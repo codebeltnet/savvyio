@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31410.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio", "src\Savvyio\Savvyio.csproj", "{5BEC19AB-F115-40F0-993C-35140A8B316C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{407762FB-26D8-435F-AE16-C76791EC9FEC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Tests", "test\Savvyio.Tests\Savvyio.Tests.csproj", "{D7D4458E-439D-4944-9827-8C1A70623063}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savvyio.Storage", "src\Savvyio.Storage\Savvyio.Storage.csproj", "{1A287768-813D-4A8F-B539-9D557DFEE41C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savvyio.Storage.InMemory", "src\Savvyio.Storage.InMemory\Savvyio.Storage.InMemory.csproj", "{29C4AD19-CD20-47C3-9A37-2379549DE9E3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5BEC19AB-F115-40F0-993C-35140A8B316C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BEC19AB-F115-40F0-993C-35140A8B316C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BEC19AB-F115-40F0-993C-35140A8B316C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BEC19AB-F115-40F0-993C-35140A8B316C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7D4458E-439D-4944-9827-8C1A70623063}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7D4458E-439D-4944-9827-8C1A70623063}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7D4458E-439D-4944-9827-8C1A70623063}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7D4458E-439D-4944-9827-8C1A70623063}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A287768-813D-4A8F-B539-9D557DFEE41C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A287768-813D-4A8F-B539-9D557DFEE41C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A287768-813D-4A8F-B539-9D557DFEE41C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A287768-813D-4A8F-B539-9D557DFEE41C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29C4AD19-CD20-47C3-9A37-2379549DE9E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29C4AD19-CD20-47C3-9A37-2379549DE9E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29C4AD19-CD20-47C3-9A37-2379549DE9E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29C4AD19-CD20-47C3-9A37-2379549DE9E3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5BEC19AB-F115-40F0-993C-35140A8B316C} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
+		{D7D4458E-439D-4944-9827-8C1A70623063} = {407762FB-26D8-435F-AE16-C76791EC9FEC}
+		{1A287768-813D-4A8F-B539-9D557DFEE41C} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
+		{29C4AD19-CD20-47C3-9A37-2379549DE9E3} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D8DDAD51-08E6-42B5-970B-2DC88D44297B}
+	EndGlobalSection
+EndGlobal

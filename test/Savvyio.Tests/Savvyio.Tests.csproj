@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Savvyio</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cuemon.Security.Cryptography" Version="6.3.0-preview.17" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Savvyio.Storage.InMemory\Savvyio.Storage.InMemory.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Storage\Savvyio.Storage.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio\Savvyio.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Cuemon.Extensions.Xunit.Hosting" Version="6.3.0-preview.17" />
+  </ItemGroup>
+
+</Project>
