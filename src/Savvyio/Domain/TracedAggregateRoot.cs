@@ -12,11 +12,19 @@ namespace Savvyio.Domain
     {
         private readonly HandlerManager<ITracedDomainEvent> _handlers = new();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TracedAggregateRoot{TKey}"/> class.
+        /// </summary>
         protected TracedAggregateRoot()
         {
             Initialize();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TracedAggregateRoot{TKey}"/> class.
+        /// </summary>
+        /// <param name="id">The identifier of the entity.</param>
+        /// <param name="events">The events to rehydrate from.</param>
         protected TracedAggregateRoot(TKey id, IEnumerable<ITracedDomainEvent> events) : base(id)
         {
             Initialize();
@@ -28,11 +36,19 @@ namespace Savvyio.Domain
             RegisterTracedDomainEventHandlers(_handlers);
         }
 
+        /// <summary>
+        /// Registers the delegates responsible of handling types that implements the <see cref="ITracedDomainEvent"/> interface.
+        /// </summary>
+        /// <param name="handler">The registry that store the delegates of type <see cref="ITracedDomainEvent"/>.</param>
         protected abstract void RegisterTracedDomainEventHandlers(IHandlerRegistry<ITracedDomainEvent> handler);
 
+        /// <summary>
+        /// Gets the version of the Aggregate.
+        /// </summary>
+        /// <value>The version of the Aggregate.</value>
         public long Version { get; private set; }
 
-        public void ReplayEvents(IEnumerable<ITracedDomainEvent> events)
+        private void ReplayEvents(IEnumerable<ITracedDomainEvent> events)
         {
             if (events == null) { return; }
             foreach (var e in events)
@@ -42,7 +58,7 @@ namespace Savvyio.Domain
             }
         }
 
-        protected void ApplyChange(ITracedDomainEvent e, bool isNew = true)
+        private void ApplyChange(ITracedDomainEvent e, bool isNew = true)
         {
             if (e == null) { return; }
             if (isNew)

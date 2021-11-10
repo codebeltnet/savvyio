@@ -8,9 +8,9 @@ namespace Savvyio.Domain
     public interface IDomainEvent
     {
         /// <summary>
-        /// Gets the time of occurrence of a particular event.
+        /// Gets the time of occurrence of the event.
         /// </summary>
-        /// <value>The time of occurrence of a particular event.</value>
+        /// <value>The time of occurrence of the event.</value>
         DateTime Timestamp { get; }
     }
 }
