@@ -7,9 +7,9 @@
     public interface IDomainEventHandler : IHandler<IDomainEvent>
     {
         /// <summary>
-        /// Gets the domain events.
+        /// Gets the activator responsible of invoking delegates that handles <see cref="IDomainEvent"/>.
         /// </summary>
-        /// <value>The domain events.</value>
+        /// <value>The activator responsible of invoking delegates that handles <see cref="IDomainEvent"/>.</value>
         IHandlerActivator<IDomainEvent> DomainEvents { get; }
     }
 }
