@@ -23,7 +23,7 @@ namespace Savvyio.Domain
         {
             if (_store.TryGetValue(id, out var events))
             {
-                return Task.FromResult(events.Where(de => de.Version >= version));
+                return Task.FromResult(events.Where(de => de.GetAggregateVersion() >= version));
             }
             return Task.FromResult(Enumerable.Empty<ITracedDomainEvent>());
         }

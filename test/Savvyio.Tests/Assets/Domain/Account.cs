@@ -48,7 +48,7 @@ namespace Savvyio.Assets.Domain
         {
             Validator.ThrowIfNull(credentials, nameof(credentials));
             var identity = new UserAccount(Id, credentials.UserName);
-            AddEvent(new UserAccountCreated(identity));
+            AddEvent(new UserAccountInitiated(identity));
             ChangePassword(credentials);
         }
 

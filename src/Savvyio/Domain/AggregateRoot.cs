@@ -5,7 +5,7 @@
     /// </summary>
     /// <typeparam name="TKey">The type of the key that uniquely identifies this aggregate.</typeparam>
     /// <seealso cref="Aggregate{TKey,TEvent}" />
-    public abstract class AggregateRoot<TKey> : Aggregate<TKey, IDomainEvent>, IAggregateRoot<TKey>
+    public abstract class AggregateRoot<TKey> : Aggregate<TKey, IDomainEvent>, IAggregateRoot<IDomainEvent, TKey>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AggregateRoot{TKey}"/> class.

@@ -12,7 +12,7 @@ using Microsoft.Extensions.Options;
 
 namespace Savvyio.Domain
 {
-    public class InMemoryActiveRecordStore<TAggregate, TKey> : Configurable<InMemoryActiveRecordStoreOptions<TAggregate, TKey>>, IActiveRecordStore<TAggregate, TKey> where TAggregate : class, IAggregateRoot<TKey>
+    public class InMemoryActiveRecordStore<TAggregate, TKey> : Configurable<InMemoryActiveRecordStoreOptions<TAggregate, TKey>>, IActiveRecordStore<TAggregate, TKey> where TAggregate : class, IAggregateRoot<IDomainEvent, TKey>
     {
         private readonly List<TAggregate> _store = new();
 
@@ -22,7 +22,7 @@ namespace Savvyio.Domain
 
         public Task<TAggregate> LoadAsync(TKey id, Action<AsyncOptions> setup = null)
         {
-            return Task.FromResult(_store.SingleOrDefault(o => o.As<IAggregateRoot<TKey>>().Id.Equals(id)) as TAggregate);
+            return Task.FromResult(_store.SingleOrDefault(o => o.As<IAggregateRoot<IDomainEvent, TKey>>().Id.Equals(id)));
         }
 
         public Task<IQueryable<TAggregate>> QueryAsync(Expression<Func<TAggregate, bool>> predicate = null, Action<AsyncOptions> setup = null)

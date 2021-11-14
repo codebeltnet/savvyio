@@ -6,7 +6,7 @@ using Cuemon.Threading;
 
 namespace Savvyio.Domain
 {
-    public interface IActiveRecordRepository<TAggregate, in TKey> : IPersistentRepository<TAggregate> where TAggregate : class, IAggregateRoot<TKey>
+    public interface IActiveRecordRepository<TAggregate, in TKey> : IPersistentRepository<TAggregate> where TAggregate : class, IAggregateRoot<IDomainEvent, TKey>
     {
         Task<TAggregate> LoadAsync(TKey id, Action<AsyncOptions> setup = null);
 

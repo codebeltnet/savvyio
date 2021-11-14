@@ -2,7 +2,7 @@
 
 namespace Savvyio.Assets.Commands
 {
-    public class UpdateAccount : ICommand
+    public class UpdateAccount : Command
     {
         public UpdateAccount(long id, string fullName, string emailAddress)
         {

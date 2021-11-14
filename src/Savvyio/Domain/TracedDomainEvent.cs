@@ -11,24 +11,40 @@ namespace Savvyio.Domain
     public abstract class TracedDomainEvent : DomainEvent, ITracedDomainEvent
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ITracedDomainEvent"/> class.
+        /// Initializes a new instance of the <see cref="ITracedDomainEvent" /> class.
         /// </summary>
-        /// <param name="type">The optional type of the event.</param>
-        protected TracedDomainEvent(Type type = null)
+        /// <param name="eventId">The optional identifier of the event. Default is an auto-generated UUID.</param>
+        /// <param name="type">The optional type of the event. Default is the type of this instance.</param>
+        /// <remarks>
+        /// The following table shows the initial metadata values for an instance of <see cref="TracedDomainEvent"/>.
+        /// <list type="table">
+        ///     <listheader>
+        ///         <term>Key</term>
+        ///         <description>Initial Value</description>
+        ///     </listheader>
+        ///     <item>
+        ///         <term><see cref="MetadataDictionary.EventId"/></term>
+        ///         <description><c>eventId ?? Guid.NewGuid().ToString("N")</c></description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="MetadataDictionary.Timestamp"/></term>
+        ///         <description><c>DateTime.UtcNow</c></description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="MetadataDictionary.MemberType"/></term>
+        ///         <description><c>type ?? GetType()</c></description>
+        ///     </item>
+        /// </list>
+        /// </remarks>
+        protected TracedDomainEvent(string eventId = null, Type type = null) : base(eventId)
         {
-            Type = (type ?? GetType()).ToFullNameIncludingAssemblyName();
+            this.SetMemberType(type ?? GetType());
         }
 
         /// <summary>
         /// Gets or sets the version of the event.
         /// </summary>
         /// <value>The version of the event.</value>
-        public long Version { get; set; }
-
-        /// <summary>
-        /// Gets the type of the event.
-        /// </summary>
-        /// <value>The type of the event.</value>
-        public string Type { get; }
+        //public long AggregateVersion { get; set; }
     }
 }

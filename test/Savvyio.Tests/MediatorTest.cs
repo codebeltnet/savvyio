@@ -10,6 +10,7 @@ using Savvyio.Assets.Commands;
 using Savvyio.Assets.Domain;
 using Savvyio.Assets.Domain.Events;
 using Savvyio.Assets.Events;
+using Savvyio.Commands;
 using Savvyio.Domain;
 using Savvyio.Events;
 using Xunit;
@@ -62,7 +63,7 @@ namespace Savvyio
             using (var host = GenericHostTestFactory.CreateGenericHostTest(services =>
             {
                 services.AddSingleton(TestOutput);
-                services.AddInMemoryActiveRecordStore<Account, long>(o => o.IdentityProvider = _ => Generate.RandomNumber(101));
+                services.AddInMemoryActiveRecordStore<Account, long>(o => o.IdentityProvider = _ => Generate.RandomNumber(1, 101));
                 services.AddInMemoryActiveRecordStore<PlatformProvider, Guid>();
                 services.AddActiveRecordRepository<Account, long>();
                 services.AddActiveRecordRepository<PlatformProvider, Guid>();
@@ -79,9 +80,12 @@ namespace Savvyio
                 TestOutput.WriteLine(descriptor.ToString());
 
                 var id = Guid.NewGuid();
+                var clientProvidedCorrelationId = Guid.NewGuid().ToString("N");
 
-                await mediator.CommitAsync(new CreateAccount(id, "Michael Mortensen", "root@gimlichael.dev"));
-                
+                await mediator.CommitAsync(new CreateAccount(id, "Michael Mortensen", "root@gimlichael.dev")
+                    .SetCorrelationId(clientProvidedCorrelationId)
+                    .SetCausationId(clientProvidedCorrelationId));
+
                 Assert.Equal(id, deStore.QueryFor<AccountInitiated>().Single().PlatformProviderId);
                 Assert.InRange(ieStore.QueryFor<AccountCreated>().Single().Id, 1, 100);
             }

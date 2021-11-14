@@ -53,7 +53,7 @@ namespace Savvyio.Domain
             if (events == null) { return; }
             foreach (var e in events)
             {
-                Version = e.Version;
+                Version = e.GetAggregateVersion();
                 ApplyChange(e, false);
             }
         }
@@ -64,8 +64,8 @@ namespace Savvyio.Domain
             if (isNew)
             {
                 if (Version == 0) { RaiseEvent(e); }
-                e.Version = Version + 1;
-                Version = e.Version;
+                e.SetAggregateVersion(Version + 1);
+                Version = e.GetAggregateVersion();
                 AddEvent(e);
             }
             else

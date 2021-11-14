@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Savvyio.Domain
 {
-    public class InMemoryActiveRecordStoreOptions<TAggregate, TKey> where TAggregate : class, IAggregateRoot<TKey>
+    public class InMemoryActiveRecordStoreOptions<TAggregate, TKey> where TAggregate : class, IAggregateRoot<IDomainEvent, TKey>
     {
         public InMemoryActiveRecordStoreOptions()
         {

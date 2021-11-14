@@ -23,7 +23,7 @@ namespace Savvyio.Queries
 
         public Task<TProjection> LoadAsync<TProjection, TKey>(TKey id, Action<AsyncOptions> setup = null) where TProjection : class, IIdentity<TKey>
         {
-            return Task.FromResult(_store.SingleOrDefault(o => o.As<IAggregateRoot<TKey>>().Id.Equals(id)) as TProjection);
+            return Task.FromResult(_store.SingleOrDefault(o => o.As<IAggregateRoot<IDomainEvent, TKey>>().Id.Equals(id)) as TProjection);
         }
 
         public Task<IQueryable<TProjection>> QueryAsync<TProjection, TKey>(Expression<Func<TProjection, bool>> predicate, Action<AsyncOptions> setup = null) where TProjection : class, IIdentity<TKey>

@@ -7,7 +7,7 @@ using Cuemon.Threading;
 
 namespace Savvyio.Domain
 {
-    public class ActiveRecordRepository<TAggregate, TKey> : IActiveRecordRepository<TAggregate, TKey> where TAggregate : class, IAggregateRoot<TKey>
+    public class ActiveRecordRepository<TAggregate, TKey> : IActiveRecordRepository<TAggregate, TKey> where TAggregate : class, IAggregateRoot<IDomainEvent, TKey>
     {
         private readonly IActiveRecordStore<TAggregate, TKey> _store;
         private readonly IMediator _mediator;

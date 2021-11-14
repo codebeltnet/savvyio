@@ -6,13 +6,13 @@ namespace Savvyio.Domain
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddActiveRecordRepository<TAggregate, TKey>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped) where TAggregate : class, IAggregateRoot<TKey>
+        public static IServiceCollection AddActiveRecordRepository<TAggregate, TKey>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped) where TAggregate : class, IAggregateRoot<IDomainEvent, TKey>
         {
             return services.Add<IActiveRecordRepository<TAggregate, TKey>, ActiveRecordRepository<TAggregate, TKey>>(lifetime);
         }
 
         public static IServiceCollection AddActiveRecordRepository<TAggregate, TKey, TOptions>(this IServiceCollection services, Action<TOptions> setup, ServiceLifetime lifetime = ServiceLifetime.Scoped)
-            where TAggregate : class, IAggregateRoot<TKey>
+            where TAggregate : class, IAggregateRoot<IDomainEvent, TKey>
             where TOptions : class, new()
         {
             return services.Add<IActiveRecordRepository<TAggregate, TKey>, ActiveRecordRepository<TAggregate, TKey>, TOptions>(lifetime, setup);
@@ -33,14 +33,14 @@ namespace Savvyio.Domain
         //}
 
         public static IServiceCollection AddActiveRecordStore<TAggregate, TKey, TImplementation>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
-            where TAggregate : class, IAggregateRoot<TKey>
+            where TAggregate : class, IAggregateRoot<IDomainEvent, TKey>
             where TImplementation : class, IActiveRecordStore<TAggregate, TKey>
         {
             return services.Add<IActiveRecordStore<TAggregate, TKey>, TImplementation>(lifetime);
         }
 
         public static IServiceCollection AddActiveRecordStore<TAggregate, TKey, TImplementation, TOptions>(this IServiceCollection services, Action<TOptions> setup, ServiceLifetime lifetime = ServiceLifetime.Scoped)
-            where TAggregate : class, IAggregateRoot<TKey>
+            where TAggregate : class, IAggregateRoot<IDomainEvent, TKey>
             where TImplementation : class, IActiveRecordStore<TAggregate, TKey>
             where TOptions : class, new()
         {

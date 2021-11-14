@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Extensions.Core" Version="6.3.0-preview.17" />
-    <PackageReference Include="Cuemon.Extensions.DependencyInjection" Version="6.3.0-preview.17" />
-    <PackageReference Include="Cuemon.Extensions.Reflection" Version="6.3.0-preview.17" />
+    <PackageReference Include="Cuemon.Extensions.Core" Version="6.3.0-preview.19" />
+    <PackageReference Include="Cuemon.Extensions.Collections.Generic" Version="6.3.0-preview.19" />
+    <PackageReference Include="Cuemon.Extensions.DependencyInjection" Version="6.3.0-preview.19" />
+    <PackageReference Include="Cuemon.Extensions.Reflection" Version="6.3.0-preview.19" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Messaging\" />
     <Folder Include="Storage\" />
     <Folder Include="Queries\" />
   </ItemGroup>

@@ -8,7 +8,7 @@ using Cuemon.Threading;
 
 namespace Savvyio.Domain
 {
-    public class EventSourcingRepository<TAggregate, TKey> : IEventSourcingRepository<TAggregate, TKey> where TAggregate : class, ITracedAggregateRoot<TKey>, IAggregateNotification<ITracedDomainEvent>
+    public class EventSourcingRepository<TAggregate, TKey> : IEventSourcingRepository<TAggregate, TKey> where TAggregate : class, ITracedAggregateRoot<TKey>
     {
         private readonly IEventSourcingStore _store;
         private readonly IMediator _mediator;

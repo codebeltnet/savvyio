@@ -15,12 +15,12 @@ namespace Savvyio.Domain
         //    return services.AddActiveRecordStore<InMemoryActiveRecordStore, InMemoryActiveRecordStoreOptions>(setup, ServiceLifetime.Singleton);
         //}
 
-        public static IServiceCollection AddInMemoryActiveRecordStore<TAggregate, TKey>(this IServiceCollection services) where TAggregate : class, IAggregateRoot<TKey>
+        public static IServiceCollection AddInMemoryActiveRecordStore<TAggregate, TKey>(this IServiceCollection services) where TAggregate : class, IAggregateRoot<IDomainEvent, TKey>
         {
             return services.AddActiveRecordStore<TAggregate, TKey, InMemoryActiveRecordStore<TAggregate, TKey>>(ServiceLifetime.Singleton);
         }
 
-        public static IServiceCollection AddInMemoryActiveRecordStore<TAggregate, TKey>(this IServiceCollection services, Action<InMemoryActiveRecordStoreOptions<TAggregate, TKey>> setup) where TAggregate : class, IAggregateRoot<TKey>
+        public static IServiceCollection AddInMemoryActiveRecordStore<TAggregate, TKey>(this IServiceCollection services, Action<InMemoryActiveRecordStoreOptions<TAggregate, TKey>> setup) where TAggregate : class, IAggregateRoot<IDomainEvent, TKey>
         {
             return services.AddActiveRecordStore<TAggregate, TKey, InMemoryActiveRecordStore<TAggregate, TKey>, InMemoryActiveRecordStoreOptions<TAggregate, TKey>>(setup, ServiceLifetime.Singleton);
         }

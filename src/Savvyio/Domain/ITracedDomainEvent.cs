@@ -6,15 +6,9 @@
     public interface ITracedDomainEvent : IDomainEvent
     {
         /// <summary>
-        /// Gets or sets the version of the event.
+        /// Gets or sets the version of the associated <see cref="ITracedAggregateRoot{TKey}"/>.
         /// </summary>
         /// <value>The version of the event.</value>
-        long Version { get; set; }
-
-        /// <summary>
-        /// Gets the type of the event.
-        /// </summary>
-        /// <value>The type of the event.</value>
-        string Type { get; }
+        //long AggregateVersion { get; set; }
     }
 }
