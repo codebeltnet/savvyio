@@ -1,34 +1,45 @@
 ﻿using System;
-using Cuemon.Extensions.Reflection;
 
 namespace Savvyio.Events
 {
     /// <summary>
-    /// Provides a default implementation of something that happened when an Aggregate is successfully persisted and you want other subsystems (out-process/inter-application) to be aware of.
+    /// Provides a default implementation of of the <see cref="IIntegrationEvent"/> interface.
     /// </summary>
     /// <seealso cref="IIntegrationEvent" />
-    public abstract class IntegrationEvent : IIntegrationEvent
+    /// <seealso cref="Model"/>
+    public abstract class IntegrationEvent : Model, IIntegrationEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegrationEvent"/> class.
         /// </summary>
-        /// <param name="type">The optional type of the event.</param>
-        protected IntegrationEvent(Type type = null)
+        /// <param name="eventId">The optional identifier of the event. Default is an auto-generated UUID.</param>
+        /// <param name="type">The optional type of the event. Default is the type of this instance.</param>
+        /// <remarks>
+        /// The following table shows the initial metadata values for an instance of <see cref="IntegrationEvent"/>.
+        /// <list type="table">
+        ///     <listheader>
+        ///         <term>Key</term>
+        ///         <description>Initial Value</description>
+        ///     </listheader>
+        ///     <item>
+        ///         <term><see cref="MetadataDictionary.EventId"/></term>
+        ///         <description><c>eventId ?? Guid.NewGuid().ToString("N")</c></description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="MetadataDictionary.Timestamp"/></term>
+        ///         <description><c>DateTime.UtcNow</c></description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="MetadataDictionary.MemberType"/></term>
+        ///         <description><c>type ?? GetType()</c></description>
+        ///     </item>
+        /// </list>
+        /// </remarks>
+        protected IntegrationEvent(string eventId = null, Type type = null)
         {
-            Timestamp = DateTime.UtcNow;
-            Type = (type ?? GetType()).ToFullNameIncludingAssemblyName();
+            this.SetEventId(eventId ?? Guid.NewGuid().ToString("N"));
+            this.SetTimestamp();
+            this.SetMemberType(type ?? GetType());
         }
-
-        /// <summary>
-        /// Gets the time of occurrence of the event, expressed as the Coordinated Universal Time (UTC).
-        /// </summary>
-        /// <value>The time of occurrence of the event.</value>
-        public DateTime Timestamp { get; }
-
-        /// <summary>
-        /// Gets the type of the event.
-        /// </summary>
-        /// <value>The type of the event.</value>
-        public string Type { get; }
     }
 }

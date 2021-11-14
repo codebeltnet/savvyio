@@ -3,7 +3,7 @@
     /// <summary>
     /// Specifies a marker interface that represents an intention.
     /// </summary>
-    public interface ICommand
+    public interface ICommand : IMetadata
     {
     }
 }

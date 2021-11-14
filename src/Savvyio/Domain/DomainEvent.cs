@@ -3,23 +3,37 @@
 namespace Savvyio.Domain
 {
     /// <summary>
-    /// Provides a default implementation of something that happened in the domain that you want other parts of the same domain (in-process/inner-application) to be aware of.
+    /// Provides a default implementation of the <see cref="IDomainEvent"/> interface.
     /// </summary>
     /// <seealso cref="IDomainEvent" />
-    public abstract class DomainEvent : IDomainEvent
+    /// <seealso cref="Model"/>
+    public abstract class DomainEvent : Model, IDomainEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainEvent" /> class.
         /// </summary>
-        protected DomainEvent()
+        /// <param name="eventId">The optional identifier of the event. Default is an auto-generated UUID.</param>
+        /// <remarks>
+        /// The following table shows the initial metadata values for an instance of <see cref="TracedDomainEvent"/>.
+        /// <list type="table">
+        ///     <listheader>
+        ///         <term>Key</term>
+        ///         <description>Initial Value</description>
+        ///     </listheader>
+        ///     <item>
+        ///         <term><see cref="MetadataDictionary.EventId"/></term>
+        ///         <description><c>eventId ?? Guid.NewGuid().ToString("N")</c></description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="MetadataDictionary.Timestamp"/></term>
+        ///         <description><c>DateTime.UtcNow</c></description>
+        ///     </item>
+        /// </list>
+        /// </remarks>
+        protected DomainEvent(string eventId = null)
         {
-            Timestamp = DateTime.UtcNow;
+            this.SetEventId(eventId ?? Guid.NewGuid().ToString("N"));
+            this.SetTimestamp();
         }
-
-        /// <summary>
-        /// Gets the time of occurrence of a particular event, expressed as the Coordinated Universal Time (UTC).
-        /// </summary>
-        /// <value>The time of occurrence of a particular event.</value>
-        public DateTime Timestamp { get; }
     }
 }

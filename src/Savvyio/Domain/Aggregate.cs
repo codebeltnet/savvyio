@@ -8,8 +8,7 @@ namespace Savvyio.Domain
     /// <typeparam name="TKey">The type of the key that uniquely identifies this aggregate.</typeparam>
     /// <typeparam name="TEvent">The type of the event that implements the <see cref="IDomainEvent"/> interface.</typeparam>
     /// <seealso cref="Entity{TKey}" />
-    /// <seealso cref="IAggregateNotification{TEvent}" />
-    public abstract class Aggregate<TKey, TEvent> : Entity<TKey>, IAggregateNotification<TEvent> where TEvent : IDomainEvent
+    public abstract class Aggregate<TKey, TEvent> : Entity<TKey>, IMetadata
     {
         private readonly List<TEvent> _events = new();
 
@@ -34,6 +33,12 @@ namespace Savvyio.Domain
         /// </summary>
         /// <value>The events added to the Aggregate.</value>
         public IReadOnlyList<TEvent> Events => _events;
+
+        /// <summary>
+        /// Gets the associated metadata of this Aggregate.
+        /// </summary>
+        /// <value>The associated metadata of this Aggregate.</value>
+        public IMetadataDictionary Metadata { get; } = new MetadataDictionary();
 
         /// <summary>
         /// Adds an event to the Aggregate.
