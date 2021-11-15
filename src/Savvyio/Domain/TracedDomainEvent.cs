@@ -1,5 +1,4 @@
 ﻿using System;
-using Cuemon.Extensions.Reflection;
 
 namespace Savvyio.Domain
 {
@@ -15,6 +14,7 @@ namespace Savvyio.Domain
         /// </summary>
         /// <param name="eventId">The optional identifier of the event. Default is an auto-generated UUID.</param>
         /// <param name="type">The optional type of the event. Default is the type of this instance.</param>
+        /// <param name="metadata">The optional metadata to merge with this instance.</param>
         /// <remarks>
         /// The following table shows the initial metadata values for an instance of <see cref="TracedDomainEvent"/>.
         /// <list type="table">
@@ -36,15 +36,9 @@ namespace Savvyio.Domain
         ///     </item>
         /// </list>
         /// </remarks>
-        protected TracedDomainEvent(string eventId = null, Type type = null) : base(eventId)
+        protected TracedDomainEvent(string eventId = null, Type type = null, IMetadata metadata = null) : base(eventId, metadata)
         {
             this.SetMemberType(type ?? GetType());
         }
-
-        /// <summary>
-        /// Gets or sets the version of the event.
-        /// </summary>
-        /// <value>The version of the event.</value>
-        //public long AggregateVersion { get; set; }
     }
 }

@@ -10,7 +10,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AggregateRoot{TKey}"/> class.
         /// </summary>
-        protected AggregateRoot()
+        /// <param name="metadata">The optional metadata to merge with this instance.</param>
+        protected AggregateRoot(IMetadata metadata = null) : base(metadata)
         {
         }
 

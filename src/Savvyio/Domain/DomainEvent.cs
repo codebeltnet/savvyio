@@ -13,6 +13,7 @@ namespace Savvyio.Domain
         /// Initializes a new instance of the <see cref="DomainEvent" /> class.
         /// </summary>
         /// <param name="eventId">The optional identifier of the event. Default is an auto-generated UUID.</param>
+        /// <param name="metadata">The optional metadata to merge with this instance.</param>
         /// <remarks>
         /// The following table shows the initial metadata values for an instance of <see cref="TracedDomainEvent"/>.
         /// <list type="table">
@@ -30,10 +31,11 @@ namespace Savvyio.Domain
         ///     </item>
         /// </list>
         /// </remarks>
-        protected DomainEvent(string eventId = null)
+        protected DomainEvent(string eventId = null, IMetadata metadata = null)
         {
             this.SetEventId(eventId ?? Guid.NewGuid().ToString("N"));
             this.SetTimestamp();
+            this.MergeMetadata(metadata);
         }
     }
 }

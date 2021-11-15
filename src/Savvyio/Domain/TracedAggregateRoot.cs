@@ -15,7 +15,8 @@ namespace Savvyio.Domain
         /// <summary>
         /// Initializes a new instance of the <see cref="TracedAggregateRoot{TKey}"/> class.
         /// </summary>
-        protected TracedAggregateRoot()
+        /// <param name="metadata">The optional metadata to merge with this instance.</param>
+        protected TracedAggregateRoot(IMetadata metadata = null) : base(metadata)
         {
             Initialize();
         }

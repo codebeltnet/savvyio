@@ -15,8 +15,10 @@ namespace Savvyio.Domain
         /// <summary>
         /// Initializes a new instance of the <see cref="Aggregate{TKey, TEvent}"/> class.
         /// </summary>
-        protected Aggregate()
+        /// <param name="metadata">The optional metadata to merge with this instance.</param>
+        protected Aggregate(IMetadata metadata = null)
         {
+            this.MergeMetadata(metadata);
         }
 
         /// <summary>

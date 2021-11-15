@@ -10,8 +10,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Command"/> class.
         /// </summary>
-        protected Command()
+        /// <param name="metadata">The optional metadata to merge with this instance.</param>
+        protected Command(IMetadata metadata = null)
         {
+            this.MergeMetadata(metadata);
         }
     }
 }
