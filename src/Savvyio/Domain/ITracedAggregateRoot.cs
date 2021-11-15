@@ -13,10 +13,5 @@
         /// </summary>
         /// <value>The version of the Aggregate.</value>
         long Version { get; }
-
-
-        //void ReplayEvents(IEnumerable<ITracedDomainEvent> events);
-
-        //void RaiseEvent(ITracedDomainEvent @event);
     }
 }
