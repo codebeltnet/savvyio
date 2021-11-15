@@ -40,7 +40,7 @@ namespace Savvyio.Assets
 
         public async Task CreateAccountAsync(CreateAccount c)
         {
-            var account = new Account(c.PlatformProviderId, c.FullName, c.EmailAddress).TakeMetadata(c);
+            var account = new Account(c.PlatformProviderId, c.FullName, c.EmailAddress).MergeMetadata(c);
 
             // check unique email
 
@@ -48,7 +48,7 @@ namespace Savvyio.Assets
 
             await Task.Delay(TimeSpan.FromSeconds(1));
 
-            await _mediator.PublishAsync(new AccountCreated(account.Id, account.FullName, account.EmailAddress).TakeMetadata(account)); // raise integration event
+            await _mediator.PublishAsync(new AccountCreated(account.Id, account.FullName, account.EmailAddress).MergeMetadata(account)); // raise integration event
         }
     }
 }

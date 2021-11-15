@@ -1,7 +1,9 @@
 ﻿using System;
 using Cuemon.Extensions.Xunit;
+using Savvyio.Assets.Commands;
 using Savvyio.Assets.Domain;
 using Savvyio.Assets.Domain.Events;
+using Savvyio.Commands;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -11,6 +13,46 @@ namespace Savvyio.Domain
     {
         public AggregateRootTest(ITestOutputHelper output) : base(output)
         {
+        }
+
+        [Fact]
+        public void AggregateRoot_Account_ShouldHaveMetadata_FromCommand()
+        {
+            var id = Guid.NewGuid();
+            var idString = id.ToString("N");
+            var fullname = "Michael Mortensen";
+            var email = "root@gimlichael.dev";
+
+            var command = new CreateAccount(id, fullname, email)
+                .SetCausationId(idString)
+                .SetCorrelationId(idString);
+            
+            var sut = new Account(command.PlatformProviderId, command.FullName, command.EmailAddress).MergeMetadata(command);
+            
+            Assert.Collection(sut.Metadata, 
+                pair =>
+                {
+                    Assert.Equal(pair.Key, MetadataDictionary.CausationId);
+                    Assert.Equal(pair.Value, idString);
+                },
+                pair =>
+                {
+                    Assert.Equal(pair.Key, MetadataDictionary.CorrelationId);
+                    Assert.Equal(pair.Value, idString);
+                });
+
+            Assert.True(sut.Metadata.Count == 2, "sut.Metadata.Count == 2");
+        }
+
+        [Fact]
+        public void AggregateRoot_Account_ShouldHaveDefaultMetadata()
+        {
+            var fullname = "Michael Mortensen";
+            var email = "root@gimlichael.dev";
+
+            var sut = new Account(Guid.NewGuid(), fullname, email);
+
+            Assert.True(sut.Metadata.Count == 0, "sut.Metadata.Count == 0");
         }
 
         [Fact]

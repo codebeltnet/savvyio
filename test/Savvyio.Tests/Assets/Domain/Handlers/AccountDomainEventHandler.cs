@@ -53,7 +53,7 @@ namespace Savvyio.Assets.Domain.Handlers
         {
             _testStore.Add(e);
             _output.WriteLines($"DE {nameof(OnInProcAccountInitiated)}", JsonSerializer.Serialize(e));
-            _mediator.PublishAsync(new AccountInitiatedChained().TakeMetadata(e).SetCausationId(e.GetEventId()));
+            _mediator.PublishAsync(new AccountInitiatedChained().MergeMetadata(e).SetCausationId(e.GetEventId()));
             return Task.CompletedTask;
         }
     }
