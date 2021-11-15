@@ -9,12 +9,12 @@ namespace Savvyio
     public static class MetadataExtensions
     {
         /// <summary>
-        /// Adds a new set of metadata to the <paramref name="model"/>.
+        /// Add or update a set of metadata to the <paramref name="model"/>.
         /// </summary>
         /// <typeparam name="T">The model that implements the <see cref="IMetadata"/> interface.</typeparam>
         /// <param name="model">The <see cref="IMetadata"/> to extend.</param>
-        /// <param name="key">The key of the element to add.</param>
-        /// <param name="value">The value of the element to add.</param>
+        /// <param name="key">The key of the element to add or update.</param>
+        /// <param name="value">The value of the element to add or update.</param>
         /// <returns>A reference to <paramref name="model"/> after the operation has completed.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="model" /> cannot be null -or-
@@ -23,32 +23,35 @@ namespace Savvyio
         /// <exception cref="ReservedKeywordException">
         /// <paramref name="key"/> is a reserved keyword.
         /// </exception>
-        public static T AddOrUpdateMetadata<T>(this T model, string key, object value) where T : IMetadata
+        public static T SaveMetadata<T>(this T model, string key, object value) where T : IMetadata
         {
             MetadataFactory.Set(model, key, value);
             return model;
         }
 
         /// <summary>
-        /// Copies the metadata from the <paramref name="giver"/> to the <paramref name="recipient"/> if not already existing.
+        /// Copies metadata from the <paramref name="source"/> to the <paramref name="model"/> if not already existing.
         /// </summary>
         /// <typeparam name="TSource">The giving type of the model that implements the <see cref="IMetadata"/> interface.</typeparam>
         /// <typeparam name="TDestination">The receiving type of the model that implements the <see cref="IMetadata"/> interface.</typeparam>
-        /// <param name="recipient">The model that will receive metadata from <paramref name="giver"/>.</param>
-        /// <param name="giver">The model that will give metata to <paramref name="recipient"/>.</param>
-        /// <returns>A reference to <paramref name="recipient"/> after the operation has completed.</returns>
-        public static TDestination TakeMetadata<TSource, TDestination>(this TDestination recipient, TSource giver) 
+        /// <param name="model">The <see cref="IMetadata"/> to extend. Receives metadata from <paramref name="source"/>.</param>
+        /// <param name="source">The model that will give metata to <paramref name="model"/>.</param>
+        /// <returns>A reference to <paramref name="model"/> after the operation has completed.</returns>
+        public static TDestination MergeMetadata<TSource, TDestination>(this TDestination model, TSource source) 
             where TSource : IMetadata
             where TDestination : IMetadata
         {
-            foreach (var entry in giver.Metadata)
+            if (model != null && source != null)
             {
-                if (!recipient.Metadata.ContainsKey(entry.Key))
+                foreach (var entry in source.Metadata)
                 {
-                    recipient.Metadata.AddUnristricted(entry.Key, entry.Value); // bypass reserved keyword check since the value is only added if non-existing
+                    if (!model.Metadata.ContainsKey(entry.Key))
+                    {
+                        model.Metadata.AddUnristricted(entry.Key, entry.Value); // bypass reserved keyword check since the value is only added if non-existing
+                    }
                 }
             }
-            return recipient;
+            return model;
         }
     }
 }

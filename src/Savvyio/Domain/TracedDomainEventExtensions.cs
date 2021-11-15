@@ -28,6 +28,7 @@ namespace Savvyio.Domain
         /// <param name="model">The <see cref="ITracedDomainEvent"/> to extend.</param>
         /// <param name="type">The type of the model.</param>
         /// <returns>A reference to <paramref name="model"/> after the operation has completed.</returns>
+        /// <remarks>The <paramref name="type"/> is converted to its equivalent string representation (fully qualified name of the type, including its namespace, comma delimited with the simple name of the assembly).</remarks>
         public static T SetMemberType<T>(this T model, Type type) where T : ITracedDomainEvent
         {
             MetadataFactory.SetUnrestricted(model, MetadataDictionary.MemberType, type.ToFullNameIncludingAssemblyName());

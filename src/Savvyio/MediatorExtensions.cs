@@ -23,7 +23,7 @@ namespace Savvyio
             if (!typeof(ITracedDomainEvent).IsAssignableFrom(typeof(T))) { aggregate.RemoveAllEvents(); }
             foreach (var @event in events)
             {
-                mediator.Publish(@event.TakeMetadata(aggregate));
+                mediator.Publish(@event.MergeMetadata(aggregate));
             }
         }
 
@@ -41,7 +41,7 @@ namespace Savvyio
             if (!typeof(ITracedDomainEvent).IsAssignableFrom(typeof(T))) { aggregate.RemoveAllEvents(); }
             foreach (var @event in events)
             {
-                await mediator.PublishAsync(@event.TakeMetadata(aggregate), setup).ConfigureAwait(false);
+                await mediator.PublishAsync(@event.MergeMetadata(aggregate), setup).ConfigureAwait(false);
             }
         }
     }
