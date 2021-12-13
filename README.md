@@ -1,4 +1,4 @@
-![Savvy I/O](https://nblcdn.net/cuemon/128x128.png)
+![Savvy I/O](.nuget/icon.png)
 
 # Savvy I/O
 
