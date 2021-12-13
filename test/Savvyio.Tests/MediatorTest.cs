@@ -10,6 +10,7 @@ using Savvyio.Assets.Commands;
 using Savvyio.Assets.Domain;
 using Savvyio.Assets.Domain.Events;
 using Savvyio.Assets.Events;
+using Savvyio.Assets.Queries;
 using Savvyio.Commands;
 using Savvyio.Domain;
 using Savvyio.Events;
@@ -88,6 +89,37 @@ namespace Savvyio
 
                 Assert.Equal(id, deStore.QueryFor<AccountInitiated>().Single().PlatformProviderId);
                 Assert.InRange(ieStore.QueryFor<AccountCreated>().Single().Id, 1, 100);
+            }
+        }
+
+        [Fact]
+        public async Task QueryTest()
+        {
+            using (var host = GenericHostTestFactory.CreateGenericHostTest(services =>
+                   {
+                       services.AddSingleton(TestOutput);
+                       services.AddInMemoryActiveRecordStore<Account, long>(o => o.IdentityProvider = _ => Generate.RandomNumber(1, 101));
+                       services.AddInMemoryActiveRecordStore<PlatformProvider, Guid>();
+                       services.AddActiveRecordRepository<Account, long>();
+                       services.AddActiveRecordRepository<PlatformProvider, Guid>();
+                       services.AddMediator(registry => registry.AddHandlersFromCurrentDomain(), o => o.IncludeMediatorDescriptor = true);
+                       services.AddScoped<ITestStore<IDomainEvent>, DomainEventStore>();
+                       services.AddScoped<ITestStore<IIntegrationEvent>, IntegrationEventStore>();
+                   }))
+            {
+                var mediator = host.ServiceProvider.GetRequiredService<IMediator>();
+                var descriptor = host.ServiceProvider.GetRequiredService<MediatorDescriptor>();
+                var deStore = host.ServiceProvider.GetRequiredService<ITestStore<IDomainEvent>>();
+                var ieStore = host.ServiceProvider.GetRequiredService<ITestStore<IIntegrationEvent>>();
+
+                TestOutput.WriteLine(descriptor.ToString());
+
+                var id = Guid.NewGuid();
+                var clientProvidedCorrelationId = Guid.NewGuid().ToString("N");
+
+                var result = await mediator.QueryAsync(new GetAccount(10));
+
+                TestOutput.WriteLine(result);
             }
         }
     }

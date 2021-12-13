@@ -21,17 +21,6 @@ namespace Savvyio
             _handlers.TryAdd(typeof(T), e => handler(e as T));
         }
 
-        public bool TryInvoke(TModel model)
-        {
-            Validator.ThrowIfNull(model, nameof(model));
-            if (_handlers.TryGetValue(model.GetType(), out var handler))
-            {
-                handler.Invoke(model);
-                return true;
-            }
-            return false;
-        }
-
         public void RegisterAsync<T>(Func<T, Task> handler) where T : class, TModel
         {
             Validator.ThrowIfNull(handler, nameof(handler));
@@ -44,15 +33,31 @@ namespace Savvyio
             _asyncHandlers.TryAdd(typeof(T), (h, t) => handler(h as T, t));
         }
 
-        public async Task<bool> TryInvokeAsync(TModel model, CancellationToken ct = default)
+        public bool TryInvoke(TModel model)
+        {
+            Validator.ThrowIfNull(model, nameof(model));
+            if (_handlers.TryGetValue(model.GetType(), out var handler))
+            {
+                handler.Invoke(model);
+                return true;
+            }
+            return false;
+        }
+
+        public bool TryInvoke<TResult>(TModel model, out TResult result)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<ConditionalOperation> TryInvokeAsync(TModel model, CancellationToken ct = default)
         {
             Validator.ThrowIfNull(model, nameof(model));
             if (_asyncHandlers.TryGetValue(model.GetType(), out var handler))
             {
                 await handler(model, ct).ConfigureAwait(false);
-                return true;
+                return new SuccessfulOperation();
             }
-            return false;
+            return new UnsuccessfulOperation();
         }
     }
 

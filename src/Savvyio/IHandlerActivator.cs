@@ -23,6 +23,6 @@ namespace Savvyio
         /// <param name="model">The model that is handled by a function delegate.</param>
         /// <param name="ct">The cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns><c>true</c> if the function delegate handling the specified <paramref name="model"/> was invoked, <c>false</c> otherwise.</returns>
-        Task<bool> TryInvokeAsync(TModel model, CancellationToken ct = default);
+        Task<ConditionalOperation> TryInvokeAsync(TModel model, CancellationToken ct = default);
     }
 }

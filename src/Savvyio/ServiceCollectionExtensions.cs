@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Commands;
 using Savvyio.Domain;
 using Savvyio.Events;
+using Savvyio.Queries;
 
 namespace Savvyio
 {
@@ -29,7 +30,7 @@ namespace Savvyio
             var descriptors = new Dictionary<Type, List<IHierarchy<object>>>();
             foreach (var handlerType in handlerTypes)
             {
-                var handlerTypeInterfaces = handlerType.GetInterfaces().Where(type => type.HasInterfaces(typeof(ICommandHandler), typeof(IIntegrationEventHandler), typeof(IDomainEventHandler)));
+                var handlerTypeInterfaces = handlerType.GetInterfaces().Where(type => type.HasInterfaces(typeof(ICommandHandler), typeof(IIntegrationEventHandler), typeof(IDomainEventHandler), typeof(IQueryHandler)));
                 foreach (var handlerTypeInterface in handlerTypeInterfaces)
                 {
                     var handlers = new Hierarchy<object>();
@@ -39,7 +40,7 @@ namespace Savvyio
                     foreach (var method in handlerType.GetTypeInfo().DeclaredMethods.Where(m =>
                     {
                         var parameters = m.GetParameters();
-                        return parameters.Length == 1 && parameters.Any(p => p.ParameterType.HasInterfaces(handlerTypeInterfaceModel));
+                        return parameters.Any(p => p.ParameterType.HasInterfaces(handlerTypeInterfaceModel));
                     }))
                     {
                         if (options.IncludeMediatorDescriptor) { handlers.Add(method); }
@@ -67,7 +68,8 @@ namespace Savvyio
                 services.AddSingleton(new MediatorDescriptor(
                     descriptors.Where(pair => pair.Key.HasInterfaces(typeof(ICommandHandler))).SelectMany(pair => pair.Value).ToList(),
                     descriptors.Where(pair => pair.Key.HasInterfaces(typeof(IIntegrationEventHandler))).SelectMany(pair => pair.Value).ToList(), 
-                    descriptors.Where(pair => pair.Key.HasInterfaces(typeof(IDomainEventHandler))).SelectMany(pair => pair.Value).ToList()));
+                    descriptors.Where(pair => pair.Key.HasInterfaces(typeof(IDomainEventHandler))).SelectMany(pair => pair.Value).ToList(),
+                    descriptors.Where(pair => pair.Key.HasInterfaces(typeof(IQueryHandler))).SelectMany(pair => pair.Value).ToList()));
             }
             services.Add(typeof(IMediator), options.MediatorImplementationType, options.MediatorLifetime);
             return services;

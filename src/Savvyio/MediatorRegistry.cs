@@ -6,12 +6,13 @@ using Cuemon.Extensions;
 using Savvyio.Commands;
 using Savvyio.Domain;
 using Savvyio.Events;
+using Savvyio.Queries;
 
 namespace Savvyio
 {
     public class MediatorRegistry
     {
-        private static readonly IEnumerable<Type> Abstractions = new [] { typeof(ICommandHandler), typeof(IIntegrationEventHandler), typeof(IDomainEventHandler) };
+        private static readonly IEnumerable<Type> Abstractions = new [] { typeof(ICommandHandler), typeof(IIntegrationEventHandler), typeof(IDomainEventHandler), typeof(IQueryHandler) };
         private readonly List<Type> _handlerTypes = new();
 
         public MediatorRegistry AddHandlersFromCurrentDomain()
@@ -64,6 +65,16 @@ namespace Savvyio
         {
             var handlerType = typeof(T);
             if (IsValidHandlerType(handlerType, typeof(ICommandHandler)))
+            {
+                _handlerTypes.Add(handlerType);
+            }
+            return this;
+        }
+
+        public MediatorRegistry AddQueryHandler<T>() where T : IQueryHandler
+        {
+            var handlerType = typeof(T);
+            if (IsValidHandlerType(handlerType, typeof(IQueryHandler)))
             {
                 _handlerTypes.Add(handlerType);
             }
