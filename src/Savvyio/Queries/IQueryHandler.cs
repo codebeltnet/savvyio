@@ -2,6 +2,6 @@
 {
     public interface IQueryHandler : IHandler<IQuery>
     {
-        IResponseHandlerActivator<IQuery> Queries { get; }
+        IRequestReplyActivator<IQuery> Queries { get; }
     }
 }

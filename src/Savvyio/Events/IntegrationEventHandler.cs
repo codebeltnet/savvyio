@@ -6,7 +6,7 @@
     /// <seealso cref="IIntegrationEventHandler" />
     public abstract class IntegrationEventHandler : IIntegrationEventHandler
     {
-        private readonly HandlerManager<IIntegrationEvent> _handlerManager = new();
+        private readonly FireForgetManager<IIntegrationEvent> _manager = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegrationEventHandler"/> class.
@@ -18,19 +18,19 @@
 
         private void Initialize()
         {
-            RegisterEventHandlers(_handlerManager);
+            RegisterEventHandlers(_manager);
         }
 
         /// <summary>
         /// Registers the delegates responsible of handling types that implements the <see cref="IIntegrationEvent"/> interface.
         /// </summary>
         /// <param name="handler">The registry that store the delegates of type <see cref="IIntegrationEvent"/>.</param>
-        protected abstract void RegisterEventHandlers(IHandlerRegistry<IIntegrationEvent> handler);
+        protected abstract void RegisterEventHandlers(IFireForgetRegistry<IIntegrationEvent> handler);
 
         /// <summary>
         /// Gets the activator responsible of invoking delegates that handles <see cref="IIntegrationEvent" />.
         /// </summary>
         /// <value>The activator responsible of invoking delegates that handles <see cref="IIntegrationEvent" />.</value>
-        public IHandlerActivator<IIntegrationEvent> IntegrationEvents => _handlerManager;
+        public IFireForgetActivator<IIntegrationEvent> IntegrationEvents => _manager;
     }
 }

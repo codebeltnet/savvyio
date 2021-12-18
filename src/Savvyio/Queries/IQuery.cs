@@ -2,11 +2,11 @@
 
 namespace Savvyio.Queries
 {
-    public interface IQuery
+    public interface IQuery : IMetadata
     {
     }
 
-    public interface IQuery<TResult> : IResponse<TResult>, IQuery
+    public interface IQuery<TResult> : IRequestReply<TResult>, IQuery
     {
     }
 }

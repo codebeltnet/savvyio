@@ -1,11 +1,12 @@
 ﻿using Savvyio.Commands;
 using Savvyio.Domain;
 using Savvyio.Events;
+using Savvyio.Queries;
 
 namespace Savvyio
 {
     /// <summary>
-    /// Represents the base class from which all implementations of <see cref="ICommand"/>, <see cref="IDomainEvent"/> and <see cref="IIntegrationEvent"/> should derive.
+    /// Represents the base class from which all implementations of <see cref="ICommand"/>, <see cref="IDomainEvent"/>, <see cref="IIntegrationEvent"/> and <see cref="IQuery{TResult}"/> should derive.
     /// </summary>
     /// <seealso cref="IMetadata" />
     public abstract class Model : IMetadata

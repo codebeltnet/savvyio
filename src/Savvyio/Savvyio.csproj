@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Extensions.Core" Version="6.3.0" />
-    <PackageReference Include="Cuemon.Extensions.Collections.Generic" Version="6.3.0" />
-    <PackageReference Include="Cuemon.Extensions.DependencyInjection" Version="6.3.0" />
-    <PackageReference Include="Cuemon.Extensions.Reflection" Version="6.3.0" />
+    <PackageReference Include="Cuemon.Extensions.Core" Version="6.4.0-preview.6" />
+    <PackageReference Include="Cuemon.Extensions.Collections.Generic" Version="6.4.0-preview.6" />
+    <PackageReference Include="Cuemon.Extensions.DependencyInjection" Version="6.4.0-preview.6" />
+    <PackageReference Include="Cuemon.Extensions.Reflection" Version="6.4.0-preview.6" />
   </ItemGroup>
 
   <ItemGroup>

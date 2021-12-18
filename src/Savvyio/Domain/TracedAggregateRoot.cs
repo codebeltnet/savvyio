@@ -10,7 +10,7 @@ namespace Savvyio.Domain
     /// <seealso cref="ITracedAggregateRoot{TKey}" />
     public abstract class TracedAggregateRoot<TKey> : Aggregate<TKey, ITracedDomainEvent>, ITracedAggregateRoot<TKey>
     {
-        private readonly HandlerManager<ITracedDomainEvent> _handlers = new();
+        private readonly FireForgetManager<ITracedDomainEvent> _handlers = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TracedAggregateRoot{TKey}"/> class.
@@ -41,7 +41,7 @@ namespace Savvyio.Domain
         /// Registers the delegates responsible of handling types that implements the <see cref="ITracedDomainEvent"/> interface.
         /// </summary>
         /// <param name="handler">The registry that store the delegates of type <see cref="ITracedDomainEvent"/>.</param>
-        protected abstract void RegisterTracedDomainEventHandlers(IHandlerRegistry<ITracedDomainEvent> handler);
+        protected abstract void RegisterTracedDomainEventHandlers(IFireForgetRegistry<ITracedDomainEvent> handler);
 
         /// <summary>
         /// Gets the version of the Aggregate.

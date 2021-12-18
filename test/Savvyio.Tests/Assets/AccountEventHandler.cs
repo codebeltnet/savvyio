@@ -18,7 +18,7 @@ namespace Savvyio.Assets
             _testStore = testStore;
         }
 
-        protected override void RegisterEventHandlers(IHandlerRegistry<IIntegrationEvent> handler)
+        protected override void RegisterEventHandlers(IFireForgetRegistry<IIntegrationEvent> handler)
         {
             handler.RegisterAsync<AccountCreated>(OnOutProcAccountCreated);
             handler.RegisterAsync<AccountUpdated>(OnOutProcAccountUpdated);

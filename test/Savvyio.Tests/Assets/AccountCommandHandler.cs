@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Cuemon.Extensions;
 using Savvyio.Assets.Commands;
 using Savvyio.Assets.Domain;
 using Savvyio.Assets.Events;
 using Savvyio.Commands;
 using Savvyio.Domain;
-using Savvyio.Events;
 using Xunit.Abstractions;
 
 namespace Savvyio.Assets
@@ -25,7 +22,7 @@ namespace Savvyio.Assets
             _output = output;
         }
 
-        protected override void RegisterCommandHandlers(IHandlerRegistry<ICommand> handler)
+        protected override void RegisterCommandHandlers(IFireForgetRegistry<ICommand> handler)
         {
             handler.RegisterAsync<CreateAccount>(CreateAccountAsync);
             handler.RegisterAsync<UpdateAccount>(c =>

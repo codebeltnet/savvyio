@@ -10,6 +10,6 @@
         /// Gets the activator responsible of invoking delegates that handles <see cref="IDomainEvent"/>.
         /// </summary>
         /// <value>The activator responsible of invoking delegates that handles <see cref="IDomainEvent"/>.</value>
-        IHandlerActivator<IDomainEvent> DomainEvents { get; }
+        IFireForgetActivator<IDomainEvent> DomainEvents { get; }
     }
 }

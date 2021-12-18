@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Security.Cryptography" Version="6.3.0" />
+    <PackageReference Include="Cuemon.Security.Cryptography" Version="6.4.0-preview.6" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="Cuemon.Extensions.Xunit.Hosting" Version="6.3.0" />
+    <PackageReference Update="Cuemon.Extensions.Xunit.Hosting" Version="6.4.0-preview.6" />
   </ItemGroup>
 
 </Project>

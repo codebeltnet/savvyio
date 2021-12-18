@@ -27,7 +27,7 @@ namespace Savvyio.Assets
             _activeRecordRepository = activeRecordRepository;
         }
 
-        public IHandlerActivator<ICommand> Commands => HandlerManager.Create<ICommand>(handler =>
+        public IFireForgetActivator<ICommand> Commands => HandlerFactory.CreateFireForget<ICommand>(handler =>
         {
             handler.RegisterAsync<CreatePlatformProvider>(c =>
             {
@@ -55,7 +55,7 @@ namespace Savvyio.Assets
             });
         });
 
-        public IHandlerActivator<IIntegrationEvent> IntegrationEvents => HandlerManager.Create<IIntegrationEvent>(handler =>
+        public IFireForgetActivator<IIntegrationEvent> IntegrationEvents => HandlerFactory.CreateFireForget<IIntegrationEvent>(handler =>
         {
             handler.RegisterAsync<PlatformProviderCreated>(e =>
             {

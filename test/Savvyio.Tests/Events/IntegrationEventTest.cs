@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cuemon.Extensions.Reflection;
 using Cuemon.Extensions.Xunit;
-using Savvyio.Assets.Domain;
-using Savvyio.Assets.Domain.Events;
 using Savvyio.Assets.Events;
 using Xunit;
 using Xunit.Abstractions;

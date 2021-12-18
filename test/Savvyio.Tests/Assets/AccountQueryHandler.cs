@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Savvyio.Assets.Domain;
 using Savvyio.Assets.Queries;
 using Savvyio.Queries;
 
@@ -12,10 +8,16 @@ namespace Savvyio.Assets
 {
     public class AccountQueryHandler : QueryHandler
     {
-        protected override void RegisterQueryHandlers(IResponseHandlerRegistry<IQuery> handler)
+        protected override void RegisterQueryHandlers(IRequestReplyRegistry<IQuery> handler)
         {
             handler.RegisterAsync<GetAccount, string>(GetAccountAsync);
+            handler.RegisterAsync<GetAccount, string>(HandlerAsync);
             handler.Register<GetAccount, string>(Handler);
+        }
+
+        private Task<string> HandlerAsync(GetAccount arg1, CancellationToken arg2)
+        {
+            throw new NotImplementedException();
         }
 
         private string Handler(GetAccount arg)

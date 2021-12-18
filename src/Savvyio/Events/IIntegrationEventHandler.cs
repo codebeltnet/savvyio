@@ -10,6 +10,6 @@
         /// Gets the activator responsible of invoking delegates that handles <see cref="IIntegrationEvent"/>.
         /// </summary>
         /// <value>The activator responsible of invoking delegates that handles <see cref="IIntegrationEvent"/>.</value>
-        IHandlerActivator<IIntegrationEvent> IntegrationEvents { get; }
+        IFireForgetActivator<IIntegrationEvent> IntegrationEvents { get; }
     }
 }

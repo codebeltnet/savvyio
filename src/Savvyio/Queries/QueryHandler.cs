@@ -2,7 +2,7 @@
 {
     public abstract class QueryHandler : IQueryHandler
     {
-        private readonly ResponseHandlerManager<IQuery> _handlerManager = new();
+        private readonly RequestReplyManager<IQuery> _handlerManager = new();
 
         protected QueryHandler()
         {
@@ -14,8 +14,8 @@
             RegisterQueryHandlers(_handlerManager);
         }
 
-        protected abstract void RegisterQueryHandlers(IResponseHandlerRegistry<IQuery> handler);
+        protected abstract void RegisterQueryHandlers(IRequestReplyRegistry<IQuery> handler);
 
-        public IResponseHandlerActivator<IQuery> Queries => _handlerManager;
+        public IRequestReplyActivator<IQuery> Queries => _handlerManager;
     }
 }

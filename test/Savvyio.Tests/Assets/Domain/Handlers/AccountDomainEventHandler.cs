@@ -20,7 +20,7 @@ namespace Savvyio.Assets.Domain.Handlers
             _mediator = mediator;
         }
 
-        protected override void RegisterDomainEventHandlers(IHandlerRegistry<IDomainEvent> handler)
+        protected override void RegisterDomainEventHandlers(IFireForgetRegistry<IDomainEvent> handler)
         {
             handler.RegisterAsync<AccountInitiated>(OnInProcAccountInitiated);
             handler.RegisterAsync<AccountEmailAddressChanged>(OnInProcAccountEmailAddressChanged);

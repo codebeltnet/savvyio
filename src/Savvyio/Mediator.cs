@@ -130,36 +130,38 @@ namespace Savvyio
             throw new OrphanedHandlerException($"Unable to retrieve an {handlerType.Name} for the specified {nameof(IQuery)}: {modelType.FullName}.", nameof(query));
         }
 
-        private void Dispatch<TModel, THandler>(TModel model, Func<THandler, IHandlerActivator<TModel>> handlerFactory, string parameterName) where THandler : IHandler<TModel>
+        private void Dispatch<TModel, THandler>(TModel model, Func<THandler, IFireForgetActivator<TModel>> handlerFactory, string parameterName) where THandler : IHandler<TModel>
         {
             Validator.ThrowIfNull(model, parameterName);
             var handlerType = typeof(THandler);
             var modelType = model.GetType();
+            var hasHandler = false;
             if (_serviceFactory(handlerType) is IEnumerable<THandler> handlers)
             {
-                foreach (var handler in handlers)
+                foreach (var handler in handlers) // allow multiple handlers for same model
                 {
-                    if (handlerFactory(handler).TryInvoke(model)) { return; }
+                    hasHandler |= handlerFactory(handler).TryInvoke(model);
                 }
             }
-            throw new OrphanedHandlerException($"Unable to retrieve an {handlerType.Name} for the specified {typeof(TModel).Name}: {modelType.FullName}.", parameterName);
+            if (!hasHandler) { throw new OrphanedHandlerException($"Unable to retrieve an {handlerType.Name} for the specified {typeof(TModel).Name}: {modelType.FullName}.", parameterName); }
         }
 
-        private async Task DispatchAsync<TModel, THandler>(TModel model, Func<THandler, IHandlerActivator<TModel>> handlerFactory, Action<AsyncOptions> setup, string parameterName) where THandler : IHandler<TModel>
+        private async Task DispatchAsync<TModel, THandler>(TModel model, Func<THandler, IFireForgetActivator<TModel>> handlerFactory, Action<AsyncOptions> setup, string parameterName) where THandler : IHandler<TModel>
         {
             Validator.ThrowIfNull(model, parameterName);
             var options = setup.Configure();
             var handlerType = typeof(THandler);
             var modelType = model.GetType();
+            var hasHandler = false;
             if (_serviceFactory(handlerType) is IEnumerable<THandler> handlers)
             {
-                foreach (var handler in handlers)
+                foreach (var handler in handlers) // allow multiple handlers for same model
                 {
                     var operation = await handlerFactory(handler).TryInvokeAsync(model, options.CancellationToken).ConfigureAwait(false);
-                    if (operation.Succeeded) { return; }
+                    hasHandler |= operation.Succeeded;
                 }
             }
-            throw new OrphanedHandlerException($"Unable to retrieve an {handlerType.Name} for the specified {typeof(TModel).Name}: {modelType.FullName}.", parameterName);
+            if (!hasHandler) { throw new OrphanedHandlerException($"Unable to retrieve an {handlerType.Name} for the specified {typeof(TModel).Name}: {modelType.FullName}.", parameterName); }
         }
     }
 }

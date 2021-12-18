@@ -6,7 +6,7 @@
     /// <seealso cref="IDomainEventHandler" />
     public abstract class DomainEventHandler : IDomainEventHandler
     {
-        private readonly HandlerManager<IDomainEvent> _handlerManager = new();
+        private readonly FireForgetManager<IDomainEvent> _manager = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainEventHandler"/> class.
@@ -18,19 +18,19 @@
 
         private void Initialize()
         {
-            RegisterDomainEventHandlers(_handlerManager);
+            RegisterDomainEventHandlers(_manager);
         }
 
         /// <summary>
         /// Registers the delegates responsible of handling types that implements the <see cref="IDomainEvent"/> interface.
         /// </summary>
         /// <param name="handler">The registry that store the delegates of type <see cref="IDomainEvent"/>.</param>
-        protected abstract void RegisterDomainEventHandlers(IHandlerRegistry<IDomainEvent> handler);
+        protected abstract void RegisterDomainEventHandlers(IFireForgetRegistry<IDomainEvent> handler);
 
         /// <summary>
         /// Gets the activator responsible of invoking delegates that handles <see cref="IDomainEvent" />.
         /// </summary>
         /// <value>The activator responsible of invoking delegates that handles <see cref="IDomainEvent" />.</value>
-        public IHandlerActivator<IDomainEvent> DomainEvents => _handlerManager;
+        public IFireForgetActivator<IDomainEvent> DomainEvents => _manager;
     }
 }

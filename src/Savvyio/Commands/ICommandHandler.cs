@@ -10,6 +10,6 @@
         /// Gets the activator responsible of invoking delegates that handles <see cref="ICommand"/>.
         /// </summary>
         /// <value>The activator responsible of invoking delegates that handles <see cref="ICommand"/>.</value>
-        IHandlerActivator<ICommand> Commands { get; }
+        IFireForgetActivator<ICommand> Commands { get; }
     }
 }

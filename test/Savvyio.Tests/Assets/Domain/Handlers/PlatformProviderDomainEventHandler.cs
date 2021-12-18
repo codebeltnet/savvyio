@@ -18,7 +18,7 @@ namespace Savvyio.Assets.Domain.Handlers
             _testStore = testStore;
         }
 
-        protected override void RegisterDomainEventHandlers(IHandlerRegistry<IDomainEvent> handler)
+        protected override void RegisterDomainEventHandlers(IFireForgetRegistry<IDomainEvent> handler)
         {
             handler.RegisterAsync<PlatformProviderAccountPolicyChanged>(e =>
             {

@@ -3,15 +3,16 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 using Cuemon;
+using Cuemon.Threading;
 
 namespace Savvyio
 {
-    public class HandlerManager<TModel> : IHandlerRegistry<TModel>, IHandlerActivator<TModel>
+    internal class FireForgetManager<TModel> : IFireForgetRegistry<TModel>, IFireForgetActivator<TModel>
     {
         private readonly ConcurrentDictionary<Type, Action<TModel>> _handlers = new();
         private readonly ConcurrentDictionary<Type, Func<TModel, CancellationToken, Task>> _asyncHandlers = new();
 
-        public HandlerManager()
+        public FireForgetManager()
         {
         }
 
@@ -21,16 +22,10 @@ namespace Savvyio
             _handlers.TryAdd(typeof(T), e => handler(e as T));
         }
 
-        public void RegisterAsync<T>(Func<T, Task> handler) where T : class, TModel
-        {
-            Validator.ThrowIfNull(handler, nameof(handler));
-            _asyncHandlers.TryAdd(typeof(T), (h, _) => handler(h as T));
-        }
-
         public void RegisterAsync<T>(Func<T, CancellationToken, Task> handler) where T : class, TModel
         {
             Validator.ThrowIfNull(handler, nameof(handler));
-            _asyncHandlers.TryAdd(typeof(T), (h, t) => handler(h as T, t));
+            _asyncHandlers.TryAdd(typeof(T), async (h, t) => await handler(h as T, t));
         }
 
         public bool TryInvoke(TModel model)
@@ -44,31 +39,15 @@ namespace Savvyio
             return false;
         }
 
-        public bool TryInvoke<TResult>(TModel model, out TResult result)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<ConditionalOperation> TryInvokeAsync(TModel model, CancellationToken ct = default)
+        public async Task<ConditionalValue> TryInvokeAsync(TModel model, CancellationToken ct = default)
         {
             Validator.ThrowIfNull(model, nameof(model));
             if (_asyncHandlers.TryGetValue(model.GetType(), out var handler))
             {
                 await handler(model, ct).ConfigureAwait(false);
-                return new SuccessfulOperation();
+                return new SuccessfulValue();
             }
-            return new UnsuccessfulOperation();
-        }
-    }
-
-    public static class HandlerManager
-    {
-        public static IHandlerActivator<T> Create<T>(Action<IHandlerRegistry<T>> handlerRegistrar)
-        {
-            Validator.ThrowIfNull(handlerRegistrar, nameof(handlerRegistrar));
-            var handlerManager = new HandlerManager<T>();
-            handlerRegistrar(handlerManager);
-            return handlerManager;
+            return new UnsuccessfulValue();
         }
     }
 }
