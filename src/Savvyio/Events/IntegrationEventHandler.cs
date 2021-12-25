@@ -18,19 +18,19 @@
 
         private void Initialize()
         {
-            RegisterEventHandlers(_manager);
+            RegisterDelegates(_manager);
         }
 
         /// <summary>
         /// Registers the delegates responsible of handling types that implements the <see cref="IIntegrationEvent"/> interface.
         /// </summary>
-        /// <param name="handler">The registry that store the delegates of type <see cref="IIntegrationEvent"/>.</param>
-        protected abstract void RegisterEventHandlers(IFireForgetRegistry<IIntegrationEvent> handler);
+        /// <param name="handlers">The registry that store the delegates of type <see cref="IIntegrationEvent"/>.</param>
+        protected abstract void RegisterDelegates(IFireForgetRegistry<IIntegrationEvent> handlers);
 
         /// <summary>
         /// Gets the activator responsible of invoking delegates that handles <see cref="IIntegrationEvent" />.
         /// </summary>
         /// <value>The activator responsible of invoking delegates that handles <see cref="IIntegrationEvent" />.</value>
-        public IFireForgetActivator<IIntegrationEvent> IntegrationEvents => _manager;
+        public IFireForgetActivator<IIntegrationEvent> Delegates => _manager;
     }
 }

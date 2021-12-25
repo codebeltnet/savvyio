@@ -14,7 +14,7 @@ namespace Savvyio.Assets.Domain
         public ThirdLevelDomainName(string value) : base(value)
         {
             Validator.ThrowIfNullOrWhitespace(value, nameof(value));
-            Validator.ThrowIf.HasDifference(Alphanumeric.Letters, value, nameof(value));
+            Validator.ThrowIf.HasDifference(Alphanumeric.Letters, value, nameof(value), $"One or more invalid character(s) specified. Allowed characters are: {Alphanumeric.Letters}");
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Savvyio
         {
             HandlersLifetime = ServiceLifetime.Transient;
             MediatorLifetime = ServiceLifetime.Scoped;
-            MediatorImplementationType = typeof(Mediator);
+            MediatorImplementationType = typeof(SavvyioMediator);
             IncludeMediatorDescriptor = false;
         }
 

@@ -22,10 +22,10 @@ namespace Savvyio.Assets
             _output = output;
         }
 
-        protected override void RegisterCommandHandlers(IFireForgetRegistry<ICommand> handler)
+        protected override void RegisterDelegates(IFireForgetRegistry<ICommand> handlers)
         {
-            handler.RegisterAsync<CreateAccount>(CreateAccountAsync);
-            handler.RegisterAsync<UpdateAccount>(c =>
+            handlers.RegisterAsync<CreateAccount>(CreateAccountAsync);
+            handlers.RegisterAsync<UpdateAccount>(c =>
             {
                 var account = new Account(c.Id);
                 account.ChangeFullName(c.FullName);

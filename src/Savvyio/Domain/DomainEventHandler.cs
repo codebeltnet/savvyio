@@ -18,19 +18,19 @@
 
         private void Initialize()
         {
-            RegisterDomainEventHandlers(_manager);
+            RegisterDelegates(_manager);
         }
 
         /// <summary>
         /// Registers the delegates responsible of handling types that implements the <see cref="IDomainEvent"/> interface.
         /// </summary>
-        /// <param name="handler">The registry that store the delegates of type <see cref="IDomainEvent"/>.</param>
-        protected abstract void RegisterDomainEventHandlers(IFireForgetRegistry<IDomainEvent> handler);
+        /// <param name="handlers">The registry that store the delegates of type <see cref="IDomainEvent"/>.</param>
+        protected abstract void RegisterDelegates(IFireForgetRegistry<IDomainEvent> handlers);
 
         /// <summary>
         /// Gets the activator responsible of invoking delegates that handles <see cref="IDomainEvent" />.
         /// </summary>
         /// <value>The activator responsible of invoking delegates that handles <see cref="IDomainEvent" />.</value>
-        public IFireForgetActivator<IDomainEvent> DomainEvents => _manager;
+        public IFireForgetActivator<IDomainEvent> Delegates => _manager;
     }
 }

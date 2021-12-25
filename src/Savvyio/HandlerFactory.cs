@@ -12,4 +12,12 @@ public static class HandlerFactory
         handlerRegistrar(handlerManager);
         return handlerManager;
     }
+
+    public static IRequestReplyActivator<T> CreateRequestReply<T>(Action<IRequestReplyRegistry<T>> handlerRegistrar)
+    {
+        Validator.ThrowIfNull(handlerRegistrar, nameof(handlerRegistrar));
+        var handlerManager = new RequestReplyManager<T>();
+        handlerRegistrar(handlerManager);
+        return handlerManager;
+    }
 }

@@ -1,7 +1,7 @@
 ﻿namespace Savvyio.Commands
 {
     /// <summary>
-    /// Specifies a marker interface that represents an intention.
+    /// A marker interface that specifies an intention to do something (e.g. change the state).
     /// </summary>
     public interface ICommand : IMetadata
     {

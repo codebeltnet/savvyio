@@ -15,7 +15,7 @@ namespace Savvyio
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddMediator(this IServiceCollection services, Action<MediatorRegistry> handlersInitializer, Action<MediatorOptions> setup = null)
+        public static IServiceCollection AddSavvyioMediator(this IServiceCollection services, Action<MediatorRegistry> handlersInitializer, Action<MediatorOptions> setup = null)
         {
             Validator.ThrowIfNull(handlersInitializer, nameof(handlersInitializer));
             var handlers = handlersInitializer.Configure();
