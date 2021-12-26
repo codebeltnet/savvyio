@@ -14,6 +14,7 @@ using Savvyio.Assets.Queries;
 using Savvyio.Commands;
 using Savvyio.Domain;
 using Savvyio.Events;
+using Savvyio.Extensions.Domain;
 using Xunit;
 using Xunit.Abstractions;
 

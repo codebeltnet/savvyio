@@ -7,8 +7,9 @@ using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Threading;
 using Savvyio.Domain;
+using Savvyio.Queries;
 
-namespace Savvyio.Queries
+namespace Savvyio.Extensions.Queries
 {
     public class InMemoryQueryStore : IQueryStore
     {

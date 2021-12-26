@@ -5,8 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cuemon;
 using Cuemon.Threading;
+using Savvyio.Domain;
 
-namespace Savvyio.Domain
+namespace Savvyio.Extensions.Domain
 {
     public class InMemoryEventSourcingStore : IEventSourcingStore
     {

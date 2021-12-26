@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Savvyio.Storage.InMemory\Savvyio.Storage.InMemory.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.Storage.InMemory\Savvyio.Extensions.Storage.InMemory.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Storage\Savvyio.Storage.csproj" />
     <ProjectReference Include="..\..\src\Savvyio\Savvyio.csproj" />
   </ItemGroup>

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Savvyio.Domain;
 
-namespace Savvyio.Domain
+namespace Savvyio.Extensions.Domain
 {
     public class InMemoryActiveRecordStoreOptions<TAggregate, TKey> where TAggregate : class, IAggregateRoot<IDomainEvent, TKey>
     {

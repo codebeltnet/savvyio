@@ -9,8 +9,9 @@ using Cuemon.Configuration;
 using Cuemon.Extensions;
 using Cuemon.Threading;
 using Microsoft.Extensions.Options;
+using Savvyio.Domain;
 
-namespace Savvyio.Domain
+namespace Savvyio.Extensions.Domain
 {
     public class InMemoryActiveRecordStore<TAggregate, TKey> : Configurable<InMemoryActiveRecordStoreOptions<TAggregate, TKey>>, IActiveRecordStore<TAggregate, TKey> where TAggregate : class, IAggregateRoot<IDomainEvent, TKey>
     {

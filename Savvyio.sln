@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Tests", "test\Savvy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savvyio.Storage", "src\Savvyio.Storage\Savvyio.Storage.csproj", "{1A287768-813D-4A8F-B539-9D557DFEE41C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savvyio.Storage.InMemory", "src\Savvyio.Storage.InMemory\Savvyio.Storage.InMemory.csproj", "{29C4AD19-CD20-47C3-9A37-2379549DE9E3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savvyio.Storage.InMemory", "src\Savvyio.Extensions.Storage.InMemory\Savvyio.Extensions.Storage.InMemory.csproj", "{29C4AD19-CD20-47C3-9A37-2379549DE9E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

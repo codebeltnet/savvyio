@@ -1,7 +1,8 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Savvyio.Queries;
 
-namespace Savvyio.Queries
+namespace Savvyio.Extensions.Queries
 {
     public static class ServiceCollectionExtensions
     {
