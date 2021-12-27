@@ -18,7 +18,7 @@ All CI and CD integrations are done on [Microsoft Azure DevOps](https://azure.mi
 
 All code quality analysis are done by [SonarCloud](https://sonarcloud.io/) and [CodeCov.io](https://codecov.io/).
 
-![License](https://img.shields.io/github/license/codebeltnet/classlib-savvyio) [![Build Status](https://dev.azure.com/codebelt/savvyio/_apis/build/status/gimlichael.SavvyIO?branchName=development)](https://dev.azure.com/codebelt/savvyio/_build/latest?definitionId=9&branchName=development) [![codecov](https://codecov.io/gh/codebelt/classlib-savvyio/branch/development/graph/badge.svg)](https://codecov.io/gh/codebelt/classlib-savvyio) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=SavvyIO&metric=coverage)](https://sonarcloud.io/dashboard?id=SavvyIO) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](.github/CODE_OF_CONDUCT.md)
+![License](https://img.shields.io/github/license/codebeltnet/classlib-savvyio) [![Build Status](https://dev.azure.com/codebelt/savvyio/_apis/build/status/codebeltnet.classlib-savvyio?branchName=development)](https://dev.azure.com/codebelt/savvyio/_build/latest?definitionId=2&branchName=development) [![codecov](https://codecov.io/gh/codebeltnet/classlib-savvyio/branch/development/graph/badge.svg)](https://codecov.io/gh/codebeltnet/classlib-savvyio) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=savvyio&metric=coverage)](https://sonarcloud.io/dashboard?id=savvyio) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](.github/CODE_OF_CONDUCT.md)
 
 ## Development Branch
 
