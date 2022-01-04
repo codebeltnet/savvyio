@@ -15,12 +15,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsTestProject)' == 'false'">
-    <Copyright>Copyright © Geekle 2021. All rights reserved.</Copyright>
+    <Copyright>Copyright © Geekle 2021-2022. All rights reserved.</Copyright>
     <Authors>gimlichael</Authors>
     <Company>Geekle</Company>
     <Product>Savvy IO</Product>
     <PackageIcon>icon.png</PackageIcon>
-    <PackageIconUrl>https://nblcdn.net/codebelt/128x128.png</PackageIconUrl>
     <PackageProjectUrl>https://www.savvyio.net/</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/codebeltnet/classlib-savvyio</RepositoryUrl>
@@ -31,6 +30,8 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <SignAssembly Condition="'$(TF_BUILD)' == 'true' OR '$(IsMainAuthor)' == 'true'">true</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)savvyio.snk</AssemblyOriginatorKeyFile>
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
