@@ -1,15 +1,11 @@
-﻿using Savvyio.Commands;
-using Savvyio.Domain;
-using Savvyio.Events;
-using Savvyio.Queries;
-
-namespace Savvyio
+﻿namespace Savvyio
 {
     /// <summary>
-    /// Represents the base class from which all implementations of <see cref="ICommand"/>, <see cref="IDomainEvent"/>, <see cref="IIntegrationEvent"/> and <see cref="IQuery{TResult}"/> should derive.
+    /// Represents the base class from which all implementations of <see cref="IRequest"/> should derive.
     /// </summary>
     /// <seealso cref="IMetadata" />
-    public abstract class Model : IMetadata
+    /// <seealso cref="IRequest" />
+    public abstract class Model : IRequest, IMetadata
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Model"/> class.

@@ -5,7 +5,7 @@
     /// </summary>
     /// <typeparam name="TRequest">The type of the model to handle.</typeparam>
     /// <seealso cref="IHandler{TRequest}" />
-    public interface IRequestReplyHandler<TRequest> : IHandler<TRequest>
+    public interface IRequestReplyHandler<TRequest> : IHandler<TRequest> where TRequest : IRequest
     {
         /// <summary>
         /// Gets the <see cref="IRequestReplyActivator{TRequest}"/> responsible of invoking delegates that handles the <typeparamref name="TRequest"/> model.

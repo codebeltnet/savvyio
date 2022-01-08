@@ -1,11 +1,11 @@
 ﻿namespace Savvyio
 {
     /// <summary>
-    /// Defines a generic Fire-and-Forget/In-Only MEP handler.
+    /// Defines a generic handler that uses Fire-and-Forget/In-Only MEP.
     /// </summary>
     /// <typeparam name="TRequest">The type of the model to handle.</typeparam>
     /// <seealso cref="IHandler{TRequest}" />
-    public interface IFireForgetHandler<TRequest> : IHandler<TRequest>
+    public interface IFireForgetHandler<TRequest> : IHandler<TRequest> where TRequest : IRequest
     {
         /// <summary>
         /// Gets the <see cref="IFireForgetActivator{TRequest}"/> responsible of invoking delegates that handles the <typeparamref name="TRequest"/> model.
