@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Savvyio.Events
+namespace Savvyio.EventDriven
 {
     /// <summary>
     /// Provides a default implementation of of the <see cref="IIntegrationEvent"/> interface.

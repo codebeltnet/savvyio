@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Events
+﻿namespace Savvyio.EventDriven
 {
     /// <summary>
     /// Provides a generic and consistent way of handling Integration Event objects that implements the <see cref="IIntegrationEvent"/> interface. This is an abstract class.
@@ -6,19 +6,12 @@
     /// <seealso cref="IIntegrationEventHandler" />
     public abstract class IntegrationEventHandler : IIntegrationEventHandler
     {
-        private readonly FireForgetManager<IIntegrationEvent> _manager = new();
-
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegrationEventHandler"/> class.
         /// </summary>
         protected IntegrationEventHandler()
         {
-            Initialize();
-        }
-
-        private void Initialize()
-        {
-            RegisterDelegates(_manager);
+            Delegates = HandlerFactory.CreateFireForget<IIntegrationEvent>(RegisterDelegates);
         }
 
         /// <summary>
@@ -31,6 +24,6 @@
         /// Gets the activator responsible of invoking delegates that handles <see cref="IIntegrationEvent" />.
         /// </summary>
         /// <value>The activator responsible of invoking delegates that handles <see cref="IIntegrationEvent" />.</value>
-        public IFireForgetActivator<IIntegrationEvent> Delegates => _manager;
+        public IFireForgetActivator<IIntegrationEvent> Delegates { get; }
     }
 }
