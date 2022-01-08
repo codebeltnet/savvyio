@@ -22,7 +22,7 @@ namespace Savvyio.Domain
         }
 
         /// <summary>
-        /// Invokes any domain event handlers that is assigned to the specified event.
+        /// Raises the specified <paramref name="request"/> using Fire-and-Forget/In-Only MEP.
         /// </summary>
         /// <param name="request">The <see cref="IDomainEvent" /> to raise.</param>
         public void Raise(IDomainEvent request)
@@ -32,7 +32,7 @@ namespace Savvyio.Domain
         }
 
         /// <summary>
-        /// Invokes any domain event handlers that is assigned to the specified event.
+        /// Raises the specified <paramref name="request"/> using Fire-and-Forget/In-Only MEP.
         /// </summary>
         /// <param name="request">The <see cref="IDomainEvent" /> to raise.</param>
         /// <param name="setup">The <see cref="AsyncOptions" /> which may be configured.</param>
