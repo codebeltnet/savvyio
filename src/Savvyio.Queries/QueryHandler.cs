@@ -6,19 +6,12 @@
     /// <seealso cref="IQueryHandler" />
     public abstract class QueryHandler : IQueryHandler
     {
-        private readonly RequestReplyManager<IQuery> _manager = new();
-
         /// <summary>
         /// Initializes a new instance of the <see cref="QueryHandler"/> class.
         /// </summary>
         protected QueryHandler()
         {
-            Initialize();
-        }
-
-        private void Initialize()
-        {
-            RegisterDelegates(_manager);
+            Delegates = HandlerFactory.CreateRequestReply<IQuery>(RegisterDelegates);
         }
 
         /// <summary>
@@ -31,6 +24,6 @@
         /// Gets the activator responsible of invoking delegates that handles <see cref="IQuery" />.
         /// </summary>
         /// <value>The activator responsible of invoking delegates that handles <see cref="IQuery" />.</value>
-        public IRequestReplyActivator<IQuery> Delegates => _manager;
+        public IRequestReplyActivator<IQuery> Delegates { get; }
     }
 }

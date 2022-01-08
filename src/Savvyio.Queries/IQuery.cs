@@ -3,7 +3,7 @@
     /// <summary>
     /// A marker interface that specifies something that returns data.
     /// </summary>
-    public interface IQuery : IMetadata
+    public interface IQuery : IRequest, IMetadata
     {
     }
 
