@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Savvyio.Commands\Savvyio.Commands.csproj" />
+    <ProjectReference Include="..\Savvyio.Domain\Savvyio.Domain.csproj" />
+    <ProjectReference Include="..\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
+    <ProjectReference Include="..\Savvyio.Queries\Savvyio.Queries.csproj" />
+    <ProjectReference Include="..\Savvyio\Savvyio.csproj" />
+  </ItemGroup>
+
+</Project>
