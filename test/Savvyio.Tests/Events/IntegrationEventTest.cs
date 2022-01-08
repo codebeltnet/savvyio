@@ -2,6 +2,7 @@
 using Cuemon.Extensions.Reflection;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Events;
+using Savvyio.EventDriven;
 using Xunit;
 using Xunit.Abstractions;
 

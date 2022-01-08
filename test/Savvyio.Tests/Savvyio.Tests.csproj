@@ -9,7 +9,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Savvyio.Commands\Savvyio.Commands.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Domain\Savvyio.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.Storage.InMemory\Savvyio.Extensions.Storage.InMemory.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions\Savvyio.Extensions.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Queries\Savvyio.Queries.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Storage\Savvyio.Storage.csproj" />
     <ProjectReference Include="..\..\src\Savvyio\Savvyio.csproj" />
   </ItemGroup>

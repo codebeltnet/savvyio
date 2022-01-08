@@ -10,14 +10,14 @@ namespace Savvyio.Domain
     public class ActiveRecordRepository<TAggregate, TKey> : IActiveRecordRepository<TAggregate, TKey> where TAggregate : class, IAggregateRoot<IDomainEvent, TKey>
     {
         private readonly IActiveRecordStore<TAggregate, TKey> _store;
-        private readonly IMediator _mediator;
+        private readonly IDomainEventDispatcher _dispatcher;
 
-        public ActiveRecordRepository(IActiveRecordStore<TAggregate, TKey> activeRecordStore, IMediator mediator)
+        public ActiveRecordRepository(IActiveRecordStore<TAggregate, TKey> activeRecordStore, IDomainEventDispatcher dispatcher)
         {
             Validator.ThrowIfNull(activeRecordStore, nameof(activeRecordStore));
-            Validator.ThrowIfNull(mediator, nameof(mediator));
+            Validator.ThrowIfNull(dispatcher, nameof(dispatcher));
             _store = activeRecordStore;
-            _mediator = mediator;
+            _dispatcher = dispatcher;
         }
 
         public Task<TAggregate> LoadAsync(TKey id, Action<AsyncOptions> setup = null)
@@ -33,7 +33,7 @@ namespace Savvyio.Domain
         public async Task SaveAsync(TAggregate aggregate, Action<AsyncOptions> setup = null)
         {
             Validator.ThrowIfNull(aggregate, nameof(aggregate));
-            await _mediator.PublishDomainEventsAsync(aggregate, setup).ConfigureAwait(false);
+            await _dispatcher.RaiseManyAsync(aggregate, setup).ConfigureAwait(false);
             await _store.SaveAsync(aggregate, setup).ConfigureAwait(false);
         }
 

@@ -1,4 +1,4 @@
-﻿using Savvyio.Events;
+﻿using Savvyio.EventDriven;
 
 namespace Savvyio.Assets.Events
 {

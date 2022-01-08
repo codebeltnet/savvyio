@@ -1,6 +1,6 @@
 ﻿using System;
 using Savvyio.Assets.Domain;
-using Savvyio.Events;
+using Savvyio.EventDriven;
 
 namespace Savvyio.Assets.Events
 {

@@ -13,8 +13,10 @@ using Savvyio.Assets.Events;
 using Savvyio.Assets.Queries;
 using Savvyio.Commands;
 using Savvyio.Domain;
-using Savvyio.Events;
+using Savvyio.EventDriven;
+using Savvyio.Extensions;
 using Savvyio.Extensions.Domain;
+using Savvyio.Queries;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -29,31 +31,31 @@ namespace Savvyio
         [Fact]
         public void Host_MediatorShouldBeRegistered_UsingDefaultOptions()
         {
-            using (var host = GenericHostTestFactory.CreateGenericHostTest(services => services.AddSavvyioMediator(registry => registry.AddHandlersFromCurrentDomain())))
+            using (var host = GenericHostTestFactory.CreateGenericHostTest(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>())))
             {
                 var mediator = host.ServiceProvider.GetRequiredService<IMediator>();
 
-                Assert.IsType<SavvyioMediator>(mediator);
+                Assert.IsType<Mediator>(mediator);
             }
         }
 
         [Fact]
         public void Host_MediatorDescriptorShouldNotBeRegistered_UsingDefaultOptions()
         {
-            using (var host = GenericHostTestFactory.CreateGenericHostTest(services => services.AddSavvyioMediator(registry => registry.AddHandlersFromCurrentDomain())))
+            using (var host = GenericHostTestFactory.CreateGenericHostTest(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>())))
             {
-                Assert.Throws<InvalidOperationException>(() => host.ServiceProvider.GetRequiredService<MediatorDescriptor>());
+                Assert.Throws<InvalidOperationException>(() => host.ServiceProvider.GetRequiredService<SavvyioServiceDescriptor>());
             }
         }
 
         [Fact]
         public void Host_MediatorDescriptorShouldBeRegistered()
         {
-            using (var host = GenericHostTestFactory.CreateGenericHostTest(services => services.AddSavvyioMediator(registry => registry.AddHandlersFromCurrentDomain(), o => o.IncludeMediatorDescriptor = true)))
+            using (var host = GenericHostTestFactory.CreateGenericHostTest(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>().IncludeServicesDescriptor = true)))
             {
-                var descriptor = host.ServiceProvider.GetRequiredService<MediatorDescriptor>();
+                var descriptor = host.ServiceProvider.GetRequiredService<SavvyioServiceDescriptor>();
 
-                Assert.IsType<MediatorDescriptor>(descriptor);
+                Assert.IsType<SavvyioServiceDescriptor>(descriptor);
 
                 TestOutput.WriteLine(descriptor.ToString());
             }
@@ -69,13 +71,13 @@ namespace Savvyio
                 services.AddInMemoryActiveRecordStore<PlatformProvider, Guid>();
                 services.AddActiveRecordRepository<Account, long>();
                 services.AddActiveRecordRepository<PlatformProvider, Guid>();
-                services.AddSavvyioMediator(registry => registry.AddHandlersFromCurrentDomain(), o => o.IncludeMediatorDescriptor = true);
+                services.AddSavvyIO(registry => registry.AddMediator<Mediator>().IncludeServicesDescriptor = true);
                 services.AddScoped<ITestStore<IDomainEvent>, DomainEventStore>();
                 services.AddScoped<ITestStore<IIntegrationEvent>, IntegrationEventStore>();
             }))
             {
                 var mediator = host.ServiceProvider.GetRequiredService<IMediator>();
-                var descriptor = host.ServiceProvider.GetRequiredService<MediatorDescriptor>();
+                var descriptor = host.ServiceProvider.GetRequiredService<SavvyioServiceDescriptor>();
                 var deStore = host.ServiceProvider.GetRequiredService<ITestStore<IDomainEvent>>();
                 var ieStore = host.ServiceProvider.GetRequiredService<ITestStore<IIntegrationEvent>>();
 
@@ -103,13 +105,18 @@ namespace Savvyio
                 services.AddInMemoryActiveRecordStore<PlatformProvider, Guid>();
                 services.AddActiveRecordRepository<Account, long>();
                 services.AddActiveRecordRepository<PlatformProvider, Guid>();
-                services.AddSavvyioMediator(registry => registry.AddHandlersFromCurrentDomain(), o => o.IncludeMediatorDescriptor = true);
+                services.AddSavvyIO(registry =>
+                {
+                    registry.AutoResolveDispatchers = false;
+                    registry.AddMediator<Mediator>();
+                    registry.IncludeServicesDescriptor = true;
+                });
                 services.AddScoped<ITestStore<IDomainEvent>, DomainEventStore>();
                 services.AddScoped<ITestStore<IIntegrationEvent>, IntegrationEventStore>();
             }))
             {
                 var mediator = host.ServiceProvider.GetRequiredService<IMediator>();
-                var descriptor = host.ServiceProvider.GetRequiredService<MediatorDescriptor>();
+                var descriptor = host.ServiceProvider.GetRequiredService<SavvyioServiceDescriptor>();
                 var deStore = host.ServiceProvider.GetRequiredService<ITestStore<IDomainEvent>>();
                 var ieStore = host.ServiceProvider.GetRequiredService<ITestStore<IIntegrationEvent>>();
 
@@ -137,13 +144,19 @@ namespace Savvyio
                        services.AddInMemoryActiveRecordStore<PlatformProvider, Guid>();
                        services.AddActiveRecordRepository<Account, long>();
                        services.AddActiveRecordRepository<PlatformProvider, Guid>();
-                       services.AddSavvyioMediator(registry => registry.AddHandlersFromCurrentDomain(), o => o.IncludeMediatorDescriptor = true);
+                       services.AddSavvyIO(options =>
+                       {
+                           //options.AddQueryHandler<AccountQueryHandler>();
+                           //options.AddService<IQueryHandler>();
+                           options.IncludeServicesDescriptor = true;
+                           //options.AddDispatcher<IQueryDispatcher, QueryDispatcher>();
+                       });
                        services.AddScoped<ITestStore<IDomainEvent>, DomainEventStore>();
                        services.AddScoped<ITestStore<IIntegrationEvent>, IntegrationEventStore>();
                    }))
             {
-                var mediator = host.ServiceProvider.GetRequiredService<IMediator>();
-                var descriptor = host.ServiceProvider.GetRequiredService<MediatorDescriptor>();
+                var mediator = host.ServiceProvider.GetRequiredService<IQueryDispatcher>();
+                var descriptor = host.ServiceProvider.GetRequiredService<SavvyioServiceDescriptor>();
                 var deStore = host.ServiceProvider.GetRequiredService<ITestStore<IDomainEvent>>();
                 var ieStore = host.ServiceProvider.GetRequiredService<ITestStore<IIntegrationEvent>>();
 

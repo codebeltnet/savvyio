@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Cuemon;
 using Cuemon.Threading;
 using Savvyio.Domain;
+using Savvyio.Domain.EventSourcing;
 
 namespace Savvyio.Extensions.Domain
 {

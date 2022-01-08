@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Domain.Events;
 using Savvyio.Domain;
+using Savvyio.Extensions;
 using Xunit.Abstractions;
 
 namespace Savvyio.Assets.Domain.Handlers
@@ -53,7 +54,7 @@ namespace Savvyio.Assets.Domain.Handlers
         {
             _testStore.Add(e);
             _output.WriteLines($"DE {nameof(OnInProcAccountInitiated)}", JsonSerializer.Serialize(e));
-            _mediator.PublishAsync(new AccountInitiatedChained().MergeMetadata(e).SetCausationId(e.GetEventId()));
+            _mediator.RaiseAsync(new AccountInitiatedChained().MergeMetadata(e).SetCausationId(e.GetEventId()));
             return Task.CompletedTask;
         }
     }

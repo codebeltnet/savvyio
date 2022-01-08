@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31410.357
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio", "src\Savvyio\Savvyio.csproj", "{5BEC19AB-F115-40F0-993C-35140A8B316C}"
 EndProject
@@ -11,9 +11,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{407762FB-2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Tests", "test\Savvyio.Tests\Savvyio.Tests.csproj", "{D7D4458E-439D-4944-9827-8C1A70623063}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savvyio.Storage", "src\Savvyio.Storage\Savvyio.Storage.csproj", "{1A287768-813D-4A8F-B539-9D557DFEE41C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Storage", "src\Savvyio.Storage\Savvyio.Storage.csproj", "{1A287768-813D-4A8F-B539-9D557DFEE41C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savvyio.Storage.InMemory", "src\Savvyio.Extensions.Storage.InMemory\Savvyio.Extensions.Storage.InMemory.csproj", "{29C4AD19-CD20-47C3-9A37-2379549DE9E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Storage.InMemory", "src\Savvyio.Extensions.Storage.InMemory\Savvyio.Extensions.Storage.InMemory.csproj", "{29C4AD19-CD20-47C3-9A37-2379549DE9E3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.EventDriven", "src\Savvyio.EventDriven\Savvyio.EventDriven.csproj", "{99A95321-0DFB-49D1-BAFF-7A292F1F15AC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Commands", "src\Savvyio.Commands\Savvyio.Commands.csproj", "{A0A7ADAC-5970-4463-954D-E860D0CA5C23}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Queries", "src\Savvyio.Queries\Savvyio.Queries.csproj", "{9770065A-43E6-40DE-A185-B733851C7536}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Domain", "src\Savvyio.Domain\Savvyio.Domain.csproj", "{03DC4902-28E4-416F-AB32-34D645A9428C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions", "src\Savvyio.Extensions\Savvyio.Extensions.csproj", "{139A77D1-93E8-4C14-996D-FFBB5457348B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Domain.EventSourcing", "src\Savvyio.Domain.EventSourcing\Savvyio.Domain.EventSourcing.csproj", "{6796D33B-8688-4434-9AC2-9F8690D58427}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +49,30 @@ Global
 		{29C4AD19-CD20-47C3-9A37-2379549DE9E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29C4AD19-CD20-47C3-9A37-2379549DE9E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29C4AD19-CD20-47C3-9A37-2379549DE9E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99A95321-0DFB-49D1-BAFF-7A292F1F15AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99A95321-0DFB-49D1-BAFF-7A292F1F15AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99A95321-0DFB-49D1-BAFF-7A292F1F15AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99A95321-0DFB-49D1-BAFF-7A292F1F15AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0A7ADAC-5970-4463-954D-E860D0CA5C23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0A7ADAC-5970-4463-954D-E860D0CA5C23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0A7ADAC-5970-4463-954D-E860D0CA5C23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0A7ADAC-5970-4463-954D-E860D0CA5C23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9770065A-43E6-40DE-A185-B733851C7536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9770065A-43E6-40DE-A185-B733851C7536}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9770065A-43E6-40DE-A185-B733851C7536}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9770065A-43E6-40DE-A185-B733851C7536}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03DC4902-28E4-416F-AB32-34D645A9428C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03DC4902-28E4-416F-AB32-34D645A9428C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03DC4902-28E4-416F-AB32-34D645A9428C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03DC4902-28E4-416F-AB32-34D645A9428C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{139A77D1-93E8-4C14-996D-FFBB5457348B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{139A77D1-93E8-4C14-996D-FFBB5457348B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{139A77D1-93E8-4C14-996D-FFBB5457348B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{139A77D1-93E8-4C14-996D-FFBB5457348B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6796D33B-8688-4434-9AC2-9F8690D58427}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6796D33B-8688-4434-9AC2-9F8690D58427}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6796D33B-8688-4434-9AC2-9F8690D58427}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6796D33B-8688-4434-9AC2-9F8690D58427}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +82,12 @@ Global
 		{D7D4458E-439D-4944-9827-8C1A70623063} = {407762FB-26D8-435F-AE16-C76791EC9FEC}
 		{1A287768-813D-4A8F-B539-9D557DFEE41C} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
 		{29C4AD19-CD20-47C3-9A37-2379549DE9E3} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
+		{99A95321-0DFB-49D1-BAFF-7A292F1F15AC} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
+		{A0A7ADAC-5970-4463-954D-E860D0CA5C23} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
+		{9770065A-43E6-40DE-A185-B733851C7536} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
+		{03DC4902-28E4-416F-AB32-34D645A9428C} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
+		{139A77D1-93E8-4C14-996D-FFBB5457348B} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
+		{6796D33B-8688-4434-9AC2-9F8690D58427} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8DDAD51-08E6-42B5-970B-2DC88D44297B}

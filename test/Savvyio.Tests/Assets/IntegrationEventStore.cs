@@ -1,5 +1,5 @@
 ﻿using Cuemon.Extensions.Xunit;
-using Savvyio.Events;
+using Savvyio.EventDriven;
 
 namespace Savvyio.Assets
 {

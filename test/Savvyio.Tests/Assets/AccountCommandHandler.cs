@@ -5,6 +5,7 @@ using Savvyio.Assets.Domain;
 using Savvyio.Assets.Events;
 using Savvyio.Commands;
 using Savvyio.Domain;
+using Savvyio.Extensions;
 using Xunit.Abstractions;
 
 namespace Savvyio.Assets

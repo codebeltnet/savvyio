@@ -5,6 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Savvyio.Domain.EventSourcing\Savvyio.Domain.EventSourcing.csproj" />
+    <ProjectReference Include="..\Savvyio.Domain\Savvyio.Domain.csproj" />
+    <ProjectReference Include="..\Savvyio.Queries\Savvyio.Queries.csproj" />
     <ProjectReference Include="..\Savvyio.Storage\Savvyio.Storage.csproj" />
   </ItemGroup>
 
