@@ -1,11 +1,9 @@
-﻿using Savvyio.Messaging;
-
-namespace Savvyio.Domain.EventSourcing
+﻿namespace Savvyio.Domain.EventSourcing
 {
     /// <summary>
     /// Specifies something that happened in the domain that you want other parts of the same domain (in-process/inner-application) to be aware of.
     /// </summary>
-    public interface ITracedDomainMessage : IMessage<ITracedDomainEvent>
+    public interface ITracedDomainMessage
     {
         /// <summary>
         /// Gets the type of the event.
