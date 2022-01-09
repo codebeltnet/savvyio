@@ -1,4 +1,6 @@
-﻿namespace Savvyio.EventDriven.Messaging
+﻿using System;
+
+namespace Savvyio.EventDriven.Messaging
 {
     public interface IMessage<out TData>
     {
