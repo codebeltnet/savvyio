@@ -5,7 +5,7 @@ using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Threading;
 
-namespace Savvyio
+namespace Savvyio.MessageExchangePatterns
 {
     /// <summary>
     /// Provides a generic dispatcher that uses Request-Reply/In-Out MEP. This is an abstract class.

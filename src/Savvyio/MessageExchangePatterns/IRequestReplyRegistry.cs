@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Savvyio
+namespace Savvyio.MessageExchangePatterns
 {
     /// <summary>
     /// Specifies a Request-Reply/In-Out MEP registry that store delegates responsible of handling type <typeparamref name="TRequest"/>.

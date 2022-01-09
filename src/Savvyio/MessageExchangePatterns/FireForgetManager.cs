@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Cuemon;
 using Cuemon.Threading;
 
-namespace Savvyio
+namespace Savvyio.MessageExchangePatterns
 {
     internal class FireForgetManager<TRequest> : IFireForgetRegistry<TRequest>, IFireForgetActivator<TRequest>
     {

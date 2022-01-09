@@ -5,7 +5,7 @@ using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Threading;
 
-namespace Savvyio
+namespace Savvyio.MessageExchangePatterns
 {
     /// <summary>
     /// Provides a generic dispatcher that uses Fire-and-Forget/In-Only MEP. This is an abstract class.
