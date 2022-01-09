@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Savvyio.Assets</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cuemon.Security.Cryptography" Version="6.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Savvyio.Commands\Savvyio.Commands.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Domain.EventSourcing\Savvyio.Domain.EventSourcing.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Domain\Savvyio.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions\Savvyio.Extensions.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Queries\Savvyio.Queries.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Storage\Savvyio.Storage.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio\Savvyio.csproj" />
+  </ItemGroup>
+
+</Project>
