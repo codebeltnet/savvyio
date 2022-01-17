@@ -3,10 +3,10 @@ using Savvyio.Domain;
 using Savvyio.EventDriven;
 using Savvyio.Queries;
 
-namespace Savvyio.Extensions
+namespace Savvyio.Extensions.Dispatcher
 {
     /// <summary>
-    /// Defines a mediator to encapsulate requests (Fire-and-Forget/In-Only) and request/response (Request-Reply/In-Out) patterns.
+    /// Defines a mediator to encapsulate requests (Fire-and-Forget/In-Only) and request/response (Request-Reply/In-Out) message exchange patterns.
     /// </summary>
     /// <seealso cref="ICommandDispatcher" />
     /// <seealso cref="IDomainEventDispatcher" />
