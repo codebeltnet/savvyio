@@ -7,7 +7,7 @@ using Savvyio.Domain;
 using Savvyio.EventDriven;
 using Savvyio.Queries;
 
-namespace Savvyio.Extensions.Dispatcher
+namespace Savvyio.Extensions.Dispatchers
 {
     /// <summary>
     /// Provides a default implementation of the <see cref="IMediator"/> interface.

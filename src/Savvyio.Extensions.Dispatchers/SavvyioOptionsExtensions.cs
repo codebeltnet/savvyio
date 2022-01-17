@@ -3,7 +3,7 @@ using Savvyio.Domain;
 using Savvyio.EventDriven;
 using Savvyio.Queries;
 
-namespace Savvyio.Extensions.Dispatcher
+namespace Savvyio.Extensions.Dispatchers
 {
     /// <summary>
     /// Extension methods for the <see cref="SavvyioOptions"/> class.

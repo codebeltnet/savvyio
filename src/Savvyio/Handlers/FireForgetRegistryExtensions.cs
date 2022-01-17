@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Savvyio.MessageExchangePatterns
+namespace Savvyio.Handlers
 {
     /// <summary>
     /// Extension methods for the <see cref="IFireForgetRegistry{TRequest}"/> interface.

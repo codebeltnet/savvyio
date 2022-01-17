@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Savvyio.MessageExchangePatterns
+namespace Savvyio.Handlers
 {
     /// <summary>
     /// Specifies a Fire-and-Forget/In-Only MEP registry that store delegates responsible of handling type <typeparamref name="TRequest"/>.

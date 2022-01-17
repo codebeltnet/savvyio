@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Cuemon.Threading;
 
-namespace Savvyio.MessageExchangePatterns
+namespace Savvyio.Handlers
 {
     /// <summary>
     /// Specifies a way of invoking Fire-and-Forget/In-Only MEP delegates that handles <typeparamref name="TRequest"/>.

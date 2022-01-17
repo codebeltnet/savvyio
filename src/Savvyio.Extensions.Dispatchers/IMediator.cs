@@ -3,7 +3,7 @@ using Savvyio.Domain;
 using Savvyio.EventDriven;
 using Savvyio.Queries;
 
-namespace Savvyio.Extensions.Dispatcher
+namespace Savvyio.Extensions.Dispatchers
 {
     /// <summary>
     /// Defines a mediator to encapsulate requests (Fire-and-Forget/In-Only) and request/response (Request-Reply/In-Out) message exchange patterns.

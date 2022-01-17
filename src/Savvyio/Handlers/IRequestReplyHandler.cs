@@ -1,4 +1,4 @@
-﻿namespace Savvyio.MessageExchangePatterns
+﻿namespace Savvyio.Handlers
 {
     /// <summary>
     /// Defines a generic Request-Reply/In-Out MEP handler.

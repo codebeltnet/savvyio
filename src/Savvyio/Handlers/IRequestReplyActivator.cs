@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Cuemon.Threading;
 
-namespace Savvyio.MessageExchangePatterns
+namespace Savvyio.Handlers
 {
     /// <summary>
     /// Specifies a way of invoking Request-Reply/In-Out MEP delegates that handles <typeparamref name="TRequest"/>.

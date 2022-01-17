@@ -1,4 +1,4 @@
-﻿namespace Savvyio.MessageExchangePatterns
+﻿namespace Savvyio.Handlers
 {
     /// <summary>
     /// Defines a generic handler that uses Fire-and-Forget/In-Only MEP.
