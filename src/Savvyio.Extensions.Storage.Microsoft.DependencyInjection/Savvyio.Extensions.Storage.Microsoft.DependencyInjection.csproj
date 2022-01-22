@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Savvyio.Storage</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Savvyio\Savvyio.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cuemon.Extensions.DependencyInjection" Version="6.4.0-preview.11" />
+  </ItemGroup>
+
+</Project>
