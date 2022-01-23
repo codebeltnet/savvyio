@@ -1,7 +1,7 @@
 ﻿namespace Savvyio.Storage
 {
     /// <summary>
-    /// Defines a generic way of abstracting persistent data access (CRUD).
+    /// Defines a generic way of abstracting persistent repositories (CRUD).
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     /// <typeparam name="TKey">The type of the key that uniquely identifies the entity.</typeparam>

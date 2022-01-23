@@ -3,7 +3,7 @@
 namespace Savvyio.Storage
 {
     /// <summary>
-    /// Defines a generic way of abstracting deletable data access (cruD).
+    /// Defines a generic way of abstracting deletable repositories (cruD).
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     /// <typeparam name="TKey">The type of the key that uniquely identifies the entity.</typeparam>

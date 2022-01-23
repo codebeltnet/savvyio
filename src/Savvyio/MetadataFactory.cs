@@ -13,7 +13,7 @@ namespace Savvyio
         /// </summary>
         /// <typeparam name="T">The model that implements the <see cref="IMetadata"/> interface.</typeparam>
         /// <param name="model">The <see cref="IMetadata"/> to extend.</param>
-        /// <param name="key">The key of the element to retreive.</param>
+        /// <param name="key">The key of the element to retrieve.</param>
         /// <returns>A reference to the value in the <paramref name="model"/> that is identified by <paramref name="key"/>, if the entry exists; otherwise, <c>null</c>.</returns>
         public static object Get<T>(T model, string key) where T : IMetadata
         {
@@ -29,7 +29,7 @@ namespace Savvyio
         /// </summary>
         /// <typeparam name="T">The model that implements the <see cref="IMetadata"/> interface.</typeparam>
         /// <param name="model">The <see cref="IMetadata"/> to extend.</param>
-        /// <param name="key">The key of the element to retreive.</param>
+        /// <param name="key">The key of the element to retrieve.</param>
         /// <param name="value">The value of the element to change.</param>
         /// <returns>A reference to <paramref name="model"/> after the operation has completed.</returns>
         /// <exception cref="ArgumentNullException">

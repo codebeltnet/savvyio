@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
+using Savvyio.Dispatchers;
 
 namespace Savvyio
 {
@@ -20,27 +20,76 @@ namespace Savvyio
         /// <summary>
         /// Determines if a given pair of types are a valid as a dependency.
         /// </summary>
+        /// <typeparam name="T">The type of the service to validate.</typeparam>
         /// <param name="provider">The provider type.</param>
         /// <param name="contract">The contract type.</param>
         /// <returns><c>true</c> if the specified provider is a valid dependency; otherwise, <c>false</c>.</returns>
         /// <remarks>Dependency formula: <c>provider.HasInterfaces(contract) &amp;&amp; provider.IsClass &amp;&amp; !provider.IsAbstract &amp;&amp; !provider.IsInterface</c></remarks>
-        public static bool IsValid(Type provider, Type contract)
+        public static bool IsValid<T>(Type provider, Type contract)
         {
-            return provider.HasInterfaces(contract) && provider.IsClass && !provider.IsAbstract && !provider.IsInterface;
+            if (provider.HasInterfaces(typeof(T)))
+            {
+                return provider.HasInterfaces(contract) && provider.IsClass && !provider.IsAbstract && !provider.IsInterface;
+            }
+            return false;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SavvyioOptions"/> class.
         /// </summary>
+        /// <remarks>
+        /// The following table shows the initial property values for an instance of <see cref="SavvyioOptions"/>.
+        /// <list type="table">
+        ///     <listheader>
+        ///         <term>Property</term>
+        ///         <description>Initial Value</description>
+        ///     </listheader>
+        ///     <item>
+        ///         <term><see cref="AutoResolveDispatchers"/></term>
+        ///         <description><c>true</c></description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="AutoResolveHandlers"/></term>
+        ///         <description><c>true</c></description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="IncludeHandlerServicesDescriptor"/></term>
+        ///         <description><c>false</c></description>
+        ///     </item>
+        /// </list>
+        /// </remarks>
         public SavvyioOptions()
         {
             AutoResolveHandlers = true;
             AutoResolveDispatchers = true;
-            IncludeServicesDescriptor = false;
-            ServicesLifetime = ServiceLifetime.Transient;
-            DispatchersLifetime = ServiceLifetime.Scoped;
+            IncludeHandlerServicesDescriptor = false;
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether handlers implementing the <see cref="IHandler"/> interface should be automatically resolved.
+        /// </summary>
+        /// <value><c>true</c> if handlers implementing the <see cref="IHandler"/> interface should be automatically resolved; otherwise, <c>false</c>.</value>
+        public bool AutoResolveHandlers { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether handlers implementing the <see cref="IDispatcher"/> interface should be automatically resolved.
+        /// </summary>
+        /// <value><c>true</c> if handlers implementing the <see cref="IDispatcher"/> interface should be automatically resolved; otherwise, <c>false</c>.</value>
+        public bool AutoResolveDispatchers { get; set; }
+
+        
+        /// <summary>
+        /// Gets or sets a value indicating whether handler services should have the option to be presented in a developer friendly way.
+        /// </summary>
+        /// <value><c>true</c> if handler services should have the option to be presented in a developer friendly way; otherwise, <c>false</c>.</value>
+        public bool IncludeHandlerServicesDescriptor { get; set; }
+
+        /// <summary>
+        /// Adds a dispatcher of type <typeparamref name="TDispatcher"/> to <see cref="DispatcherServiceTypes"/> (if not already registered) and <see cref="DispatcherImplementationTypes"/> (if not already registered).
+        /// </summary>
+        /// <typeparam name="TDispatcher">The type of the <see cref="IDispatcher"/> interface to add.</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
+        /// <returns>A reference to this instance.</returns>
         public SavvyioOptions AddDispatcher<TDispatcher, TImplementation>()
             where TDispatcher : IDispatcher
             where TImplementation : class, TDispatcher
@@ -49,11 +98,17 @@ namespace Savvyio
             return this;
         }
 
-        public SavvyioOptions AddDispatcher(Type dispatcher, Type implementation)
+        /// <summary>
+        /// Adds a dispatcher of type <see cref="IDispatcher"/> to <see cref="DispatcherServiceTypes"/> (if not already registered) and <see cref="DispatcherImplementationTypes"/> (if not already registered).
+        /// </summary>
+        /// <param name="service">The <see cref="Type"/> of the <see cref="IDispatcher"/> interface to add.</param>
+        /// <param name="implementation">The type of the implementation to use.</param>
+        /// <returns>A reference to this instance.</returns>
+        public SavvyioOptions AddDispatcher(Type service, Type implementation)
         {
-            _dispatcherServiceTypes.TryAdd(dispatcher);
-            if (IsValid(implementation, dispatcher))
+            if (IsValid<IDispatcher>(implementation, service))
             {
+                _dispatcherServiceTypes.TryAdd(service);
                 _dispatcherImplementationTypes.TryAdd(implementation);
             }
             return this;
@@ -75,56 +130,44 @@ namespace Savvyio
             return AddHandler(typeof(THandler), typeof(TImplementation));
         }
 
-        public SavvyioOptions AddHandler(Type handler, Type implementation)
+        /// <summary>
+        /// Adds a dispatcher of type <see cref="IHandler"/> to <see cref="HandlerServiceTypes"/> (if not already registered) and <see cref="HandlerImplementationTypes"/> (if not already registered).
+        /// </summary>
+        /// <param name="service">The <see cref="Type"/> of the <see cref="IHandler"/> interface to add.</param>
+        /// <param name="implementation">The type of the implementation to use.</param>
+        /// <returns>A reference to this instance.</returns>
+        public SavvyioOptions AddHandler(Type service, Type implementation)
         {
-            _handlerServiceTypes.TryAdd(handler);
-            if (IsValid(implementation, handler))
+            if (IsValid<IHandler>(implementation, service))
             {
+                _handlerServiceTypes.TryAdd(service);
                 _handlerImplementationTypes.TryAdd(implementation);
             }
             return this;
         }
 
-        internal SavvyioOptions ManageHandlerServiceTypes(Action<IList<Type>> configurator)
-        {
-            configurator?.Invoke(_handlerServiceTypes);
-            return this;
-        }
-
-        internal SavvyioOptions ManageHandlerImplementationTypes(Action<IList<Type>> configurator)
-        {
-            configurator?.Invoke(_handlerImplementationTypes);
-            return this;
-        }
-
-        internal SavvyioOptions ManageDispatcherServiceTypes(Action<IList<Type>> configurator)
-        {
-            configurator?.Invoke(_dispatcherServiceTypes);
-            return this;
-        }
-
-        internal SavvyioOptions ManageDispatcherImplementationTypes(Action<IList<Type>> configurator)
-        {
-            configurator?.Invoke(_dispatcherImplementationTypes);
-            return this;
-        }
-
+        /// <summary>
+        /// Gets the types associated with an <see cref="IHandler"/> service.
+        /// </summary>
+        /// <value>The types associated with an <see cref="IHandler"/> service.</value>
         public IReadOnlyCollection<Type> HandlerServiceTypes => _handlerServiceTypes;
 
+        /// <summary>
+        /// Gets the types implementing an <see cref="IHandler"/> service.
+        /// </summary>
+        /// <value>The types implementing an <see cref="IHandler"/> service.</value>
         public IReadOnlyCollection<Type> HandlerImplementationTypes => _handlerImplementationTypes;
 
+        /// <summary>
+        /// Gets the types associated with an <see cref="IDispatcher"/> service.
+        /// </summary>
+        /// <value>The types dispatcher with an <see cref="IDispatcher"/> service.</value>
         public IReadOnlyCollection<Type> DispatcherServiceTypes => _dispatcherServiceTypes;
 
+        /// <summary>
+        /// Gets the types implementing an <see cref="IDispatcher"/> service.
+        /// </summary>
+        /// <value>The types implementing an <see cref="IDispatcher"/> service.</value>
         public IReadOnlyCollection<Type> DispatcherImplementationTypes => _dispatcherImplementationTypes;
-
-        public bool AutoResolveHandlers { get; set; }
-
-        public bool AutoResolveDispatchers { get; set; }
-
-        public bool IncludeServicesDescriptor { get; set; }
-
-        public ServiceLifetime ServicesLifetime { get; set; }
-
-        public ServiceLifetime DispatchersLifetime { get; set; }
     }
 }

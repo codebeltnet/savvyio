@@ -7,7 +7,7 @@ using Cuemon.Threading;
 namespace Savvyio.Storage
 {
     /// <summary>
-    /// Defines a generic way of abstracting readable data access (cRud).
+    /// Defines a generic way of abstracting readable repositories (cRud).
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     /// <typeparam name="TKey">The type of the key that uniquely identifies the entity.</typeparam>

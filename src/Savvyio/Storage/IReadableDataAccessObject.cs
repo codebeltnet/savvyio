@@ -7,7 +7,7 @@ using Cuemon.Threading;
 namespace Savvyio.Storage
 {
     /// <summary>
-    /// Defines a generic way of abstracting readable data access (cRud).
+    /// Defines a generic way of abstracting readable data access objects (cRud).
     /// </summary>
     /// <typeparam name="T">The type of the DTO.</typeparam>
     public interface IReadableDataAccessObject<T> : IDataAccessObject<T> where T : class
