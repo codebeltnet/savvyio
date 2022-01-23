@@ -13,6 +13,7 @@ namespace Savvyio.Domain
     /// Defines an Event based contract of an Aggregate as specified in Domain Driven Design.
     /// </summary>
     /// <typeparam name="TEvent">The type of the event that implements the <see cref="IDomainEvent"/> interface.</typeparam>
+    /// <seealso cref="IAggregateRoot" />
     public interface IAggregateRoot<out TEvent> : IAggregateRoot
     {
         /// <summary>
@@ -28,12 +29,12 @@ namespace Savvyio.Domain
     }
 
     /// <summary>
-    /// Defines an Active Record capable contract of an Aggregate as specified in Domain Driven Design.
+    /// Defines an Event and Entity based contract of an Aggregate as specified in Domain Driven Design.
     /// </summary>
     /// <typeparam name="TEvent">The type of the event that implements the <see cref="IDomainEvent"/> interface.</typeparam>
     /// <typeparam name="TKey">The type of the key that uniquely identifies this Aggregate.</typeparam>
-    /// <seealso cref="IAggregateRoot" />
-    /// <seealso cref="IIdentity{TKey}" />
+    /// <seealso cref="IAggregateRoot{TEvent}" />
+    /// <seealso cref="IEntity{TKey}" />
     public interface IAggregateRoot<out TEvent, out TKey> : IAggregateRoot<TEvent>, IEntity<TKey>
     {
     }

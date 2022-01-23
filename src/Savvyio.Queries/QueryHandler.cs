@@ -1,4 +1,6 @@
-﻿namespace Savvyio.Queries
+﻿using Savvyio.Handlers;
+
+namespace Savvyio.Queries
 {
     /// <summary>
     /// Provides a generic and consistent way of handling Query objects that implements the <see cref="IQuery"/> interface. This is an abstract class.

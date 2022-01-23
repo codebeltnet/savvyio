@@ -1,4 +1,6 @@
-﻿namespace Savvyio.Commands
+﻿using Savvyio.Handlers;
+
+namespace Savvyio.Commands
 {
     /// <summary>
     /// Provides a generic and consistent way of handling Command objects that implements the <see cref="ICommand"/> interface. This is an abstract class.

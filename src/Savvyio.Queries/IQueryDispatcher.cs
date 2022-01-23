@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cuemon.Threading;
+using Savvyio.Dispatchers;
 
 namespace Savvyio.Queries
 {
@@ -15,7 +16,7 @@ namespace Savvyio.Queries
         /// </summary>
         /// <typeparam name="TResult">The type of the result to return.</typeparam>
         /// <param name="request">The <see cref="IQuery{TResult}" /> to request.</param>
-        /// <returns>TResult.</returns>
+        /// <returns>The outcome of the query operation.</returns>
         TResult Query<TResult>(IQuery<TResult> request);
 
         /// <summary>

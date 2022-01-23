@@ -1,4 +1,6 @@
-﻿namespace Savvyio.EventDriven
+﻿using Savvyio.Handlers;
+
+namespace Savvyio.EventDriven
 {
     /// <summary>
     /// Provides a generic and consistent way of handling Integration Event objects that implements the <see cref="IIntegrationEvent"/> interface. This is an abstract class.

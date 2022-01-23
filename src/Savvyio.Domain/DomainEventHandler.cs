@@ -1,4 +1,6 @@
-﻿namespace Savvyio.Domain
+﻿using Savvyio.Handlers;
+
+namespace Savvyio.Domain
 {
     /// <summary>
     /// Provides a generic and consistent way of handling Domain Event (as specified in Domain Driven Design) objects that implements the <see cref="IDomainEvent"/> interface. This is an abstract class.
