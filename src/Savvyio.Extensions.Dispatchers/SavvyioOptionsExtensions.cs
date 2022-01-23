@@ -15,7 +15,8 @@ namespace Savvyio.Extensions.Dispatchers
         /// </summary>
         /// <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
         /// <param name="options">The <see cref="SavvyioOptions"/> to extend.</param>
-        /// <returns>A reference to <paramref name="options"/> after the operation has completed.</returns>
+        /// <returns>A reference to <paramref name="options"/> so that additional configuration calls can be chained.</returns>
+        /// <remarks>The implementation will be type forwarded to: <see cref="ICommandDispatcher"/>, <see cref="IDomainEventDispatcher"/>, <see cref="IIntegrationEventDispatcher"/> and <see cref="IQueryDispatcher"/>.</remarks>
         public static SavvyioOptions AddMediator<TImplementation>(this SavvyioOptions options) where TImplementation : class, IMediator
         {
             options.AddDispatcher<IMediator, TImplementation>();
