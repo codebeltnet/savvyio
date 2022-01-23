@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Storage
+﻿namespace Savvyio.Extensions.Storage
 {
     /// <summary>
     /// Defines a generic way to support multiple implementations of the actual I/O communication with a data store that is responsible of persisting data (CRUD).

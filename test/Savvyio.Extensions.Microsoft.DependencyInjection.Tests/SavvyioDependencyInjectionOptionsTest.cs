@@ -1,5 +1,6 @@
 ﻿using Cuemon.Extensions.Xunit;
 using Microsoft.Extensions.DependencyInjection;
+using Savvyio.Extensions.Storage;
 using Savvyio.Storage;
 using Xunit;
 using Xunit.Abstractions;

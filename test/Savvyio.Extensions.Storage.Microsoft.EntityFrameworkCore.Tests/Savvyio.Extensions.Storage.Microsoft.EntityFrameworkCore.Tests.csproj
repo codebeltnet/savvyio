@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>Savvyio.Storage</RootNamespace>
+    <RootNamespace>Savvyio.Extensions.Storage</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

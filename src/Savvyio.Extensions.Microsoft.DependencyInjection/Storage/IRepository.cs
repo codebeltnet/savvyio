@@ -1,6 +1,7 @@
 ﻿using Cuemon.Extensions.DependencyInjection;
+using Savvyio.Storage;
 
-namespace Savvyio.Storage
+namespace Savvyio.Extensions.Storage
 {
     /// <summary>
     /// A marker interface that specifies an abstraction of persistent data access.

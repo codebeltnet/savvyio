@@ -2,7 +2,7 @@
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Storage
+namespace Savvyio.Extensions.Storage
 {
     public class EfCoreDataStoreOptionsTest : Test
     {

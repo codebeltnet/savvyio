@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Savvyio.Extensions.Storage.Microsoft.DependencyInjection\Savvyio.Extensions.Storage.Microsoft.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.Microsoft.DependencyInjection\Savvyio.Extensions.Microsoft.DependencyInjection.csproj" />
   </ItemGroup>
 
 </Project>

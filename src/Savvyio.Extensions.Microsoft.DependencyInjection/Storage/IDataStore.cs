@@ -1,6 +1,7 @@
 ﻿using Cuemon.Extensions.DependencyInjection;
+using Savvyio.Storage;
 
-namespace Savvyio.Storage
+namespace Savvyio.Extensions.Storage
 {
     /// <summary>
     /// Defines a generic way to support multiple implementations that does the actual I/O communication towards a data store.

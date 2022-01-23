@@ -1,6 +1,7 @@
 ﻿using Cuemon.Extensions.DependencyInjection;
+using Savvyio.Storage;
 
-namespace Savvyio.Storage
+namespace Savvyio.Extensions.Storage
 {
     /// <summary>
     /// Defines a generic way to support multiple implementations that bundles transactions from multiple <see cref="IPersistentRepository{TEntity,TKey}"/> calls into a single unit.

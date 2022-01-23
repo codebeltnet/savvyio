@@ -17,7 +17,7 @@
     <ProjectReference Include="..\..\src\Savvyio.Domain\Savvyio.Domain.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.Dispatchers\Savvyio.Extensions.Dispatchers.csproj" />
-    <ProjectReference Include="..\..\src\Savvyio.Extensions.Storage.Microsoft.DependencyInjection\Savvyio.Extensions.Storage.Microsoft.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.Microsoft.DependencyInjection\Savvyio.Extensions.Microsoft.DependencyInjection.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore\Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Queries\Savvyio.Queries.csproj" />
     <ProjectReference Include="..\..\src\Savvyio\Savvyio.csproj" />

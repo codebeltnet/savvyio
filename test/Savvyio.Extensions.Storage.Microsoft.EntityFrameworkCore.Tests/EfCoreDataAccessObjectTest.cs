@@ -7,7 +7,7 @@ using Savvyio.Assets.Storage;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Storage
+namespace Savvyio.Extensions.Storage
 {
     public class EfCoreDataAccessObjectTest : Test
     {

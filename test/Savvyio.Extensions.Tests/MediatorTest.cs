@@ -16,6 +16,7 @@ using Savvyio.Assets.Storage;
 using Savvyio.Domain;
 using Savvyio.EventDriven;
 using Savvyio.Extensions.Dispatchers;
+using Savvyio.Extensions.Storage;
 using Savvyio.Queries;
 using Savvyio.Storage;
 using Xunit;

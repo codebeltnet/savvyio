@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>Savvyio.Storage</RootNamespace>
+    <RootNamespace>Savvyio.Extensions.Storage</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Savvyio.Domain\Savvyio.Domain.csproj" />
-    <ProjectReference Include="..\Savvyio.Extensions.Storage.Microsoft.DependencyInjection\Savvyio.Extensions.Storage.Microsoft.DependencyInjection.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.Microsoft.DependencyInjection\Savvyio.Extensions.Microsoft.DependencyInjection.csproj" />
     <ProjectReference Include="..\Savvyio\Savvyio.csproj" />
   </ItemGroup>
 

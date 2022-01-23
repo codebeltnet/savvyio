@@ -37,13 +37,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Dispatch
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.EventDriven.Messaging", "src\Savvyio.EventDriven.Messaging\Savvyio.EventDriven.Messaging.csproj", "{2101F49B-992B-42AC-A4D2-F3100ACECF79}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Storage.Microsoft.DependencyInjection", "src\Savvyio.Extensions.Storage.Microsoft.DependencyInjection\Savvyio.Extensions.Storage.Microsoft.DependencyInjection.csproj", "{8CDFE9AA-CC01-4342-8847-C5239ECA7F21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Microsoft.DependencyInjection", "src\Savvyio.Extensions.Microsoft.DependencyInjection\Savvyio.Extensions.Microsoft.DependencyInjection.csproj", "{8CDFE9AA-CC01-4342-8847-C5239ECA7F21}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Microsoft.DependencyInjection.Tests", "test\Savvyio.Extensions.Microsoft.DependencyInjection.Tests\Savvyio.Extensions.Microsoft.DependencyInjection.Tests.csproj", "{BDD819B5-399D-4805-8D96-DEC3B4F67B37}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore", "src\Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore\Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore.csproj", "{D63C031A-A3E4-4FB6-9354-2497BBA581F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore.Tests", "test\Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore.Tests\Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore.Tests.csproj", "{F6892A1D-89DF-40F6-96B1-3ADB74ABA0FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore.Tests", "test\Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore.Tests\Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore.Tests.csproj", "{F6892A1D-89DF-40F6-96B1-3ADB74ABA0FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

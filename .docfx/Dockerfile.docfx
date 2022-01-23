@@ -4,7 +4,7 @@ FROM nginx:1.21.5 AS base
 RUN rm -rf /usr/share/nginx/html/*
 
 FROM mono:6.12.0.122 AS build
-ARG DOCFX_VERSION=v2.58.9
+ARG DOCFX_VERSION=v2.59.0
 
 ENV PATH ${PATH}:/opt/docfx
 ENV DOCFX_SOURCE_BRANCH_NAME="development"

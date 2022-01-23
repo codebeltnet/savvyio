@@ -7,7 +7,7 @@ using Cuemon.Extensions;
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Savvyio.Storage
+namespace Savvyio.Extensions
 {
     /// <summary>
     /// Extension methods for the <see cref="IServiceCollection"/> interface.

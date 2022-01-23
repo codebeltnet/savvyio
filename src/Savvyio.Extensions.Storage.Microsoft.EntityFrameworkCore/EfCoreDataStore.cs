@@ -6,8 +6,9 @@ using Cuemon.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Savvyio.Domain;
+using Savvyio.Storage;
 
-namespace Savvyio.Storage
+namespace Savvyio.Extensions.Storage
 {
     /// <summary>
     /// Provides a default implementation of the <see cref="IEfCoreDataStore"/> interface to support the actual I/O communication towards a data store using Microsoft Entity Framework Core.

@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Storage
+﻿namespace Savvyio.Extensions.Storage
 {
     /// <summary>
     /// Interface IPersistentDataStore

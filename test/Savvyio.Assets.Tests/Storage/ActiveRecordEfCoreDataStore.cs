@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Cuemon.Threading;
 using Microsoft.EntityFrameworkCore;
 using Savvyio.Assets.Domain;
 using Savvyio.Domain;
-using Savvyio.Storage;
+using Savvyio.Extensions.Storage;
 
 namespace Savvyio.Assets.Storage
 {
