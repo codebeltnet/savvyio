@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Savvyio.Storage</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore\Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Savvyio.Assets.Tests\Savvyio.Assets.Tests.csproj" />
+  </ItemGroup>
+
+</Project>

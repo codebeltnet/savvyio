@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Savvyio.Assets.Queries;
+using Savvyio.Handlers;
 using Savvyio.Queries;
 
 namespace Savvyio.Assets

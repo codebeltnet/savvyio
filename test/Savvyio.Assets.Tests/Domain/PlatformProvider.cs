@@ -7,6 +7,10 @@ namespace Savvyio.Assets.Domain
 {
     public class PlatformProvider : AggregateRoot<Guid>
     {
+        PlatformProvider() // efcore
+        {
+        }
+
         public PlatformProvider(Name name, ThirdLevelDomainName thirdLevelDomainName, Description description = null)
         {
             Validator.ThrowIfNull(name, nameof(name));

@@ -19,7 +19,7 @@ namespace Savvyio.Storage
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
         /// <param name="setup">The <see cref="SavvyioDependencyInjectionOptions" /> which may be configured.</param>
-        /// <returns>A reference to <paramref name="services"/> after the operation has completed.</returns>
+        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
         public static IServiceCollection AddSavvyIO(this IServiceCollection services, Action<SavvyioDependencyInjectionOptions> setup = null)
         {
             services.AddScoped<Func<Type, IEnumerable<object>>>(p => p.GetServices);

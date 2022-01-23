@@ -4,6 +4,8 @@ using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Domain.Events;
 using Savvyio.Domain;
 using Savvyio.Extensions;
+using Savvyio.Extensions.Dispatchers;
+using Savvyio.Handlers;
 using Xunit.Abstractions;
 
 namespace Savvyio.Assets.Domain.Handlers
@@ -12,13 +14,13 @@ namespace Savvyio.Assets.Domain.Handlers
     {
         private readonly ITestOutputHelper _output;
         private readonly ITestStore<IDomainEvent> _testStore;
-        private readonly IMediator _mediator;
+        private readonly IDomainEventDispatcher _dispatcher;
 
-        public AccountDomainEventHandler(ITestOutputHelper output, ITestStore<IDomainEvent> testStore, IMediator mediator)
+        public AccountDomainEventHandler(ITestOutputHelper output = null, ITestStore<IDomainEvent> testStore = null, IDomainEventDispatcher dispatcher = null)
         {
             _output = output;
             _testStore = testStore;
-            _mediator = mediator;
+            _dispatcher = dispatcher;
         }
 
         protected override void RegisterDelegates(IFireForgetRegistry<IDomainEvent> handlers)
@@ -31,30 +33,30 @@ namespace Savvyio.Assets.Domain.Handlers
 
         private Task OnInProcAccountInitiatedChained(AccountInitiatedChained e)
         {
-            _testStore.Add(e);
-            _output.WriteLines($"DE {nameof(OnInProcAccountInitiatedChained)}", JsonSerializer.Serialize(e));
+            _testStore?.Add(e);
+            _output?.WriteLines($"DE {nameof(OnInProcAccountInitiatedChained)}", JsonSerializer.Serialize(e));
             return Task.CompletedTask;
         }
 
         private Task OnInProcAccountFullNameChanged(AccountFullNameChanged e)
         {
-            _testStore.Add(e);
-            _output.WriteLines($"DE {nameof(OnInProcAccountFullNameChanged)}", JsonSerializer.Serialize(e));
+            _testStore?.Add(e);
+            _output?.WriteLines($"DE {nameof(OnInProcAccountFullNameChanged)}", JsonSerializer.Serialize(e));
             return Task.CompletedTask;
         }
 
         private Task OnInProcAccountEmailAddressChanged(AccountEmailAddressChanged e)
         {
-            _testStore.Add(e);
-            _output.WriteLines($"DE {nameof(OnInProcAccountEmailAddressChanged)}", JsonSerializer.Serialize(e));
+            _testStore?.Add(e);
+            _output?.WriteLines($"DE {nameof(OnInProcAccountEmailAddressChanged)}", JsonSerializer.Serialize(e));
             return Task.CompletedTask;
         }
 
         private Task OnInProcAccountInitiated(AccountInitiated e)
         {
-            _testStore.Add(e);
-            _output.WriteLines($"DE {nameof(OnInProcAccountInitiated)}", JsonSerializer.Serialize(e));
-            _mediator.RaiseAsync(new AccountInitiatedChained().MergeMetadata(e).SetCausationId(e.GetEventId()));
+            _testStore?.Add(e);
+            _output?.WriteLines($"DE {nameof(OnInProcAccountInitiated)}", JsonSerializer.Serialize(e));
+            _dispatcher.RaiseAsync(new AccountInitiatedChained().MergeMetadata(e).SetCausationId(e.GetEventId()));
             return Task.CompletedTask;
         }
     }

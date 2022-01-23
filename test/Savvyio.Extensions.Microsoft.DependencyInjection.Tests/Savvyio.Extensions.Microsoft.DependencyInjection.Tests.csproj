@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Savvyio.Extensions.Microsoft.DependencyInjection</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.Storage.Microsoft.DependencyInjection\Savvyio.Extensions.Storage.Microsoft.DependencyInjection.csproj" />
+  </ItemGroup>
+
+</Project>

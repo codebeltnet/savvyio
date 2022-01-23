@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Savvyio.Storage</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Savvyio.Domain\Savvyio.Domain.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.Storage.Microsoft.DependencyInjection\Savvyio.Extensions.Storage.Microsoft.DependencyInjection.csproj" />
+    <ProjectReference Include="..\Savvyio\Savvyio.csproj" />
+  </ItemGroup>
+
+</Project>

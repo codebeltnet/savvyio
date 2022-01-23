@@ -7,6 +7,10 @@ namespace Savvyio.Assets.Domain
 {
     public class Account : AggregateRoot<long>
     {
+        Account() // efcore
+        {
+        }
+
         public Account(PlatformProviderId platformProviderId, FullName fullName, EmailAddress emailAddress)
         {
             Validator.ThrowIfNull(platformProviderId, nameof(platformProviderId));
@@ -22,7 +26,7 @@ namespace Savvyio.Assets.Domain
         {
         }
 
-        public Guid PlatformProviderId { get; }
+        public Guid PlatformProviderId { get; private set; }
 
         public string FullName { get; private set; }
 

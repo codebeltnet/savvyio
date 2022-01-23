@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Events;
 using Savvyio.EventDriven;
+using Savvyio.Handlers;
 using Xunit.Abstractions;
 
 namespace Savvyio.Assets
