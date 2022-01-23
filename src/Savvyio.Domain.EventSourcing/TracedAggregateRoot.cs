@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Savvyio.Handlers;
 
 namespace Savvyio.Domain.EventSourcing
 {
