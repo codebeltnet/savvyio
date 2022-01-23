@@ -5,7 +5,12 @@
         {
           "files": [
             "Savvyio/**.csproj",
-            "Savvyio.Storage/**.csproj"
+            "Savvyio.Commands/**.csproj",
+            "Savvyio.Domain/**.csproj",
+            "Savvyio.Domain.EventSourcing/**.csproj",
+            "Savvyio.EventDriven/**.csproj",
+            "Savvyio.EventDriven/Messaging/**.csproj",
+            "Savvyio.Queries/**.csproj"
           ],
           "src": "../src"
         }
@@ -20,7 +25,9 @@
       "src": [
         {
           "files": [
-            "Savvyio.Extensions.Storage.InMemory/**.csproj"
+            "Savvyio.Extensions.Dispatchers/**.csproj",
+            "Savvyio.Extensions.Storage.Microsoft.DependencyInjection/**.csproj",
+            "Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore/**.csproj"
           ],
           "src": "../src"
         }
