@@ -69,8 +69,8 @@ namespace Savvyio.Extensions
             using (var host = GenericHostTestFactory.CreateGenericHostTest(services =>
             {
                 services.AddSingleton(TestOutput);
-                services.AddEfCoreRepository<EfCoreRepository<Account, long, Account>, Account, long>();
-                services.AddEfCoreDataAccessObject<EfCoreDataAccessObject<PlatformProvider, PlatformProvider>, PlatformProvider>();
+                services.AddEfCoreRepository<Account, long>();
+                services.AddEfCoreDataAccessObject<PlatformProvider>();
                 //services.AddInMemoryActiveRecordStore<Account, long>(o => o.IdentityProvider = _ => Generate.RandomNumber(1, 101));
                 //services.AddInMemoryActiveRecordStore<PlatformProvider, Guid>();
                 services.AddEfCoreDataStore<ActiveRecordEfCoreDataStore<Account>>();
@@ -111,8 +111,8 @@ namespace Savvyio.Extensions
             using (var host = GenericHostTestFactory.CreateGenericHostTest(services =>
             {
                 services.AddSingleton(TestOutput);
-                services.AddEfCoreRepository<EfCoreRepository<Account, long, Account>, Account, long>();
-                services.AddEfCoreDataAccessObject<EfCoreDataAccessObject<PlatformProvider, PlatformProvider>, PlatformProvider>();
+                services.AddEfCoreRepository<Account, long>();
+                services.AddEfCoreDataAccessObject<PlatformProvider>();
                 services.AddEfCoreDataStore<ActiveRecordEfCoreDataStore<Account>>();
                 services.AddEfCoreDataStore<PlatformProvider>(o =>
                 {
