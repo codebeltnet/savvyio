@@ -26,7 +26,7 @@
         {
           "files": [
             "Savvyio.Extensions.Dispatchers/**.csproj",
-            "Savvyio.Extensions.Storage.Microsoft.DependencyInjection/**.csproj",
+            "Savvyio.Extensions.Microsoft.DependencyInjection/**.csproj",
             "Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore/**.csproj"
           ],
           "src": "../src"
