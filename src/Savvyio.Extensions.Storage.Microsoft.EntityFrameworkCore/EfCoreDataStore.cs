@@ -34,12 +34,28 @@ namespace Savvyio.Extensions.Storage
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreDataStore"/> class.
         /// </summary>
+        /// <param name="setup">The <see cref="EfCoreDataStoreOptions" /> which need to be configured.</param>
+        public EfCoreDataStore(IOptions<EfCoreDataStoreOptions> setup) : this(null, setup)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EfCoreDataStore"/> class.
+        /// </summary>
         /// <param name="dispatcher">The <see cref="IDomainEventDispatcher"/> that are responsible for raising domain events.</param>
         /// <param name="setup">The <see cref="EfCoreDataStoreOptions" /> which need to be configured.</param>
         public EfCoreDataStore(IDomainEventDispatcher dispatcher, IOptions<EfCoreDataStoreOptions> setup)
         {
             _dispatcher = dispatcher;
             _dbContext = new SavvyioDbContext(setup);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EfCoreDataStore"/> class.
+        /// </summary>
+        /// <param name="setup">The <see cref="EfCoreDataStoreOptions" /> which need to be configured.</param>
+        public EfCoreDataStore(Action<EfCoreDataStoreOptions> setup) : this(null, setup)
+        {
         }
 
         /// <summary>

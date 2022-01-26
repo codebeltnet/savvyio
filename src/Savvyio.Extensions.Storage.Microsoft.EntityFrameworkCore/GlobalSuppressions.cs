@@ -5,4 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested", Justification = "No added complexity in this scope.", Scope = "member", Target = "~M:Savvyio.Storage.EfCoreRepository`2.FindAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Action{Cuemon.Threading.AsyncOptions})~System.Threading.Tasks.Task{System.Collections.Generic.IEnumerable{`0}}")]
+[assembly: SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested", Justification = "By design. No added complexity in this scope.", Scope = "member", Target = "~M:Savvyio.Extensions.Storage.EfCoreRepository`2.FindAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Action{Cuemon.Threading.AsyncOptions})~System.Threading.Tasks.Task{System.Collections.Generic.IEnumerable{`0}}")]

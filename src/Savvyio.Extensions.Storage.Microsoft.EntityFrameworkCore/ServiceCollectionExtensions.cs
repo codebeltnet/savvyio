@@ -2,6 +2,8 @@
 using Cuemon;
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Savvyio.Domain;
 using Savvyio.Storage;
 
 namespace Savvyio.Extensions.Storage
@@ -12,9 +14,35 @@ namespace Savvyio.Extensions.Storage
     public static class ServiceCollectionExtensions
     {
         /// <summary>
+        /// Adds an <see cref="EfCoreDataStore" /> implementation to the specified <see cref="IServiceCollection" />.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
+        /// <param name="setup">The <see cref="EfCoreDataStoreOptions" /> which need to be configured.</param>
+        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
+        public static IServiceCollection AddEfCoreDataStore(this IServiceCollection services, Action<EfCoreDataStoreOptions> setup)
+        {
+            AddEfCoreDataStore<EfCoreDataStore>(services);
+            services.Configure(setup);
+            return services;
+        }
+
+        /// <summary>
+        /// Adds an <see cref="EfCoreDataStore{TMarker}" /> implementation to the specified <see cref="IServiceCollection" />.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
+        /// <param name="setup">The <see cref="EfCoreDataStoreOptions{TMarker}" /> which need to be configured.</param>
+        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
+        public static IServiceCollection AddEfCoreDataStore<TMarker>(this IServiceCollection services, Action<EfCoreDataStoreOptions<TMarker>> setup)
+        {
+            AddEfCoreDataStore<EfCoreDataStore<TMarker>>(services);
+            services.Configure(setup);
+            return services;
+        }
+
+        /// <summary>
         /// Adds an implementation of <see cref="IEfCoreDataStore" /> to the specified <see cref="IServiceCollection" />.
         /// </summary>
-        /// <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
+        /// <typeparam name="TImplementation">The type of the configured implementation to use.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional configuration calls can be chained.</returns>
         /// <remarks>If the underlying type of <typeparamref name="TImplementation"/> implements <see cref="IDependencyInjectionMarker{TMarker}"/> interface then this is automatically handled. Also, the implementation will be type forwarded accordingly.</remarks>
@@ -29,46 +57,29 @@ namespace Savvyio.Extensions.Storage
             Validator.ThrowIfNull(services, nameof(services));
             var efCoreDataStoreType = typeof(IEfCoreDataStore);
             var unitOfWorkType = typeof(IUnitOfWork);
-            services.AddScoped<TImplementation>();
+            services.TryAddScoped<TImplementation>();
             if (typeof(TImplementation).TryGetDependencyInjectionMarker(out var markerType))
             {
                 efCoreDataStoreType = typeof(IEfCoreDataStore<>).MakeGenericType(markerType);
                 unitOfWorkType = typeof(IUnitOfWork<>).MakeGenericType(markerType);
             }
-            services.AddScoped(efCoreDataStoreType, p => p.GetRequiredService<TImplementation>());
-            services.AddScoped(unitOfWorkType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddScoped(efCoreDataStoreType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddScoped(unitOfWorkType, p => p.GetRequiredService<TImplementation>());
             return services;
         }
 
         /// <summary>
-        /// Adds an <see cref="EfCoreDataStore" /> implementation to the specified <see cref="IServiceCollection" />.
+        /// Adds an <see cref="EfCoreRepository{TEntity,TKey,TMarker}"/> to the specified <see cref="IServiceCollection" />.
         /// </summary>
-        /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
-        /// <param name="setup">The <see cref="EfCoreDataStoreOptions" /> which need to be configured.</param>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <typeparam name="TKey">The type of the key that uniquely identifies the entity.</typeparam>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
-        public static IServiceCollection AddEfCoreDataStore(this IServiceCollection services, Action<EfCoreDataStoreOptions> setup)
+        /// <remarks>This method supports a convenient way of adding an implementation of a <see cref="EfCoreRepository{TEntity,TKey,TMarker}"/> where <c>TEntity</c> and <c>TMarker</c> is <typeparamref name="TEntity"/>.</remarks>
+        /// <seealso cref="EfCoreRepository{TEntity,TKey,TMarker}"/>
+        public static IServiceCollection AddEfCoreRepository<TEntity, TKey>(this IServiceCollection services)
+            where TEntity : class, IAggregateRoot<IDomainEvent, TKey>
         {
-            Validator.ThrowIfNull(services, nameof(services));
-            services.AddScoped<EfCoreDataStore>();
-            services.AddScoped<IEfCoreDataStore>(p => p.GetRequiredService<EfCoreDataStore>());
-            services.AddScoped<IUnitOfWork>(p => p.GetRequiredService<EfCoreDataStore>());
-            services.Configure(setup);
-            return services;
-        }
-
-        /// <summary>
-        /// Adds an <see cref="EfCoreDataStore{TMarker}" /> implementation to the specified <see cref="IServiceCollection" />.
-        /// </summary>
-        /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
-        /// <param name="setup">The <see cref="EfCoreDataStoreOptions{TMarker}" /> which need to be configured.</param>
-        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
-        public static IServiceCollection AddEfCoreDataStore<TMarker>(this IServiceCollection services, Action<EfCoreDataStoreOptions<TMarker>> setup)
-        {
-            Validator.ThrowIfNull(services, nameof(services));
-            services.AddScoped<EfCoreDataStore<TMarker>>();
-            services.AddScoped<IEfCoreDataStore<TMarker>>(p => p.GetRequiredService<EfCoreDataStore<TMarker>>());
-            services.AddScoped<IUnitOfWork<TMarker>>(p => p.GetRequiredService<EfCoreDataStore<TMarker>>());
-            services.Configure(setup);
+            AddEfCoreRepository<EfCoreRepository<TEntity, TKey, TEntity>, TEntity, TKey>(services);
             return services;
         }
 
@@ -91,7 +102,7 @@ namespace Savvyio.Extensions.Storage
             var efWritableRepositoryType = typeof(IWritableRepository<,>);
             var efReadableRepositoryType = typeof(IReadableRepository<,>);
             var efDeletableRepositoryType = typeof(IDeletableRepository<,>);
-            services.AddScoped<TImplementation>();
+            services.TryAddScoped<TImplementation>();
             if (typeof(TImplementation).TryGetDependencyInjectionMarker(out var markerType))
             {
                 efPersistentRepositoryType = typeof(IPersistentRepository<,,>).MakeGenericType(entityType, keyType, markerType);
@@ -99,10 +110,25 @@ namespace Savvyio.Extensions.Storage
                 efReadableRepositoryType = typeof(IReadableRepository<,,>).MakeGenericType(entityType, keyType, markerType);
                 efDeletableRepositoryType = typeof(IDeletableRepository<,,>).MakeGenericType(entityType, keyType, markerType);
             }
-            services.AddScoped(efPersistentRepositoryType, p => p.GetRequiredService<TImplementation>());
-            services.AddScoped(efWritableRepositoryType, p => p.GetRequiredService<TImplementation>());
-            services.AddScoped(efReadableRepositoryType, p => p.GetRequiredService<TImplementation>());
-            services.AddScoped(efDeletableRepositoryType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddScoped(efPersistentRepositoryType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddScoped(efWritableRepositoryType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddScoped(efReadableRepositoryType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddScoped(efDeletableRepositoryType, p => p.GetRequiredService<TImplementation>());
+            return services;
+        }
+
+        /// <summary>
+        /// Adds an <see cref="EfCoreDataAccessObject{T,TMarker}"/> to the specified <see cref="IServiceCollection"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the DTO.</typeparam>
+        /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
+        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
+        /// <remarks>This method supports a convenient way of adding an implementation of a <see cref="EfCoreDataAccessObject{T,TMarker}"/> where <c>T</c> and <c>TMarker</c> is <typeparamref name="T"/>.</remarks>
+        /// <seealso cref="EfCoreDataAccessObject{T,TMarker}"/>
+        public static IServiceCollection AddEfCoreDataAccessObject<T>(this IServiceCollection services)
+            where T : class
+        {
+            AddEfCoreDataAccessObject<EfCoreDataAccessObject<T, T>, T>(services);
             return services;
         }
 
@@ -132,7 +158,7 @@ namespace Savvyio.Extensions.Storage
             var efWritableDataAccessObjectType = typeof(IWritableDataAccessObject<>);
             var efReadableDataAccessObjectType = typeof(IReadableDataAccessObject<>);
             var efDeletableDataAccessObjectType = typeof(IDeletableDataAccessObject<>);
-            services.AddTransient<TImplementation>();
+            services.TryAddTransient<TImplementation>();
             if (typeof(TImplementation).TryGetDependencyInjectionMarker(out var markerType))
             {
                 efDataAccessObjectType = typeof(IPersistentDataAccessObject<,>).MakeGenericType(dtoType, markerType);
@@ -140,10 +166,10 @@ namespace Savvyio.Extensions.Storage
                 efReadableDataAccessObjectType = typeof(IReadableDataAccessObject<,>).MakeGenericType(dtoType, markerType);
                 efDeletableDataAccessObjectType = typeof(IDeletableDataAccessObject<,>).MakeGenericType(dtoType, markerType);
             }
-            services.AddTransient(efDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
-            services.AddTransient(efWritableDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
-            services.AddTransient(efReadableDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
-            services.AddTransient(efDeletableDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddTransient(efDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddTransient(efWritableDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddTransient(efReadableDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddTransient(efDeletableDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
             return services;
         }
     }
