@@ -18,7 +18,7 @@ namespace Savvyio.Assets
         private readonly IPersistentRepository<Account, long, Account> _accountRepository;
         private readonly ITestOutputHelper _output;
 
-        public AccountCommandHandler(IMediator mediator, IUnitOfWork<Account> uow, IPersistentRepository<Account, long, Account> accountRepository, ITestOutputHelper output)
+        public AccountCommandHandler(IMediator mediator = null, IUnitOfWork<Account> uow = null, IPersistentRepository<Account, long, Account> accountRepository = null, ITestOutputHelper output = null)
         {
             _mediator = mediator;
             _uow = uow;

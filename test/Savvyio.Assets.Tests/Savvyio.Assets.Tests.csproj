@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Security.Cryptography" Version="6.3.0" />
+    <PackageReference Include="Cuemon.Security.Cryptography" Version="6.4.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -21,6 +21,10 @@
     <ProjectReference Include="..\..\src\Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore\Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Queries\Savvyio.Queries.csproj" />
     <ProjectReference Include="..\..\src\Savvyio\Savvyio.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Cuemon.Extensions.Xunit.App" Version="6.4.0" />
   </ItemGroup>
 
 </Project>

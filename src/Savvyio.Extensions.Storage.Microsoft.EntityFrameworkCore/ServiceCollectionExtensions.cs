@@ -132,7 +132,7 @@ namespace Savvyio.Extensions.Storage
             var efWritableDataAccessObjectType = typeof(IWritableDataAccessObject<>);
             var efReadableDataAccessObjectType = typeof(IReadableDataAccessObject<>);
             var efDeletableDataAccessObjectType = typeof(IDeletableDataAccessObject<>);
-            services.AddScoped<TImplementation>();
+            services.AddTransient<TImplementation>();
             if (typeof(TImplementation).TryGetDependencyInjectionMarker(out var markerType))
             {
                 efDataAccessObjectType = typeof(IPersistentDataAccessObject<,>).MakeGenericType(dtoType, markerType);
@@ -140,10 +140,10 @@ namespace Savvyio.Extensions.Storage
                 efReadableDataAccessObjectType = typeof(IReadableDataAccessObject<,>).MakeGenericType(dtoType, markerType);
                 efDeletableDataAccessObjectType = typeof(IDeletableDataAccessObject<,>).MakeGenericType(dtoType, markerType);
             }
-            services.AddScoped(efDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
-            services.AddScoped(efWritableDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
-            services.AddScoped(efReadableDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
-            services.AddScoped(efDeletableDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
+            services.AddTransient(efDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
+            services.AddTransient(efWritableDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
+            services.AddTransient(efReadableDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
+            services.AddTransient(efDeletableDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
             return services;
         }
     }

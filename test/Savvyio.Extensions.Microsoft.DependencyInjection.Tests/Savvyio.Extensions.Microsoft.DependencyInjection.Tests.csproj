@@ -5,7 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Savvyio.Commands\Savvyio.Commands.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Domain\Savvyio.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.Microsoft.DependencyInjection\Savvyio.Extensions.Microsoft.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Queries\Savvyio.Queries.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Cuemon.Extensions.Xunit.App" Version="6.4.0" />
   </ItemGroup>
 
 </Project>

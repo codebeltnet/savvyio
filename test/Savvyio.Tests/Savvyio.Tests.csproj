@@ -5,11 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Security.Cryptography" Version="6.4.0-preview.6" />
+    <PackageReference Include="Cuemon.Security.Cryptography" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Savvyio\Savvyio.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Cuemon.Extensions.Xunit.App" Version="6.4.0" />
   </ItemGroup>
 
 </Project>

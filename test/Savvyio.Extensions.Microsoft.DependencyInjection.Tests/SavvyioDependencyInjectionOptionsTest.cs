@@ -1,7 +1,5 @@
 ﻿using Cuemon.Extensions.Xunit;
 using Microsoft.Extensions.DependencyInjection;
-using Savvyio.Extensions.Storage;
-using Savvyio.Storage;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -14,7 +12,7 @@ namespace Savvyio.Extensions.Microsoft.DependencyInjection
         }
 
         [Fact]
-        public void SavvyioOptions_Ensure_Initialization_Defaults()
+        public void SavvyioDependencyInjectionOptions_Ensure_Initialization_Defaults()
         {
             var sut = new SavvyioDependencyInjectionOptions();
 

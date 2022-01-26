@@ -4,4 +4,8 @@
     <RootNamespace>Savvyio.Commands</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Update="Cuemon.Extensions.Xunit.App" Version="6.4.0" />
+  </ItemGroup>
+
 </Project>

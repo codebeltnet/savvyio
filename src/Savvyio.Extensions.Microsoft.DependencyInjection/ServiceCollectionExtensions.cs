@@ -36,11 +36,7 @@ namespace Savvyio.Extensions
                     if (options.IncludeHandlerServicesDescriptor) { handlers.Add(handlerType); }
 
                     var handlerTypeInterfaceModel = handlerTypeService.GetInterface("IHandler`1")?.GenericTypeArguments.SingleOrDefault();
-                    foreach (var method in handlerType.GetTypeInfo().DeclaredMethods.Where(m =>
-                    {
-                        var parameters = m.GetParameters();
-                        return parameters.Any(p => p.ParameterType.HasInterfaces(handlerTypeInterfaceModel));
-                    }))
+                    foreach (var method in handlerType.GetTypeInfo().DeclaredMembers.Where(m => MemberIsMethodOrLambdaWithHandlerTypeInterface(m, handlerTypeInterfaceModel)))
                     {
                         if (options.IncludeHandlerServicesDescriptor) { handlers.Add(method); }
                         if (!services.Any(sd => sd.ServiceType == handlerTypeService && sd.ImplementationType == handlerType))
@@ -59,7 +55,7 @@ namespace Savvyio.Extensions
                         {
                             descriptors.Add(handlerTypeService, new List<IHierarchy<object>>() { handlers });
                         }
-                    }   
+                    }
                 }
             }
 
@@ -78,6 +74,34 @@ namespace Savvyio.Extensions
             }
 
             return services;
+        }
+
+        private static bool MemberIsMethodOrLambdaWithHandlerTypeInterface(MemberInfo m, Type handlerTypeInterfaceModel)
+        {
+            switch (m.MemberType)
+            {
+                case MemberTypes.Method:
+                    if (m is MethodInfo mi)
+                    {
+                        var parameters = mi.GetParameters();
+                        return parameters.Any(p => p.ParameterType.HasInterfaces(handlerTypeInterfaceModel));
+                    }
+                    break;
+                case MemberTypes.NestedType:
+                    if (m is Type nt)
+                    {
+                        foreach (var nestedMethod in nt.GetRuntimeMethods())
+                        {
+                            var parameters = nestedMethod.GetParameters();
+                            if (parameters.Any(p => p.ParameterType.HasInterfaces(handlerTypeInterfaceModel)))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    break;
+            }
+            return false;
         }
     }
 }
