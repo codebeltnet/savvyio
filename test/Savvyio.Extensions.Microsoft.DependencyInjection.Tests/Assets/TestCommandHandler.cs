@@ -2,7 +2,7 @@
 using Savvyio.Commands;
 using Savvyio.Handlers;
 
-namespace Savvyio.Extensions.Microsoft.DependencyInjection.Assets
+namespace Savvyio.Extensions.Assets
 {
     public class TestCommandHandler : CommandHandler
     {

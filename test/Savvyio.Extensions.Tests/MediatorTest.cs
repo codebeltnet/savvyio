@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Cuemon;
 using Cuemon.Extensions.Xunit;
 using Cuemon.Extensions.Xunit.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -12,17 +11,15 @@ using Savvyio.Assets.Domain;
 using Savvyio.Assets.Domain.Events;
 using Savvyio.Assets.Events;
 using Savvyio.Assets.Queries;
-using Savvyio.Assets.Storage;
 using Savvyio.Domain;
 using Savvyio.EventDriven;
-using Savvyio.Extensions.Dispatchers;
 using Savvyio.Extensions.Storage;
 using Savvyio.Queries;
 using Savvyio.Storage;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions
+namespace Savvyio.Extensions.Dispatchers
 {
     public class MediatorTest : Test
     {
@@ -69,19 +66,15 @@ namespace Savvyio.Extensions
             using (var host = GenericHostTestFactory.CreateGenericHostTest(services =>
             {
                 services.AddSingleton(TestOutput);
-                services.AddEfCoreRepository<Account, long>();
-                services.AddEfCoreDataAccessObject<PlatformProvider>();
-                //services.AddInMemoryActiveRecordStore<Account, long>(o => o.IdentityProvider = _ => Generate.RandomNumber(1, 101));
-                //services.AddInMemoryActiveRecordStore<PlatformProvider, Guid>();
-                services.AddEfCoreDataStore<ActiveRecordEfCoreDataStore<Account>>();
+                services.AddEfCoreRepository<Account, long, DbMarker>();
+                services.AddEfCoreDataAccessObject<PlatformProvider, PlatformProvider>();
+                services.AddEfCoreDataStore<CustomEfCoreDataStore>();
                 services.AddEfCoreDataStore<PlatformProvider>(o =>
                 {
                     o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(PlatformProvider)).EnableDetailedErrors().LogTo(Console.WriteLine);
                     o.ModelConstructor = mb => mb.AddPlatformProvider();
                 });
-                //services.AddActiveRecordRepository<Account, long>();
-                //services.AddActiveRecordRepository<PlatformProvider, Guid>();
-                services.AddSavvyIO(registry => registry.AddMediator<Mediator>().IncludeHandlerServicesDescriptor = true);
+                services.AddSavvyIO(o => o.AddMediator<Mediator>().IncludeHandlerServicesDescriptor = true);
                 services.AddScoped<ITestStore<IDomainEvent>, DomainEventStore>();
                 services.AddScoped<ITestStore<IIntegrationEvent>, IntegrationEventStore>();
             }))
@@ -112,21 +105,17 @@ namespace Savvyio.Extensions
             {
                 services.AddSingleton(TestOutput);
                 services.AddEfCoreRepository<Account, long>();
-                services.AddEfCoreDataAccessObject<PlatformProvider>();
-                services.AddEfCoreDataStore<ActiveRecordEfCoreDataStore<Account>>();
+                services.AddEfCoreDataAccessObject<PlatformProvider, PlatformProvider>();
+                services.AddEfCoreDataStore<CustomEfCoreDataStore>();
                 services.AddEfCoreDataStore<PlatformProvider>(o =>
                 {
                     o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(PlatformProvider)).EnableDetailedErrors().LogTo(Console.WriteLine);
                     o.ModelConstructor = mb => mb.AddPlatformProvider();
                 });
-                //services.AddInMemoryActiveRecordStore<Account, long>(o => o.IdentityProvider = _ => Generate.RandomNumber(1, 101));
-                //services.AddInMemoryActiveRecordStore<PlatformProvider, Guid>();
-                //services.AddActiveRecordRepository<Account, long>();
-                //services.AddActiveRecordRepository<PlatformProvider, Guid>();
-                services.AddSavvyIO(registry =>
+                services.AddSavvyIO(o =>
                 {
-                    registry.AddMediator<Mediator>();
-                    registry.IncludeHandlerServicesDescriptor = true;
+                    o.AddMediator<Mediator>();
+                    o.IncludeHandlerServicesDescriptor = true;
                 });
                 services.AddScoped<ITestStore<IDomainEvent>, DomainEventStore>();
                 services.AddScoped<ITestStore<IIntegrationEvent>, IntegrationEventStore>();
@@ -159,17 +148,13 @@ namespace Savvyio.Extensions
                        services.AddSingleton(TestOutput);
                        services.AddScoped<IPersistentRepository<Account, long>, EfCoreRepository<Account, long, Account>>();
                        services.AddScoped<IPersistentRepository<PlatformProvider, Guid>, EfCoreRepository<PlatformProvider, Guid, PlatformProvider>>();
-                       services.AddEfCoreDataStore<ActiveRecordEfCoreDataStore<Account>>();
-                       services.AddEfCoreDataStore<ActiveRecordEfCoreDataStore<PlatformProvider>>();
-                       //services.AddInMemoryActiveRecordStore<Account, long>(o => o.IdentityProvider = _ => Generate.RandomNumber(1, 101));
-                       //services.AddInMemoryActiveRecordStore<PlatformProvider, Guid>();
-                       //services.AddActiveRecordRepository<Account, long>();
-                       //services.AddActiveRecordRepository<PlatformProvider, Guid>();
-                       services.AddSavvyIO(options =>
+                       services.AddEfCoreDataStore<Account>(o => o.ModelConstructor = builder => builder.AddAccount());
+                       services.AddEfCoreDataStore<PlatformProvider>(o => o.ModelConstructor = builder => builder.AddPlatformProvider());
+                       services.AddSavvyIO(o =>
                        {
                            //options.AddQueryHandler<AccountQueryHandler>();
                            //options.AddService<IQueryHandler>();
-                           options.IncludeHandlerServicesDescriptor = true;
+                           o.IncludeHandlerServicesDescriptor = true;
                            //options.AddDispatcher<IQueryDispatcher, QueryDispatcher>();
                        });
                        services.AddScoped<ITestStore<IDomainEvent>, DomainEventStore>();
@@ -192,26 +177,4 @@ namespace Savvyio.Extensions
             }
         }
     }
-
-
-    //public class MediatorTest : HostTest<HostFixture>
-    //{
-    //    private readonly HostFixture _hostFixture;
-
-    //    public MediatorTest(HostFixture hostFixture, ITestOutputHelper output = null, Type callerType = null) : base(hostFixture, output, callerType)
-    //    {
-    //        _hostFixture = hostFixture;
-    //    }
-
-    //    [Fact]
-    //    public void HostFixture_MediatorShouldBeRegistered()
-    //    {
-    //        _hostFixture.ServiceProvider.GetRequiredService<IMediator>();
-    //    }
-
-    //    public override void ConfigureServices(IServiceCollection services)
-    //    {
-    //        services.AddMediator(registry => registry.AddHandlersFromCurrentDomain());
-    //    }
-    //}
 }

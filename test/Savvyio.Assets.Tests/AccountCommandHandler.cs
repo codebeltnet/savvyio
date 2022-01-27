@@ -14,11 +14,11 @@ namespace Savvyio.Assets
     public class AccountCommandHandler : CommandHandler
     {
         private readonly IMediator _mediator;
-        private readonly IUnitOfWork<Account> _uow;
-        private readonly IPersistentRepository<Account, long, Account> _accountRepository;
+        private readonly IUnitOfWork<DbMarker> _uow;
+        private readonly IPersistentRepository<Account, long, DbMarker> _accountRepository;
         private readonly ITestOutputHelper _output;
 
-        public AccountCommandHandler(IMediator mediator = null, IUnitOfWork<Account> uow = null, IPersistentRepository<Account, long, Account> accountRepository = null, ITestOutputHelper output = null)
+        public AccountCommandHandler(IMediator mediator = null, IUnitOfWork<DbMarker> uow = null, IPersistentRepository<Account, long, DbMarker> accountRepository = null, ITestOutputHelper output = null)
         {
             _mediator = mediator;
             _uow = uow;

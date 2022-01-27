@@ -1,12 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>Savvyio.Extensions</RootNamespace>
+    <RootNamespace>Savvyio.Extensions.Dispatchers</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Savvyio.Extensions.Dispatchers\Savvyio.Extensions.Dispatchers.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.Microsoft.DependencyInjection\Savvyio.Extensions.Microsoft.DependencyInjection.csproj" />
+    <ProjectReference Include="..\Savvyio.Assets.EfCore.Tests\Savvyio.Assets.EfCore.Tests.csproj" />
     <ProjectReference Include="..\Savvyio.Assets.Tests\Savvyio.Assets.Tests.csproj" />
   </ItemGroup>
 

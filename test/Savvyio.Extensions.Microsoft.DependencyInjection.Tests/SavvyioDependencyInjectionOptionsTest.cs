@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions.Microsoft.DependencyInjection
+namespace Savvyio.Extensions
 {
     public class SavvyioDependencyInjectionOptionsTest : Test
     {

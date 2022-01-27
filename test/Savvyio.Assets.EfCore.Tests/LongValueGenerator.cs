@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
 
-namespace Savvyio.Assets.Storage
+namespace Savvyio.Assets
 {
     public class LongValueGenerator : ValueGenerator<long>
     {

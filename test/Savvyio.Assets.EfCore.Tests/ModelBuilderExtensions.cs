@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Savvyio.Assets.Domain;
 
-namespace Savvyio.Assets.Storage
+namespace Savvyio.Assets
 {
     public static class ModelBuilderExtensions
     {

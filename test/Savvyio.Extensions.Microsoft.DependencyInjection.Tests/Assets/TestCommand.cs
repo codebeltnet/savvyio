@@ -1,6 +1,6 @@
 ﻿using Savvyio.Commands;
 
-namespace Savvyio.Extensions.Microsoft.DependencyInjection.Assets
+namespace Savvyio.Extensions.Assets
 {
     public class TestCommand : Command
     {

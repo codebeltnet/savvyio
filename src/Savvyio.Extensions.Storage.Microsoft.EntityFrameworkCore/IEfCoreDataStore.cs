@@ -1,5 +1,4 @@
-﻿using Cuemon.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Savvyio.Storage;
 
 namespace Savvyio.Extensions.Storage
@@ -8,8 +7,7 @@ namespace Savvyio.Extensions.Storage
     /// Defines a generic way to support the actual I/O communication towards a data store using Microsoft Entity Framework Core.
     /// </summary>
     /// <seealso cref="IDataStore" />
-    /// <seealso cref="IUnitOfWork" />
-    public interface IEfCoreDataStore : IDataStore, IUnitOfWork
+    public interface IEfCoreDataStore : IDataStore
     {
         /// <summary>
         /// Creates a <see cref="DbSet{TEntity}" /> that can be used to query and save instances of <typeparamref name="TEntity" />.
@@ -23,10 +21,9 @@ namespace Savvyio.Extensions.Storage
     /// Defines a generic way to support multiple implementations that does the actual I/O communication towards a data store using Microsoft Entity Framework Core.
     /// </summary>
     /// <typeparam name="TMarker">The type used to mark the implementation that this data store represents. Optimized for Microsoft Dependency Injection.</typeparam>
-    /// <seealso cref="IDependencyInjectionMarker{TMarker}" />
     /// <seealso cref="IEfCoreDataStore" />
-    /// <seealso cref="IUnitOfWork{TMarker}" />
-    public interface IEfCoreDataStore<TMarker> : IEfCoreDataStore, IUnitOfWork<TMarker>
+    /// <seealso cref="IDataStore{TMarker}"/>
+    public interface IEfCoreDataStore<TMarker> : IEfCoreDataStore, IDataStore<TMarker>
     {
     }
 }

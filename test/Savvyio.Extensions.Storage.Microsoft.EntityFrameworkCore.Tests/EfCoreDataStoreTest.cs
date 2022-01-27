@@ -10,7 +10,6 @@ using Savvyio.Assets;
 using Savvyio.Assets.Domain;
 using Savvyio.Assets.Domain.Events;
 using Savvyio.Assets.Domain.Handlers;
-using Savvyio.Assets.Storage;
 using Savvyio.Domain;
 using Xunit;
 using Xunit.Abstractions;

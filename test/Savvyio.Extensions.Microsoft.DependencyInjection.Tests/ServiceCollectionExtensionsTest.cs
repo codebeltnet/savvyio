@@ -6,12 +6,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Commands;
 using Savvyio.Domain;
 using Savvyio.EventDriven;
-using Savvyio.Extensions.Microsoft.DependencyInjection.Assets;
+using Savvyio.Extensions.Assets;
 using Savvyio.Queries;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions.Microsoft.DependencyInjection
+namespace Savvyio.Extensions
 {
     public class ServiceCollectionExtensionsTest : Test
     {
