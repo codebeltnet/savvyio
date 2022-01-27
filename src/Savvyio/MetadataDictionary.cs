@@ -108,7 +108,7 @@ namespace Savvyio
             _dictionary.Add(key, value);
         }
 
-        IMetadataDictionary IMetadataDictionary.AddUnristricted(string key, object value)
+        IMetadataDictionary IMetadataDictionary.AddUnrestricted(string key, object value)
         {
             _dictionary.Add(key, value);
             return this;

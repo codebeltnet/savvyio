@@ -8,6 +8,6 @@ namespace Savvyio
     /// <seealso cref="IDictionary{TKey,TValue}" />
     public interface IMetadataDictionary : IDictionary<string, object>
     {
-        internal IMetadataDictionary AddUnristricted(string key, object value);
+        internal IMetadataDictionary AddUnrestricted(string key, object value);
     }
 }

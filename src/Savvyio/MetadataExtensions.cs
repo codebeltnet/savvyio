@@ -136,7 +136,7 @@ namespace Savvyio
                 {
                     if (!destination.Metadata.ContainsKey(entry.Key))
                     {
-                        destination.Metadata.AddUnristricted(entry.Key, entry.Value); // bypass reserved keyword check since the value is only added if non-existing
+                        destination.Metadata.AddUnrestricted(entry.Key, entry.Value); // bypass reserved keyword check since the value is only added if non-existing
                     }
                 }
             }

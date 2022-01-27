@@ -66,7 +66,7 @@ namespace Savvyio
             }
             else
             {
-                model.Metadata.AddUnristricted(key, value);
+                model.Metadata.AddUnrestricted(key, value);
             }
             return model;
         }
