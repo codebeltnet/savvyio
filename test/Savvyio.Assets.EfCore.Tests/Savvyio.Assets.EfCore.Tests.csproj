@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <RootNamespace>Savvyio.Assets</RootNamespace>
@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore\Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.Microsoft.EntityFrameworkCore\Savvyio.Extensions.Microsoft.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Savvyio.Assets.Tests\Savvyio.Assets.Tests.csproj" />
   </ItemGroup>
 

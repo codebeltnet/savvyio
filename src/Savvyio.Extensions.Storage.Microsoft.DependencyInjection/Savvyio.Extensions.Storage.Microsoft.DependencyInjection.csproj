@@ -1,9 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <ItemGroup>
-    <ProjectReference Include="..\Savvyio.Domain\Savvyio.Domain.csproj" />
-    <ProjectReference Include="..\Savvyio.Extensions.Microsoft.DependencyInjection\Savvyio.Extensions.Microsoft.DependencyInjection.csproj" />
-    <ProjectReference Include="..\Savvyio\Savvyio.csproj" />
-  </ItemGroup>
-
-</Project>

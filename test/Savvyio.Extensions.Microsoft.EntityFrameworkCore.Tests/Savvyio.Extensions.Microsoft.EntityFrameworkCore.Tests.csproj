@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Savvyio.Extensions.Storage</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.Microsoft.DependencyInjection.EntityFrameworkCore\Savvyio.Extensions.Microsoft.DependencyInjection.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.Microsoft.EntityFrameworkCore\Savvyio.Extensions.Microsoft.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Savvyio.Assets.EfCore.Tests\Savvyio.Assets.EfCore.Tests.csproj" />
+    <ProjectReference Include="..\Savvyio.Assets.Tests\Savvyio.Assets.Tests.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Cuemon.Extensions.Xunit.App" Version="6.4.0" />
+  </ItemGroup>
+
+</Project>

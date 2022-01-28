@@ -14,10 +14,10 @@
     <ProjectReference Include="..\..\src\Savvyio.Domain.EventSourcing\Savvyio.Domain.EventSourcing.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Domain\Savvyio.Domain.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
-    <ProjectReference Include="..\..\src\Savvyio.Extensions.Dispatchers\Savvyio.Extensions.Dispatchers.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.Core\Savvyio.Extensions.Core.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.Microsoft.DependencyInjection.EntityFrameworkCore\Savvyio.Extensions.Microsoft.DependencyInjection.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.Microsoft.DependencyInjection\Savvyio.Extensions.Microsoft.DependencyInjection.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Queries\Savvyio.Queries.csproj" />
-    <ProjectReference Include="..\..\src\Savvyio\Savvyio.csproj" />
   </ItemGroup>
 
   <ItemGroup>
