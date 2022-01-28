@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cuemon.Threading;
+using Savvyio.Extensions.Microsoft.DependencyInjection.Storage;
 using Savvyio.Storage;
 
 namespace Savvyio.Extensions.Storage.Assets

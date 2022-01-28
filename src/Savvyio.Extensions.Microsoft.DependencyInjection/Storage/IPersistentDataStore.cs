@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Extensions.Storage
+﻿namespace Savvyio.Extensions.Microsoft.DependencyInjection.Storage
 {
     /// <summary>
     /// Interface IPersistentDataStore

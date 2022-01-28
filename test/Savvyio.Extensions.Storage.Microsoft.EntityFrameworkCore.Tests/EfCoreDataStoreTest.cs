@@ -11,6 +11,7 @@ using Savvyio.Assets.Domain;
 using Savvyio.Assets.Domain.Events;
 using Savvyio.Assets.Domain.Handlers;
 using Savvyio.Domain;
+using Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore;
 using Xunit;
 using Xunit.Abstractions;
 

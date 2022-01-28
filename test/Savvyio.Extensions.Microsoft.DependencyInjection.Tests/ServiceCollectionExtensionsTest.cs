@@ -7,6 +7,7 @@ using Savvyio.Commands;
 using Savvyio.Domain;
 using Savvyio.EventDriven;
 using Savvyio.Extensions.Assets;
+using Savvyio.Extensions.Microsoft.DependencyInjection;
 using Savvyio.Queries;
 using Xunit;
 using Xunit.Abstractions;

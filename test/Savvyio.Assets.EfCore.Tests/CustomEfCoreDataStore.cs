@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Savvyio.Assets.Domain;
 using Savvyio.Domain;
+using Savvyio.Extensions.Microsoft.DependencyInjection.Storage;
 using Savvyio.Extensions.Storage;
+using Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore;
 
 namespace Savvyio.Assets
 {

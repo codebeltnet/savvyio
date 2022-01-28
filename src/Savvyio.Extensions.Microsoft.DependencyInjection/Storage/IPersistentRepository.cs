@@ -1,6 +1,6 @@
 ﻿using Savvyio.Storage;
 
-namespace Savvyio.Extensions.Storage
+namespace Savvyio.Extensions.Microsoft.DependencyInjection.Storage
 {
     /// <summary>
     /// Defines a generic way to support multiple implementations of persistent repositories (CRUD).

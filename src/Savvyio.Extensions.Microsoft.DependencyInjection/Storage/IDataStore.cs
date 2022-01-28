@@ -1,6 +1,6 @@
 ﻿using Savvyio.Storage;
 
-namespace Savvyio.Extensions.Storage
+namespace Savvyio.Extensions.Microsoft.DependencyInjection.Storage
 {
     /// <summary>
     /// Defines a generic way to support multiple implementations that does the actual I/O communication towards a data store.

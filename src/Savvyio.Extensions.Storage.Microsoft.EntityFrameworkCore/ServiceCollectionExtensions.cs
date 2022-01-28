@@ -4,9 +4,11 @@ using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Savvyio.Domain;
+using Savvyio.Extensions.Microsoft.DependencyInjection.Storage;
+using Savvyio.Extensions.Storage.Microsoft.DependencyInjection;
 using Savvyio.Storage;
 
-namespace Savvyio.Extensions.Storage
+namespace Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore
 {
     /// <summary>
     /// Extension methods for the <see cref="IServiceCollection"/> interface.

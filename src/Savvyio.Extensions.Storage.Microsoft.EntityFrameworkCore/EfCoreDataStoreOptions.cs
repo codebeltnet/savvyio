@@ -2,7 +2,7 @@
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 
-namespace Savvyio.Extensions.Storage
+namespace Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore
 {
     /// <summary>
     /// Configuration options for <see cref="IEfCoreDataStore"/>.

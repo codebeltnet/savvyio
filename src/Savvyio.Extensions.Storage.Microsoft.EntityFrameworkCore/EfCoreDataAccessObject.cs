@@ -7,9 +7,10 @@ using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Threading;
 using Microsoft.EntityFrameworkCore;
+using Savvyio.Extensions.Microsoft.DependencyInjection.Storage;
 using Savvyio.Storage;
 
-namespace Savvyio.Extensions.Storage
+namespace Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore
 {
     /// <summary>
     /// Provides a default implementation of the <see cref="IPersistentDataAccessObject{T}"/> interface to serve as an abstraction layer before the actual I/O communication towards a data store using Microsoft Entity Framework Core.

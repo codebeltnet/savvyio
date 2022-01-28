@@ -5,7 +5,7 @@ using Cuemon.Threading;
 using Microsoft.EntityFrameworkCore;
 using Savvyio.Domain;
 
-namespace Savvyio.Extensions.Storage
+namespace Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore
 {
     /// <summary>
     /// Extension methods for the <see cref="IDomainEventDispatcher"/> interface.

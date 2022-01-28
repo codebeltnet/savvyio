@@ -3,7 +3,7 @@ using Cuemon.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Savvyio.Extensions.Storage
+namespace Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore
 {
     internal class SavvyioDbContext : DbContext, IConfigurable<EfCoreDataStoreOptions>
     {

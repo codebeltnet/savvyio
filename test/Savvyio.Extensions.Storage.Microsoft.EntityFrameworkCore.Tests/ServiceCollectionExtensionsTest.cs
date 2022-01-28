@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Savvyio.Assets;
 using Savvyio.Assets.Domain;
+using Savvyio.Extensions.Microsoft.DependencyInjection.Storage;
+using Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore;
 using Savvyio.Storage;
 using Xunit;
 using Xunit.Abstractions;

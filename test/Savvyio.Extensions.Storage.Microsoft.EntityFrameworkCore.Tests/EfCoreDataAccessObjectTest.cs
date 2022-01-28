@@ -4,6 +4,7 @@ using Cuemon.Extensions.Xunit;
 using Microsoft.EntityFrameworkCore;
 using Savvyio.Assets;
 using Savvyio.Assets.Domain;
+using Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore;
 using Xunit;
 using Xunit.Abstractions;
 

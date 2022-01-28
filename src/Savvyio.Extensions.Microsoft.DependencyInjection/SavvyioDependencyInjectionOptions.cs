@@ -2,7 +2,7 @@
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Savvyio.Extensions
+namespace Savvyio.Extensions.Microsoft.DependencyInjection
 {
     /// <summary>
     /// Specifies options that is related to setting up Savvy I/O services.
