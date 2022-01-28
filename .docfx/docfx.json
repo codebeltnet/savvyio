@@ -4,7 +4,7 @@
       "src": [
         {
           "files": [
-            "Savvyio/**.csproj",
+            "Savvyio.Core/**.csproj",
             "Savvyio.Commands/**.csproj",
             "Savvyio.Domain/**.csproj",
             "Savvyio.Domain.EventSourcing/**.csproj",
@@ -25,10 +25,10 @@
       "src": [
         {
           "files": [
-            "Savvyio.Extensions.Dispatchers/**.csproj",
+            "Savvyio.Extensions.Core/**.csproj",
             "Savvyio.Extensions.Microsoft.DependencyInjection/**.csproj",
-            "Savvyio.Extensions.Storage.Microsoft.DependencyInjection/**.csproj",
-            "Savvyio.Extensions.Storage.Microsoft.EntityFrameworkCore/**.csproj"
+            "Savvyio.Extensions.Microsoft.DependencyInjection.EntityFrameworkCore/**.csproj",
+            "Savvyio.Extensions.Microsoft.EntityFrameworkCore/**.csproj"
           ],
           "src": "../src"
         }
