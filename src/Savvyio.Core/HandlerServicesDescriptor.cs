@@ -8,17 +8,38 @@ using Cuemon.Extensions;
 
 namespace Savvyio
 {
+    /// <summary>
+    /// Provides information, in a developer friendly way, about implementations of the <see cref="IHandler{TRequest}"/> interface such as name, declared members and what type of request they handle.
+    /// </summary>
+    /// <remarks>
+    /// An example of the output available when calling <see cref="ToString"/>:<br/>
+    /// <br/>
+    /// Discovered 1 ICommandHandler implementation covering a total of 5 ICommand methods<br/>
+    /// <br/>
+    /// <br/>
+    /// Assembly: Savvyio.Assets.Tests<br/>
+    /// Namespace: Savvyio.Assets<br/>
+    /// <br/>
+    /// &lt;AccountCommandHandler&gt;<br/>
+    ///    *UpdateAccount --> &amp;&lt;RegisterDelegates&gt;b__5_0<br/>
+    ///    *CreateAccount --> &amp;CreateAccountAsync<br/>
+    /// </remarks>>
     public class HandlerServicesDescriptor
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HandlerServicesDescriptor"/> class.
+        /// </summary>
+        /// <param name="discoveredServices">The discovered implementations of the <see cref="IHandler{TRequest}"/> interface.</param>
+        /// <param name="serviceTypes">The registered <see cref="IHandler{TRequest}"/> service types.</param>
         public HandlerServicesDescriptor(IEnumerable<IGrouping<Type, KeyValuePair<Type, List<IHierarchy<object>>>>> discoveredServices, IEnumerable<Type> serviceTypes)
         {
             DiscoveredServices = new List<IGrouping<Type, KeyValuePair<Type, List<IHierarchy<object>>>>>(discoveredServices ?? Enumerable.Empty<IGrouping<Type, KeyValuePair<Type, List<IHierarchy<object>>>>>());
             ServiceTypes = new List<Type>(serviceTypes ?? Enumerable.Empty<Type>()).OrderBy(type => type.Name).ToList();
         }
 
-        public IReadOnlyList<IGrouping<Type, KeyValuePair<Type, List<IHierarchy<object>>>>> DiscoveredServices { get; }
+        private IReadOnlyList<IGrouping<Type, KeyValuePair<Type, List<IHierarchy<object>>>>> DiscoveredServices { get; }
 
-        public IReadOnlyList<Type> ServiceTypes { get; }
+        private IReadOnlyList<Type> ServiceTypes { get; }
 
         /// <summary>
         /// Returns a <see cref="string" /> that represents this instance.
@@ -35,9 +56,10 @@ namespace Savvyio
                 
                 foreach (var discoveredServicesGroup in DiscoveredServices)
                 {
-                    var handlers = discoveredServicesGroup.Where(pair => pair.Key == serviceType).SelectMany(pair => pair.Value).ToList(); // DiscoveredServices.Where(h => h.InstanceAs<Type>().HasInterfaces(serviceType)).Distinct().ToList();
+                    var handlers = discoveredServicesGroup.Where(pair => pair.Key == serviceType).SelectMany(pair => pair.Value).ToList();
                     if (handlers.Count == 0) { continue; }
-                    var text = $"Discovered {handlers.Count} {serviceType.Name} implementations covering a total of {handlers.SelectMany(h => h.GetChildren()).Count()} {serviceRequestType.Name} methods";
+                    var handlerMethodsCount = handlers.SelectMany(h => h.GetChildren()).Count();
+                    var text = $"Discovered {handlers.Count} {serviceType.Name} implementation{(handlers.Count > 1 ? "s" : "")} covering a total of {handlerMethodsCount} {serviceRequestType.Name} method{(handlerMethodsCount > 1 ? "s" : "")}";
                     var dashes = Generate.FixedString('-', text.Length.Max(text.Length.Max(text.Length)));
                     builder.Append(text);
                     builder.AppendLine();
