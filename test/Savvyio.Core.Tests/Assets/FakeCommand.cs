@@ -1,8 +1,9 @@
 ﻿using System;
+using Savvyio.Commands;
 
 namespace Savvyio.Assets
 {
-    internal class FakeCommand : IRequest
+    internal class FakeCommand : Command
     {
         public FakeCommand()
         {
