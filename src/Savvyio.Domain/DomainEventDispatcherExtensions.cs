@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Cuemon.Threading;
+using Savvyio.Domain.EventSourcing;
 
 namespace Savvyio.Domain
 {

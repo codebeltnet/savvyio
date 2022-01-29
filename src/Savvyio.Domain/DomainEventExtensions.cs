@@ -1,5 +1,6 @@
 ﻿using System;
 using Cuemon.Extensions;
+using Savvyio.Domain.EventSourcing;
 
 namespace Savvyio.Domain
 {
