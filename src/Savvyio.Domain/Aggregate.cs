@@ -25,9 +25,8 @@ namespace Savvyio.Domain
         /// Initializes a new instance of the <see cref="Aggregate{TKey, TEvent}"/> class.
         /// </summary>
         /// <param name="id">The identifier of the entity.</param>
-        protected Aggregate(TKey id)
+        protected Aggregate(TKey id) : base(id)
         {
-            Id = id;
         }
 
         /// <summary>

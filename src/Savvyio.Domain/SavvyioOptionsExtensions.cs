@@ -13,8 +13,7 @@
         /// <returns>A reference to <paramref name="options"/> after the operation has completed.</returns>
         public static SavvyioOptions AddDomainEventHandler<T>(this SavvyioOptions options) where T : class, IDomainEventHandler
         {
-            options.AddHandler<IDomainEventHandler, IDomainEvent, T>();
-            return options;
+            return options.AddHandler<IDomainEventHandler, IDomainEvent, T>();
         }
     }
 }

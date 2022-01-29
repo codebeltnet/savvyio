@@ -43,11 +43,4 @@ namespace Savvyio.Domain
             yield return Value;
         }
     }
-
-    internal class DefaultSingleValueObject<T> : SingleValueObject<T>
-    {
-        public DefaultSingleValueObject(T value) : base(value)
-        {
-        }
-    }
 }
