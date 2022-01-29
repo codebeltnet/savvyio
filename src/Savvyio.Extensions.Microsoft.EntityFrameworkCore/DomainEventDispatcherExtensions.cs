@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cuemon.Threading;
@@ -19,17 +20,10 @@ namespace Savvyio.Extensions.Microsoft.EntityFrameworkCore
         /// <param name="context">The <see cref="DbContext"/> to extract aggregate(s) and publish domain events from.</param>
         public static void RaiseMany(this IDomainEventDispatcher dispatcher, DbContext context)
         {
-            var entries = context.ChangeTracker.Entries<IAggregateRoot<IDomainEvent>>().Where(entry => entry.Entity.Events.Any()).ToList();
-            foreach (var entry in entries)
+            var domainEvents = ExtractDomainEvents(context);
+            foreach (var de in domainEvents)
             {
-                var aggregate = entry.Entity;
-                var events = entries.SelectMany(ee => ee.Entity.Events).ToList();
-                var eventsType = events.First().GetType();
-                if (!typeof(ITracedDomainEvent).IsAssignableFrom(eventsType)) { aggregate.RemoveAllEvents(); }
-                foreach (var @event in events)
-                {
-                    dispatcher.Raise(@event.MergeMetadata(aggregate));
-                }
+                dispatcher.Raise(de);
             }
         }
 
@@ -42,6 +36,15 @@ namespace Savvyio.Extensions.Microsoft.EntityFrameworkCore
         /// <returns>A <see cref="Task"/> that represents the asynchronous operation.</returns>
         public static async Task RaiseManyAsync(this IDomainEventDispatcher dispatcher, DbContext context, Action<AsyncOptions> setup = null)
         {
+            var domainEvents = ExtractDomainEvents(context);
+            foreach (var de in domainEvents)
+            {
+                await dispatcher.RaiseAsync(de, setup).ConfigureAwait(false);
+            }
+        }
+
+        private static IEnumerable<IDomainEvent> ExtractDomainEvents(DbContext context)
+        {
             var entries = context.ChangeTracker.Entries<IAggregateRoot<IDomainEvent>>().Where(entry => entry.Entity.Events.Any()).ToList();
             foreach (var entry in entries)
             {
@@ -51,7 +54,7 @@ namespace Savvyio.Extensions.Microsoft.EntityFrameworkCore
                 if (!typeof(ITracedDomainEvent).IsAssignableFrom(eventsType)) { aggregate.RemoveAllEvents(); }
                 foreach (var @event in events)
                 {
-                    await dispatcher.RaiseAsync(@event.MergeMetadata(aggregate), setup).ConfigureAwait(false);
+                    yield return @event.MergeMetadata(aggregate);
                 }
             }
         }
