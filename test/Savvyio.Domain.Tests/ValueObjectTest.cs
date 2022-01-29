@@ -20,7 +20,9 @@ namespace Savvyio.Domain
 
             TestOutput.WriteLines(sut1.ToString(), sut2.ToString());
 
+            Assert.True(sut1 == sut2);
             Assert.Equal(sut1, sut2);
+            Assert.Equal(sut1.GetHashCode(), sut2.GetHashCode());
         }
 
         [Fact]
@@ -31,7 +33,9 @@ namespace Savvyio.Domain
 
             TestOutput.WriteLines(sut1.ToString(), sut2.ToString());
 
+            Assert.True(sut1 != sut2);
             Assert.NotEqual(sut1, sut2);
+            Assert.NotEqual(sut1.GetHashCode(), sut2.GetHashCode());
         }
     }
 }

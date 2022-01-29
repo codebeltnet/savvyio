@@ -60,7 +60,7 @@ namespace Savvyio.Assets.Domain
         {
             Validator.ThrowIfNull(credentials, nameof(credentials));
             var password = new UserAccountPassword(Id, credentials);
-            AddEvent(new UserAccountPasswordCreated(password));
+            AddEvent(new UserAccountPasswordInitiated(password));
         }
 
         public void RegisterFailedLogonAttempt(string userHostAddress)

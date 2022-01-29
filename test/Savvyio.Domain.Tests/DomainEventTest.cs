@@ -21,6 +21,7 @@ namespace Savvyio.Domain
 
             var account = new Account(Guid.NewGuid(), fullname, email);
             var sut = new AccountInitiated(account);
+            var ts = DateTime.UtcNow;
 
             Assert.Equal(account.EmailAddress, sut.EmailAddress);
             Assert.Equal(account.FullName, sut.FullName);
@@ -30,6 +31,7 @@ namespace Savvyio.Domain
                 s => Assert.Equal(s, MetadataDictionary.EventId),
                 s => Assert.Equal(s, MetadataDictionary.Timestamp));
             Assert.True(sut.Metadata.Count == 2, "sut.Metadata.Count == 2");
+            Assert.InRange(DateTime.UtcNow, sut.GetTimestamp(), ts.AddSeconds(1));
         }
 
         [Fact]
@@ -44,6 +46,7 @@ namespace Savvyio.Domain
                 .SaveMetadata("Key2", "Key2Value");
             
             var sut = new AccountInitiated(account).MergeMetadata(account);
+            var ts = DateTime.UtcNow;
 
             Assert.Equal(account.EmailAddress, sut.EmailAddress);
             Assert.Equal(account.FullName, sut.FullName);
@@ -54,6 +57,7 @@ namespace Savvyio.Domain
                 s => Assert.Equal(s, "Key1"),
                 s => Assert.Equal(s, "Key2"));
             Assert.True(sut.Metadata.Count == 4, "sut.Metadata.Count == 4");
+            Assert.InRange(DateTime.UtcNow, sut.GetTimestamp(), ts.AddSeconds(1));
         }
     }
 }

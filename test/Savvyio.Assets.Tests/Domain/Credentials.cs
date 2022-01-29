@@ -13,6 +13,7 @@ namespace Savvyio.Assets.Domain
             Validator.ThrowIfNullOrWhitespace(username, nameof(username));
             Validator.ThrowIfNullOrWhitespace(password, nameof(password));
             Validator.ThrowIfNullOrWhitespace(salt, nameof(salt));
+            UserName = username;
             Hash = KeyedHashFactory.CreateHmacCryptoSha256(salt.ToByteArray()).ComputeHash(password).ToHexadecimalString();
             Salt = salt;
         }

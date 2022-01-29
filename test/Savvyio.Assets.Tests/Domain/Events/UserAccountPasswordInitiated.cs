@@ -2,13 +2,13 @@
 
 namespace Savvyio.Assets.Domain.Events
 {
-    public class UserAccountPasswordCreated : DomainEvent
+    public class UserAccountPasswordInitiated : DomainEvent
     {
-        public UserAccountPasswordCreated()
+        public UserAccountPasswordInitiated()
         {
         }
 
-        public UserAccountPasswordCreated(UserAccountPassword password)
+        public UserAccountPasswordInitiated(UserAccountPassword password)
         {
             AccountId = password.AccountId;
             Hash = password.Hash;
