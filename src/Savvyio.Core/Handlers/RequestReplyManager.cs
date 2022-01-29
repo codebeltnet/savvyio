@@ -28,24 +28,24 @@ namespace Savvyio.Handlers
             _asyncHandlers.TryAdd(typeof(T), async (h, t) => await handler(h as T, t));
         }
 
-        public bool TryInvoke<TResult>(TModel model, out TResult result)
+        public bool TryInvoke<TResult>(TModel request, out TResult result)
         {
-            Validator.ThrowIfNull(model, nameof(model));
-            if (_handlers.TryGetValue(model.GetType(), out var handler))
+            Validator.ThrowIfNull(request, nameof(request));
+            if (_handlers.TryGetValue(request.GetType(), out var handler))
             {
-                result = (TResult)handler(model);
+                result = (TResult)handler(request);
                 return true;
             }
             result = default;
             return false;
         }
 
-        public async Task<ConditionalValue<TResult>> TryInvokeAsync<TResult>(TModel model, CancellationToken ct = default)
+        public async Task<ConditionalValue<TResult>> TryInvokeAsync<TResult>(TModel request, CancellationToken ct = default)
         {
-            Validator.ThrowIfNull(model, nameof(model));
-            if (_asyncHandlers.TryGetValue(model.GetType(), out var handler))
+            Validator.ThrowIfNull(request, nameof(request));
+            if (_asyncHandlers.TryGetValue(request.GetType(), out var handler))
             {
-                var result = await handler(model, ct).ConfigureAwait(false);
+                var result = await handler(request, ct).ConfigureAwait(false);
                 return new SuccessfulValue<TResult>((TResult)result);
             }
             return new UnsuccessfulValue<TResult>();
