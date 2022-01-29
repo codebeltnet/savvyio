@@ -48,7 +48,7 @@ namespace Savvyio.Extensions.Storage
             sut1.AddScoped<Func<Type, IEnumerable<object>>>(p => p.GetServices);
             sut1.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
             sut1.AddScoped<IDomainEventHandler, AccountDomainEventHandler>();
-            sut1.AddScoped<ITestStore<IDomainEvent>, DomainEventStore>();
+            sut1.AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
             var sut2 = sut1.BuildServiceProvider();
             var sut3 = new EfCoreDataStore(sut2.GetRequiredService<IDomainEventDispatcher>(), o =>
             {

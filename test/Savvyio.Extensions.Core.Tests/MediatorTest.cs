@@ -76,8 +76,8 @@ namespace Savvyio.Extensions
                     o.ModelConstructor = mb => mb.AddPlatformProvider();
                 });
                 services.AddSavvyIO(o => o.AddMediator<Mediator>().IncludeHandlerServicesDescriptor = true);
-                services.AddScoped<ITestStore<IDomainEvent>, DomainEventStore>();
-                services.AddScoped<ITestStore<IIntegrationEvent>, IntegrationEventStore>();
+                services.AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
+                services.AddScoped<ITestStore<IIntegrationEvent>, InMemUnitTestStore<IIntegrationEvent>>();
             }))
             {
                 var mediator = host.ServiceProvider.GetRequiredService<IMediator>();
@@ -118,8 +118,8 @@ namespace Savvyio.Extensions
                     o.AddMediator<Mediator>();
                     o.IncludeHandlerServicesDescriptor = true;
                 });
-                services.AddScoped<ITestStore<IDomainEvent>, DomainEventStore>();
-                services.AddScoped<ITestStore<IIntegrationEvent>, IntegrationEventStore>();
+                services.AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
+                services.AddScoped<ITestStore<IIntegrationEvent>, InMemUnitTestStore<IIntegrationEvent>>();
             }))
             {
                 var mediator = host.ServiceProvider.GetRequiredService<IMediator>();
@@ -158,8 +158,8 @@ namespace Savvyio.Extensions
                            o.IncludeHandlerServicesDescriptor = true;
                            //options.AddDispatcher<IQueryDispatcher, QueryDispatcher>();
                        });
-                       services.AddScoped<ITestStore<IDomainEvent>, DomainEventStore>();
-                       services.AddScoped<ITestStore<IIntegrationEvent>, IntegrationEventStore>();
+                       services.AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
+                       services.AddScoped<ITestStore<IIntegrationEvent>, InMemUnitTestStore<IIntegrationEvent>>();
                    }))
             {
                 var mediator = host.ServiceProvider.GetRequiredService<IQueryDispatcher>();
