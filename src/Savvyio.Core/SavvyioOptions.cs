@@ -89,7 +89,7 @@ namespace Savvyio
         /// </summary>
         /// <typeparam name="TDispatcher">The type of the <see cref="IDispatcher"/> interface to add.</typeparam>
         /// <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
-        /// <returns>A reference to this instance.</returns>
+        /// <returns>A reference to this instance so that additional configuration calls can be chained.</returns>
         public SavvyioOptions AddDispatcher<TDispatcher, TImplementation>()
             where TDispatcher : IDispatcher
             where TImplementation : class, TDispatcher
@@ -103,7 +103,7 @@ namespace Savvyio
         /// </summary>
         /// <param name="service">The <see cref="Type"/> of the <see cref="IDispatcher"/> interface to add.</param>
         /// <param name="implementation">The type of the implementation to use.</param>
-        /// <returns>A reference to this instance.</returns>
+        /// <returns>A reference to this instance so that additional configuration calls can be chained.</returns>
         public SavvyioOptions AddDispatcher(Type service, Type implementation)
         {
             if (IsValid<IDispatcher>(implementation, service))
@@ -120,7 +120,7 @@ namespace Savvyio
         /// <typeparam name="THandler">The type of the service to add.</typeparam>
         /// <typeparam name="TRequest">The type of the model to handle.</typeparam>
         /// <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
-        /// <returns>A reference to this instance.</returns>
+        /// <returns>A reference to this instance so that additional configuration calls can be chained.</returns>
         /// <remarks>Handler is only added if the following conditions are true: <c>typeof(THandler).HasInterfaces(typeof(IHandler&lt;TRequest&gt;)) &amp;&amp; typeof(T).IsClass &amp;&amp; !typeof(T).IsAbstract &amp;&amp; !typeof(T).IsInterface</c></remarks>
         public SavvyioOptions AddHandler<THandler, TRequest, TImplementation>()
             where THandler : IHandler<TRequest>
@@ -135,7 +135,7 @@ namespace Savvyio
         /// </summary>
         /// <param name="service">The <see cref="Type"/> of the <see cref="IHandler"/> interface to add.</param>
         /// <param name="implementation">The type of the implementation to use.</param>
-        /// <returns>A reference to this instance.</returns>
+        /// <returns>A reference to this instance so that additional configuration calls can be chained.</returns>
         public SavvyioOptions AddHandler(Type service, Type implementation)
         {
             if (IsValid<IHandler>(implementation, service))
