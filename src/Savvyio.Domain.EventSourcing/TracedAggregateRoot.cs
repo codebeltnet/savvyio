@@ -60,15 +60,24 @@ namespace Savvyio.Domain.EventSourcing
             }
         }
 
+        /// <summary>
+        /// Adds an event to the Aggregate.
+        /// </summary>
+        /// <param name="e">The event to be added to the end of <see cref="P:Savvyio.Domain.Aggregate`2.Events" />.</param>
+        protected sealed override void AddEvent(ITracedDomainEvent e)
+        {
+            ApplyChange(e);
+        }
+
         private void ApplyChange(ITracedDomainEvent e, bool isNew = true)
         {
             if (e == null) { return; }
             if (isNew)
             {
-                if (Version == 0) { RaiseEvent(e); }
+                RaiseEvent(e);
                 e.SetAggregateVersion(Version + 1);
                 Version = e.GetAggregateVersion();
-                AddEvent(e);
+                base.AddEvent(e);
             }
             else
             {

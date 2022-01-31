@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Assets;
 using Savvyio.Assets.Commands;
 using Savvyio.Commands;
-using Savvyio.Extensions.Microsoft.DependencyInjection;
+using Savvyio.Extensions.DependencyInjection;
 using Savvyio.Handlers;
 using Xunit;
 using Xunit.Abstractions;

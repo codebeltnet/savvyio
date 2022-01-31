@@ -13,8 +13,9 @@ using Savvyio.Assets.Events;
 using Savvyio.Assets.Queries;
 using Savvyio.Domain;
 using Savvyio.EventDriven;
-using Savvyio.Extensions.Microsoft.DependencyInjection;
-using Savvyio.Extensions.Microsoft.DependencyInjection.EntityFrameworkCore;
+using Savvyio.Extensions.DependencyInjection;
+using Savvyio.Extensions.DependencyInjection.EntityFrameworkCore;
+using Savvyio.Extensions.DependencyInjection.EntityFrameworkCore.Domain;
 using Savvyio.Queries;
 using Savvyio.Storage;
 using Xunit;
@@ -108,7 +109,7 @@ namespace Savvyio.Extensions
                 services.AddEfCoreRepository<Account, long>();
                 services.AddEfCoreDataAccessObject<PlatformProvider, PlatformProvider>();
                 services.AddEfCoreDataStore<CustomEfCoreDataStore>();
-                services.AddEfCoreDataStore<PlatformProvider>(o =>
+                services.AddEfCoreAggregateDataStore<PlatformProvider>(o =>
                 {
                     o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(PlatformProvider)).EnableDetailedErrors().LogTo(Console.WriteLine);
                     o.ModelConstructor = mb => mb.AddPlatformProvider();

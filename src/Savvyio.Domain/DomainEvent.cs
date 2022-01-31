@@ -6,8 +6,8 @@ namespace Savvyio.Domain
     /// Provides a default implementation of the <see cref="IDomainEvent"/> interface.
     /// </summary>
     /// <seealso cref="IDomainEvent" />
-    /// <seealso cref="Model"/>
-    public abstract class DomainEvent : Model, IDomainEvent
+    /// <seealso cref="Request"/>
+    public abstract class DomainEvent : Request, IDomainEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainEvent" /> class.

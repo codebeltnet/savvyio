@@ -1,5 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
   <ItemGroup>
     <ProjectReference Include="..\Savvyio.Core\Savvyio.Core.csproj" />
   </ItemGroup>
+
 </Project>

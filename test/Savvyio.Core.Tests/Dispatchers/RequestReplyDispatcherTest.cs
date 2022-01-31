@@ -10,7 +10,7 @@ using Savvyio.Assets;
 using Savvyio.Assets.Commands;
 using Savvyio.Assets.Queries;
 using Savvyio.Commands;
-using Savvyio.Extensions.Microsoft.DependencyInjection;
+using Savvyio.Extensions.DependencyInjection;
 using Savvyio.Handlers;
 using Savvyio.Queries;
 using Xunit;

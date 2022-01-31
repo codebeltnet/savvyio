@@ -6,8 +6,8 @@ namespace Savvyio.EventDriven
     /// Provides a default implementation of of the <see cref="IIntegrationEvent"/> interface.
     /// </summary>
     /// <seealso cref="IIntegrationEvent" />
-    /// <seealso cref="Model"/>
-    public abstract class IntegrationEvent : Model, IIntegrationEvent
+    /// <seealso cref="Request"/>
+    public abstract class IntegrationEvent : Request, IIntegrationEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegrationEvent"/> class.

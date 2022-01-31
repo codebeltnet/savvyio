@@ -14,7 +14,7 @@ namespace Savvyio
     public sealed class MetadataDictionary : IMetadataDictionary
     {
         private static readonly IEnumerable<string> ReservedKeywords = Arguments.ToEnumerableOf(Timestamp, MemberType, CorrelationId, CausationId);
-        private readonly IDictionary<string, object> _dictionary = new Dictionary<string, object>();
+        private readonly IDictionary<string, object> _dictionary = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Timestamp is a reserved keyword.
@@ -104,7 +104,7 @@ namespace Savvyio
         /// <param name="value">The object to use as the value of the element to add.</param>
         public void Add(string key, object value)
         {
-            Validator.ThrowIf.ContainsReservedKeyword(key, ReservedKeywords, nameof(key), FormattableString.Invariant($"Unable to add the specified {nameof(key)} as it is a reserved keyword."));
+            Validator.ThrowIf.ContainsReservedKeyword(key, ReservedKeywords, StringComparer.OrdinalIgnoreCase, nameof(key), FormattableString.Invariant($"Unable to add the specified {nameof(key)} as it is a reserved keyword."));
             _dictionary.Add(key, value);
         }
 

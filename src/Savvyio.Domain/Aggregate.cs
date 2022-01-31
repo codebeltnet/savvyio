@@ -44,10 +44,10 @@ namespace Savvyio.Domain
         /// <summary>
         /// Adds an event to the Aggregate.
         /// </summary>
-        /// <param name="event">The event to be added to the end of <see cref="Events"/>.</param>
-        protected void AddEvent(TEvent @event)
+        /// <param name="e">The event to be added to the end of <see cref="Events"/>.</param>
+        protected virtual void AddEvent(TEvent e)
         {
-            _events.Add(@event);
+            _events.Add(e);
         }
 
         /// <summary>

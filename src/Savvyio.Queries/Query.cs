@@ -5,8 +5,8 @@
     /// </summary>
     /// <typeparam name="TResult">The type of the t result.</typeparam>
     /// <seealso cref="IQuery{TResult}" />
-    /// <seealso cref="Model" />
-    public abstract class Query<TResult> : Model, IQuery<TResult>
+    /// <seealso cref="Request" />
+    public abstract class Query<TResult> : Request, IQuery<TResult>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Query{TResult}"/> class.

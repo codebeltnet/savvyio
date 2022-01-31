@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Savvyio.Domain.EventSourcing\Savvyio.Domain.EventSourcing.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.EntityFrameworkCore\Savvyio.Extensions.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Savvyio.Assets.EfCore.Tests\Savvyio.Assets.EfCore.Tests.csproj" />
+  </ItemGroup>
+
+</Project>

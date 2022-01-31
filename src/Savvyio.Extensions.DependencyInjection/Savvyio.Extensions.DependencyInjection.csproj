@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Savvyio.Core\Savvyio.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cuemon.Extensions.DependencyInjection" Version="6.4.0" />
+  </ItemGroup>
+
+</Project>

@@ -3,7 +3,7 @@
 namespace Savvyio.Domain
 {
     /// <summary>
-    /// Provides a way to cover the pattern of an Enetiy as specified in Domain Driven Design. This is an abstract class.
+    /// Provides a way to cover the pattern of an Entity as specified in Domain Driven Design. This is an abstract class.
     /// </summary>
     /// <typeparam name="TKey">The type of the identifier.</typeparam>
     /// <seealso cref="IEntity{TKey}" />

@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Cuemon.Extensions.IO" Version="6.4.0" />
+    <PackageReference Include="Cuemon.Extensions.Newtonsoft.Json" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Savvyio.Domain\Savvyio.Domain.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.EntityFrameworkCore\Savvyio.Extensions.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+
+</Project>

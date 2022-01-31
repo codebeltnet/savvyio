@@ -14,7 +14,7 @@ using Savvyio.Assets;
 using Savvyio.Assets.Domain;
 using Savvyio.Assets.Domain.Events;
 using Savvyio.Commands;
-using Savvyio.Extensions.Microsoft.DependencyInjection;
+using Savvyio.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
 

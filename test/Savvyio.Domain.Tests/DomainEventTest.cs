@@ -27,10 +27,10 @@ namespace Savvyio.Domain
             Assert.Equal(account.FullName, sut.FullName);
             Assert.Equal(account.PlatformProviderId, sut.PlatformProviderId);
             Assert.Empty(account.Metadata);
-            Assert.Collection(sut.Metadata.Keys, 
+            Assert.Collection(sut.Metadata.Keys,
                 s => Assert.Equal(s, MetadataDictionary.EventId),
                 s => Assert.Equal(s, MetadataDictionary.Timestamp));
-            Assert.True(sut.Metadata.Count == 2, "sut.Metadata.Count == 2");
+                Assert.True(sut.Metadata.Count == 2, "sut.Metadata.Count == 2");
             Assert.InRange(DateTime.UtcNow, sut.GetTimestamp(), ts.AddSeconds(1));
         }
 
