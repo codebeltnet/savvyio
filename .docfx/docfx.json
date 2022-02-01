@@ -26,9 +26,14 @@
         {
           "files": [
             "Savvyio.Extensions.Core/**.csproj",
-            "Savvyio.Extensions.Microsoft.DependencyInjection/**.csproj",
-            "Savvyio.Extensions.Microsoft.DependencyInjection.EntityFrameworkCore/**.csproj",
-            "Savvyio.Extensions.Microsoft.EntityFrameworkCore/**.csproj"
+            "Savvyio.Extensions.DependencyInjection/**.csproj",
+            "Savvyio.Extensions.DependencyInjection.Domain/**.csproj",
+            "Savvyio.Extensions.DependencyInjection.EFCore/**.csproj",
+            "Savvyio.Extensions.DependencyInjection.EFCore.Domain/**.csproj",
+            "Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing/**.csproj",
+            "Savvyio.Extensions.EFCore/**.csproj",
+            "Savvyio.Extensions.EFCore.Domain/**.csproj",
+            "Savvyio.Extensions.EFCore.Domain.EventSourcing/**.csproj"
           ],
           "src": "../src"
         }
