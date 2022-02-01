@@ -52,7 +52,7 @@ namespace Savvyio.Extensions
         [Fact]
         public void Host_MediatorDescriptorShouldBeRegistered()
         {
-            using (var host = GenericHostTestFactory.CreateGenericHostTest(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>().IncludeHandlerServicesDescriptor = true)))
+            using (var host = GenericHostTestFactory.CreateGenericHostTest(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>().EnableHandlerServicesDescriptor())))
             {
                 var descriptor = host.ServiceProvider.GetRequiredService<HandlerServicesDescriptor>();
 
@@ -76,7 +76,7 @@ namespace Savvyio.Extensions
                     o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(PlatformProvider)).EnableDetailedErrors().LogTo(Console.WriteLine);
                     o.ModelConstructor = mb => mb.AddPlatformProvider();
                 });
-                services.AddSavvyIO(o => o.AddMediator<Mediator>().IncludeHandlerServicesDescriptor = true);
+                services.AddSavvyIO(o => o.EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery().EnableHandlerServicesDescriptor().AddMediator<Mediator>());
                 services.AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
                 services.AddScoped<ITestStore<IIntegrationEvent>, InMemUnitTestStore<IIntegrationEvent>>();
             }))
@@ -116,8 +116,7 @@ namespace Savvyio.Extensions
                 });
                 services.AddSavvyIO(o =>
                 {
-                    o.AddMediator<Mediator>();
-                    o.IncludeHandlerServicesDescriptor = true;
+                    o.AddMediator<Mediator>().EnableHandlerServicesDescriptor().EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery();
                 });
                 services.AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
                 services.AddScoped<ITestStore<IIntegrationEvent>, InMemUnitTestStore<IIntegrationEvent>>();
@@ -152,13 +151,7 @@ namespace Savvyio.Extensions
                        services.AddScoped<IPersistentRepository<PlatformProvider, Guid>, EfCoreRepository<PlatformProvider, Guid, PlatformProvider>>();
                        services.AddEfCoreDataStore<Account>(o => o.ModelConstructor = builder => builder.AddAccount());
                        services.AddEfCoreDataStore<PlatformProvider>(o => o.ModelConstructor = builder => builder.AddPlatformProvider());
-                       services.AddSavvyIO(o =>
-                       {
-                           //options.AddQueryHandler<AccountQueryHandler>();
-                           //options.AddService<IQueryHandler>();
-                           o.IncludeHandlerServicesDescriptor = true;
-                           //options.AddDispatcher<IQueryDispatcher, QueryDispatcher>();
-                       });
+                       services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery());
                        services.AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
                        services.AddScoped<ITestStore<IIntegrationEvent>, InMemUnitTestStore<IIntegrationEvent>>();
                    }))

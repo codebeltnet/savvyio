@@ -23,7 +23,7 @@ namespace Savvyio.Dispatchers
         [Fact]
         public void Dispatch_ShouldFailWithOrphanedHandlerException()
         {
-            var sc = new ServiceCollection().AddSavvyIO(o => o.AssembliesToScan = typeof(RequestReplyDispatcherTest).Assembly.Yield());
+            var sc = new ServiceCollection().AddSavvyIO(o => o.AddAssemblyToScan(typeof(RequestReplyDispatcherTest).Assembly));
             var sp = sc.BuildServiceProvider();
             var sut = new QueryDispatcher(sp.GetRequiredService<IServiceLocator>());
 
@@ -34,7 +34,7 @@ namespace Savvyio.Dispatchers
         public void Dispatch_ShouldDispatchCommandToDesignatedHandler()
         {
             var sc = new ServiceCollection()
-                .AddSavvyIO(o => o.AssembliesToScan = Arguments.ToEnumerableOf(typeof(RequestReplyDispatcherTest).Assembly, typeof(IQuery).Assembly))
+                .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(RequestReplyDispatcherTest).Assembly, typeof(IQuery).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery())
                 .AddScoped<ITestStore<IQuery>, InMemUnitTestStore<IQuery>>();
             
             var sp = sc.BuildServiceProvider();
@@ -52,7 +52,7 @@ namespace Savvyio.Dispatchers
         [Fact]
         public async Task DispatchAsync_ShouldFailWithOrphanedHandlerExceptionAsync()
         {
-            var sc = new ServiceCollection().AddSavvyIO(o => o.AssembliesToScan = typeof(RequestReplyDispatcherTest).Assembly.Yield());
+            var sc = new ServiceCollection().AddSavvyIO(o => o.AddAssemblyToScan(typeof(RequestReplyDispatcherTest).Assembly));
             var sp = sc.BuildServiceProvider();
             var sut = new QueryDispatcher(sp.GetRequiredService<IServiceLocator>());
 
@@ -63,7 +63,7 @@ namespace Savvyio.Dispatchers
         public async Task DispatchAsync_ShouldDispatchCommandToDesignatedHandlerAsync()
         {
             var sc = new ServiceCollection()
-                .AddSavvyIO(o => o.AssembliesToScan = Arguments.ToEnumerableOf(typeof(RequestReplyDispatcherTest).Assembly, typeof(IQuery).Assembly))
+                .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(RequestReplyDispatcherTest).Assembly, typeof(IQuery).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery())
                 .AddScoped<ITestStore<IQuery>, InMemUnitTestStore<IQuery>>();
             
             var sp = sc.BuildServiceProvider();

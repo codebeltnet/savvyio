@@ -18,7 +18,7 @@ namespace Savvyio
         /// </summary>
         /// <param name="options">The <see cref="SavvyioOptions"/> to extend.</param>
         /// <param name="assemblies">The assemblies to scan for <see cref="IDispatcher"/> implementations.</param>
-        /// <returns>A reference to <paramref name="options"/> after the operation has completed.</returns>
+        /// <returns>A reference to <paramref name="options"/> so that additional configuration calls can be chained.</returns>
         public static SavvyioOptions AddDispatchers(this SavvyioOptions options, params Assembly[] assemblies)
         {
             return AddDependenciesCore<IDispatcher>(options, (service, implementation) => options.AddDispatcher(service, implementation), assemblies);
@@ -29,7 +29,7 @@ namespace Savvyio
         /// </summary>
         /// <param name="options">The <see cref="SavvyioOptions"/> to extend.</param>
         /// <param name="assemblies">The assemblies to scan for <see cref="IHandler"/> implementations.</param>
-        /// <returns>A reference to <paramref name="options"/> after the operation has completed.</returns>
+        /// <returns>A reference to <paramref name="options"/> so that additional configuration calls can be chained.</returns>
         public static SavvyioOptions AddHandlers(this SavvyioOptions options, params Assembly[] assemblies)
         {
             return AddDependenciesCore<IHandler>(options, (service, implementation) => options.AddHandler(service, implementation), assemblies);

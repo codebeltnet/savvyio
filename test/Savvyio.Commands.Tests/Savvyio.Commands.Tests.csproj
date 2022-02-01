@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Savvyio.Commands\Savvyio.Commands.csproj" />
-    <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.Commands\Savvyio.Extensions.DependencyInjection.Commands.csproj" />
+    <ProjectReference Include="..\Savvyio.Assets.Tests\Savvyio.Assets.Tests.csproj" />
   </ItemGroup>
 
   <ItemGroup>

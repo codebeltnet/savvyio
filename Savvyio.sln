@@ -61,12 +61,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Dependen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing", "src\Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing\Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing.csproj", "{17EDCC72-7163-4985-BA1F-BD0B02AF511C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savvyio.Extensions.DependencyInjection.Commands", "src\Savvyio.Extensions.DependencyInjection.Commands\Savvyio.Extensions.DependencyInjection.Commands.csproj", "{3C3A02F3-BD90-43FF-9C79-340D18CAD03E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savvyio.Extensions.DependencyInjection.EventDriven", "src\Savvyio.Extensions.DependencyInjection.EventDriven\Savvyio.Extensions.DependencyInjection.EventDriven.csproj", "{C4D5B845-C7AD-4375-ABB6-7FF485106C43}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savvyio.Extensions.DependencyInjection.Queries", "src\Savvyio.Extensions.DependencyInjection.Queries\Savvyio.Extensions.DependencyInjection.Queries.csproj", "{DC2F401F-3AF4-496E-982C-CC9CF39390D2}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -181,18 +175,6 @@ Global
 		{17EDCC72-7163-4985-BA1F-BD0B02AF511C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17EDCC72-7163-4985-BA1F-BD0B02AF511C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17EDCC72-7163-4985-BA1F-BD0B02AF511C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3C3A02F3-BD90-43FF-9C79-340D18CAD03E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C3A02F3-BD90-43FF-9C79-340D18CAD03E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C3A02F3-BD90-43FF-9C79-340D18CAD03E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C3A02F3-BD90-43FF-9C79-340D18CAD03E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C4D5B845-C7AD-4375-ABB6-7FF485106C43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C4D5B845-C7AD-4375-ABB6-7FF485106C43}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C4D5B845-C7AD-4375-ABB6-7FF485106C43}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C4D5B845-C7AD-4375-ABB6-7FF485106C43}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DC2F401F-3AF4-496E-982C-CC9CF39390D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DC2F401F-3AF4-496E-982C-CC9CF39390D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DC2F401F-3AF4-496E-982C-CC9CF39390D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DC2F401F-3AF4-496E-982C-CC9CF39390D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -225,9 +207,6 @@ Global
 		{8486A6C4-295A-4A82-AE48-A561AE285938} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
 		{04A05FF7-947F-4F7D-BAAA-6999E84145C8} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
 		{17EDCC72-7163-4985-BA1F-BD0B02AF511C} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
-		{3C3A02F3-BD90-43FF-9C79-340D18CAD03E} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
-		{C4D5B845-C7AD-4375-ABB6-7FF485106C43} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
-		{DC2F401F-3AF4-496E-982C-CC9CF39390D2} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8DDAD51-08E6-42B5-970B-2DC88D44297B}

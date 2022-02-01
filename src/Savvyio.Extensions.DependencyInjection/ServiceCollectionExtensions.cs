@@ -37,8 +37,8 @@ namespace Savvyio.Extensions.DependencyInjection
         {
             services.AddServiceLocator();
             var options = setup.Configure();
-            if (options.AutoResolveDispatchers) { options.AddDispatchers(options.AssembliesToScan?.ToArray()); }
-            if (options.AutoResolveHandlers) { options.AddHandlers(options.AssembliesToScan?.ToArray()); }
+            if (options.AutomaticDispatcherDiscovery) { options.AddDispatchers(options.AssembliesToScan?.ToArray()); }
+            if (options.AutomaticHandlerDiscovery) { options.AddHandlers(options.AssembliesToScan?.ToArray()); }
             var descriptors = new Dictionary<Type, List<IHierarchy<object>>>();
             foreach (var handlerType in options.HandlerImplementationTypes)
             {

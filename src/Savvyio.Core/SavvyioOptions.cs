@@ -45,11 +45,11 @@ namespace Savvyio
         ///         <description>Initial Value</description>
         ///     </listheader>
         ///     <item>
-        ///         <term><see cref="AutoResolveDispatchers"/></term>
+        ///         <term><see cref="AutomaticDispatcherDiscovery"/></term>
         ///         <description><c>true</c></description>
         ///     </item>
         ///     <item>
-        ///         <term><see cref="AutoResolveHandlers"/></term>
+        ///         <term><see cref="AutomaticHandlerDiscovery"/></term>
         ///         <description><c>true</c></description>
         ///     </item>
         ///     <item>
@@ -60,29 +60,60 @@ namespace Savvyio
         /// </remarks>
         public SavvyioOptions()
         {
-            AutoResolveHandlers = true;
-            AutoResolveDispatchers = true;
             IncludeHandlerServicesDescriptor = false;
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether handlers implementing the <see cref="IHandler"/> interface should be automatically resolved.
+        /// Gets a value indicating whether automatic discovery of <see cref="IHandler"/> implementations is enabled.
         /// </summary>
-        /// <value><c>true</c> if handlers implementing the <see cref="IHandler"/> interface should be automatically resolved; otherwise, <c>false</c>.</value>
-        public bool AutoResolveHandlers { get; set; }
+        /// <value><c>true</c> automatic discovery of <see cref="IHandler"/> implementations is enabled; otherwise, <c>false</c>.</value>
+        public bool AutomaticHandlerDiscovery { get; private set; } = false;
 
         /// <summary>
-        /// Gets or sets a value indicating whether handlers implementing the <see cref="IDispatcher"/> interface should be automatically resolved.
+        /// Gets a value indicating whether automatic discovery of <see cref="IDispatcher"/> implementations is enabled.
         /// </summary>
-        /// <value><c>true</c> if handlers implementing the <see cref="IDispatcher"/> interface should be automatically resolved; otherwise, <c>false</c>.</value>
-        public bool AutoResolveDispatchers { get; set; }
+        /// <value><c>true</c> automatic discovery of <see cref="IDispatcher"/> implementations is enabled; otherwise, <c>false</c>.</value>
+        public bool AutomaticDispatcherDiscovery { get; private set; } = false;
 
-        
+
         /// <summary>
-        /// Gets or sets a value indicating whether handler services should have the option to be presented in a developer friendly way.
+        /// Gets a value indicating whether the <see cref="HandlerServicesDescriptor"/> is enabled.
         /// </summary>
-        /// <value><c>true</c> if handler services should have the option to be presented in a developer friendly way; otherwise, <c>false</c>.</value>
-        public bool IncludeHandlerServicesDescriptor { get; set; }
+        /// <value><c>true</c> if the <see cref="HandlerServicesDescriptor"/> is enabled; otherwise, <c>false</c>.</value>
+        public bool IncludeHandlerServicesDescriptor { get; private set; } = false;
+
+        /// <summary>
+        /// Enables the automatic discovery of handlers implementing the <see cref="IHandler"/> interface.
+        /// </summary>
+        /// <param name="autoDiscoverHandlers"><c>true</c> if handlers implementing the <see cref="IHandler"/> interface should be automatically discovered; otherwise, <c>false</c>.</param>
+        /// <returns>A reference to this instance so that additional configuration calls can be chained.</returns>
+        public SavvyioOptions EnableAutomaticHandlerDiscovery(bool autoDiscoverHandlers = true)
+        {
+            AutomaticHandlerDiscovery = autoDiscoverHandlers;
+            return this;
+        }
+
+        /// <summary>
+        /// Enables the automatic discovery of handlers implementing the <see cref="IDispatcher"/> interface.
+        /// </summary>
+        /// <param name="autoDiscoverDispatchers"><c>true</c> if handlers implementing the <see cref="IDispatcher"/> interface should be automatically discovered; otherwise, <c>false</c>.</param>
+        /// <returns>A reference to this instance so that additional configuration calls can be chained.</returns>
+        public SavvyioOptions EnableAutomaticDispatcherDiscovery(bool autoDiscoverDispatchers = true)
+        {
+            AutomaticDispatcherDiscovery = autoDiscoverDispatchers;
+            return this;
+        }
+
+        /// <summary>
+        /// Enables the inclusion of the <see cref="HandlerServicesDescriptor"/> that provides an overview of all handlers presented in a detailed and developer friendly way.
+        /// </summary>
+        /// <param name="includeHandlerServicesDescriptor"><c>true</c> enables the inclusion of the <see cref="HandlerServicesDescriptor"/> that provides an overview of all handlers presented in a detailed and developer friendly way; otherwise, <c>false</c>.</param>
+        /// <returns>A reference to this instance so that additional configuration calls can be chained.</returns>
+        public SavvyioOptions EnableHandlerServicesDescriptor(bool includeHandlerServicesDescriptor = true)
+        {
+            IncludeHandlerServicesDescriptor = includeHandlerServicesDescriptor;
+            return this;
+        }
 
         /// <summary>
         /// Adds a dispatcher of type <typeparamref name="TDispatcher"/> to <see cref="DispatcherServiceTypes"/> (if not already registered) and <see cref="DispatcherImplementationTypes"/> (if not already registered).

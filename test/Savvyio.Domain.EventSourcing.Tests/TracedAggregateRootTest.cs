@@ -73,9 +73,7 @@ namespace Savvyio.Domain.EventSourcing.Tests
         {
             string schema = null;
             var sc = new ServiceCollection();
-            sc.AddServiceLocator();
-            sc.AddDomainEventDispatcher();
-            sc.AddDomainEventHandler<AccountDomainEventHandler>();
+            sc.AddSavvyIO(o => o.AddDomainEventDispatcher().AddDomainEventHandler<AccountDomainEventHandler>());
             sc.AddEfCoreAggregateDataStore(o =>
             {
                 o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy").EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);

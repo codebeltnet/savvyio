@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+using Cuemon.Extensions.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Savvyio.Extensions.DependencyInjection
@@ -9,6 +10,8 @@ namespace Savvyio.Extensions.DependencyInjection
     /// </summary>
     public class SavvyioDependencyInjectionOptions : SavvyioOptions
     {
+        private readonly IList<Assembly> _assemblies = new List<Assembly>();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SavvyioDependencyInjectionOptions"/> class.
         /// </summary>
@@ -20,11 +23,11 @@ namespace Savvyio.Extensions.DependencyInjection
         ///         <description>Initial Value</description>
         ///     </listheader>
         ///     <item>
-        ///         <term><see cref="SavvyioOptions.AutoResolveDispatchers"/></term>
+        ///         <term><see cref="SavvyioOptions.AutomaticDispatcherDiscovery"/></term>
         ///         <description><c>true</c></description>
         ///     </item>
         ///     <item>
-        ///         <term><see cref="SavvyioOptions.AutoResolveHandlers"/></term>
+        ///         <term><see cref="SavvyioOptions.AutomaticHandlerDiscovery"/></term>
         ///         <description><c>true</c></description>
         ///     </item>
         ///     <item>
@@ -64,9 +67,31 @@ namespace Savvyio.Extensions.DependencyInjection
         public ServiceLifetime DispatcherServicesLifetime { get; set; }
 
         /// <summary>
-        /// Gets or sets the assemblies to scan for dispatcher- and handler- types.
+        /// Gets the assemblies to scan for dispatcher- and handler- types.
         /// </summary>
         /// <value>The assemblies to scan for dispatcher- and handler- types.</value>
-        public IEnumerable<Assembly> AssembliesToScan { get; set; }
+        public IEnumerable<Assembly> AssembliesToScan => _assemblies.Count == 0 ? null : _assemblies;
+
+        /// <summary>
+        /// Adds the specified range of <paramref name="assemblies"/> to be included when scanning for dispatcher- and handler- types.
+        /// </summary>
+        /// <param name="assemblies">The assemblies to include in the scan.</param>
+        /// <returns>A reference to this instance so that additional configuration calls can be chained.</returns>
+        public SavvyioDependencyInjectionOptions AddAssemblyRangeToScan(params Assembly[] assemblies)
+        {
+            _assemblies.AddRange(assemblies);
+            return this;
+        }
+
+        /// <summary>
+        /// Adds the specified <paramref name="assembly"/> to be included when scanning for dispatcher- and handler- types.
+        /// </summary>
+        /// <param name="assembly">The assembly to include in the scan.</param>
+        /// <returns>A reference to this instance so that additional configuration calls can be chained.</returns>
+        public SavvyioDependencyInjectionOptions AddAssemblyToScan(Assembly assembly)
+        {
+            _assemblies.Add(assembly);
+            return this;
+        }
     }
 }
