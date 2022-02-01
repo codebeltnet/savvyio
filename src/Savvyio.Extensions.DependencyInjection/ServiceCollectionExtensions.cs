@@ -82,7 +82,7 @@ namespace Savvyio.Extensions.DependencyInjection
                 var dispatcherTypeServices = dispatcherType.GetInterfaces().Where(type => type.HasInterfaces(options.DispatcherServiceTypes.ToArray()));
                 foreach (var dispatcherTypeService in dispatcherTypeServices)
                 {
-                    services.Add(dispatcherTypeService, dispatcherType, options.DispatcherServicesLifetime);
+                    services.TryAdd(dispatcherTypeService, dispatcherType, options.DispatcherServicesLifetime);
                 }
             }
 
