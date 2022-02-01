@@ -1,9 +1,9 @@
 ﻿using System;
 using Cuemon.Extensions;
 using Microsoft.Extensions.Options;
-using Savvyio.Extensions.EntityFrameworkCore;
+using Savvyio.Extensions.EFCore;
 
-namespace Savvyio.Extensions.DependencyInjection.EntityFrameworkCore
+namespace Savvyio.Extensions.DependencyInjection.EFCore
 {
     /// <summary>
     /// Provides a default implementation of the <see cref="IEfCoreDataStore{TMarker}"/> interface to support multiple implementations that does the actual I/O communication towards a data store using Microsoft Entity Framework Core.

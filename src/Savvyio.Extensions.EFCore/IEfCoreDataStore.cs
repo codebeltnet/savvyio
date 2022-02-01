@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Savvyio.Storage;
 
-namespace Savvyio.Extensions.EntityFrameworkCore
+namespace Savvyio.Extensions.EFCore
 {
     /// <summary>
     /// Defines a generic way to support the actual I/O communication towards a data store using Microsoft Entity Framework Core.

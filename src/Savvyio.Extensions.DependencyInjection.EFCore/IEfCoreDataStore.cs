@@ -1,7 +1,7 @@
 ﻿using Savvyio.Extensions.DependencyInjection.Storage;
-using Savvyio.Extensions.EntityFrameworkCore;
+using Savvyio.Extensions.EFCore;
 
-namespace Savvyio.Extensions.DependencyInjection.EntityFrameworkCore
+namespace Savvyio.Extensions.DependencyInjection.EFCore
 {
     /// <summary>
     /// Defines a generic way to support multiple implementations that does the actual I/O communication towards a data store using Microsoft Entity Framework Core.

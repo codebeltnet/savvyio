@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 
-namespace Savvyio.Extensions.EntityFrameworkCore
+namespace Savvyio.Extensions.EFCore
 {
     /// <summary>
     /// Configuration options for <see cref="IEfCoreDataStore"/>.

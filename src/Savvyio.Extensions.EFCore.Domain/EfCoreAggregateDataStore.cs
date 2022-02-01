@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 using Savvyio.Domain;
 using Savvyio.Storage;
 
-namespace Savvyio.Extensions.EntityFrameworkCore.Domain
+namespace Savvyio.Extensions.EFCore.Domain
 {
     /// <summary>
     /// Provides an implementation of the <see cref="EfCoreDataStore"/> that is optimized for Domain Driven Design and the concept of Aggregate Root.

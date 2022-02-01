@@ -6,7 +6,7 @@ using Cuemon.Reflection;
 using Newtonsoft.Json;
 using Savvyio.Domain.EventSourcing;
 
-namespace Savvyio.Extensions.EntityFrameworkCore.Domain.EventSourcing
+namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
 {
     /// <summary>
     /// Extension methods for the <see cref="EfCoreTracedAggregateEntity{TEntity,TKey}"/> class.

@@ -2,9 +2,9 @@
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Savvyio.Extensions.EntityFrameworkCore;
+using Savvyio.Extensions.EFCore;
 
-namespace Savvyio.Extensions.DependencyInjection.EntityFrameworkCore.Domain
+namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain
 {
     internal class SavvyioDbContext<TMarker> : DbContext, IConfigurable<EfCoreDataStoreOptions>, IDependencyInjectionMarker<TMarker>
     {

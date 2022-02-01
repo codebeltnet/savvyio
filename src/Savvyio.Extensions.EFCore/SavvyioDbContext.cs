@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Savvyio.Extensions.EntityFrameworkCore
+namespace Savvyio.Extensions.EFCore
 {
     internal class SavvyioDbContext : DbContext, IConfigurable<EfCoreDataStoreOptions>
     {

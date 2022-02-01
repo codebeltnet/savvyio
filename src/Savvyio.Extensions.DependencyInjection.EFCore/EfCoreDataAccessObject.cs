@@ -1,7 +1,7 @@
 ﻿using Savvyio.Extensions.DependencyInjection.Storage;
-using Savvyio.Extensions.EntityFrameworkCore;
+using Savvyio.Extensions.EFCore;
 
-namespace Savvyio.Extensions.DependencyInjection.EntityFrameworkCore
+namespace Savvyio.Extensions.DependencyInjection.EFCore
 {
     /// <summary>
     /// Provides a default implementation of the <see cref="IPersistentDataAccessObject{T,TMarker}"/> interface to support multiple implementations that serves as an abstraction layer before the actual I/O communication towards a data store using Microsoft Entity Framework Core.

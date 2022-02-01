@@ -1,6 +1,6 @@
 ﻿using Cuemon;
 
-namespace Savvyio.Extensions.EntityFrameworkCore.Domain.EventSourcing
+namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
 {
     /// <summary>
     /// Configuration options for <see cref="EfCoreTracedAggregateEntity"/>.

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Savvyio.Storage;
 
-namespace Savvyio.Extensions.EntityFrameworkCore
+namespace Savvyio.Extensions.EFCore
 {
     /// <summary>
     /// Provides a default implementation of the <see cref="IEfCoreDataStore"/> interface to support the actual I/O communication towards a data store using Microsoft Entity Framework Core.

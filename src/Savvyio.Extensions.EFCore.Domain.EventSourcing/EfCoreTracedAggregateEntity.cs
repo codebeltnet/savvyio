@@ -5,7 +5,7 @@ using Cuemon.Extensions.Collections.Generic;
 using Savvyio.Domain;
 using Savvyio.Domain.EventSourcing;
 
-namespace Savvyio.Extensions.EntityFrameworkCore.Domain.EventSourcing
+namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
 {
     internal static class EfCoreTracedAggregateEntity
     {

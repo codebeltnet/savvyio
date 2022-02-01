@@ -2,7 +2,7 @@
 using Cuemon.Extensions.Newtonsoft.Json.Formatters;
 using Savvyio.Domain.EventSourcing;
 
-namespace Savvyio.Extensions.EntityFrameworkCore.Domain.EventSourcing
+namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
 {
     /// <summary>
     /// Extension methods for the <see cref="ITracedDomainEvent"/> interface.

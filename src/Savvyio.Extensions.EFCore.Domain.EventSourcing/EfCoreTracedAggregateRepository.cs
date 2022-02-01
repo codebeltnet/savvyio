@@ -9,7 +9,7 @@ using Savvyio.Domain;
 using Savvyio.Domain.EventSourcing;
 using Savvyio.Storage;
 
-namespace Savvyio.Extensions.EntityFrameworkCore.Domain.EventSourcing
+namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
 {
     /// <summary>
     /// Provides an implementation of the <see cref="EfCoreRepository{TEntity,TKey}"/> that is optimized for Domain Driven Design and Event Sourcing.
@@ -18,7 +18,7 @@ namespace Savvyio.Extensions.EntityFrameworkCore.Domain.EventSourcing
     /// <typeparam name="TKey">The type of the key that uniquely identifies the entity.</typeparam>
     /// <seealso cref="IReadableRepository{TEntity, TKey}" />
     /// <seealso cref="IWritableRepository{TEntity, TKey}" />
-    public class EfCoreTracedAggregateRepository<TEntity, TKey> : IReadableRepository<TEntity, TKey>, IWritableRepository<TEntity, TKey> 
+    public class EfCoreTracedAggregateRepository<TEntity, TKey> : ITracedAggregateRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>, ITracedAggregateRoot<TKey>
     {
         private readonly EfCoreRepository<EfCoreTracedAggregateEntity<TEntity, TKey>, TKey> _repository;

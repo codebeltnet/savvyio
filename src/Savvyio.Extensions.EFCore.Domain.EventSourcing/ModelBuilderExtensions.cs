@@ -3,7 +3,7 @@ using Cuemon.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Savvyio.Domain.EventSourcing;
 
-namespace Savvyio.Extensions.EntityFrameworkCore.Domain.EventSourcing
+namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
 {
     /// <summary>
     /// Extension methods for the <see cref="ModelBuilder"/> class.
