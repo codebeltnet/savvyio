@@ -46,6 +46,11 @@
     }
   ],
   "build": {
+    "xref": [
+      "xrefmaps/cuemon-xrefmap.yml"
+    ],
+    "xrefService": [
+      "https://xref.docs.microsoft.com/query?uid={uid}" ],
     "content": [
       {
         "files": [
@@ -103,8 +108,6 @@
     "noLangKeyword": false,
     "keepFileLink": false,
     "cleanupCacheHistory": false,
-    "disableGitFeatures": false,
-    "xrefService": [
-      "https://xref.docs.microsoft.com/query?uid={uid}" ]
+    "disableGitFeatures": false
   }
 }
