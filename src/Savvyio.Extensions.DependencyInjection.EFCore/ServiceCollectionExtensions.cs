@@ -4,10 +4,10 @@ using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Savvyio.Extensions.DependencyInjection.Storage;
-using Savvyio.Extensions.EntityFrameworkCore;
+using Savvyio.Extensions.EFCore;
 using Savvyio.Storage;
 
-namespace Savvyio.Extensions.DependencyInjection.EntityFrameworkCore
+namespace Savvyio.Extensions.DependencyInjection.EFCore
 {
     /// <summary>
     /// Extension methods for the <see cref="IServiceCollection"/> interface.
@@ -75,7 +75,7 @@ namespace Savvyio.Extensions.DependencyInjection.EntityFrameworkCore
         /// <typeparam name="TEntity">The type of the entity.</typeparam>
         /// <typeparam name="TKey">The type of the key that uniquely identifies the entity.</typeparam>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
-        /// <remarks>The <see cref="EfCoreRepository{TEntity,TKey}"/> will be type forwarded to: <see cref="IWritableRepository{TEntity,TKey}" />, <see cref="IReadableRepository{TEntity,TKey}" /> and <see cref="IDeletableRepository{TEntity,TKey}" />.</remarks>
+        /// <remarks>The <see cref="EfCoreRepository{TEntity,TKey}"/> will be type forwarded to: <see cref="IWritableRepository{TEntity,TKey}" />, <see cref="IReadableRepository{TEntity,TKey}" />, <see cref="ISearchableRepository{TEntity,TKey}" /> and <see cref="IDeletableRepository{TEntity,TKey}" />.</remarks>
         /// <seealso cref="EfCoreRepository{TEntity,TKey}"/>
         public static IServiceCollection AddEfCoreRepository<TEntity, TKey>(this IServiceCollection services)
             where TEntity : class, IIdentity<TKey>
@@ -90,7 +90,7 @@ namespace Savvyio.Extensions.DependencyInjection.EntityFrameworkCore
         /// <typeparam name="TKey">The type of the key that uniquely identifies the entity.</typeparam>
         /// <typeparam name="TMarker">The type used to mark the implementation that this repository represents. Optimized for Microsoft Dependency Injection.</typeparam>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
-        /// <remarks>The <see cref="EfCoreRepository{TEntity,TKey,TMarker}"/> will be type forwarded to: <see cref="IWritableRepository{TEntity,TKey,TMarker}" />, <see cref="IReadableRepository{TEntity,TKey,TMarker}" /> and <see cref="IDeletableRepository{TEntity,TKey,TMarker}" />.</remarks>
+        /// <remarks>The <see cref="EfCoreRepository{TEntity,TKey,TMarker}"/> will be type forwarded to: <see cref="IWritableRepository{TEntity,TKey,TMarker}" />, <see cref="IReadableRepository{TEntity,TKey,TMarker}" />, <see cref="ISearchableRepository{TEntity,TKey,TMarker}" /> and <see cref="IDeletableRepository{TEntity,TKey,TMarker}" />.</remarks>
         /// <seealso cref="EfCoreRepository{TEntity,TKey,TMarker}"/>
         public static IServiceCollection AddEfCoreRepository<TEntity, TKey, TMarker>(this IServiceCollection services)
             where TEntity : class, IIdentity<TKey>

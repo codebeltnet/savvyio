@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Savvyio.Extensions.DependencyInjection._Queries</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection\Savvyio.Extensions.DependencyInjection.csproj" />
+    <ProjectReference Include="..\Savvyio.Queries\Savvyio.Queries.csproj" />
+  </ItemGroup>
+
+</Project>

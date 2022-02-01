@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cuemon;
 using Cuemon.Threading;
@@ -17,8 +16,8 @@ namespace Savvyio.Domain
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainEventDispatcher"/> class.
         /// </summary>
-        /// <param name="serviceFactory">The function delegate that provides the services.</param>
-        public DomainEventDispatcher(Func<Type, IEnumerable<object>> serviceFactory) : base(serviceFactory)
+        /// <param name="serviceLocator">The provider of service implementations.</param>
+        public DomainEventDispatcher(IServiceLocator serviceLocator) : base(serviceLocator)
         {
         }
 

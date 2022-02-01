@@ -6,6 +6,8 @@ using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Savvyio.Dispatchers;
 
 namespace Savvyio.Extensions.DependencyInjection
 {
@@ -15,6 +17,17 @@ namespace Savvyio.Extensions.DependencyInjection
     public static class ServiceCollectionExtensions
     {
         /// <summary>
+        /// Adds Savvy I/O service locator used to resolve necessary dependencies.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
+        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
+        public static IServiceCollection AddServiceLocator(this IServiceCollection services)
+        {
+            services.TryAddScoped<IServiceLocator>(p => new ServiceLocator(p.GetServices));
+            return services;
+        }
+
+        /// <summary>
         /// Adds Savvy I/O related dispatcher- and handler- types to the specified <see cref="IServiceCollection"/>.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
@@ -22,7 +35,7 @@ namespace Savvyio.Extensions.DependencyInjection
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
         public static IServiceCollection AddSavvyIO(this IServiceCollection services, Action<SavvyioDependencyInjectionOptions> setup = null)
         {
-            services.AddScoped<Func<Type, IEnumerable<object>>>(p => p.GetServices);
+            services.AddServiceLocator();
             var options = setup.Configure();
             if (options.AutoResolveDispatchers) { options.AddDispatchers(options.AssembliesToScan?.ToArray()); }
             if (options.AutoResolveHandlers) { options.AddHandlers(options.AssembliesToScan?.ToArray()); }

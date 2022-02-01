@@ -100,6 +100,8 @@ namespace Savvyio.Extensions.DependencyInjection.Storage
         /// <seealso cref="IWritableRepository{TEntity,TKey,TMarker}"/>
         /// <seealso cref="IReadableRepository{TEntity,TKey}"/>
         /// <seealso cref="IReadableRepository{TEntity,TKey,TMarker}"/>
+        /// <seealso cref="ISearchableRepository{TEntity,TKey}"/>
+        /// <seealso cref="ISearchableRepository{TEntity,TKey,TMarker}"/>
         /// <seealso cref="IDeletableRepository{TEntity,TKey}"/>
         /// <seealso cref="IDeletableRepository{TEntity,TKey,TMarker}"/>
         public static IServiceCollection AddRepository<TImplementation, TEntity, TKey>(this IServiceCollection services)
@@ -109,22 +111,25 @@ namespace Savvyio.Extensions.DependencyInjection.Storage
             Validator.ThrowIfNull(services, nameof(services));
             var entityType = typeof(TEntity);
             var keyType = typeof(TKey);
-            var efPersistentRepositoryType = typeof(IPersistentRepository<,>).MakeGenericType(entityType, keyType);
-            var efWritableRepositoryType = typeof(IWritableRepository<,>).MakeGenericType(entityType, keyType);
-            var efReadableRepositoryType = typeof(IReadableRepository<,>).MakeGenericType(entityType, keyType);
-            var efDeletableRepositoryType = typeof(IDeletableRepository<,>).MakeGenericType(entityType, keyType);
+            var persistentRepositoryType = typeof(IPersistentRepository<,>).MakeGenericType(entityType, keyType);
+            var writableRepositoryType = typeof(IWritableRepository<,>).MakeGenericType(entityType, keyType);
+            var readableRepositoryType = typeof(IReadableRepository<,>).MakeGenericType(entityType, keyType);
+            var searchableRepositoryType = typeof(ISearchableRepository<,>).MakeGenericType(entityType, keyType);
+            var deletableRepositoryType = typeof(IDeletableRepository<,>).MakeGenericType(entityType, keyType);
             services.TryAddScoped<TImplementation>();
             if (typeof(TImplementation).TryGetDependencyInjectionMarker(out var markerType))
             {
-                efPersistentRepositoryType = typeof(IPersistentRepository<,,>).MakeGenericType(entityType, keyType, markerType);
-                efWritableRepositoryType = typeof(IWritableRepository<,,>).MakeGenericType(entityType, keyType, markerType);
-                efReadableRepositoryType = typeof(IReadableRepository<,,>).MakeGenericType(entityType, keyType, markerType);
-                efDeletableRepositoryType = typeof(IDeletableRepository<,,>).MakeGenericType(entityType, keyType, markerType);
+                persistentRepositoryType = typeof(IPersistentRepository<,,>).MakeGenericType(entityType, keyType, markerType);
+                writableRepositoryType = typeof(IWritableRepository<,,>).MakeGenericType(entityType, keyType, markerType);
+                searchableRepositoryType = typeof(ISearchableRepository<,,>).MakeGenericType(entityType, keyType, markerType);
+                readableRepositoryType = typeof(IReadableRepository<,,>).MakeGenericType(entityType, keyType, markerType);
+                deletableRepositoryType = typeof(IDeletableRepository<,,>).MakeGenericType(entityType, keyType, markerType);
             }
-            services.TryAddScoped(efPersistentRepositoryType, p => p.GetRequiredService<TImplementation>());
-            services.TryAddScoped(efWritableRepositoryType, p => p.GetRequiredService<TImplementation>());
-            services.TryAddScoped(efReadableRepositoryType, p => p.GetRequiredService<TImplementation>());
-            services.TryAddScoped(efDeletableRepositoryType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddScoped(persistentRepositoryType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddScoped(writableRepositoryType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddScoped(readableRepositoryType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddScoped(searchableRepositoryType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddScoped(deletableRepositoryType, p => p.GetRequiredService<TImplementation>());
             return services;
         }
 
@@ -151,22 +156,22 @@ namespace Savvyio.Extensions.DependencyInjection.Storage
         {
             Validator.ThrowIfNull(services, nameof(services));
             var dtoType = typeof(T);
-            var efDataAccessObjectType = typeof(IPersistentDataAccessObject<>).MakeGenericType(dtoType);
-            var efWritableDataAccessObjectType = typeof(IWritableDataAccessObject<>).MakeGenericType(dtoType);
-            var efReadableDataAccessObjectType = typeof(IReadableDataAccessObject<>).MakeGenericType(dtoType);
-            var efDeletableDataAccessObjectType = typeof(IDeletableDataAccessObject<>).MakeGenericType(dtoType);
+            var dataAccessObjectType = typeof(IPersistentDataAccessObject<>).MakeGenericType(dtoType);
+            var writableDataAccessObjectType = typeof(IWritableDataAccessObject<>).MakeGenericType(dtoType);
+            var readableDataAccessObjectType = typeof(IReadableDataAccessObject<>).MakeGenericType(dtoType);
+            var deletableDataAccessObjectType = typeof(IDeletableDataAccessObject<>).MakeGenericType(dtoType);
             services.TryAddTransient<TImplementation>();
             if (typeof(TImplementation).TryGetDependencyInjectionMarker(out var markerType))
             {
-                efDataAccessObjectType = typeof(IPersistentDataAccessObject<,>).MakeGenericType(dtoType, markerType);
-                efWritableDataAccessObjectType = typeof(IWritableDataAccessObject<,>).MakeGenericType(dtoType, markerType);
-                efReadableDataAccessObjectType = typeof(IReadableDataAccessObject<,>).MakeGenericType(dtoType, markerType);
-                efDeletableDataAccessObjectType = typeof(IDeletableDataAccessObject<,>).MakeGenericType(dtoType, markerType);
+                dataAccessObjectType = typeof(IPersistentDataAccessObject<,>).MakeGenericType(dtoType, markerType);
+                writableDataAccessObjectType = typeof(IWritableDataAccessObject<,>).MakeGenericType(dtoType, markerType);
+                readableDataAccessObjectType = typeof(IReadableDataAccessObject<,>).MakeGenericType(dtoType, markerType);
+                deletableDataAccessObjectType = typeof(IDeletableDataAccessObject<,>).MakeGenericType(dtoType, markerType);
             }
-            services.TryAddTransient(efDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
-            services.TryAddTransient(efWritableDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
-            services.TryAddTransient(efReadableDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
-            services.TryAddTransient(efDeletableDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddTransient(dataAccessObjectType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddTransient(writableDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddTransient(readableDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddTransient(deletableDataAccessObjectType, p => p.GetRequiredService<TImplementation>());
             return services;
         }
     }
