@@ -15,11 +15,11 @@
     <ProjectReference Include="..\..\src\Savvyio.Domain\Savvyio.Domain.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.Core\Savvyio.Extensions.Core.csproj" />
-    <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.EntityFrameworkCore.Domain\Savvyio.Extensions.DependencyInjection.EntityFrameworkCore.Domain.csproj" />
-    <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.EntityFrameworkCore\Savvyio.Extensions.DependencyInjection.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.EFCore.Domain\Savvyio.Extensions.DependencyInjection.EFCore.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.EFCore\Savvyio.Extensions.DependencyInjection.EFCore.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection\Savvyio.Extensions.DependencyInjection.csproj" />
-    <ProjectReference Include="..\..\src\Savvyio.Extensions.EntityFrameworkCore.Domain.EventSourcing\Savvyio.Extensions.EntityFrameworkCore.Domain.EventSourcing.csproj" />
-    <ProjectReference Include="..\..\src\Savvyio.Extensions.EntityFrameworkCore.Domain\Savvyio.Extensions.EntityFrameworkCore.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.EFCore.Domain.EventSourcing\Savvyio.Extensions.EFCore.Domain.EventSourcing.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.EFCore.Domain\Savvyio.Extensions.EFCore.Domain.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Queries\Savvyio.Queries.csproj" />
   </ItemGroup>
 

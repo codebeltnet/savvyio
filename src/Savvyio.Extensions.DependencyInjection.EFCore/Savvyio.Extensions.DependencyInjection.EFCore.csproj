@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection\Savvyio.Extensions.DependencyInjection.csproj" />
-    <ProjectReference Include="..\Savvyio.Extensions.EntityFrameworkCore\Savvyio.Extensions.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.EFCore\Savvyio.Extensions.EFCore.csproj" />
   </ItemGroup>
 </Project>

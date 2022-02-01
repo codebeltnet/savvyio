@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Savvyio.Domain.EventSourcing\Savvyio.Domain.EventSourcing.csproj" />
-    <ProjectReference Include="..\Savvyio.Extensions.EntityFrameworkCore.Domain\Savvyio.Extensions.EntityFrameworkCore.Domain.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.EFCore.Domain\Savvyio.Extensions.EFCore.Domain.csproj" />
   </ItemGroup>
 
 </Project>
