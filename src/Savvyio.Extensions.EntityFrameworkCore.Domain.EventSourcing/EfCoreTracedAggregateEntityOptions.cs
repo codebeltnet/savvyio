@@ -23,7 +23,7 @@ namespace Savvyio.Extensions.EntityFrameworkCore.Domain.EventSourcing
         /// Initializes a new instance of the <see cref="EfCoreTracedAggregateEntityOptions"/> class.
         /// </summary>
         /// <remarks>
-        /// The following table shows the initial property values for an instance of <see cref="ConvertibleOptions"/>.
+        /// The following table shows the initial property values for an instance of <see cref="EfCoreTracedAggregateEntityOptions"/>.
         /// <list type="table">
         ///     <listheader>
         ///         <term>Property</term>
