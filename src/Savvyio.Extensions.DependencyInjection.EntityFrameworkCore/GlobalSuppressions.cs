@@ -5,4 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Major Code Smell", "S2436:Types and methods should not have too many generic parameters", Justification = "By design to support service-to-multiple implementations in MS DI.", Scope = "type", Target = "~T:Savvyio.Extensions.Microsoft.DependencyInjection.EntityFrameworkCore.EfCoreRepository`3")]
+[assembly: SuppressMessage("Major Code Smell", "S2436:Types and methods should not have too many generic parameters", Justification = "By design to support service-to-multiple implementations in MS DI.", Scope = "type", Target = "~T:Savvyio.Extensions.DependencyInjection.EntityFrameworkCore.EfCoreRepository`3")]

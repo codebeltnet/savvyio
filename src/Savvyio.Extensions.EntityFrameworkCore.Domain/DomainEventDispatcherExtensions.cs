@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Cuemon.Threading;
 using Microsoft.EntityFrameworkCore;
 using Savvyio.Domain;
-using Savvyio.Domain.EventSourcing;
 
 namespace Savvyio.Extensions.EntityFrameworkCore.Domain
 {

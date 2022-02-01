@@ -2,12 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Savvyio.Assets.Domain;
 using Savvyio.Domain;
-using Savvyio.Extensions.Microsoft.DependencyInjection.EntityFrameworkCore;
-using Savvyio.Extensions.Microsoft.DependencyInjection.Storage;
+using Savvyio.Extensions.DependencyInjection.EntityFrameworkCore;
+using Savvyio.Extensions.DependencyInjection.EntityFrameworkCore.Domain;
+using Savvyio.Extensions.DependencyInjection.Storage;
 
 namespace Savvyio.Assets
 {
-    public class CustomEfCoreDataStore : EfCoreDataStore<DbMarker>
+    public class CustomEfCoreDataStore : EfCoreAggregateDataStore<DbMarker>
     {
         public CustomEfCoreDataStore(IDomainEventDispatcher dispatcher) : base(dispatcher, o =>
         {
@@ -20,6 +21,6 @@ namespace Savvyio.Assets
         {
         }
 
-        public IPersistentRepository<Account, long, DbMarker> Account => new EfCoreRepository<Account, long, DbMarker>(this);
+        public IPersistentRepository<Account, long, DbMarker> Account => new EfCoreAggregateRepository<Account, long, DbMarker>(this);
     }
 }

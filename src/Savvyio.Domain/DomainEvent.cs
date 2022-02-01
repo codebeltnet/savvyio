@@ -15,7 +15,7 @@ namespace Savvyio.Domain
         /// <param name="eventId">The optional identifier of the event. Default is an auto-generated UUID.</param>
         /// <param name="metadata">The optional metadata to merge with this instance.</param>
         /// <remarks>
-        /// The following table shows the initial metadata values for an instance of <see cref="TracedDomainEvent"/>.
+        /// The following table shows the initial metadata values for an instance of <see cref="DomainEvent"/>.
         /// <list type="table">
         ///     <listheader>
         ///         <term>Key</term>

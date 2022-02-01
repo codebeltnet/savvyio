@@ -1,5 +1,4 @@
-﻿
-using Savvyio.Domain;
+﻿using Savvyio.Domain;
 using Savvyio.Extensions.DependencyInjection.Storage;
 using Savvyio.Extensions.EntityFrameworkCore;
 
