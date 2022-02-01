@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Savvyio.Domain.EventSourcing\Savvyio.Domain.EventSourcing.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.EntityFrameworkCore.Domain\Savvyio.Extensions.EntityFrameworkCore.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

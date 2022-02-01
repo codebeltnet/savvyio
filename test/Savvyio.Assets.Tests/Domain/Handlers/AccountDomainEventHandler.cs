@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Domain.Events;
@@ -27,6 +28,22 @@ namespace Savvyio.Assets.Domain.Handlers
             handlers.RegisterAsync<AccountEmailAddressChanged>(OnInProcAccountEmailAddressChanged);
             handlers.RegisterAsync<AccountFullNameChanged>(OnInProcAccountFullNameChanged);
             handlers.RegisterAsync<AccountInitiatedChained>(OnInProcAccountInitiatedChained);
+            handlers.RegisterAsync<TracedAccountInitiated>(OnInProcTracedAccountInitiated);
+            handlers.RegisterAsync<TracedAccountEmailAddressChanged>(OnInProcTracedAccountEmailAddressChanged);
+        }
+
+        private Task OnInProcTracedAccountInitiated(TracedAccountInitiated e)
+        {
+            _testStore?.Add(e);
+            _output?.WriteLines($"DE {nameof(OnInProcTracedAccountInitiated)}", JsonSerializer.Serialize(e));
+            return Task.CompletedTask;
+        }
+
+        private Task OnInProcTracedAccountEmailAddressChanged(TracedAccountEmailAddressChanged e)
+        {
+            _testStore?.Add(e);
+            _output?.WriteLines($"DE {nameof(OnInProcTracedAccountEmailAddressChanged)}", JsonSerializer.Serialize(e));
+            return Task.CompletedTask;
         }
 
         private Task OnInProcAccountInitiatedChained(AccountInitiatedChained e)

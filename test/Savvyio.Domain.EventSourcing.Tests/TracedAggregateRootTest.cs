@@ -141,7 +141,7 @@ namespace Savvyio.Domain.EventSourcing.Tests
           Relational:ColumnType: datetime
       Type (_type, string)
         Annotations: 
-          Relational:ColumnName: type
+          Relational:ColumnName: clrtype
           Relational:ColumnType: varchar(1024)
     Keys: 
       Id, Version PK

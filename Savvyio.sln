@@ -21,11 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Core", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Domain.EventSourcing", "src\Savvyio.Domain.EventSourcing\Savvyio.Domain.EventSourcing.csproj", "{6796D33B-8688-4434-9AC2-9F8690D58427}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Microsoft.DependencyInjection.EntityFrameworkCore", "src\Savvyio.Extensions.Microsoft.DependencyInjection.EntityFrameworkCore\Savvyio.Extensions.Microsoft.DependencyInjection.EntityFrameworkCore.csproj", "{91A272A5-23D6-4152-B422-0D232EDF0752}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.DependencyInjection.EntityFrameworkCore", "src\Savvyio.Extensions.DependencyInjection.EntityFrameworkCore\Savvyio.Extensions.DependencyInjection.EntityFrameworkCore.csproj", "{91A272A5-23D6-4152-B422-0D232EDF0752}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.EventDriven.Messaging", "src\Savvyio.EventDriven.Messaging\Savvyio.EventDriven.Messaging.csproj", "{2101F49B-992B-42AC-A4D2-F3100ACECF79}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Microsoft.DependencyInjection", "src\Savvyio.Extensions.Microsoft.DependencyInjection\Savvyio.Extensions.Microsoft.DependencyInjection.csproj", "{8CDFE9AA-CC01-4342-8847-C5239ECA7F21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.DependencyInjection", "src\Savvyio.Extensions.DependencyInjection\Savvyio.Extensions.DependencyInjection.csproj", "{8CDFE9AA-CC01-4342-8847-C5239ECA7F21}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Core.Tests", "test\Savvyio.Core.Tests\Savvyio.Core.Tests.csproj", "{D7D4458E-439D-4944-9827-8C1A70623063}"
 EndProject
@@ -41,13 +41,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Assets.Tests", "tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Core.Tests", "test\Savvyio.Extensions.Core.Tests\Savvyio.Extensions.Core.Tests.csproj", "{6CC468FF-F2AC-4698-A0DA-FC255D6D7405}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Microsoft.DependencyInjection.Tests", "test\Savvyio.Extensions.Microsoft.DependencyInjection.Tests\Savvyio.Extensions.Microsoft.DependencyInjection.Tests.csproj", "{BDD819B5-399D-4805-8D96-DEC3B4F67B37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.DependencyInjection.Tests", "test\Savvyio.Extensions.DependencyInjection.Tests\Savvyio.Extensions.DependencyInjection.Tests.csproj", "{BDD819B5-399D-4805-8D96-DEC3B4F67B37}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Microsoft.EntityFrameworkCore", "src\Savvyio.Extensions.Microsoft.EntityFrameworkCore\Savvyio.Extensions.Microsoft.EntityFrameworkCore.csproj", "{D63C031A-A3E4-4FB6-9354-2497BBA581F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.EntityFrameworkCore", "src\Savvyio.Extensions.EntityFrameworkCore\Savvyio.Extensions.EntityFrameworkCore.csproj", "{D63C031A-A3E4-4FB6-9354-2497BBA581F1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Microsoft.EntityFrameworkCore.Tests", "test\Savvyio.Extensions.Microsoft.EntityFrameworkCore.Tests\Savvyio.Extensions.Microsoft.EntityFrameworkCore.Tests.csproj", "{F6892A1D-89DF-40F6-96B1-3ADB74ABA0FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.EntityFrameworkCore.Tests", "test\Savvyio.Extensions.EntityFrameworkCore.Tests\Savvyio.Extensions.EntityFrameworkCore.Tests.csproj", "{F6892A1D-89DF-40F6-96B1-3ADB74ABA0FE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Assets.EfCore.Tests", "test\Savvyio.Assets.EfCore.Tests\Savvyio.Assets.EfCore.Tests.csproj", "{207C868D-FB47-4737-9A40-13F89C7AAB36}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Domain.EventSourcing.Tests", "test\Savvyio.Domain.EventSourcing.Tests\Savvyio.Domain.EventSourcing.Tests.csproj", "{2F8790E4-015E-44AB-9781-1EFC4AB7A521}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.EntityFrameworkCore.Domain", "src\Savvyio.Extensions.EntityFrameworkCore.Domain\Savvyio.Extensions.EntityFrameworkCore.Domain.csproj", "{0FBF5E05-DD48-43C4-871F-6968F72D9BAC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.EntityFrameworkCore.Domain.EventSourcing", "src\Savvyio.Extensions.EntityFrameworkCore.Domain.EventSourcing\Savvyio.Extensions.EntityFrameworkCore.Domain.EventSourcing.csproj", "{74CF96A1-4B13-4750-82BC-9C0FF1FDFA17}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.DependencyInjection.EntityFrameworkCore.Domain", "src\Savvyio.Extensions.DependencyInjection.EntityFrameworkCore.Domain\Savvyio.Extensions.DependencyInjection.EntityFrameworkCore.Domain.csproj", "{8486A6C4-295A-4A82-AE48-A561AE285938}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.DependencyInjection.Domain", "src\Savvyio.Extensions.DependencyInjection.Domain\Savvyio.Extensions.DependencyInjection.Domain.csproj", "{04A05FF7-947F-4F7D-BAAA-6999E84145C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -139,6 +149,26 @@ Global
 		{207C868D-FB47-4737-9A40-13F89C7AAB36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{207C868D-FB47-4737-9A40-13F89C7AAB36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{207C868D-FB47-4737-9A40-13F89C7AAB36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F8790E4-015E-44AB-9781-1EFC4AB7A521}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F8790E4-015E-44AB-9781-1EFC4AB7A521}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F8790E4-015E-44AB-9781-1EFC4AB7A521}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F8790E4-015E-44AB-9781-1EFC4AB7A521}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FBF5E05-DD48-43C4-871F-6968F72D9BAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FBF5E05-DD48-43C4-871F-6968F72D9BAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FBF5E05-DD48-43C4-871F-6968F72D9BAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FBF5E05-DD48-43C4-871F-6968F72D9BAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74CF96A1-4B13-4750-82BC-9C0FF1FDFA17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74CF96A1-4B13-4750-82BC-9C0FF1FDFA17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74CF96A1-4B13-4750-82BC-9C0FF1FDFA17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74CF96A1-4B13-4750-82BC-9C0FF1FDFA17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8486A6C4-295A-4A82-AE48-A561AE285938}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8486A6C4-295A-4A82-AE48-A561AE285938}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8486A6C4-295A-4A82-AE48-A561AE285938}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8486A6C4-295A-4A82-AE48-A561AE285938}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04A05FF7-947F-4F7D-BAAA-6999E84145C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04A05FF7-947F-4F7D-BAAA-6999E84145C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04A05FF7-947F-4F7D-BAAA-6999E84145C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04A05FF7-947F-4F7D-BAAA-6999E84145C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -165,6 +195,11 @@ Global
 		{D63C031A-A3E4-4FB6-9354-2497BBA581F1} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
 		{F6892A1D-89DF-40F6-96B1-3ADB74ABA0FE} = {407762FB-26D8-435F-AE16-C76791EC9FEC}
 		{207C868D-FB47-4737-9A40-13F89C7AAB36} = {407762FB-26D8-435F-AE16-C76791EC9FEC}
+		{2F8790E4-015E-44AB-9781-1EFC4AB7A521} = {407762FB-26D8-435F-AE16-C76791EC9FEC}
+		{0FBF5E05-DD48-43C4-871F-6968F72D9BAC} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
+		{74CF96A1-4B13-4750-82BC-9C0FF1FDFA17} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
+		{8486A6C4-295A-4A82-AE48-A561AE285938} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
+		{04A05FF7-947F-4F7D-BAAA-6999E84145C8} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8DDAD51-08E6-42B5-970B-2DC88D44297B}
