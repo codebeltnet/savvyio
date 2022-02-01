@@ -44,28 +44,5 @@ namespace Savvyio.Extensions.DependencyInjection.Domain
             services.AddRepository<TImplementation, TEntity, TKey>();
             return services;
         }
-
-        /// <summary>
-        /// Adds a default implementation of the <see cref="IDomainEventDispatcher"/> interface.
-        /// </summary>
-        /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
-        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
-        public static IServiceCollection AddDomainEventDispatcher(this IServiceCollection services)
-        {
-            services.TryAddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
-            return services;
-        }
-
-        /// <summary>
-        /// Adds an implementation of <see cref="IDomainEventHandler" /> to the specified <see cref="IServiceCollection" />.
-        /// </summary>
-        /// <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
-        /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
-        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
-        public static IServiceCollection AddDomainEventHandler<TImplementation>(this IServiceCollection services) where TImplementation : class, IDomainEventHandler
-        {
-            services.TryAddTransient<IDomainEventHandler, TImplementation>();
-            return services;
-        }
     }
 }
