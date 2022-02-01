@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cuemon.Extensions.Xunit;
@@ -11,8 +10,9 @@ using Savvyio.Assets.Domain;
 using Savvyio.Assets.Domain.Events;
 using Savvyio.Assets.Domain.Handlers;
 using Savvyio.Domain;
-using Savvyio.Extensions.EntityFrameworkCore;
-using Savvyio.Extensions.EntityFrameworkCore.Domain;
+using Savvyio.Extensions.DependencyInjection;
+using Savvyio.Extensions.EFCore;
+using Savvyio.Extensions.EFCore.Domain;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -46,7 +46,7 @@ namespace Savvyio.Extensions.Storage
         public async Task EfCoreDataStore_ShouldRaiseDomainEvents()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddScoped<Func<Type, IEnumerable<object>>>(p => p.GetServices);
+            sut1.AddServiceLocator();
             sut1.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
             sut1.AddScoped<IDomainEventHandler, AccountDomainEventHandler>();
             sut1.AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();

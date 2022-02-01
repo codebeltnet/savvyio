@@ -4,8 +4,8 @@ using Cuemon.Extensions.Xunit;
 using Microsoft.EntityFrameworkCore;
 using Savvyio.Assets;
 using Savvyio.Assets.Domain;
-using Savvyio.Extensions.DependencyInjection.EntityFrameworkCore;
-using Savvyio.Extensions.EntityFrameworkCore;
+using Savvyio.Extensions.DependencyInjection.EFCore;
+using Savvyio.Extensions.EFCore;
 using Xunit;
 using Xunit.Abstractions;
 

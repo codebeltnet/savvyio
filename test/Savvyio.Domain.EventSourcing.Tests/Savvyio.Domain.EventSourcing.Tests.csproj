@@ -2,6 +2,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Savvyio.Domain.EventSourcing\Savvyio.Domain.EventSourcing.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing\Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.EFCore.Domain\Savvyio.Extensions.DependencyInjection.EFCore.Domain.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.EFCore\Savvyio.Extensions.EFCore.csproj" />
     <ProjectReference Include="..\Savvyio.Assets.EfCore.Tests\Savvyio.Assets.EfCore.Tests.csproj" />
   </ItemGroup>

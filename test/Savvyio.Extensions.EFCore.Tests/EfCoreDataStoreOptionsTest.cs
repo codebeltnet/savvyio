@@ -1,5 +1,5 @@
 ﻿using Cuemon.Extensions.Xunit;
-using Savvyio.Extensions.EntityFrameworkCore;
+using Savvyio.Extensions.EFCore;
 using Xunit;
 using Xunit.Abstractions;
 

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Cuemon.Collections.Generic;
+﻿using Cuemon.Collections.Generic;
 using Cuemon.Extensions.Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Commands;
+using Savvyio.Dispatchers;
 using Savvyio.Domain;
 using Savvyio.EventDriven;
 using Savvyio.Extensions.Assets;
@@ -36,7 +35,7 @@ namespace Savvyio.Extensions
             var sut1 = new ServiceCollection();
             sut1.AddSavvyIO();
             var sut2 = sut1.BuildServiceProvider();
-            var sut3 = sut2.GetRequiredService<Func<Type, IEnumerable<object>>>();
+            var sut3 = sut2.GetRequiredService<IServiceLocator>();
             Assert.NotNull(sut3);
         }
 

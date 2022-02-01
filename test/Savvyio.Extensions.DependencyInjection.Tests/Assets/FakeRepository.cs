@@ -6,7 +6,7 @@ using Cuemon.Threading;
 using Savvyio.Extensions.DependencyInjection.Storage;
 using Savvyio.Storage;
 
-namespace Savvyio.Extensions.Storage.Assets
+namespace Savvyio.Extensions.Assets
 {
     public class FakeRepository<TEntity, TKey> : IPersistentRepository<TEntity, TKey> where TEntity : class, IIdentity<TKey>
     {

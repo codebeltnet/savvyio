@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Domain.Events;

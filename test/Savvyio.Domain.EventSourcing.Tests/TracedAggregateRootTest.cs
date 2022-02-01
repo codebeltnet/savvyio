@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cuemon;
@@ -14,8 +13,12 @@ using Savvyio.Assets.Domain;
 using Savvyio.Assets.Domain.Events;
 using Savvyio.Assets.Domain.EventSourcing;
 using Savvyio.Assets.Domain.Handlers;
-using Savvyio.Extensions.EntityFrameworkCore.Domain;
-using Savvyio.Extensions.EntityFrameworkCore.Domain.EventSourcing;
+using Savvyio.Extensions.DependencyInjection;
+using Savvyio.Extensions.DependencyInjection.Domain;
+using Savvyio.Extensions.DependencyInjection.EFCore.Domain;
+using Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing;
+using Savvyio.Extensions.EFCore;
+using Savvyio.Extensions.EFCore.Domain.EventSourcing;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -70,12 +73,10 @@ namespace Savvyio.Domain.EventSourcing.Tests
         {
             string schema = null;
             var sc = new ServiceCollection();
-            sc.AddScoped<Func<Type, IEnumerable<object>>>(p => p.GetServices);
-            sc.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
-            sc.AddScoped<IDomainEventHandler, AccountDomainEventHandler>();
-            sc.AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
-            var sp = sc.BuildServiceProvider();
-            var ds = new EfCoreAggregateDataStore(sp.GetRequiredService<IDomainEventDispatcher>(), o =>
+            sc.AddServiceLocator();
+            sc.AddDomainEventDispatcher();
+            sc.AddDomainEventHandler<AccountDomainEventHandler>();
+            sc.AddEfCoreAggregateDataStore(o =>
             {
                 o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy").EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
                 o.ModelConstructor = mb =>
@@ -85,7 +86,13 @@ namespace Savvyio.Domain.EventSourcing.Tests
                     TestOutput.WriteLine(schema);
                 };
             });
-            var sut4 = new EfCoreTracedAggregateRepository<TracedAccount, Guid>(ds);
+            sc.AddEfCoreTracedAggregateRepository<TracedAccount, Guid>();
+            sc.AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
+            
+            var sp = sc.BuildServiceProvider();
+
+            var ds = sp.GetRequiredService<IEfCoreDataStore>();
+            var sut4 = sp.GetRequiredService<ITracedAggregateRepository<TracedAccount, Guid>>();
 
             var id = Guid.NewGuid();
             var providerId = Guid.NewGuid();

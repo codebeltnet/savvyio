@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Cuemon.Collections.Generic;
 using Cuemon.Extensions.Collections.Generic;
 using Cuemon.Extensions.Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Assets;
-using Savvyio.Assets.Commands;
 using Savvyio.Assets.Queries;
-using Savvyio.Commands;
 using Savvyio.Extensions.DependencyInjection;
 using Savvyio.Handlers;
 using Savvyio.Queries;
@@ -29,7 +25,7 @@ namespace Savvyio.Dispatchers
         {
             var sc = new ServiceCollection().AddSavvyIO(o => o.AssembliesToScan = typeof(RequestReplyDispatcherTest).Assembly.Yield());
             var sp = sc.BuildServiceProvider();
-            var sut = new QueryDispatcher(sp.GetRequiredService<Func<Type, IEnumerable<object>>>());
+            var sut = new QueryDispatcher(sp.GetRequiredService<IServiceLocator>());
 
             Assert.Throws<OrphanedHandlerException>(() => sut.Query(new FakeQuery()));
         }
@@ -42,7 +38,7 @@ namespace Savvyio.Dispatchers
                 .AddScoped<ITestStore<IQuery>, InMemUnitTestStore<IQuery>>();
             
             var sp = sc.BuildServiceProvider();
-            var sut = new QueryDispatcher(sp.GetRequiredService<Func<Type, IEnumerable<object>>>());
+            var sut = new QueryDispatcher(sp.GetRequiredService<IServiceLocator>());
             var ga = new GetAccount(2313);
             var cs = sp.GetRequiredService<ITestStore<IQuery>>();
             
@@ -58,7 +54,7 @@ namespace Savvyio.Dispatchers
         {
             var sc = new ServiceCollection().AddSavvyIO(o => o.AssembliesToScan = typeof(RequestReplyDispatcherTest).Assembly.Yield());
             var sp = sc.BuildServiceProvider();
-            var sut = new QueryDispatcher(sp.GetRequiredService<Func<Type, IEnumerable<object>>>());
+            var sut = new QueryDispatcher(sp.GetRequiredService<IServiceLocator>());
 
             await Assert.ThrowsAsync<OrphanedHandlerException>(async () => await sut.QueryAsync(new FakeQuery()));
         }
@@ -71,7 +67,7 @@ namespace Savvyio.Dispatchers
                 .AddScoped<ITestStore<IQuery>, InMemUnitTestStore<IQuery>>();
             
             var sp = sc.BuildServiceProvider();
-            var sut = new QueryDispatcher(sp.GetRequiredService<Func<Type, IEnumerable<object>>>());
+            var sut = new QueryDispatcher(sp.GetRequiredService<IServiceLocator>());
             var ga = new GetAccount(74893297432);
             var cs = sp.GetRequiredService<ITestStore<IQuery>>();
             

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cuemon.Collections.Generic;
@@ -27,7 +26,7 @@ namespace Savvyio.Dispatchers
         {
             var sc = new ServiceCollection().AddSavvyIO(o => o.AssembliesToScan = typeof(FireForgetDispatcherTest).Assembly.Yield());
             var sp = sc.BuildServiceProvider();
-            var sut = new CommandDispatcher(sp.GetRequiredService<Func<Type, IEnumerable<object>>>());
+            var sut = new CommandDispatcher(sp.GetRequiredService<IServiceLocator>());
 
             Assert.Throws<OrphanedHandlerException>(() => sut.Commit(new FakeCommand()));
         }
@@ -40,7 +39,7 @@ namespace Savvyio.Dispatchers
                 .AddScoped<ITestStore<ICommand>, InMemUnitTestStore<ICommand>>();
             
             var sp = sc.BuildServiceProvider();
-            var sut = new CommandDispatcher(sp.GetRequiredService<Func<Type, IEnumerable<object>>>());
+            var sut = new CommandDispatcher(sp.GetRequiredService<IServiceLocator>());
             var ca = new CreateAccount(Guid.NewGuid(), "Michael Mortensen", "root@gimlichael.dev");
             var cs = sp.GetRequiredService<ITestStore<ICommand>>();
             
@@ -56,7 +55,7 @@ namespace Savvyio.Dispatchers
         {
             var sc = new ServiceCollection().AddSavvyIO(o => o.AssembliesToScan = typeof(FireForgetDispatcherTest).Assembly.Yield());
             var sp = sc.BuildServiceProvider();
-            var sut = new CommandDispatcher(sp.GetRequiredService<Func<Type, IEnumerable<object>>>());
+            var sut = new CommandDispatcher(sp.GetRequiredService<IServiceLocator>());
 
             await Assert.ThrowsAsync<OrphanedHandlerException>(async () => await sut.CommitAsync(new FakeCommand()));
         }
@@ -69,7 +68,7 @@ namespace Savvyio.Dispatchers
                 .AddScoped<ITestStore<ICommand>, InMemUnitTestStore<ICommand>>();
             
             var sp = sc.BuildServiceProvider();
-            var sut = new CommandDispatcher(sp.GetRequiredService<Func<Type, IEnumerable<object>>>());
+            var sut = new CommandDispatcher(sp.GetRequiredService<IServiceLocator>());
             var ca = new CreateAccount(Guid.NewGuid(), "Michael Mortensen", "root@gimlichael.dev");
             var cs = sp.GetRequiredService<ITestStore<ICommand>>();
             

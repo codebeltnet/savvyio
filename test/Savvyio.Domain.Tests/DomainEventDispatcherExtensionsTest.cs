@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Cuemon;
 using Cuemon.Collections.Generic;
@@ -13,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Assets;
 using Savvyio.Assets.Domain;
 using Savvyio.Assets.Domain.Events;
-using Savvyio.Commands;
+using Savvyio.Dispatchers;
 using Savvyio.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
@@ -39,7 +37,7 @@ namespace Savvyio.Domain
             var providerId = Guid.NewGuid();
 
             var sp = sc.BuildServiceProvider();
-            var sut = new DomainEventDispatcher(sp.GetRequiredService<Func<Type, IEnumerable<object>>>());
+            var sut = new DomainEventDispatcher(sp.GetRequiredService<IServiceLocator>());
             var ar = new Account(new PlatformProviderId(providerId), new FullName(firstName, lastName), new EmailAddress(emailAddress));
 
             Assert.NotEmpty(ar.Events);
@@ -62,7 +60,7 @@ namespace Savvyio.Domain
                 .AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
 
             var sp = sc.BuildServiceProvider();
-            var sut = new DomainEventDispatcher(sp.GetRequiredService<Func<Type, IEnumerable<object>>>());
+            var sut = new DomainEventDispatcher(sp.GetRequiredService<IServiceLocator>());
             var ar = new Account(new AccountId(100));
 
             var fullName = "Michael Mortensen";
@@ -114,7 +112,7 @@ namespace Savvyio.Domain
             var providerId = Guid.NewGuid();
 
             var sp = sc.BuildServiceProvider();
-            var sut = new DomainEventDispatcher(sp.GetRequiredService<Func<Type, IEnumerable<object>>>());
+            var sut = new DomainEventDispatcher(sp.GetRequiredService<IServiceLocator>());
             var ar = new Account(new PlatformProviderId(providerId), new FullName(firstName, lastName), new EmailAddress(emailAddress));
 
             Assert.NotEmpty(ar.Events);
@@ -137,7 +135,7 @@ namespace Savvyio.Domain
                 .AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
 
             var sp = sc.BuildServiceProvider();
-            var sut = new DomainEventDispatcher(sp.GetRequiredService<Func<Type, IEnumerable<object>>>());
+            var sut = new DomainEventDispatcher(sp.GetRequiredService<IServiceLocator>());
             var ar = new Account(new AccountId(100));
 
             var fullName = "Michael Mortensen";
