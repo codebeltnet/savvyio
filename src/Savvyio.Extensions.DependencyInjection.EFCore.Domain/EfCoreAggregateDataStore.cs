@@ -18,7 +18,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain
         /// </summary>
         /// <param name="dispatcher">The <see cref="IDomainEventDispatcher" /> that are responsible for raising domain events.</param>
         /// <param name="setup">The <see cref="EfCoreDataStoreOptions" /> which need to be configured.</param>
-        public EfCoreAggregateDataStore(IDomainEventDispatcher dispatcher, IOptions<EfCoreDataStoreOptions<TMarker>> setup) : base(dispatcher, new SavvyioDbContext<TMarker>(setup))
+        public EfCoreAggregateDataStore(IDomainEventDispatcher dispatcher, IOptions<EfCoreDataStoreOptions<TMarker>> setup) : base(dispatcher, new EfCoreDbContext<TMarker>(setup))
         {
         }
 

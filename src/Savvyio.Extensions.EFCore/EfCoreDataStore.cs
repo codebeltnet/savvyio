@@ -31,7 +31,7 @@ namespace Savvyio.Extensions.EFCore
         /// <param name="setup">The <see cref="EfCoreDataStoreOptions" /> which need to be configured.</param>
         public EfCoreDataStore(IOptions<EfCoreDataStoreOptions> setup)
         {
-            DbContext = new SavvyioDbContext(setup);
+            DbContext = new EfCoreDbContext(setup);
         }
 
         /// <summary>
