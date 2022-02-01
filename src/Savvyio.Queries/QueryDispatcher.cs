@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cuemon;
 using Cuemon.Threading;
@@ -17,8 +16,8 @@ namespace Savvyio.Queries
         /// <summary>
         /// Initializes a new instance of the <see cref="QueryDispatcher"/> class.
         /// </summary>
-        /// <param name="serviceFactory">The function delegate that provides the services.</param>
-        public QueryDispatcher(Func<Type, IEnumerable<object>> serviceFactory) : base(serviceFactory)
+        /// <param name="serviceLocator">The provider of service implementations.</param>
+        public QueryDispatcher(IServiceLocator serviceLocator) : base(serviceLocator)
         {
         }
 

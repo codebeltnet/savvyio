@@ -13,11 +13,11 @@ namespace Savvyio.Dispatchers
         /// <summary>
         /// Initializes a new instance of the <see cref="Dispatcher"/> class.
         /// </summary>
-        /// <param name="serviceFactory">The function delegate that provides the services.</param>
-        protected Dispatcher(Func<Type, IEnumerable<object>> serviceFactory)
+        /// <param name="serviceLocator">The provider of service implementations.</param>
+        protected Dispatcher(IServiceLocator serviceLocator)
         {
-            Validator.ThrowIfNull(serviceFactory, nameof(serviceFactory));
-            ServiceFactory = serviceFactory;
+            Validator.ThrowIfNull(serviceLocator, nameof(serviceLocator));
+            ServiceFactory = serviceLocator.GetServices;
         }
 
         /// <summary>

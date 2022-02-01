@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cuemon.Threading;
 using Savvyio.Commands;
+using Savvyio.Dispatchers;
 using Savvyio.Domain;
 using Savvyio.EventDriven;
 using Savvyio.Queries;
@@ -23,13 +23,13 @@ namespace Savvyio.Extensions
         /// <summary>
         /// Initializes a new instance of the <see cref="Mediator"/> class.
         /// </summary>
-        /// <param name="serviceFactory">The function delegate that provides the services.</param>
-        public Mediator(Func<Type, IEnumerable<object>> serviceFactory)
+        /// <param name="serviceLocator">The provider of service implementations.</param>
+        public Mediator(IServiceLocator serviceLocator)
         {
-            _commandDispatcher = new CommandDispatcher(serviceFactory);
-            _domainEventDispatcher = new DomainEventDispatcher(serviceFactory);
-            _integrationEventDispatcher = new IntegrationEventDispatcher(serviceFactory);
-            _queryDispatcher = new QueryDispatcher(serviceFactory);
+            _commandDispatcher = new CommandDispatcher(serviceLocator);
+            _domainEventDispatcher = new DomainEventDispatcher(serviceLocator);
+            _integrationEventDispatcher = new IntegrationEventDispatcher(serviceLocator);
+            _queryDispatcher = new QueryDispatcher(serviceLocator);
         }
 
         /// <summary>
