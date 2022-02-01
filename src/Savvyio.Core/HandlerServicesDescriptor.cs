@@ -52,27 +52,30 @@ namespace Savvyio
             {
                 var serviceRequestType = serviceType.GetInterface("IHandler`1")?.GenericTypeArguments.Single();
                 if (serviceRequestType == null) { continue; }
-
-                
                 foreach (var discoveredServicesGroup in DiscoveredServices)
                 {
-                    var handlers = discoveredServicesGroup.Where(pair => pair.Key == serviceType).SelectMany(pair => pair.Value).ToList();
-                    if (handlers.Count == 0) { continue; }
-                    var handlerMethodsCount = handlers.SelectMany(h => h.GetChildren()).Count();
-                    var text = $"Discovered {handlers.Count} {serviceType.Name} implementation{(handlers.Count > 1 ? "s" : "")} covering a total of {handlerMethodsCount} {serviceRequestType.Name} method{(handlerMethodsCount > 1 ? "s" : "")}";
-                    var dashes = Generate.FixedString('-', text.Length.Max(text.Length.Max(text.Length)));
-                    builder.Append(text);
-                    builder.AppendLine();
-                    foreach (var group in handlers.GroupBy(h =>
-                             {
-                                 var ti = h.Instance.As<Type>();
-                                 return new Tuple<string, string>(ti.Assembly.GetName().Name, ti.Namespace);
-                             })) { AppendHandler(builder, group, serviceRequestType); }
-                    builder.AppendLine(dashes);
-                    builder.AppendLine();
+                    AppendServices(builder, serviceType, serviceRequestType, discoveredServicesGroup);
                 }
             }
             return builder.ToString();
+        }
+
+        private static void AppendServices(StringBuilder builder, Type serviceType, Type serviceRequestType, IGrouping<Type, KeyValuePair<Type, List<IHierarchy<object>>>> discoveredServicesGroup)
+        {
+            var handlers = discoveredServicesGroup.Where(pair => pair.Key == serviceType).SelectMany(pair => pair.Value).ToList();
+            if (handlers.Count == 0) { return; }
+            var handlerMethodsCount = handlers.SelectMany(h => h.GetChildren()).Count();
+            var text = $"Discovered {handlers.Count} {serviceType.Name} implementation{(handlers.Count > 1 ? "s" : "")} covering a total of {handlerMethodsCount} {serviceRequestType.Name} method{(handlerMethodsCount > 1 ? "s" : "")}";
+            var dashes = Generate.FixedString('-', text.Length.Max(text.Length.Max(text.Length)));
+            builder.Append(text);
+            builder.AppendLine();
+            foreach (var group in handlers.GroupBy(h =>
+                     {
+                         var ti = h.Instance.As<Type>();
+                         return new Tuple<string, string>(ti.Assembly.GetName().Name, ti.Namespace);
+                     })) { AppendHandler(builder, group, serviceRequestType); }
+            builder.AppendLine(dashes);
+            builder.AppendLine();
         }
 
         private static void AppendHandler(StringBuilder builder, IGrouping<Tuple<string, string>, IHierarchy<object>> group, Type serviceRequestType)
