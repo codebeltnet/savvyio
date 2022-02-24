@@ -4,6 +4,7 @@ using System.Linq;
 using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Reflection;
+using Cuemon.Security;
 
 namespace Savvyio.Domain
 {
@@ -13,6 +14,8 @@ namespace Savvyio.Domain
     /// <seealso cref="T:IEquatable{ValueObject}" />
     public abstract class ValueObject : IEquatable<ValueObject>
     {
+        private const int NullHashCode = 472074819;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ValueObject"/> class.
         /// </summary>
@@ -85,7 +88,7 @@ namespace Savvyio.Domain
         /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.</returns>
         public override int GetHashCode()
         {
-            return GetEqualityComponents().Select(x => x != null ? x.GetHashCode() : 0).Aggregate((x, y) => x ^ y);
+            return GetEqualityComponents().Select(x => x != null ? x.GetHashCode() : NullHashCode).GetHashCode32();
         }
 
         /// <summary>
