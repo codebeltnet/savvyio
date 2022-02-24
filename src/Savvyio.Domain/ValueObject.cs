@@ -4,7 +4,6 @@ using System.Linq;
 using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Reflection;
-using Cuemon.Security;
 
 namespace Savvyio.Domain
 {
@@ -15,6 +14,8 @@ namespace Savvyio.Domain
     public abstract class ValueObject : IEquatable<ValueObject>
     {
         private const int NullHashCode = 472074819;
+        private readonly object _locker = new();
+        private IEnumerable<object> _equalityComponents;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ValueObject"/> class.
@@ -52,11 +53,23 @@ namespace Savvyio.Domain
         /// <returns>An <see cref="IEnumerable{T}"/> that contains the equality components of this instance.</returns>
         protected virtual IEnumerable<object> GetEqualityComponents()
         {
-            var properties = GetType().GetProperties(new MemberReflection(true, true)).Where(pi => pi.PropertyType.IsSimple() && pi.CanRead);
-            foreach (var property in properties)
+            if (_equalityComponents == null)
             {
-                yield return property.GetValue(this);
+                lock (_locker)
+                {
+                    if (_equalityComponents == null)
+                    {
+                        var equalityComponents = new List<object>();
+                        var properties = GetType().GetProperties(new MemberReflection(true, true)).Where(pi => pi.PropertyType.IsSimple() && pi.CanRead);
+                        foreach (var property in properties)
+                        {
+                            equalityComponents.Add(property.GetValue(this));
+                        }
+                        _equalityComponents = equalityComponents;
+                    }
+                }
             }
+            return _equalityComponents;
         }
 
         /// <summary>
