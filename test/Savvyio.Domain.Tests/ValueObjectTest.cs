@@ -51,5 +51,31 @@ namespace Savvyio.Domain
             Assert.NotEqual(sut1, sut2);
             Assert.NotEqual(sut1.GetHashCode(), sut2.GetHashCode());
         }
+
+        [Fact]
+        public void ValueObject_MixedSimpleAndValueObject_ShouldNotBeEqual()
+        {
+            var sut1 = new Mixed() { AccountId = 2414214, Money = new Money(Currency.MYR, 123) };
+            var sut2 = new Mixed() { AccountId = 315551312, Money = new Money(Currency.MYR, 321) };
+
+            TestOutput.WriteLines(sut1.ToString(), sut2.ToString());
+
+            Assert.True(sut1 != sut2);
+            Assert.NotEqual(sut1, sut2);
+            Assert.NotEqual(sut1.GetHashCode(), sut2.GetHashCode());
+        }
+
+        [Fact]
+        public void ValueObject_MixedSimpleAndValueObject_ShouldBeEqual()
+        {
+            var sut1 = new Mixed() { AccountId = 2414214, Money = new Money(Currency.MYR, 123) };
+            var sut2 = new Mixed() { AccountId = 2414214, Money = new Money(Currency.MYR, 123) };
+
+            TestOutput.WriteLines(sut1.ToString(), sut2.ToString());
+
+            Assert.True(sut1 == sut2);
+            Assert.Equal(sut1, sut2);
+            Assert.Equal(sut1.GetHashCode(), sut2.GetHashCode());
+        }
     }
 }

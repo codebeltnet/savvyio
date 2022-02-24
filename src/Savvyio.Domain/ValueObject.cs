@@ -14,7 +14,7 @@ namespace Savvyio.Domain
     public abstract class ValueObject : IEquatable<ValueObject>
     {
         private const int NullHashCode = 472074819;
-        private readonly object _locker = new();
+        private readonly object _locker = new object();
         private IEnumerable<object> _equalityComponents;
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Savvyio.Domain
                     if (_equalityComponents == null)
                     {
                         var equalityComponents = new List<object>();
-                        var properties = GetType().GetProperties(new MemberReflection(true, true)).Where(pi => pi.PropertyType.IsSimple() && pi.CanRead);
+                        var properties = GetType().GetProperties(new MemberReflection(true, true)).Where(pi => (pi.PropertyType.IsSimple() || pi.PropertyType.IsAssignableTo(typeof(ValueObject))) && pi.CanRead);
                         foreach (var property in properties)
                         {
                             equalityComponents.Add(property.GetValue(this));
