@@ -13,7 +13,7 @@ namespace Savvyio
     /// <seealso cref="IMetadataDictionary" />
     public sealed class MetadataDictionary : IMetadataDictionary
     {
-        private static readonly IEnumerable<string> ReservedKeywords = Arguments.ToEnumerableOf(Timestamp, MemberType, CorrelationId, CausationId);
+        private static readonly IEnumerable<string> ReservedKeywords = Arguments.ToEnumerableOf(Timestamp, MemberType, CorrelationId, CausationId, EventId, AggregateVersion);
         private readonly IDictionary<string, object> _dictionary = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
@@ -54,24 +54,24 @@ namespace Savvyio
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="string"/> with the specified key.
+        /// Gets or sets the element with the specified key.
         /// </summary>
-        /// <param name="key">The key.</param>
-        /// <returns>System.String.</returns>
+        /// <param name="key">The key of the value to get or set.</param>
+        /// <returns>The value associated with the specified key.</returns>
         public object this[string key]
         {
             get => _dictionary[key];
-            set => _dictionary[key] = value;
+            set => Add(key, value);
         }
 
         /// <summary>
         /// Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.
         /// </summary>
-        /// <value>The count.</value>
+        /// <value>The number of key/value pairs contained in the <see cref="MetadataDictionary"/>.</value>
         public int Count => _dictionary.Count;
 
         /// <summary>
-        /// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.
+        /// Gets a value indicating whether the <see cref="MetadataDictionary" />is read-only.
         /// </summary>
         /// <value><c>true</c> if this instance is read only; otherwise, <c>false</c>.</value>
         public bool IsReadOnly => _dictionary.IsReadOnly;
@@ -79,19 +79,19 @@ namespace Savvyio
         /// <summary>
         /// Gets an <see cref="T:System.Collections.Generic.ICollection`1" /> containing the keys of the <see cref="MetadataDictionary" />.
         /// </summary>
-        /// <value>The keys.</value>
+        /// <value>A <see cref="Dictionary{TKey,TValue}.KeyCollection"/> containing the keys in the <see cref="MetadataDictionary"/>.</value>
         public ICollection<string> Keys => _dictionary.Keys;
 
         /// <summary>
         /// Gets an <see cref="T:System.Collections.Generic.ICollection`1" /> containing the values in the <see cref="MetadataDictionary" />.
         /// </summary>
-        /// <value>The values.</value>
+        /// <value>A <see cref="Dictionary{TKey,TValue}.ValueCollection"/> containing the values in the <see cref="MetadataDictionary"/>.</value>
         public ICollection<object> Values => _dictionary.Values;
 
         /// <summary>
-        /// Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1" />.
+        /// Adds an item to the <see cref="MetadataDictionary" />.
         /// </summary>
-        /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
+        /// <param name="item">The object to add to the <see cref="MetadataDictionary" />.</param>
         public void Add(KeyValuePair<string, object> item)
         {
             Add(item.Key, item.Value);
@@ -102,6 +102,9 @@ namespace Savvyio
         /// </summary>
         /// <param name="key">The object to use as the key of the element to add.</param>
         /// <param name="value">The object to use as the value of the element to add.</param>
+        /// <exception cref="ReservedKeywordException">
+        /// The specified <paramref name="key"/> is a reserved keyword.
+        /// </exception>
         public void Add(string key, object value)
         {
             Validator.ThrowIf.ContainsReservedKeyword(key, ReservedKeywords, StringComparer.OrdinalIgnoreCase, nameof(key), FormattableString.Invariant($"Unable to add the specified {nameof(key)} as it is a reserved keyword."));
@@ -123,7 +126,7 @@ namespace Savvyio
         }
 
         /// <summary>
-        /// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1" /> to an <see cref="T:System.Array" />, starting at a particular <see cref="T:System.Array" /> index.
+        /// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1" /> to an array of type <see cref="KeyValuePair{TKey,TValue}"/>, starting at the specified array index.
         /// </summary>
         /// <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
