@@ -20,7 +20,7 @@ namespace Savvyio.Domain
         }
 
         [Fact]
-        public void AddHandlers_ShouldAddDomainEventHandler()
+        public void AddDomainEventHandler_ShouldAddDomainEventHandler()
         {
             var sut = new SavvyioOptions().AddDomainEventHandler<AccountDomainEventHandler>();
 
@@ -28,6 +28,17 @@ namespace Savvyio.Domain
             Assert.NotEmpty(sut.HandlerImplementationTypes);
             Assert.Collection(sut.HandlerServiceTypes, type => Assert.Equal(typeof(IDomainEventHandler), type));
             Assert.Collection(sut.HandlerImplementationTypes, type => Assert.Equal(typeof(AccountDomainEventHandler), type));
+        }
+
+        [Fact]
+        public void AddDomainEventDispatcher_ShouldAddDomainEventDispatcher()
+        {
+            var sut = new SavvyioOptions().AddDomainEventDispatcher();
+
+            Assert.NotEmpty(sut.DispatcherServiceTypes);
+            Assert.NotEmpty(sut.DispatcherImplementationTypes);
+            Assert.Collection(sut.DispatcherServiceTypes, type => Assert.Equal(typeof(IDomainEventDispatcher), type));
+            Assert.Collection(sut.DispatcherImplementationTypes, type => Assert.Equal(typeof(DomainEventDispatcher), type));
         }
     }
 }

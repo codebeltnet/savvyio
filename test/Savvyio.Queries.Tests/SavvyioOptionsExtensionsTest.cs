@@ -3,7 +3,7 @@ using Savvyio.Assets;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Commands
+namespace Savvyio.Queries
 {
     public class SavvyioOptionsExtensionsTest : Test
     {
@@ -20,25 +20,25 @@ namespace Savvyio.Commands
         }
 
         [Fact]
-        public void AddCommandHandler_ShouldAddCommandHandler()
+        public void AddQueryHandler_ShouldAddQueryHandler()
         {
-            var sut = new SavvyioOptions().AddCommandHandler<AccountCommandHandler>();
+            var sut = new SavvyioOptions().AddQueryHandler<AccountQueryHandler>();
 
             Assert.NotEmpty(sut.HandlerServiceTypes);
             Assert.NotEmpty(sut.HandlerImplementationTypes);
-            Assert.Collection(sut.HandlerServiceTypes, type => Assert.Equal(typeof(ICommandHandler), type));
-            Assert.Collection(sut.HandlerImplementationTypes, type => Assert.Equal(typeof(AccountCommandHandler), type));
+            Assert.Collection(sut.HandlerServiceTypes, type => Assert.Equal(typeof(IQueryHandler), type));
+            Assert.Collection(sut.HandlerImplementationTypes, type => Assert.Equal(typeof(AccountQueryHandler), type));
         }
 
         [Fact]
-        public void AddCommandDispatcher_ShouldAddCommandDispatcher()
+        public void AddQueryDispatcher_ShouldAddQueryDispatcher()
         {
-            var sut = new SavvyioOptions().AddCommandDispatcher();
+            var sut = new SavvyioOptions().AddQueryDispatcher();
 
             Assert.NotEmpty(sut.DispatcherServiceTypes);
             Assert.NotEmpty(sut.DispatcherImplementationTypes);
-            Assert.Collection(sut.DispatcherServiceTypes, type => Assert.Equal(typeof(ICommandDispatcher), type));
-            Assert.Collection(sut.DispatcherImplementationTypes, type => Assert.Equal(typeof(CommandDispatcher), type));
+            Assert.Collection(sut.DispatcherServiceTypes, type => Assert.Equal(typeof(IQueryDispatcher), type));
+            Assert.Collection(sut.DispatcherImplementationTypes, type => Assert.Equal(typeof(QueryDispatcher), type));
         }
     }
 }

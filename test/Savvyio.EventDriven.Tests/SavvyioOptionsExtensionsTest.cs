@@ -3,7 +3,7 @@ using Savvyio.Assets;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Commands
+namespace Savvyio.EventDriven
 {
     public class SavvyioOptionsExtensionsTest : Test
     {
@@ -20,25 +20,25 @@ namespace Savvyio.Commands
         }
 
         [Fact]
-        public void AddCommandHandler_ShouldAddCommandHandler()
+        public void AddIntegrationEventHandler_ShouldAddDomainEventHandler()
         {
-            var sut = new SavvyioOptions().AddCommandHandler<AccountCommandHandler>();
+            var sut = new SavvyioOptions().AddIntegrationEventHandler<AccountEventHandler>();
 
             Assert.NotEmpty(sut.HandlerServiceTypes);
             Assert.NotEmpty(sut.HandlerImplementationTypes);
-            Assert.Collection(sut.HandlerServiceTypes, type => Assert.Equal(typeof(ICommandHandler), type));
-            Assert.Collection(sut.HandlerImplementationTypes, type => Assert.Equal(typeof(AccountCommandHandler), type));
+            Assert.Collection(sut.HandlerServiceTypes, type => Assert.Equal(typeof(IIntegrationEventHandler), type));
+            Assert.Collection(sut.HandlerImplementationTypes, type => Assert.Equal(typeof(AccountEventHandler), type));
         }
 
         [Fact]
-        public void AddCommandDispatcher_ShouldAddCommandDispatcher()
+        public void AddIntegrationEventDispatcher_ShouldAddDomainEventDispatcher()
         {
-            var sut = new SavvyioOptions().AddCommandDispatcher();
+            var sut = new SavvyioOptions().AddIntegrationEventDispatcher();
 
             Assert.NotEmpty(sut.DispatcherServiceTypes);
             Assert.NotEmpty(sut.DispatcherImplementationTypes);
-            Assert.Collection(sut.DispatcherServiceTypes, type => Assert.Equal(typeof(ICommandDispatcher), type));
-            Assert.Collection(sut.DispatcherImplementationTypes, type => Assert.Equal(typeof(CommandDispatcher), type));
+            Assert.Collection(sut.DispatcherServiceTypes, type => Assert.Equal(typeof(IIntegrationEventDispatcher), type));
+            Assert.Collection(sut.DispatcherImplementationTypes, type => Assert.Equal(typeof(IntegrationEventDispatcher), type));
         }
     }
 }
