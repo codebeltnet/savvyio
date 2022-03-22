@@ -7,7 +7,7 @@ namespace Savvyio.Extensions.EFCore
     /// Defines a generic way to support the actual I/O communication towards a data store using Microsoft Entity Framework Core.
     /// </summary>
     /// <seealso cref="IDataStore" />
-    public interface IEfCoreDataStore : IDataStore
+    public interface IEfCoreDataStore : IDataStore, IUnitOfWork
     {
         /// <summary>
         /// Creates a <see cref="DbSet{TEntity}" /> that can be used to query and save instances of <typeparamref name="TEntity" />.
