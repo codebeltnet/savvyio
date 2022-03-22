@@ -3,7 +3,7 @@
 namespace Savvyio.EventDriven
 {
     /// <summary>
-    /// Specifies a handler resposible for objects that implements the <see cref="IIntegrationEvent"/> interface.
+    /// Specifies a handler responsible for objects that implements the <see cref="IIntegrationEvent"/> interface.
     /// </summary>
     /// <seealso cref="IFireForgetHandler{TRequest}" />
     public interface IIntegrationEventHandler : IFireForgetHandler<IIntegrationEvent>
