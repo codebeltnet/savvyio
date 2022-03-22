@@ -2,7 +2,6 @@
 using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Newtonsoft.Json;
 using Cuemon.Extensions.Newtonsoft.Json.Formatters;
-using Cuemon.Reflection;
 using Newtonsoft.Json;
 using Savvyio.Domain.EventSourcing;
 
@@ -33,12 +32,10 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
         private static IMetadataDictionary MetadataReader(JsonReader reader, Type type, IMetadataDictionary dictionary, JsonSerializer serializer)
         {
             var md = new MetadataDictionary();
-            var unrestrictedAdder = typeof(IMetadataDictionary).GetMethod("AddUnrestricted", new MemberReflection(), new []{ typeof(string), typeof(object) });
-            if (unrestrictedAdder == null) { throw new NotImplementedException("It appears that the internal AddUnrestricted method has been removed or renamed. Please check the source code."); }
             var result = JData.ReadAll(reader);
             foreach (var entry in result)
             {
-               unrestrictedAdder.Invoke(md, new[] { entry.PropertyName, entry.Value });
+               md.Add(entry.PropertyName, entry.Value);
             }
             return md;
         }
