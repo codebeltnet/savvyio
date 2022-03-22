@@ -54,21 +54,5 @@ namespace Savvyio
             }
             return request;
         }
-
-        internal static T SetUnrestricted<T>(T request, string key, object value) where T : IMetadata
-        {
-            Validator.ThrowIfNull(request, nameof(request));
-            Validator.ThrowIfNull(key, nameof(key));
-
-            if (request.Metadata.ContainsKey(key))
-            {
-                request.Metadata[key] = value;
-            }
-            else
-            {
-                request.Metadata.AddUnrestricted(key, value);
-            }
-            return request;
-        }
     }
 }

@@ -29,16 +29,6 @@ namespace Savvyio
         }
 
         [Fact]
-        public void Indexer_ShouldFailWith_ReservedKeywordException()
-        {
-            var sut = new MetadataDictionary();
-            Assert.Throws<ReservedKeywordException>(() =>
-            {
-                sut[MetadataDictionary.EventId] = Guid.NewGuid();
-            });
-        }
-
-        [Fact]
         public void ReservedKeywords_ShouldMatchNumberOfPublicConst()
         {
             var sut = typeof(MetadataDictionary);
@@ -108,27 +98,6 @@ namespace Savvyio
             Assert.Equal(sut["key1"], "value");
             Assert.Equal(sut["key2"], Guid.Empty);
             Assert.Equal(sut["key3"], int.MaxValue);
-        }
-
-        [Fact]
-        public void AddUnrestricted_ShouldBypassReservedKeywordsValidation()
-        {
-            var sut = new MetadataDictionary();
-
-            var addUnrestricted = typeof(IMetadataDictionary).GetMethod("AddUnrestricted", new MemberReflection());
-            addUnrestricted.Invoke(sut, new object[] { MetadataDictionary.AggregateVersion, 1 });
-            addUnrestricted.Invoke(sut, new object[] { MetadataDictionary.EventId, 2 });
-            addUnrestricted.Invoke(sut, new object[] { MetadataDictionary.CausationId, 3 });
-            addUnrestricted.Invoke(sut, new object[] { MetadataDictionary.CorrelationId, 4 });
-            addUnrestricted.Invoke(sut, new object[] { MetadataDictionary.MemberType, 5 });
-            addUnrestricted.Invoke(sut, new object[] { MetadataDictionary.Timestamp, 6 });
-
-            Assert.Equal(1, sut[MetadataDictionary.AggregateVersion]);
-            Assert.Equal(2, sut[MetadataDictionary.EventId]);
-            Assert.Equal(3, sut[MetadataDictionary.CausationId]);
-            Assert.Equal(4, sut[MetadataDictionary.CorrelationId]);
-            Assert.Equal(5, sut[MetadataDictionary.MemberType]);
-            Assert.Equal(6, sut[MetadataDictionary.Timestamp]);
         }
 
         [Fact]

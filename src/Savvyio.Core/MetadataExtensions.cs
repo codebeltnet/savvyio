@@ -41,7 +41,7 @@ namespace Savvyio
         /// <returns>A reference to <paramref name="request"/> after the operation has completed.</returns>
         public static T SetCausationId<T>(this T request, string causationId) where T : IMetadata
         {
-            MetadataFactory.SetUnrestricted(request, MetadataDictionary.CausationId, causationId);
+            MetadataFactory.Set(request, MetadataDictionary.CausationId, causationId);
             return request;
         }
 
@@ -54,7 +54,7 @@ namespace Savvyio
         /// <returns>A reference to <paramref name="request"/> after the operation has completed.</returns>
         public static T SetCorrelationId<T>(this T request, string correlationId) where T : IMetadata
         {
-            MetadataFactory.SetUnrestricted(request, MetadataDictionary.CorrelationId, correlationId);
+            MetadataFactory.Set(request, MetadataDictionary.CorrelationId, correlationId);
             return request;
         }
 
@@ -67,7 +67,7 @@ namespace Savvyio
         /// <returns>A reference to <paramref name="request"/> after the operation has completed.</returns>
         public static T SetEventId<T>(this T request, string eventId) where T : IMetadata
         {
-            MetadataFactory.SetUnrestricted(request, MetadataDictionary.EventId, eventId);
+            MetadataFactory.Set(request, MetadataDictionary.EventId, eventId);
             return request;
         }
 
@@ -79,7 +79,7 @@ namespace Savvyio
         /// <returns>A reference to <paramref name="request"/> after the operation has completed.</returns>
         public static T SetTimestamp<T>(this T request) where T : IMetadata
         {
-            MetadataFactory.SetUnrestricted(request, MetadataDictionary.Timestamp, DateTime.UtcNow);
+            MetadataFactory.Set(request, MetadataDictionary.Timestamp, DateTime.UtcNow);
             return request;
         }
 
@@ -93,7 +93,7 @@ namespace Savvyio
         /// <remarks>The <paramref name="type"/> is converted to its equivalent string representation (fully qualified name of the type, including its namespace, comma delimited with the simple name of the assembly).</remarks>
         public static T SetMemberType<T>(this T request, Type type) where T : IMetadata
         {
-            MetadataFactory.SetUnrestricted(request, MetadataDictionary.MemberType, type.ToFullNameIncludingAssemblyName());
+            MetadataFactory.Set(request, MetadataDictionary.MemberType, type.ToFullNameIncludingAssemblyName());
             return request;
         }
 
@@ -124,7 +124,7 @@ namespace Savvyio
         /// <typeparam name="TSource">The giving type of the model that implements the <see cref="IMetadata"/> interface.</typeparam>
         /// <typeparam name="TDestination">The receiving type of the model that implements the <see cref="IMetadata"/> interface.</typeparam>
         /// <param name="destination">The <see cref="IMetadata"/> to extend. Receives model from <paramref name="source"/>.</param>
-        /// <param name="source">The model that will give metata to <paramref name="destination"/>.</param>
+        /// <param name="source">The model that will give metadata to <paramref name="destination"/>.</param>
         /// <returns>A reference to <paramref name="destination"/> after the operation has completed.</returns>
         public static TDestination MergeMetadata<TSource, TDestination>(this TDestination destination, TSource source)
             where TSource : IMetadata
@@ -136,7 +136,7 @@ namespace Savvyio
                 {
                     if (!destination.Metadata.ContainsKey(entry.Key))
                     {
-                        destination.Metadata.AddUnrestricted(entry.Key, entry.Value); // bypass reserved keyword check since the value is only added if non-existing
+                        destination.Metadata.Add(entry.Key, entry.Value);
                     }
                 }
             }
