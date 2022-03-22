@@ -6,7 +6,7 @@ using Savvyio.Storage;
 
 namespace Savvyio.Extensions.Assets
 {
-    public class FakeDataStore : IDataStore
+    public class FakeDataStore : IDataStore, IUnitOfWork
     {
         public Task SaveChangesAsync(Action<AsyncOptions> setup = null)
         {
