@@ -37,7 +37,7 @@ namespace Savvyio
                 o.ExcludeInheritancePath = true;
             });
 
-            var reservedKeywords = sut.GetField("ReservedKeywords", mr.Flags).GetValue(null) as IEnumerable<string>;
+            var reservedKeywords = MetadataDictionary.ReservedKeywords;
             var keywordConstants = sut.GetFields(mr.Flags).Where(fi => fi.IsPublic).Select(fi => fi.Name);
 
             Assert.Equal(reservedKeywords, keywordConstants);
