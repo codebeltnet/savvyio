@@ -2,12 +2,17 @@
 
   <PropertyGroup>
     <RootNamespace>Savvyio</RootNamespace>
+    <AssemblyName>Savvyio</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Cuemon.Extensions.Core" Version="6.4.0" />
     <PackageReference Include="Cuemon.Extensions.Collections.Generic" Version="6.4.0" />
     <PackageReference Include="Cuemon.Extensions.Reflection" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Storage\" />
   </ItemGroup>
 
 </Project>
