@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Cuemon.Threading;
 
-namespace Savvyio.Storage
+namespace Savvyio.Data
 {
     /// <summary>
     /// Defines a generic way of abstracting deletable data access objects (cruD).

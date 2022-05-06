@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Storage
+﻿namespace Savvyio.Data
 {
     /// <summary>
     /// A marker interface that specifies the actual I/O communication with a data store.

@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Storage
+﻿namespace Savvyio.Data
 {
     /// <summary>
     /// Defines a generic way of abstracting persistent data access objects (CRUD).
