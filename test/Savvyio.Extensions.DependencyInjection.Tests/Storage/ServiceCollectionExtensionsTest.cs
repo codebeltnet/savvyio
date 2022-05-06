@@ -3,9 +3,12 @@ using Cuemon.Extensions.Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Assets;
 using Savvyio.Assets.Domain;
+using Savvyio.Data;
+using Savvyio.Domain;
 using Savvyio.Extensions.Assets;
-using Savvyio.Extensions.DependencyInjection.Storage;
-using Savvyio.Storage;
+using Savvyio.Extensions.DependencyInjection;
+using Savvyio.Extensions.DependencyInjection.Data;
+using Savvyio.Extensions.DependencyInjection.Domain;
 using Xunit;
 using Xunit.Abstractions;
 

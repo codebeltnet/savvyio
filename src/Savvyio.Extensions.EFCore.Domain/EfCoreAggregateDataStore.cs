@@ -5,7 +5,6 @@ using Cuemon.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Savvyio.Domain;
-using Savvyio.Storage;
 
 namespace Savvyio.Extensions.EFCore.Domain
 {

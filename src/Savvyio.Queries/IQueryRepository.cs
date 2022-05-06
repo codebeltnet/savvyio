@@ -1,4 +1,4 @@
-﻿using Savvyio.Storage;
+﻿using Savvyio.Data;
 
 namespace Savvyio.Queries
 {

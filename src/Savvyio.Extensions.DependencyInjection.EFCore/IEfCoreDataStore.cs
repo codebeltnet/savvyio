@@ -1,5 +1,4 @@
-﻿using Savvyio.Extensions.DependencyInjection.Storage;
-using Savvyio.Extensions.EFCore;
+﻿using Savvyio.Extensions.EFCore;
 
 namespace Savvyio.Extensions.DependencyInjection.EFCore
 {

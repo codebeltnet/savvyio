@@ -7,7 +7,6 @@ using Cuemon.Reflection;
 using Cuemon.Threading;
 using Savvyio.Domain;
 using Savvyio.Domain.EventSourcing;
-using Savvyio.Storage;
 
 namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
 {

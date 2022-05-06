@@ -1,5 +1,4 @@
 ﻿using Savvyio.Domain.EventSourcing;
-using Savvyio.Extensions.DependencyInjection.Storage;
 
 namespace Savvyio.Extensions.DependencyInjection.Domain.EventSourcing
 {

@@ -3,8 +3,6 @@ using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Savvyio.Domain;
-using Savvyio.Extensions.DependencyInjection.Storage;
-using Savvyio.Storage;
 
 namespace Savvyio.Extensions.DependencyInjection.Domain
 {

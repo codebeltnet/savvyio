@@ -3,9 +3,10 @@ using Cuemon;
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Savvyio.Extensions.DependencyInjection.Storage;
+using Savvyio.Domain;
+using Savvyio.Extensions.DependencyInjection.Data;
+using Savvyio.Extensions.DependencyInjection.Domain;
 using Savvyio.Extensions.EFCore;
-using Savvyio.Storage;
 
 namespace Savvyio.Extensions.DependencyInjection.EFCore
 {

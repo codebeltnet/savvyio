@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Savvyio.Storage;
+using Savvyio.Domain;
 
 namespace Savvyio.Extensions.EFCore
 {

@@ -17,7 +17,6 @@ using Savvyio.Extensions.DependencyInjection;
 using Savvyio.Extensions.DependencyInjection.EFCore;
 using Savvyio.Extensions.DependencyInjection.EFCore.Domain;
 using Savvyio.Queries;
-using Savvyio.Storage;
 using Xunit;
 using Xunit.Abstractions;
 

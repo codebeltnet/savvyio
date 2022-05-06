@@ -1,5 +1,5 @@
 ﻿using Savvyio.Domain;
-using Savvyio.Extensions.DependencyInjection.Storage;
+using Savvyio.Extensions.DependencyInjection.Domain;
 using Savvyio.Extensions.EFCore;
 
 namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain

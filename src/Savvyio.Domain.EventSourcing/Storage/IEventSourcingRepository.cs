@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cuemon.Threading;
-using Savvyio.Storage;
 
 namespace Savvyio.Domain.EventSourcing.Storage
 {

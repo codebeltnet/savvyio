@@ -1,6 +1,6 @@
 ﻿using Savvyio.Domain.EventSourcing;
+using Savvyio.Extensions.DependencyInjection.Domain;
 using Savvyio.Extensions.DependencyInjection.Domain.EventSourcing;
-using Savvyio.Extensions.DependencyInjection.Storage;
 using Savvyio.Extensions.EFCore.Domain.EventSourcing;
 
 namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
@@ -12,7 +12,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
     /// <typeparam name="TKey">The type of the key that uniquely identifies the entity.</typeparam>
     /// <typeparam name="TMarker">The type used to mark the implementation that this repository represents. Optimized for Microsoft Dependency Injection.</typeparam>
     /// <seealso cref="EfCoreTracedAggregateRepository{TEntity, TKey}" />
-    /// <seealso cref="IReadableRepository{TEntity, TKey, TMarker}" />
+    /// <seealso cref="IReadableRepository{TEntity,TKey,TMarker}" />
     /// <seealso cref="IWritableRepository{TEntity, TKey, TMarker}" />
     public class EfCoreTracedAggregateRepository<TEntity, TKey, TMarker> : EfCoreTracedAggregateRepository<TEntity, TKey>, ITracedAggregateRepository<TEntity, TKey, TMarker>
         where TEntity : class, ITracedAggregateRoot<TKey>
