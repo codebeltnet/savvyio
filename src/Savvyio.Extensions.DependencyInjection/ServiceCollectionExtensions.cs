@@ -17,6 +17,63 @@ namespace Savvyio.Extensions.DependencyInjection
     public static class ServiceCollectionExtensions
     {
         /// <summary>
+        /// Adds an implementation of <see cref="IDataStore" /> to the specified <see cref="IServiceCollection" />.
+        /// </summary>
+        /// <typeparam name="TDataStore">The type of the <see cref="IDataStore"/> interface to add.</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
+        /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
+        /// <returns>A reference to <paramref name="services" /> so that additional configuration calls can be chained.</returns>
+        /// <remarks>The implementation will be type forwarded accordingly.</remarks>
+        /// <seealso cref="IDataStore"/>
+        public static IServiceCollection AddDataStore<TDataStore, TImplementation>(this IServiceCollection services)
+            where TDataStore : IDataStore
+            where TImplementation : class, TDataStore
+        {
+            return services.AddDataStore<TImplementation>();
+        }
+
+        /// <summary>
+        /// Adds an implementation of <see cref="IDataStore" /> to the specified <see cref="IServiceCollection" />.
+        /// </summary>
+        /// <typeparam name="TDataStore">The type of the <see cref="IDataStore"/> interface to add.</typeparam>
+        /// <typeparam name="TImplementation">The type of the configured implementation to use.</typeparam>
+        /// <typeparam name="TMarker">The type used to mark the implementation that this data store represents. Optimized for Microsoft Dependency Injection.</typeparam>
+        /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
+        /// <returns>A reference to <paramref name="services" /> so that additional configuration calls can be chained.</returns>
+        /// <seealso cref="IDependencyInjectionMarker{TMarker}"/>
+        /// <seealso cref="IDataStore{TMarker}"/>
+        public static IServiceCollection AddDataStore<TDataStore, TImplementation, TMarker>(this IServiceCollection services)
+            where TDataStore : IDataStore<TMarker>
+            where TImplementation : class, TDataStore
+        {
+            return services.AddDataStore<TImplementation>();
+        }
+
+        /// <summary>
+        /// Adds an implementation of <see cref="IDataStore" /> to the specified <see cref="IServiceCollection" />.
+        /// </summary>
+        /// <typeparam name="TImplementation">The type of the configured implementation to use.</typeparam>
+        /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
+        /// <returns>A reference to <paramref name="services" /> so that additional configuration calls can be chained.</returns>
+        /// <remarks>If the underlying type of <typeparamref name="TImplementation"/> implements <see cref="IDependencyInjectionMarker{TMarker}"/> interface then this is automatically handled. Also, the implementation will be type forwarded accordingly.</remarks>
+        /// <seealso cref="IDependencyInjectionMarker{TMarker}"/>
+        /// <seealso cref="IDataStore"/>
+        /// <seealso cref="IDataStore{TMarker}"/>
+        public static IServiceCollection AddDataStore<TImplementation>(this IServiceCollection services)
+            where TImplementation : class, IDataStore
+        {
+            Validator.ThrowIfNull(services, nameof(services));
+            var dataStoreType = typeof(IDataStore);
+            services.TryAddScoped<TImplementation>();
+            if (typeof(TImplementation).TryGetDependencyInjectionMarker(out var markerType))
+            {
+                dataStoreType = typeof(IDataStore<>).MakeGenericType(markerType);
+            }
+            services.TryAddScoped(dataStoreType, p => p.GetRequiredService<TImplementation>());
+            return services;
+        }
+
+        /// <summary>
         /// Adds Savvy I/O service locator used to resolve necessary dependencies.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
