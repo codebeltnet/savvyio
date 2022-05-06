@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Cuemon.Threading;
 
-namespace Savvyio.Storage
+namespace Savvyio.Domain
 {
     /// <summary>
     /// Defines a generic way of abstracting searchable repositories (cRud).

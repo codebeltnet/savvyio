@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Savvyio.Storage;
 
-namespace Savvyio.Storage
+namespace Savvyio.Domain
 {
     /// <summary>
     /// Defines a generic way of abstracting deletable repositories (cruD).

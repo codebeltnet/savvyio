@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Cuemon.Threading;
 
-namespace Savvyio.Storage
+namespace Savvyio.Domain
 {
     /// <summary>
     /// Defines a transaction that bundles multiple <see cref="IRepository{TEntity,TKey}"/> calls into a single unit.

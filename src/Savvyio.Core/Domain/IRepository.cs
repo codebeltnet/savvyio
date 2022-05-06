@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Storage
+﻿namespace Savvyio.Domain
 {
     /// <summary>
     /// A marker interface that specifies an abstraction of persistent data access based on the Repository Pattern.
