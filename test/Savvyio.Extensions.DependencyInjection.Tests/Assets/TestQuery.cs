@@ -1,7 +1,7 @@
 ﻿using System;
 using Savvyio.Queries;
 
-namespace Savvyio.Extensions.Assets
+namespace Savvyio.Extensions.DependencyInjection.Assets
 {
     internal class TestQuery : Query<Guid>
     {

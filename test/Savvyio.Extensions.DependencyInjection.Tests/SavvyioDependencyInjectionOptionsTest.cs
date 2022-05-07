@@ -1,10 +1,9 @@
 ﻿using Cuemon.Extensions.Xunit;
 using Microsoft.Extensions.DependencyInjection;
-using Savvyio.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions
+namespace Savvyio.Extensions.DependencyInjection
 {
     public class SavvyioDependencyInjectionOptionsTest : Test
     {

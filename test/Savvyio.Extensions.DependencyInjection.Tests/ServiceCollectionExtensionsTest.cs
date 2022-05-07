@@ -1,17 +1,15 @@
-﻿using Cuemon.Collections.Generic;
-using Cuemon.Extensions.Xunit;
+﻿using Cuemon.Extensions.Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Commands;
 using Savvyio.Dispatchers;
 using Savvyio.Domain;
 using Savvyio.EventDriven;
-using Savvyio.Extensions.Assets;
-using Savvyio.Extensions.DependencyInjection;
+using Savvyio.Extensions.DependencyInjection.Assets;
 using Savvyio.Queries;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions
+namespace Savvyio.Extensions.DependencyInjection
 {
     public class ServiceCollectionExtensionsTest : Test
     {

@@ -1,6 +1,6 @@
 ﻿using Savvyio.EventDriven;
 
-namespace Savvyio.Extensions.Assets
+namespace Savvyio.Extensions.DependencyInjection.Assets
 {
     internal class TestIntegrationEvent : IntegrationEvent
     {

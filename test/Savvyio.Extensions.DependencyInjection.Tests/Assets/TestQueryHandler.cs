@@ -2,7 +2,7 @@
 using Savvyio.Handlers;
 using Savvyio.Queries;
 
-namespace Savvyio.Extensions.Assets
+namespace Savvyio.Extensions.DependencyInjection.Assets
 {
     internal class TestQueryHandler : QueryHandler
     {

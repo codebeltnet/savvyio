@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Cuemon.Threading;
-using Savvyio.Data;
 using Savvyio.Domain;
-using Savvyio.Extensions.DependencyInjection;
-using Savvyio.Extensions.DependencyInjection.Data;
 using Savvyio.Extensions.DependencyInjection.Domain;
 
-namespace Savvyio.Extensions.Assets
+namespace Savvyio.Extensions.DependencyInjection.Assets
 {
     public class FakeRepository<TEntity, TKey> : IPersistentRepository<TEntity, TKey> where TEntity : class, IIdentity<TKey>
     {

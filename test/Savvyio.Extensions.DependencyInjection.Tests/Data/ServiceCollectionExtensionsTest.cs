@@ -1,18 +1,17 @@
 ﻿using System;
 using Cuemon.Extensions.Xunit;
+using Cuemon.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Assets;
 using Savvyio.Assets.Domain;
 using Savvyio.Data;
 using Savvyio.Domain;
-using Savvyio.Extensions.Assets;
-using Savvyio.Extensions.DependencyInjection;
-using Savvyio.Extensions.DependencyInjection.Data;
+using Savvyio.Extensions.DependencyInjection.Assets;
 using Savvyio.Extensions.DependencyInjection.Domain;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions.Storage
+namespace Savvyio.Extensions.DependencyInjection.Data
 {
     public class ServiceCollectionExtensionsTest : Test
     {
@@ -28,24 +27,40 @@ namespace Savvyio.Extensions.Storage
             var sut2 = sut1.BuildServiceProvider();
 
             Assert.IsType<FakeDataStore>(sut2.GetRequiredService<IDataStore>());
-            Assert.IsType<FakeDataStore>(sut2.GetRequiredService<IUnitOfWork>());
-            Assert.Same(sut2.GetRequiredService<IDataStore>(), sut2.GetRequiredService<IUnitOfWork>());
         }
 
         [Fact]
-        public void AddEfCoreDataStore_ShouldAddDefaultImplementationWithMarker()
+        public void AddDataStore_ShouldAddDefaultImplementation_Implicit()
+        {
+            var sut1 = new ServiceCollection();
+            sut1.AddDataStore<FakeDataStore>();
+            var sut2 = sut1.BuildServiceProvider();
+
+            Assert.IsType<FakeDataStore>(sut2.GetRequiredService<IDataStore>());
+        }
+
+        [Fact]
+        public void AddDataStore_ShouldAddDefaultImplementationWithMarker()
+        {
+            var sut1 = new ServiceCollection();
+            sut1.AddDataStore<IDataStore<DbMarker>, FakeDataStore<DbMarker>, DbMarker>();
+            var sut2 = sut1.BuildServiceProvider();
+
+            Assert.IsType<FakeDataStore<DbMarker>>(sut2.GetRequiredService<IDataStore<DbMarker>>());
+        }
+
+        [Fact]
+        public void AddDataStore_ShouldAddDefaultImplementationWithMarker_Implicit()
         {
             var sut1 = new ServiceCollection();
             sut1.AddDataStore<FakeDataStore<DbMarker>>();
             var sut2 = sut1.BuildServiceProvider();
 
             Assert.IsType<FakeDataStore<DbMarker>>(sut2.GetRequiredService<IDataStore<DbMarker>>());
-            Assert.IsType<FakeDataStore<DbMarker>>(sut2.GetRequiredService<IUnitOfWork<DbMarker>>());
-            Assert.Same(sut2.GetRequiredService<IDataStore<DbMarker>>(), sut2.GetRequiredService<IUnitOfWork<DbMarker>>());
         }
 
         [Fact]
-        public void AddEfCoreRepository_ShouldAddManyImplementations()
+        public void AddRepository_ShouldAddManyImplementations()
         {
             var sut1 = new ServiceCollection();
             sut1.AddDataStore<FakeDataStore>();
@@ -58,7 +73,7 @@ namespace Savvyio.Extensions.Storage
         }
 
         [Fact]
-        public void AddEfCoreRepository_ShouldAddManyImplementationsWithMarkers()
+        public void AddRepository_ShouldAddManyImplementationsWithMarkers()
         {
             var sut1 = new ServiceCollection();
             sut1.AddDataStore<FakeDataStore<DbMarker>>();
@@ -78,7 +93,7 @@ namespace Savvyio.Extensions.Storage
         }
         
         [Fact]
-        public void AddEfCoreDataAccessObject_ShouldAddManyImplementations()
+        public void AddDataAccessObject_ShouldAddManyImplementations()
         {
             var sut1 = new ServiceCollection();
             sut1.AddDataStore<FakeDataStore>();
@@ -86,12 +101,12 @@ namespace Savvyio.Extensions.Storage
             sut1.AddDataAccessObject<FakeDataAccessObject<PlatformProvider>, PlatformProvider>();
             var sut2 = sut1.BuildServiceProvider();
 
-            Assert.IsType<FakeDataAccessObject<Account>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account>>());
-            Assert.IsType<FakeDataAccessObject<PlatformProvider>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider>>());
+            Assert.IsType<FakeDataAccessObject<Account>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, AsyncOptions>>());
+            Assert.IsType<FakeDataAccessObject<PlatformProvider>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, AsyncOptions>>());
         }
 
         [Fact]
-        public void AddEfCoreDataAccessObject_ShouldAddManyImplementationsWithMarkers()
+        public void AddDataAccessObject_ShouldAddManyImplementationsWithMarkers()
         {
             var sut1 = new ServiceCollection();
             sut1.AddDataStore<FakeDataStore<DbMarker>>();
@@ -102,12 +117,12 @@ namespace Savvyio.Extensions.Storage
             sut1.AddDataAccessObject<FakeDataAccessObject<PlatformProvider, AnotherDbMarker>, PlatformProvider>();
             var sut2 = sut1.BuildServiceProvider();
 
-            Assert.IsType<FakeDataAccessObject<Account, DbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, DbMarker>>());
-            Assert.IsType<FakeDataAccessObject<PlatformProvider, DbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, DbMarker>>());
-            Assert.IsType<FakeDataAccessObject<Account, AnotherDbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, AnotherDbMarker>>());
-            Assert.IsType<FakeDataAccessObject<PlatformProvider, AnotherDbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, AnotherDbMarker>>());
-            Assert.NotSame(sut2.GetRequiredService<IPersistentDataAccessObject<Account, DbMarker>>(), sut2.GetRequiredService<IPersistentDataAccessObject<Account, AnotherDbMarker>>());
-            Assert.NotSame(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, DbMarker>>(), sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, AnotherDbMarker>>());
+            Assert.IsType<FakeDataAccessObject<Account, DbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, AsyncOptions, DbMarker>>());
+            Assert.IsType<FakeDataAccessObject<PlatformProvider, DbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, AsyncOptions, DbMarker>>());
+            Assert.IsType<FakeDataAccessObject<Account, AnotherDbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, AsyncOptions, AnotherDbMarker>>());
+            Assert.IsType<FakeDataAccessObject<PlatformProvider, AnotherDbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, AsyncOptions, AnotherDbMarker>>());
+            Assert.NotSame(sut2.GetRequiredService<IPersistentDataAccessObject<Account, AsyncOptions, DbMarker>>(), sut2.GetRequiredService<IPersistentDataAccessObject<Account, AsyncOptions, AnotherDbMarker>>());
+            Assert.NotSame(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, AsyncOptions, DbMarker>>(), sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, AsyncOptions, AnotherDbMarker>>());
         }
     }
 }

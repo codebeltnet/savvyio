@@ -2,7 +2,7 @@
 using Savvyio.EventDriven;
 using Savvyio.Handlers;
 
-namespace Savvyio.Extensions.Assets
+namespace Savvyio.Extensions.DependencyInjection.Assets
 {
     internal class TestIntegrationEventHandler : IntegrationEventHandler
     {

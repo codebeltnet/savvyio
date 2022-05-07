@@ -4,12 +4,11 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Cuemon.Threading;
 using Savvyio.Data;
-using Savvyio.Extensions.DependencyInjection;
 using Savvyio.Extensions.DependencyInjection.Data;
 
-namespace Savvyio.Extensions.Assets
+namespace Savvyio.Extensions.DependencyInjection.Assets
 {
-    public class FakeDataAccessObject<T> : IPersistentDataAccessObject<T> where T : class
+    public class FakeDataAccessObject<T> : IPersistentDataAccessObject<T, AsyncOptions> where T : class
     {
         public FakeDataAccessObject(IDataStore ds)
         {
@@ -42,7 +41,7 @@ namespace Savvyio.Extensions.Assets
         }
     }
 
-    public class FakeDataAccessObject<T, TMarker> : FakeDataAccessObject<T>, IPersistentDataAccessObject<T, TMarker> where T : class
+    public class FakeDataAccessObject<T, TMarker> : FakeDataAccessObject<T>, IPersistentDataAccessObject<T, AsyncOptions, TMarker> where T : class
     {
         public FakeDataAccessObject(IDataStore<TMarker> ds) : base(ds)
         {
