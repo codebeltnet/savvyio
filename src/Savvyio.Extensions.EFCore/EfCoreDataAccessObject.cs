@@ -13,11 +13,11 @@ using Savvyio.Domain;
 namespace Savvyio.Extensions.EFCore
 {
     /// <summary>
-    /// Provides a default implementation of the <see cref="IPersistentDataAccessObject{T}"/> interface to serve as an abstraction layer before the actual I/O communication towards a data store using Microsoft Entity Framework Core.
+    /// Provides a default implementation of the <see cref="IPersistentDataAccessObject{T,TOptions}"/> interface to serve as an abstraction layer before the actual I/O communication towards a data store using Microsoft Entity Framework Core.
     /// </summary>
     /// <typeparam name="T">The type of the DTO.</typeparam>
-    /// <seealso cref="IPersistentDataAccessObject{T}" />
-    public class EfCoreDataAccessObject<T> : IPersistentDataAccessObject<T> where T : class
+    /// <seealso cref="IPersistentDataAccessObject{T,TOptions}" />
+    public class EfCoreDataAccessObject<T> : IPersistentDataAccessObject<T, AsyncOptions> where T : class
     {
         private readonly DbSet<T> _dbSet;
         private readonly IUnitOfWork _uow;

@@ -1,4 +1,6 @@
-﻿using Savvyio.Extensions.EFCore;
+﻿using Cuemon.Extensions.DependencyInjection;
+using Savvyio.Extensions.DependencyInjection.Domain;
+using Savvyio.Extensions.EFCore;
 
 namespace Savvyio.Extensions.DependencyInjection.EFCore
 {
@@ -8,7 +10,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
     /// <typeparam name="TMarker">The type used to mark the implementation that this data store represents. Optimized for Microsoft Dependency Injection.</typeparam>
     /// <seealso cref="IEfCoreDataStore" />
     /// <seealso cref="IDataStore{TMarker}"/>
-    public interface IEfCoreDataStore<TMarker> : IEfCoreDataStore, IDataStore<TMarker>
+    public interface IEfCoreDataStore<TMarker> : IEfCoreDataStore, IDataStore<TMarker>, IUnitOfWork<TMarker>
     {
     }
 }

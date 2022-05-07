@@ -21,11 +21,11 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
         /// <param name="setup">The <see cref="EfCoreDataStoreOptions" /> which need to be configured.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
+        /// <remarks>The implementation will be type forwarded accordingly.</remarks>
         public static IServiceCollection AddEfCoreDataStore(this IServiceCollection services, Action<EfCoreDataStoreOptions> setup)
         {
-            services.AddDataStore<IEfCoreDataStore, EfCoreDataStore>();
-            services.Configure(setup);
-            return services;
+            services.AddEfCoreDataStore<EfCoreDataStore>();
+            return services.Configure(setup);
         }
 
         /// <summary>
@@ -34,11 +34,11 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
         /// <param name="setup">The <see cref="EfCoreDataStoreOptions{TMarker}" /> which need to be configured.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
+        /// <remarks>The implementation will be type forwarded accordingly.</remarks>
         public static IServiceCollection AddEfCoreDataStore<TMarker>(this IServiceCollection services, Action<EfCoreDataStoreOptions<TMarker>> setup)
         {
-            services.AddDataStore<IEfCoreDataStore<TMarker>, EfCoreDataStore<TMarker>, TMarker>();
-            services.Configure(setup);
-            return services;
+            services.AddEfCoreDataStore<EfCoreDataStore<TMarker>>();
+            return services.Configure(setup);
         }
 
         /// <summary>
@@ -58,14 +58,17 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         {
             Validator.ThrowIfNull(services, nameof(services));
             var efCoreDataStoreType = typeof(IEfCoreDataStore);
+            var dataStoreType = typeof(IDataStore);
             var unitOfWorkType = typeof(IUnitOfWork);
             services.TryAddScoped<TImplementation>();
             if (typeof(TImplementation).TryGetDependencyInjectionMarker(out var markerType))
             {
                 efCoreDataStoreType = typeof(IEfCoreDataStore<>).MakeGenericType(markerType);
+                dataStoreType = typeof(IDataStore<>).MakeGenericType(markerType);
                 unitOfWorkType = typeof(IUnitOfWork<>).MakeGenericType(markerType);
             }
             services.TryAddScoped(efCoreDataStoreType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddScoped(dataStoreType, p => p.GetRequiredService<TImplementation>());
             services.TryAddScoped(unitOfWorkType, p => p.GetRequiredService<TImplementation>());
             return services;
         }

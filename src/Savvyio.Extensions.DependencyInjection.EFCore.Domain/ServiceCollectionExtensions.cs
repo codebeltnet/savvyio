@@ -22,7 +22,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain
         /// <remarks>The <see cref="EfCoreAggregateDataStore"/> will be type forwarded accordingly.</remarks>
         public static IServiceCollection AddEfCoreAggregateDataStore(this IServiceCollection services, Action<EfCoreDataStoreOptions> setup)
         {
-            services.AddDataStore<IEfCoreDataStore, EfCoreAggregateDataStore>();
+            services.AddEfCoreDataStore<EfCoreAggregateDataStore>();
             services.Configure(setup);
             return services;
         }
@@ -36,7 +36,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain
         /// <remarks>The <see cref="EfCoreAggregateDataStore{TMarker}"/> will be type forwarded accordingly.</remarks>
         public static IServiceCollection AddEfCoreAggregateDataStore<TMarker>(this IServiceCollection services, Action<EfCoreDataStoreOptions<TMarker>> setup)
         {
-            services.AddDataStore<IEfCoreDataStore<TMarker>, EfCoreAggregateDataStore<TMarker>, TMarker>();
+            services.AddEfCoreDataStore<EfCoreAggregateDataStore<TMarker>>();
             services.Configure(setup);
             return services;
         }
