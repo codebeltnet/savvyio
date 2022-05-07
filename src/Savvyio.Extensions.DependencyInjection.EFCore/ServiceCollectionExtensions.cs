@@ -53,8 +53,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         /// <seealso cref="IEfCoreDataStore{TMarker}"/>
         /// <seealso cref="IUnitOfWork"/>
         /// <seealso cref="IUnitOfWork{TMarker}"/>
-        public static IServiceCollection AddEfCoreDataStore<TImplementation>(this IServiceCollection services)
-            where TImplementation : class, IEfCoreDataStore
+        public static IServiceCollection AddEfCoreDataStore<TImplementation>(this IServiceCollection services) where TImplementation : class, IEfCoreDataStore
         {
             Validator.ThrowIfNull(services, nameof(services));
             var efCoreDataStoreType = typeof(IEfCoreDataStore);
@@ -81,8 +80,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
         /// <remarks>The <see cref="EfCoreRepository{TEntity,TKey}"/> will be type forwarded to: <see cref="IWritableRepository{TEntity,TKey}" />, <see cref="IReadableRepository{TEntity,TKey}" />, <see cref="ISearchableRepository{TEntity,TKey}" /> and <see cref="IDeletableRepository{TEntity,TKey}" />.</remarks>
         /// <seealso cref="EfCoreRepository{TEntity,TKey}"/>
-        public static IServiceCollection AddEfCoreRepository<TEntity, TKey>(this IServiceCollection services)
-            where TEntity : class, IIdentity<TKey>
+        public static IServiceCollection AddEfCoreRepository<TEntity, TKey>(this IServiceCollection services) where TEntity : class, IIdentity<TKey>
         {
             return services.AddRepository<EfCoreRepository<TEntity, TKey>, TEntity, TKey>();
         }
@@ -96,8 +94,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
         /// <remarks>The <see cref="EfCoreRepository{TEntity,TKey,TMarker}"/> will be type forwarded to: <see cref="IWritableRepository{TEntity,TKey,TMarker}" />, <see cref="IReadableRepository{TEntity,TKey,TMarker}" />, <see cref="ISearchableRepository{TEntity,TKey,TMarker}" /> and <see cref="IDeletableRepository{TEntity,TKey,TMarker}" />.</remarks>
         /// <seealso cref="EfCoreRepository{TEntity,TKey,TMarker}"/>
-        public static IServiceCollection AddEfCoreRepository<TEntity, TKey, TMarker>(this IServiceCollection services)
-            where TEntity : class, IIdentity<TKey>
+        public static IServiceCollection AddEfCoreRepository<TEntity, TKey, TMarker>(this IServiceCollection services) where TEntity : class, IIdentity<TKey>
         {
             return services.AddRepository<EfCoreRepository<TEntity, TKey, TMarker>, TEntity, TKey>();
         }
@@ -108,9 +105,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         /// <typeparam name="T">The type of the DTO.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
-        /// <seealso cref="EfCoreDataAccessObject{T}"/>
-        public static IServiceCollection AddEfCoreDataAccessObject<T>(this IServiceCollection services)
-            where T : class
+        public static IServiceCollection AddEfCoreDataAccessObject<T>(this IServiceCollection services) where T : class
         {
             return services.AddDataAccessObject<EfCoreDataAccessObject<T>, T>();
         }
@@ -122,9 +117,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         /// <typeparam name="TMarker">The type used to mark the implementation that this data access object represents. Optimized for Microsoft Dependency Injection.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
-        /// <seealso cref="EfCoreDataAccessObject{T,TMarker}"/>
-        public static IServiceCollection AddEfCoreDataAccessObject<T, TMarker>(this IServiceCollection services)
-            where T : class
+        public static IServiceCollection AddEfCoreDataAccessObject<T, TMarker>(this IServiceCollection services) where T : class
         {
             return services.AddDataAccessObject<EfCoreDataAccessObject<T, TMarker>, T>();
         }
