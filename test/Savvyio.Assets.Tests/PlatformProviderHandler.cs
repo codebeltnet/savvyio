@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Threading.Tasks;
 using Cuemon.Extensions.Xunit;
+using Cuemon.Threading;
 using Savvyio.Assets.Commands;
 using Savvyio.Assets.Domain;
 using Savvyio.Assets.Events;
@@ -17,10 +18,10 @@ namespace Savvyio.Assets
     {
         private readonly IMediator _mediator;
         private readonly ITestOutputHelper _output;
-        private readonly IPersistentDataAccessObject<PlatformProvider, PlatformProvider> _activeRecordRepository;
+        private readonly IPersistentDataAccessObject<PlatformProvider, AsyncOptions, PlatformProvider> _activeRecordRepository;
         private readonly ITestStore<IIntegrationEvent> _testStore;
 
-        public PlatformProviderHandler(IMediator mediator, ITestOutputHelper output, ITestStore<IIntegrationEvent> testStore, IPersistentDataAccessObject<PlatformProvider, PlatformProvider> activeRecordRepository)
+        public PlatformProviderHandler(IMediator mediator, ITestOutputHelper output, ITestStore<IIntegrationEvent> testStore, IPersistentDataAccessObject<PlatformProvider, AsyncOptions, PlatformProvider> activeRecordRepository)
         {
             _mediator = mediator;
             _output = output;
