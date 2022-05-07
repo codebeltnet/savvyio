@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection\Savvyio.Extensions.DependencyInjection.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.Dapper\Savvyio.Extensions.Dapper.csproj" />
+  </ItemGroup>
+
+</Project>

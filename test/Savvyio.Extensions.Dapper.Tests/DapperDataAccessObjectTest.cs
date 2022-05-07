@@ -39,6 +39,10 @@ namespace Savvyio.Extensions.Dapper
             
             var sut3 = await sut2.ReadAsync(a => a.PlatformProviderId == id, o => o.CommandText = "SELECT * FROM Account");
 
+            sut2.Dispose();
+
+            Assert.True(sut1.Disposed, "sut1.Disposed");
+            Assert.True(sut2.Disposed, "sut2.Disposed");
             Assert.Equal(id, sut3.PlatformProviderId);
             Assert.Equal(name, sut3.FullName);
             Assert.Equal(email, sut3.EmailAddress);
@@ -72,6 +76,10 @@ namespace Savvyio.Extensions.Dapper
 
             var sut4 = await sut2.ReadAsync(a => a.PlatformProviderId == id, o => o.CommandText = "SELECT * FROM Account");
 
+            sut2.Dispose();
+
+            Assert.True(sut1.Disposed, "sut1.Disposed");
+            Assert.True(sut2.Disposed, "sut2.Disposed");
             Assert.NotNull(sut3);
             Assert.Null(sut4);
         }
@@ -107,6 +115,10 @@ namespace Savvyio.Extensions.Dapper
 
             var sut4 = await sut2.ReadAsync(a => a.PlatformProviderId == id, o => o.CommandText = "SELECT * FROM Account");
 
+            sut2.Dispose();
+
+            Assert.True(sut1.Disposed, "sut1.Disposed");
+            Assert.True(sut2.Disposed, "sut2.Disposed");
             Assert.NotEqual(name, sut3.FullName);
             Assert.Equal(newName, sut4.FullName);
         }
