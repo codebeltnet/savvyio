@@ -89,7 +89,7 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
 
         void IAggregateRoot<ITracedDomainEvent>.RemoveAllEvents()
         {
-            throw new NotImplementedException();
+            // empty as we do not want to clear events due to dehydrate/rehydrate
         }
     }
 }
