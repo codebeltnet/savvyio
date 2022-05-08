@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cuemon.Extensions;
 using Cuemon.Threading;
 using Microsoft.EntityFrameworkCore;
 using Savvyio.Domain;
@@ -48,9 +49,9 @@ namespace Savvyio.Extensions.EFCore.Domain
             var entries = context.ChangeTracker.Entries<IAggregateRoot<IDomainEvent>>().Where(entry => entry.Entity.Events.Any()).ToList();
             foreach (var aggregate in entries.Select(entry => entry.Entity))
             {
-                var events = aggregate.Events;
+                var events = aggregate.Events.ToList();
                 var eventsType = events.First().GetType();
-                if (typeof(IDomainEvent) == eventsType) { aggregate.RemoveAllEvents(); }
+                if (eventsType.HasInterfaces(typeof(IDomainEvent))) { aggregate.RemoveAllEvents(); }
                 foreach (var e in events)
                 {
                     yield return e.MergeMetadata(aggregate);
