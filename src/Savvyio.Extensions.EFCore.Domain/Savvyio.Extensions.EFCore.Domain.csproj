@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Extensions.IO" Version="6.4.0" />
-    <PackageReference Include="Cuemon.Extensions.Newtonsoft.Json" Version="6.4.0" />
+    <PackageReference Include="Cuemon.Extensions.IO" Version="6.4.1" />
+    <PackageReference Include="Cuemon.Extensions.Newtonsoft.Json" Version="6.4.1" />
   </ItemGroup>
 
   <ItemGroup>
