@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Cuemon;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Commands;
+using Savvyio.Assets.Events;
 using Savvyio.Assets.Queries;
 using Savvyio.Commands;
 using Savvyio.Handlers;
@@ -37,16 +38,16 @@ namespace Savvyio.Assets
 
         IRequestReplyActivator<IQuery> IRequestReplyHandler<IQuery>.Delegates => HandlerFactory.CreateRequestReply<IQuery>(registry =>
         {
-            registry.Register<GetAccount, string>(ga =>
+            registry.Register<GetAccount, AccountCreated>(a =>
             {
-                _queryTestStore.Add(ga);
-                return $"{ga.Id}___{Generate.RandomString(16)}";
+                _queryTestStore.Add(a);
+                return new AccountCreated(a.Id, $"{a.Id}___{Generate.RandomString(16)}", $"{a.Id}@no.where");
             });
-            registry.RegisterAsync<GetAccount, string>(async ga =>
+            registry.RegisterAsync<GetAccount, AccountCreated>(async a =>
             {
                 await Task.Delay(TimeSpan.FromSeconds(0.5));
-                _queryTestStore.Add(ga);
-                return $"{ga.Id}___{Generate.RandomString(16)}";
+                _queryTestStore.Add(a);
+                return new AccountCreated(a.Id, $"{a.Id}___{Generate.RandomString(16)}", $"{a.Id}@no.where");
             });
         });
     }

@@ -17,7 +17,7 @@ namespace Savvyio.Commands
         [Fact]
         public async Task CommandHandler_Ensure_Initialization_Defaults()
         {
-            var sut = new DefaultCommandHandler(new InMemUnitTestStore<string>());
+            var sut = new DefaultCommandHandler(new InMemoryTestStore<string>());
 
             Assert.IsAssignableFrom<CommandHandler>(sut);
             Assert.IsAssignableFrom<ICommandHandler>(sut);

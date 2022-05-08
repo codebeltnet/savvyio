@@ -7,11 +7,11 @@ using Savvyio.Extensions.DependencyInjection.EFCore.Domain;
 
 namespace Savvyio.Assets
 {
-    public class CustomEfCoreDataStore : EfCoreAggregateDataStore<DbMarker>
+    public class CustomEfCoreDataStore : EfCoreAggregateDataStore<Account>
     {
         public CustomEfCoreDataStore(IDomainEventDispatcher dispatcher) : base(dispatcher, o =>
         {
-            o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(DbMarker)).EnableDetailedErrors().LogTo(Console.WriteLine);
+            o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(Account)).EnableDetailedErrors().LogTo(Console.WriteLine);
             o.ModelConstructor = mb =>
             {
                 mb.AddAccount();
@@ -20,6 +20,6 @@ namespace Savvyio.Assets
         {
         }
 
-        public IPersistentRepository<Account, long, DbMarker> Account => new EfCoreAggregateRepository<Account, long, DbMarker>(this);
+        public IPersistentRepository<Account, long, Account> Account => new EfCoreAggregateRepository<Account, long, Account>(this);
     }
 }

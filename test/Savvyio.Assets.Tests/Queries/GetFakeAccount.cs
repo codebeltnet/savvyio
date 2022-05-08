@@ -3,9 +3,9 @@ using Savvyio.Queries;
 
 namespace Savvyio.Assets.Queries
 {
-    public class GetAccount : Query<AccountCreated>
+    public class GetFakeAccount : Query<AccountCreated>
     {
-        public GetAccount(long id)
+        public GetFakeAccount(long id)
         {
             Id = id;
         }

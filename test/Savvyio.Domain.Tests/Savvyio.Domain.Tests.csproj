@@ -8,5 +8,5 @@
     <ProjectReference Include="..\..\src\Savvyio.Domain\Savvyio.Domain.csproj" />
     <ProjectReference Include="..\Savvyio.Assets.Tests\Savvyio.Assets.Tests.csproj" />
   </ItemGroup>
-  
+
 </Project>

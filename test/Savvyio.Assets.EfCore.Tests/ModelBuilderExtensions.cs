@@ -25,6 +25,8 @@ namespace Savvyio.Assets
                 entity.Property(x => x.FullName)
                     .HasColumnName("fullName")
                     .HasColumnType("varchar(256)");
+                entity.Property(x => x.Metadata)
+                    .HasConversion(ap => JsonConvert.SerializeObject(ap), ap => JsonConvert.DeserializeObject<MetadataDictionary>(ap));
             });
         }
 
@@ -47,6 +49,8 @@ namespace Savvyio.Assets
                 entity.Property(x => x.Description)
                     .HasColumnName("description")
                     .HasColumnType("varchar(256)");
+                entity.Property(x => x.Metadata)
+                    .HasConversion(ap => JsonConvert.SerializeObject(ap), ap => JsonConvert.DeserializeObject<MetadataDictionary>(ap));
             });
         }
     }

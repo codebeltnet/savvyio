@@ -1,8 +1,12 @@
-﻿using System.Text.Json;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Domain.Events;
+using Savvyio.Assets.Events;
+using Savvyio.Data;
 using Savvyio.Domain;
+using Savvyio.Extensions.Dapper;
 using Savvyio.Handlers;
 using Xunit.Abstractions;
 
@@ -13,12 +17,14 @@ namespace Savvyio.Assets.Domain.Handlers
         private readonly ITestOutputHelper _output;
         private readonly ITestStore<IDomainEvent> _testStore;
         private readonly IDomainEventDispatcher _dispatcher;
+        private readonly IReadableDataAccessObject<AccountCreated, DapperOptions> _accountDao;
 
-        public AccountDomainEventHandler(ITestOutputHelper output = null, ITestStore<IDomainEvent> testStore = null, IDomainEventDispatcher dispatcher = null)
+        public AccountDomainEventHandler(ITestOutputHelper output = null, ITestStore<IDomainEvent> testStore = null, IDomainEventDispatcher dispatcher = null, IReadableDataAccessObject<AccountCreated, DapperOptions> accountDao = null)
         {
             _output = output;
             _testStore = testStore;
             _dispatcher = dispatcher;
+            _accountDao = accountDao;
         }
 
         protected override void RegisterDelegates(IFireForgetRegistry<IDomainEvent> handlers)
@@ -66,12 +72,22 @@ namespace Savvyio.Assets.Domain.Handlers
             return Task.CompletedTask;
         }
 
-        private Task OnInProcAccountInitiated(AccountInitiated e)
+        private async Task OnInProcAccountInitiated(AccountInitiated e)
         {
+            if (_accountDao != null)
+            {
+                var dao = await _accountDao.ReadAsync(null, o =>
+                {
+                    o.CommandText = "SELECT * FROM Account WHERE EmailAddress = @EmailAddress";
+                    o.Parameters = new { e.EmailAddress };
+                }).ConfigureAwait(false);
+
+                if (dao != null) { throw new ValidationException("Email address has already been registered."); }
+            }
+
             _testStore?.Add(e);
             _output?.WriteLines($"DE {nameof(OnInProcAccountInitiated)}", JsonSerializer.Serialize(e));
-            _dispatcher.RaiseAsync(new AccountInitiatedChained().MergeMetadata(e).SetCausationId(e.GetEventId()));
-            return Task.CompletedTask;
+            await _dispatcher.RaiseAsync(new AccountInitiatedChained().MergeMetadata(e).SetCausationId(e.GetEventId())).ConfigureAwait(false);
         }
     }
 }

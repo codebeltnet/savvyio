@@ -92,7 +92,6 @@ namespace Savvyio.Extensions.DependencyInjection
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
         public static IServiceCollection AddSavvyIO(this IServiceCollection services, Action<SavvyioDependencyInjectionOptions> setup = null)
         {
-            services.AddServiceLocator();
             var options = setup.Configure();
             if (options.AutomaticDispatcherDiscovery) { options.AddDispatchers(options.AssembliesToScan?.ToArray()); }
             if (options.AutomaticHandlerDiscovery) { options.AddHandlers(options.AssembliesToScan?.ToArray()); }
@@ -143,7 +142,7 @@ namespace Savvyio.Extensions.DependencyInjection
                 }
             }
 
-            return services;
+            return services.AddServiceLocator();
         }
 
         private static bool MemberIsMethodOrLambdaWithHandlerTypeInterface(MemberInfo m, Type handlerTypeInterfaceModel)

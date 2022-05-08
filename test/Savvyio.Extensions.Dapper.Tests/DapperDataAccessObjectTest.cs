@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Cuemon.Extensions.Xunit;
-using Dapper;
 using Microsoft.Data.Sqlite;
+using Savvyio.Assets;
 using Savvyio.Assets.Domain;
 using Xunit;
 using Xunit.Abstractions;
@@ -13,7 +13,7 @@ namespace Savvyio.Extensions.Dapper
     {
         public DapperDataAccessObjectTest(ITestOutputHelper output) : base(output)
         {
-            SqlMapper.AddTypeHandler(new GuidHandler());
+            
         }
 
         [Fact]
@@ -25,25 +25,18 @@ namespace Savvyio.Extensions.Dapper
 
             var sut1 = new DapperDataStore(o =>
             {
-                o.ConnectionFactory = () =>
-                {
-                    var cnn = new SqliteConnection("Data Source=:memory:");
-                    cnn.Open();
-                    cnn.ExecuteAsync("CREATE TABLE Account (Id INTEGER PRIMARY KEY, PlatformProviderId VARCHAR(36), FullName VARCHAR(255), EmailAddress VARCHAR(512))");
-                    return cnn;
-                };
+                o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable();
             });
 
             var sut2 = new DapperDataAccessObject<Account>(sut1);
-            await sut2.CreateAsync(new Account(id, name, email), o => o.CommandText = "INSERT INTO Account (PlatformProviderId, FullName, EmailAddress) VALUES (@PlatformProviderId, @FullName, @EmailAddress)");
+            await sut2.CreateAsync(new Account(id, name, email), o => o.CommandText = "INSERT INTO Account (FullName, EmailAddress) VALUES (@FullName, @EmailAddress)");
             
-            var sut3 = await sut2.ReadAsync(a => a.PlatformProviderId == id, o => o.CommandText = "SELECT * FROM Account");
+            var sut3 = await sut2.ReadAsync(a => a.Id == 1, o => o.CommandText = "SELECT * FROM Account");
 
             sut2.Dispose();
 
             Assert.True(sut1.Disposed, "sut1.Disposed");
             Assert.True(sut2.Disposed, "sut2.Disposed");
-            Assert.Equal(id, sut3.PlatformProviderId);
             Assert.Equal(name, sut3.FullName);
             Assert.Equal(email, sut3.EmailAddress);
         }
@@ -58,23 +51,17 @@ namespace Savvyio.Extensions.Dapper
 
             var sut1 = new DapperDataStore(o =>
             {
-                o.ConnectionFactory = () =>
-                {
-                    var cnn = new SqliteConnection("Data Source=:memory:");
-                    cnn.Open();
-                    cnn.ExecuteAsync("CREATE TABLE Account (Id INTEGER PRIMARY KEY, PlatformProviderId VARCHAR(36), FullName VARCHAR(255), EmailAddress VARCHAR(512))");
-                    return cnn;
-                };
+                o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable();
             });
 
             var sut2 = new DapperDataAccessObject<Account>(sut1);
-            await sut2.CreateAsync(dto, o => o.CommandText = "INSERT INTO Account (PlatformProviderId, FullName, EmailAddress) VALUES (@PlatformProviderId, @FullName, @EmailAddress)");
+            await sut2.CreateAsync(dto, o => o.CommandText = "INSERT INTO Account (FullName, EmailAddress) VALUES (@FullName, @EmailAddress)");
             
-            var sut3 = await sut2.ReadAsync(a => a.PlatformProviderId == id, o => o.CommandText = "SELECT * FROM Account");
+            var sut3 = await sut2.ReadAsync(a => a.Id == 1, o => o.CommandText = "SELECT * FROM Account");
 
             await sut2.DeleteAsync(sut3, o => o.CommandText = "DELETE FROM Account WHERE Id = @Id");
 
-            var sut4 = await sut2.ReadAsync(a => a.PlatformProviderId == id, o => o.CommandText = "SELECT * FROM Account");
+            var sut4 = await sut2.ReadAsync(null, o => o.CommandText = "SELECT * FROM Account");
 
             sut2.Dispose();
 
@@ -95,25 +82,19 @@ namespace Savvyio.Extensions.Dapper
 
             var sut1 = new DapperDataStore(o =>
             {
-                o.ConnectionFactory = () =>
-                {
-                    var cnn = new SqliteConnection("Data Source=:memory:");
-                    cnn.Open();
-                    cnn.ExecuteAsync("CREATE TABLE Account (Id INTEGER PRIMARY KEY, PlatformProviderId VARCHAR(36), FullName VARCHAR(255), EmailAddress VARCHAR(512))");
-                    return cnn;
-                };
+                o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable();
             });
 
             var sut2 = new DapperDataAccessObject<Account>(sut1);
-            await sut2.CreateAsync(dto, o => o.CommandText = "INSERT INTO Account (PlatformProviderId, FullName, EmailAddress) VALUES (@PlatformProviderId, @FullName, @EmailAddress)");
+            await sut2.CreateAsync(dto, o => o.CommandText = "INSERT INTO Account (FullName, EmailAddress) VALUES (@FullName, @EmailAddress)");
             
-            var sut3 = await sut2.ReadAsync(a => a.PlatformProviderId == id, o => o.CommandText = "SELECT * FROM Account");
+            var sut3 = await sut2.ReadAsync(a => a.Id == 1, o => o.CommandText = "SELECT * FROM Account");
 
             sut3.ChangeFullName(newName);
 
-            await sut2.UpdateAsync(sut3, o => o.CommandText = "UPDATE Account SET FullName = @FullName");
+            await sut2.UpdateAsync(sut3, o => o.CommandText = "UPDATE Account SET FullName = @FullName WHERE Id = @Id");
 
-            var sut4 = await sut2.ReadAsync(a => a.PlatformProviderId == id, o => o.CommandText = "SELECT * FROM Account");
+            var sut4 = await sut2.ReadAsync(a => a.Id == sut3.Id, o => o.CommandText = "SELECT * FROM Account");
 
             sut2.Dispose();
 

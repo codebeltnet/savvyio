@@ -2,7 +2,7 @@
 using System.Data;
 using Dapper;
 
-namespace Savvyio.Extensions.Dapper
+namespace Savvyio.Assets
 {
     public class GuidHandler : SqlMapper.TypeHandler<Guid>
     {

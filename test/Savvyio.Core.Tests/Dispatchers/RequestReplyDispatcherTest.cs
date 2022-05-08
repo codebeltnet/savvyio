@@ -35,7 +35,7 @@ namespace Savvyio.Dispatchers
         {
             var sc = new ServiceCollection()
                 .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(RequestReplyDispatcherTest).Assembly, typeof(IQuery).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery())
-                .AddScoped<ITestStore<IQuery>, InMemUnitTestStore<IQuery>>();
+                .AddScoped<ITestStore<IQuery>, InMemoryTestStore<IQuery>>();
             
             var sp = sc.BuildServiceProvider();
             var sut = new QueryDispatcher(sp.GetRequiredService<IServiceLocator>());
@@ -44,8 +44,8 @@ namespace Savvyio.Dispatchers
             
             var result = sut.Query(ga);
 
-            Assert.NotEmpty(result);
-            Assert.StartsWith(ga.Id.ToString(), result);
+            Assert.NotNull(result);
+            Assert.Equal(ga.Id, result.Id);
             Assert.Equal(ga.Id, cs.QueryFor<GetAccount>().Single().Id);
         }
 
@@ -64,7 +64,7 @@ namespace Savvyio.Dispatchers
         {
             var sc = new ServiceCollection()
                 .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(RequestReplyDispatcherTest).Assembly, typeof(IQuery).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery())
-                .AddScoped<ITestStore<IQuery>, InMemUnitTestStore<IQuery>>();
+                .AddScoped<ITestStore<IQuery>, InMemoryTestStore<IQuery>>();
             
             var sp = sc.BuildServiceProvider();
             var sut = new QueryDispatcher(sp.GetRequiredService<IServiceLocator>());
@@ -73,8 +73,8 @@ namespace Savvyio.Dispatchers
             
             var result = await sut.QueryAsync(ga);
 
-            Assert.NotEmpty(result);
-            Assert.StartsWith(ga.Id.ToString(), result);
+            Assert.NotNull(result);
+            Assert.StartsWith(ga.Id.ToString(), result.EmailAddress);
             Assert.Equal(ga.Id, cs.QueryFor<GetAccount>().Single().Id);
         }
     }

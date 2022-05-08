@@ -36,7 +36,7 @@ namespace Savvyio.Dispatchers
         {
             var sc = new ServiceCollection()
                 .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(FireForgetDispatcherTest).Assembly, typeof(ICommand).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery())
-                .AddScoped<ITestStore<ICommand>, InMemUnitTestStore<ICommand>>();
+                .AddScoped<ITestStore<ICommand>, InMemoryTestStore<ICommand>>();
             
             var sp = sc.BuildServiceProvider();
             var sut = new CommandDispatcher(sp.GetRequiredService<IServiceLocator>());
@@ -65,7 +65,7 @@ namespace Savvyio.Dispatchers
         {
             var sc = new ServiceCollection()
                 .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(FireForgetDispatcherTest).Assembly, typeof(ICommand).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery())
-                .AddScoped<ITestStore<ICommand>, InMemUnitTestStore<ICommand>>();
+                .AddScoped<ITestStore<ICommand>, InMemoryTestStore<ICommand>>();
             
             var sp = sc.BuildServiceProvider();
             var sut = new CommandDispatcher(sp.GetRequiredService<IServiceLocator>());

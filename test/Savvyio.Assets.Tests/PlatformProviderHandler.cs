@@ -21,7 +21,7 @@ namespace Savvyio.Assets
         private readonly IPersistentDataAccessObject<PlatformProvider, AsyncOptions, PlatformProvider> _activeRecordRepository;
         private readonly ITestStore<IIntegrationEvent> _testStore;
 
-        public PlatformProviderHandler(IMediator mediator, ITestOutputHelper output, ITestStore<IIntegrationEvent> testStore, IPersistentDataAccessObject<PlatformProvider, AsyncOptions, PlatformProvider> activeRecordRepository)
+        public PlatformProviderHandler(IMediator mediator = null, ITestOutputHelper output = null, ITestStore<IIntegrationEvent> testStore = null, IPersistentDataAccessObject<PlatformProvider, AsyncOptions, PlatformProvider> activeRecordRepository = null)
         {
             _mediator = mediator;
             _output = output;

@@ -29,7 +29,7 @@ namespace Savvyio.Domain
         {
             var sc = new ServiceCollection()
                 .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(DomainEventDispatcher).Assembly, typeof(DomainEventDispatcherExtensionsTest).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery())
-                .AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
+                .AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
 
             var firstName = "   Michael";
             var lastName = "Mortensen   ";
@@ -57,7 +57,7 @@ namespace Savvyio.Domain
         {
             var sc = new ServiceCollection()
                 .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(DomainEventDispatcher).Assembly, typeof(DomainEventDispatcherExtensionsTest).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery())
-                .AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
+                .AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
 
             var sp = sc.BuildServiceProvider();
             var sut = new DomainEventDispatcher(sp.GetRequiredService<IServiceLocator>());
@@ -104,7 +104,7 @@ namespace Savvyio.Domain
         {
             var sc = new ServiceCollection()
                 .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(DomainEventDispatcher).Assembly, typeof(DomainEventDispatcherExtensionsTest).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery())
-                .AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
+                .AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
 
             var firstName = "   Michael";
             var lastName = "Mortensen   ";
@@ -132,7 +132,7 @@ namespace Savvyio.Domain
         {
             var sc = new ServiceCollection()
                 .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(DomainEventDispatcher).Assembly, typeof(DomainEventDispatcherExtensionsTest).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery())
-                .AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
+                .AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
 
             var sp = sc.BuildServiceProvider();
             var sut = new DomainEventDispatcher(sp.GetRequiredService<IServiceLocator>());

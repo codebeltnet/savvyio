@@ -85,7 +85,7 @@ namespace Savvyio.Domain.EventSourcing.Tests
                 };
             });
             sc.AddEfCoreTracedAggregateRepository<TracedAccount, Guid>();
-            sc.AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
+            sc.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
             
             var sp = sc.BuildServiceProvider();
 

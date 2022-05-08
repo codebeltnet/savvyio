@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Cuemon.Extensions.Xunit;
-using Dapper;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
 using Xunit;

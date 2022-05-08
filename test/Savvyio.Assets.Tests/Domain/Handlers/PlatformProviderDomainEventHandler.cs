@@ -13,7 +13,7 @@ namespace Savvyio.Assets.Domain.Handlers
         private readonly ITestOutputHelper _output;
         private readonly ITestStore<IDomainEvent> _testStore;
 
-        public PlatformProviderDomainEventHandler(ITestOutputHelper output, ITestStore<IDomainEvent> testStore)
+        public PlatformProviderDomainEventHandler(ITestOutputHelper output = null, ITestStore<IDomainEvent> testStore = null)
         {
             _output = output;
             _testStore = testStore;

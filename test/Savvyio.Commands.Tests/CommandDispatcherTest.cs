@@ -34,7 +34,7 @@ namespace Savvyio.Commands
         [Fact]
         public async Task CommandDispatcher_ShouldCommit_DefaultCommand()
         {
-            var sp = new ServiceCollection().AddServiceLocator().AddTransient<ICommandHandler, DefaultCommandHandler>().AddSingleton<ITestStore<string>, InMemUnitTestStore<string>>().BuildServiceProvider();
+            var sp = new ServiceCollection().AddServiceLocator().AddTransient<ICommandHandler, DefaultCommandHandler>().AddSingleton<ITestStore<string>, InMemoryTestStore<string>>().BuildServiceProvider();
             var sut = new CommandDispatcher(sp.GetRequiredService<IServiceLocator>());
             var ts = sp.GetRequiredService<ITestStore<string>>();
 

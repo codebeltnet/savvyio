@@ -5,6 +5,7 @@ using Cuemon.Extensions.Xunit;
 using Cuemon.Extensions.Xunit.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Savvyio.Assets;
 using Savvyio.Assets.Commands;
 using Savvyio.Assets.Domain;
@@ -67,7 +68,7 @@ namespace Savvyio.Extensions
             using (var host = GenericHostTestFactory.CreateGenericHostTest(services =>
             {
                 services.AddSingleton(TestOutput);
-                services.AddEfCoreRepository<Account, long, DbMarker>();
+                services.AddEfCoreRepository<Account, long, Account>();
                 services.AddEfCoreDataAccessObject<PlatformProvider, PlatformProvider>();
                 services.AddEfCoreDataStore<CustomEfCoreDataStore>();
                 services.AddEfCoreDataStore<PlatformProvider>(o =>
@@ -76,8 +77,8 @@ namespace Savvyio.Extensions
                     o.ModelConstructor = mb => mb.AddPlatformProvider();
                 });
                 services.AddSavvyIO(o => o.EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery().EnableHandlerServicesDescriptor().AddMediator<Mediator>());
-                services.AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
-                services.AddScoped<ITestStore<IIntegrationEvent>, InMemUnitTestStore<IIntegrationEvent>>();
+                services.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
+                services.AddScoped<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
             }))
             {
                 var mediator = host.ServiceProvider.GetRequiredService<IMediator>();
@@ -117,8 +118,8 @@ namespace Savvyio.Extensions
                 {
                     o.AddMediator<Mediator>().EnableHandlerServicesDescriptor().EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery();
                 });
-                services.AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
-                services.AddScoped<ITestStore<IIntegrationEvent>, InMemUnitTestStore<IIntegrationEvent>>();
+                services.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
+                services.AddScoped<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
             }))
             {
                 var mediator = host.ServiceProvider.GetRequiredService<IMediator>();
@@ -151,8 +152,8 @@ namespace Savvyio.Extensions
                        services.AddEfCoreDataStore<Account>(o => o.ModelConstructor = builder => builder.AddAccount());
                        services.AddEfCoreDataStore<PlatformProvider>(o => o.ModelConstructor = builder => builder.AddPlatformProvider());
                        services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery());
-                       services.AddScoped<ITestStore<IDomainEvent>, InMemUnitTestStore<IDomainEvent>>();
-                       services.AddScoped<ITestStore<IIntegrationEvent>, InMemUnitTestStore<IIntegrationEvent>>();
+                       services.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
+                       services.AddScoped<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
                    }))
             {
                 var mediator = host.ServiceProvider.GetRequiredService<IQueryDispatcher>();
@@ -162,12 +163,11 @@ namespace Savvyio.Extensions
 
                 TestOutput.WriteLine(descriptor.ToString());
 
-                var id = Guid.NewGuid();
-                var clientProvidedCorrelationId = Guid.NewGuid().ToString("N");
+                var result = await mediator.QueryAsync(new GetFakeAccount(10));
 
-                var result = await mediator.QueryAsync(new GetAccount(10));
+                TestOutput.WriteLine(JsonConvert.SerializeObject(result));
 
-                TestOutput.WriteLine(result);
+                Assert.Equal(10, result.Id);
             }
         }
     }

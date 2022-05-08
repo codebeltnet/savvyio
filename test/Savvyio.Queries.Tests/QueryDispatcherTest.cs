@@ -34,7 +34,7 @@ namespace Savvyio.Queries
         [Fact]
         public async Task QueryDispatcher_ShouldQuery_DefaultQuery()
         {
-            var sp = new ServiceCollection().AddServiceLocator().AddTransient<IQueryHandler, DefaultQueryHandler>().AddSingleton<ITestStore<string>, InMemUnitTestStore<string>>().BuildServiceProvider();
+            var sp = new ServiceCollection().AddServiceLocator().AddTransient<IQueryHandler, DefaultQueryHandler>().AddSingleton<ITestStore<string>, InMemoryTestStore<string>>().BuildServiceProvider();
             var sut = new QueryDispatcher(sp.GetRequiredService<IServiceLocator>());
             var ts = sp.GetRequiredService<ITestStore<string>>();
 
