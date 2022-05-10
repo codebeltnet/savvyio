@@ -104,7 +104,7 @@ namespace Savvyio
                 Assert.Equal(entity.FullName, daos.Single(ac => ac.Id == entity.Id).FullName);
             }
 
-            Assert.Equal(2, entities.Count());
+            Assert.Equal(2, entities.Count);
             Assert.Equal(2, daos.Count);
         }
 

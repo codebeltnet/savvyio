@@ -1,5 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <Description>Extend the Savvy I/O support for Microsoft Dependency Injection with Dapper implementation.</Description>
+    <PackageTags>dapper di depedency-injection marker data-store dao data-access-object</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection\Savvyio.Extensions.DependencyInjection.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.Dapper\Savvyio.Extensions.Dapper.csproj" />

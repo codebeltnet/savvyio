@@ -18,7 +18,7 @@
     <Copyright>Copyright © Geekle 2021-2022. All rights reserved.</Copyright>
     <Authors>gimlichael</Authors>
     <Company>Geekle</Company>
-    <Product>Savvy IO</Product>
+    <Product>Savvy I/O</Product>
     <PackageIcon>icon.png</PackageIcon>
     <PackageProjectUrl>https://www.savvyio.net/</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -46,7 +46,7 @@
   <ItemGroup Condition="'$(IsTestProject)' == 'false'">
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all"/>
     <PackageReference Include="MinVer" Version="3.1.0" PrivateAssets="all" />
-    <None Include="..\..\.nuget\icon.png" Pack="true" Visible="false" PackagePath="icon.png" />
+    <None Include="..\..\.nuget\$(MSBuildProjectName)\icon.png" Pack="true" Visible="false" PackagePath="\" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(IsTestProject)' == 'true'">

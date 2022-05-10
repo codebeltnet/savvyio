@@ -43,14 +43,13 @@ namespace Savvyio.Assets
             var account = new Account(c.PlatformProviderId, c.FullName, c.EmailAddress).MergeMetadata(c);
 
             // check unique email
-            //await _mediator.RaiseManyAsync(account).ConfigureAwait(false);
-
+            // through domain event - look at OnInProcAccountInitiated in Savvyio.Assets.Domain.Handlers.AccountDomainEventHandler
             try
             {
                 _accountRepository.Add(account);
                 await _uow.SaveChangesAsync(); // store in db
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 _accountRepository.Remove(account); // undo add
                 throw;

@@ -3,6 +3,8 @@
   <PropertyGroup>
     <RootNamespace>Savvyio</RootNamespace>
     <AssemblyName>Savvyio</AssemblyName>
+    <Description>Provides the fundamental abstractions and classes for supporting a complete flow of DDD, CQRS and Event Sourcing concepts.</Description>
+    <PackageTags>ddd domain-driven-design dispatchers dispatcher data-store repository dao data-access-object handler handlers fire-forget-handler request-reply-handler message-exchange-pattern request metadata</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

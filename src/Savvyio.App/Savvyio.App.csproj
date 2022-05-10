@@ -3,7 +3,7 @@
   <PropertyGroup>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IncludeSymbols>false</IncludeSymbols>
-    <Description>Provides a convenient set of API additions for building a DDD, CQRS and Event Sourcing enabled .NET application using default dependency injection.</Description>
+    <Description>Provides a complete and convenient set of API additions for building a DDD, CQRS and Event Sourcing enabled .NET application using default dependency injection.</Description>
     <Title>Savvyio.App</Title>
   </PropertyGroup>
 
@@ -14,8 +14,16 @@
     <ProjectReference Include="..\Savvyio.Domain\Savvyio.Domain.csproj" />
     <ProjectReference Include="..\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.Core\Savvyio.Extensions.Core.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.Dapper\Savvyio.Extensions.Dapper.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.Dapper\Savvyio.Extensions.DependencyInjection.Dapper.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.Domain\Savvyio.Extensions.DependencyInjection.Domain.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing\Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.EFCore.Domain\Savvyio.Extensions.DependencyInjection.EFCore.Domain.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.EFCore\Savvyio.Extensions.DependencyInjection.EFCore.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection\Savvyio.Extensions.DependencyInjection.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.EFCore.Domain.EventSourcing\Savvyio.Extensions.EFCore.Domain.EventSourcing.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.EFCore.Domain\Savvyio.Extensions.EFCore.Domain.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.EFCore\Savvyio.Extensions.EFCore.csproj" />
     <ProjectReference Include="..\Savvyio.Queries\Savvyio.Queries.csproj" />
   </ItemGroup>
 

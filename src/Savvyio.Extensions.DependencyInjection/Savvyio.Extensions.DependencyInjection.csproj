@@ -1,5 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <Description>Extend the Savvy I/O core assemblies with support for Microsoft Dependency Injection.</Description>
+    <PackageTags>di depedency-injection marker datastore data-store dataaccessobject dao data-access-object repository uow unit-of-work</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Savvyio.Core\Savvyio.Core.csproj" />
   </ItemGroup>

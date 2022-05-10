@@ -1,5 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <Description>Provides the fundamental classes and interfaces to work with the concepts of Integration Events that complements both CQRS (Command and Query Responsibility Segregation) and DDD (Domain Driven Design) for a distributed architecture.</Description>
+    <PackageTags>cqrs command-query-responsibility-segregation integration-event publish integration-event-handler</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Savvyio.Core\Savvyio.Core.csproj" />
   </ItemGroup>

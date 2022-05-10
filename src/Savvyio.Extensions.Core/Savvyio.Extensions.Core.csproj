@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <RootNamespace>Savvyio.Extensions</RootNamespace>
+    <Description>Extend the Savvy I/O core assemblies with Mediator support to provide a uniform way of working with DDD, CQRS and Event driven architecture.</Description>
+    <PackageTags>mediator command domain-event integration-event query commit commit-async raise raise-async publish publish-async query-async</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

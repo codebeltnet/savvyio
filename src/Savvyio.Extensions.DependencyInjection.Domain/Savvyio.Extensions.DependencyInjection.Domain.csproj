@@ -1,6 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  
+  <PropertyGroup>
+    <Description>Extend the Savvy I/O support for Microsoft Dependency Injection - optimized for DDD (Domain Driven Design).</Description>
+    <PackageTags>ddd domain-driven-design event-sourcing es aggregate-repository traced-aggregate-repository di depedency-injection marker data-store dao data-access-object</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Savvyio.Domain\Savvyio.Domain.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection\Savvyio.Extensions.DependencyInjection.csproj" />
   </ItemGroup>
+
 </Project>

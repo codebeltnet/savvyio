@@ -1,5 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   
+  <PropertyGroup>
+    <Description>Extend the Savvy I/O support for Microsoft Dependency Injection with Microsoft Entity Framework Core implementation - optimized for Domain Driven Design and Event Sourcing.</Description>
+    <PackageTags>event-sourcing es ddd domain-driven-design traced-aggregate-repository efcore entity-framework-core di depedency-injection marker data-store dao data-access-object repository</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.Domain\Savvyio.Extensions.DependencyInjection.Domain.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.EFCore.Domain\Savvyio.Extensions.DependencyInjection.EFCore.Domain.csproj" />

@@ -1,5 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <Description>Provides the fundamental classes and interfaces to work with the concepts of DDD (Domain Driven Design).</Description>
+    <PackageTags>ddd domain-driven-design event-sourcing es aggregate-root domain-event de domain-event-handler raise raise-async entity value-object single-value-object</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Savvyio.Core\Savvyio.Core.csproj" />
   </ItemGroup>

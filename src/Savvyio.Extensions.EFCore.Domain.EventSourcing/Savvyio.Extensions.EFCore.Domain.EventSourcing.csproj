@@ -1,5 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <Description>Extend the Savvy I/O support for Microsoft Entity Framework Core - optimized for Domain Driven Design and Event Sourcing.</Description>
+    <PackageTags>es event-sourcing ddd domain-driven-design aggregate-repository traced-aggregate-repository di depedency-injection marker data-store dao data-access-object</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.4" />
   </ItemGroup>

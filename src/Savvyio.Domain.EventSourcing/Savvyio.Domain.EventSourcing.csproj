@@ -1,4 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Provides the default implementation of an Aggregate Root that is Event Sourced enabled. Complements the concepts of DDD (Domain Driven Design).</Description>
+    <PackageTags>ddd domain-driven-design es event-sourcing traced-aggregate-root traced-domain-event</PackageTags>
+  </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Savvyio.Domain\Savvyio.Domain.csproj" />
