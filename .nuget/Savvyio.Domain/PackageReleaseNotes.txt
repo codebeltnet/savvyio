@@ -1,0 +1,25 @@
+Version: 0.7.0
+Availability: .NET 6.0
+ 
+# New Features
+- ADDED Aggregate class in the Savvyio.Domain namespace that represents the base class from which all implementations of an Aggregate Root (as specified in Domain Driven Design) should derive
+- ADDED AggregateRoot class in the Savvyio.Domain namespace that provides a way to cover the pattern of an Aggregate Root as specified in Domain Driven Design
+- ADDED DomainEvent class in the Savvyio.Domain namespace that provides a default implementation of the IDomainEvent interface
+- ADDED DomainEventDispatcher class in the Savvyio.Domain namespace that provides a default implementation of the IDomainEventDispatcher interface
+- ADDED DomainEventDispatcherExtensions class in the Savvyio.Domain namespace that consist of extension methods for the IDomainEventDispatcher interface: RaiseMany, RaiseManyAsync
+- ADDED DomainEventExtensions class in the Savvyio.Domain namespace that consist of extension methods for the IDomainEvent interface: GetEventId, GetTimestamp
+- ADDED DomainEventHandler class in the Savvyio.Domain namespace that provides a generic and consistent way of handling Domain Event (as specified in Domain Driven Design) objects that implements the IDomainEvent interface
+- ADDED Entity class in the Savvyio.Domain namespace that provides a way to cover the pattern of an Entity as specified in Domain Driven Design
+- ADDED IAggregateRepository interface in the Savvyio.Domain namespace that defines a generic way of abstracting persistent repositories (CRUD) that is optimized for Domain Driven Design
+- ADDED IAggregateRoot interface in the Savvyio.Domain namespace that defines a marker interface of an Aggregate as specified in Domain Driven Design
+- ADDED IDomainEvent interface in the Savvyio.Domain namespace that defines a marker interface that specifies something that happened in the domain that you want other parts of the same domain (in-process/inner-application) to be made aware of
+- ADDED IDomainEventDispatcher interface in the Savvyio.Domain namespace that defines a Domain Event dispatcher that uses Fire-and-Forget/In-Only MEP
+- ADDED IDomainEventHandler interface in the Savvyio.Domain namespace that specifies a handler responsible for objects that implements the IDomainEvent interface
+- ADDED IEntity interface in the Savvyio.Domain namespace that defines an Entity as specified in Domain Driven Design
+- ADDED SavvyioOptionsExtensions class in the Savvyio.Domain namespace that consist of extension methods for the SavvyioOptions class: AddDomainEventHandler, AddDomainEventDispatcher
+- ADDED SingleValueObject class in the Savvyio.Domain namespace that provides an implementation of ValueObject tailored for handling a single value
+- ADDED ValueObject class in the Savvyio.Domain namespace that represents an object whose equality is based on the value rather than identity as specified in Domain Driven Design
+- ADDED ITracedAggregateRepository interface in the Savvyio.Domain.EventSourcing namespace that defines a generic way of abstracting traced read- and writable repositories (CRud) that is optimized for Domain Driven Design
+- ADDED ITracedAggregateRoot interface in the Savvyio.Domain.EventSourcing namespace that defines an Event Sourcing capable contract of an Aggregate as specified in Domain Driven Design
+- ADDED IAggregateRoot interface in the Savvyio.Domain.EventSourcing namespace that specifies something that happened in the domain that you want other parts of the same domain (in-process/inner-application) to be aware of
+ 

@@ -1,0 +1,12 @@
+Version: 0.7.0
+Availability: .NET 6.0
+ 
+# New Features
+- ADDED EfCoreDataAccessObject class in the Savvyio.Extensions.DependencyInjection.EFCore namespace that provides a default implementation of the IPersistentDataAccessObject{T,TOptions} interface to support multiple implementations that serves as an abstraction layer before the actual I/O communication towards a data store using Microsoft Entity Framework Core
+- ADDED EfCoreDataStore class in the Savvyio.Extensions.DependencyInjection.EFCore namespace that provides a default implementation of the IEfCoreDataStore{TMarker} interface to support the actual I/O communication towards a data store using Microsoft Entity Framework Core
+- ADDED EfCoreDataStoreOptions class in the Savvyio.Extensions.DependencyInjection.EFCore namespace that provides configuration options for IEfCoreDataStore{TMarker}
+- ADDED EfCoreDbContext class in the Savvyio.Extensions.DependencyInjection.EFCore namespace that provides a default implementation of the DbContext class to support Savvy I/O extensions of Microsoft Entity Framework Core in multiple implementations
+- ADDED EfCoreRepository class in the Savvyio.Extensions.DependencyInjection.EFCore namespace that provides a default implementation of the IPersistentRepository{TEntity,TKey,TMarker} interface to support multiple implementations that serves as an abstraction layer before the actual I/O communication towards a data store using Microsoft Entity Framework Core
+- ADDED IEfCoreDataStore interface in the Savvyio.Extensions.DependencyInjection.EFCore namespace that defines a generic way to support multiple implementations that does the actual I/O communication towards a data store using Microsoft Entity Framework Core
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.EFCore namespace that consist of extension methods for the IServiceCollection interface: AddEfCoreDataStore, AddEfCoreRepository, AddEfCoreDataAccessObject
+ 

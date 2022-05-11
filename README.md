@@ -81,6 +81,22 @@ For more information see our [code of conduct](.github/CODE_OF_CONDUCT.md).
 NuGet links to all projects of Savvy I/O:
 
 * [Savvyio](https://www.nuget.org/packages/Savvyio/)
-* [Savvyio.Storage](https://www.nuget.org/packages/Savvyio.Storage/)
+* [Savvyio.App](https://www.nuget.org/packages/Savvyio.App/) *
+* [Savvyio.Commands](https://www.nuget.org/packages/Savvyio.Commands/)
+* [Savvyio.Domain](https://www.nuget.org/packages/Savvyio.Domain/)
+* [Savvyio.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Domain.EventSourcing/)
+* [Savvyio.EventDriven](https://www.nuget.org/packages/Savvyio.EventDriven/)
+* [Savvyio.Extensions.Dapper](https://www.nuget.org/packages/Savvyio.Extensions.Dapper/)
+* [Savvyio.Extensions.DependencyInjection](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection/)
+* [Savvyio.Extensions.DependencyInjection.Dapper](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.Dapper/)
+* [Savvyio.Extensions.DependencyInjection.Domain](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.Domain/)
+* [Savvyio.Extensions.DependencyInjection.EFCore](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore/)
+* [Savvyio.Extensions.DependencyInjection.EFCore.Domain](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore.Domain/)
+* [Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing/)
+* [Savvyio.Extensions.Dispatchers](https://www.nuget.org/packages/Savvyio.Extensions.Dispatchers/)
+* [Savvyio.Extensions.EFCore](https://www.nuget.org/packages/Savvyio.Extensions.EFCore/)
+* [Savvyio.Extensions.EFCore.Domain](https://www.nuget.org/packages/Savvyio.Extensions.EFCore.Domain/)
+* [Savvyio.Extensions.EFCore.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Extensions.EFCore.Domain.EventSourcing/)
+* [Savvyio.Queries](https://www.nuget.org/packages/Savvyio.Queries/)
 
 *) Provides a convenient set of default API additions for building various types of .NET projects.

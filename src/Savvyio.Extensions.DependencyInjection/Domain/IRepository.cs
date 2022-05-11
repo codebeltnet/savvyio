@@ -4,7 +4,7 @@ using Savvyio.Domain;
 namespace Savvyio.Extensions.DependencyInjection.Domain
 {
     /// <summary>
-    /// A marker interface that specifies an abstraction of persistent data access.
+    /// Defines a generic way to support multiple implementations of persistent data access based on the Repository pattern.
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     /// <typeparam name="TKey">The type of the key that uniquely identifies the entity.</typeparam>

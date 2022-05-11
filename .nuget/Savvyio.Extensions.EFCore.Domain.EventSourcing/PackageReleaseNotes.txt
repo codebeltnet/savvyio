@@ -1,0 +1,11 @@
+Version: 0.7.0
+Availability: .NET 6.0
+ 
+# New Features
+- ADDED EfCoreTracedAggregateEntity class in the Savvyio.Extensions.EFCore.Domain.EventSourcing namespace that provides a generic way for EF Core to surrogate and support an implementation of ITracedAggregateRoot{TKey}
+- ADDED EfCoreTracedAggregateEntityExtensions class in the Savvyio.Extensions.EFCore.Domain.EventSourcing namespace that consist of extension methods for the EfCoreTracedAggregateEntity{TEntity,TKey} class: ToTracedDomainEvent
+- ADDED EfCoreTracedAggregateEntityOptions class in the Savvyio.Extensions.EFCore.Domain.EventSourcing namespace that specifies configuration options for EfCoreTracedAggregateEntity
+- ADDED EfCoreTracedAggregateRepository class in the Savvyio.Extensions.EFCore.Domain.EventSourcing namespace that provides an implementation of the EfCoreTracedAggregateRepository{TEntity,TKey} that is optimized for Domain Driven Design and Event Sourcing
+- ADDED ModelBuilderExtensions class in the Savvyio.Extensions.EFCore.Domain.EventSourcing namespace that consist of extension methods for the IServiceCollection interface: AddEventSourcing
+- ADDED TracedDomainEventExtensions class in the Savvyio.Extensions.EFCore.Domain.EventSourcing namespace that consist of extension methods for the ITracedDomainEvent interface: ToByteArray
+ 

@@ -1,0 +1,22 @@
+Version: 0.7.0
+Availability: .NET 6.0
+ 
+# New Features
+- ADDED IDataStore interface in the Savvyio.Extensions.DependencyInjection namespace that defines a generic way to support multiple implementations that does the actual I/O communication towards a data store
+- ADDED SavvyioDependencyInjectionOptions class in the Savvyio.Extensions.DependencyInjection namespace that specifies options that is related to setting up Savvy I/O services
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace that consist of extension methods for the IServiceCollection interface: AddDataStore, AddServiceLocator, AddSavvyIO
+- ADDED IDataAccessObject interface in the Savvyio.Extensions.DependencyInjection.Data namespace that defines a generic way to support multiple implementations of persistent data access based on the Data Access Object pattern
+- ADDED IDeletableDataAccessObject interface in the Savvyio.Extensions.DependencyInjection.Data namespace that defines a generic way to support multiple implementations of deletable data access objects (cruD)
+- ADDED IPersistentDataAccessObject interface in the Savvyio.Extensions.DependencyInjection.Data namespace that defines a generic way to support multiple implementations of the actual I/O communication with a data store that is responsible of persisting data (CRUD)
+- ADDED IReadableDataAccessObject interface in the Savvyio.Extensions.DependencyInjection.Data namespace that defines a generic way to support multiple implementations of readable data access objects (cRud)
+- ADDED IWritableDataAccessObject interface in the Savvyio.Extensions.DependencyInjection.Data namespace that defines a generic way to support multiple implementations of writable data access objects (CrUd)
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Data namespace that consist of extension methods for the IServiceCollection interface: AddDataAccessObject
+- ADDED IDeletableRepository interface in the Savvyio.Extensions.DependencyInjection.Domain namespace that defines a generic way to support multiple implementations of deletable repositories (cruD)
+- ADDED IPersistentRepository interface in the Savvyio.Extensions.DependencyInjection.Domain namespace that defines a generic way to support multiple implementations of persistent repositories (CRUD)
+- ADDED IReadableRepository interface in the Savvyio.Extensions.DependencyInjection.Domain namespace that defines a generic way to support multiple implementations of readable repositories (cRud)
+- ADDED IRepository interface in the Savvyio.Extensions.DependencyInjection.Domain namespace that defines a generic way to support multiple implementations of persistent data access based on the Repository pattern
+- ADDED ISearchableRepository interface in the Savvyio.Extensions.DependencyInjection.Domain namespace that defines a generic way to support multiple implementations of searchable repositories (cRud)
+- ADDED IUnitOfWork interface in the Savvyio.Extensions.DependencyInjection.Domain namespace that defines a generic way to support multiple implementations that bundles transactions from multiple IPersistentRepository{TEntity,TKey} calls into a single unit
+- ADDED IWritableRepository interface in the Savvyio.Extensions.DependencyInjection.Domain namespace that defines a generic way to support multiple implementations of writable repositories (CrUd)
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Domain namespace that consist of extension methods for the IServiceCollection interface: AddRepository
+ 

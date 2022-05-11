@@ -1,0 +1,13 @@
+Version: 0.7.0
+Availability: .NET 6.0
+ 
+# New Features
+- ADDED IIntegrationEvent interface in the Savvyio.EventDriven namespace that defines a marker interface that specifies something that happened when an Aggregate was successfully persisted and you want other subsystems (out-process/inter-application) to be made aware of
+- ADDED IIntegrationEventDispatcher interface in the Savvyio.EventDriven namespace that defines an Integration Event dispatcher that uses Fire-and-Forget/In-Only MEP
+- ADDED IIntegrationEventHandler interface in the Savvyio.EventDriven namespace that specifies a handler responsible for objects that implements the IIntegrationEvent interface
+- ADDED IntegrationEvent class in the Savvyio.EventDriven namespace that provides a default implementation of of the IIntegrationEvent interface
+- ADDED IntegrationEventDispatcher class in the Savvyio.EventDriven namespace that provides a default implementation of of the IIntegrationEventDispatcher interface
+- ADDED IntegrationEventExtensions class in the Savvyio.EventDriven namespace that consist of extension methods for the IIntegrationEvent interface: GetEventId, GetTimestamp, GetMemberType
+- ADDED IntegrationEventHandler class in the Savvyio.EventDriven namespace that provides a generic and consistent way of handling Integration Event objects that implements the IIntegrationEvent interface
+- ADDED SavvyioOptionsExtensions class in the Savvyio.EventDriven namespace that consist of extension methods for the SavvyioOptions class: AddIntegrationEventHandler, AddIntegrationEventDispatcher
+ 

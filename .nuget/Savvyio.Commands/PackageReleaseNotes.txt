@@ -1,0 +1,12 @@
+Version: 0.7.0
+Availability: .NET 6.0
+ 
+# New Features
+- ADDED Command class in the Savvyio.Commands namespace that provides a default implementation of the ICommand interface
+- ADDED CommandDispatcher class in the Savvyio.Commands namespace that provides a default implementation of the ICommandDispatcher interface
+- ADDED CommandHandler class in the Savvyio.Commands namespace that defines a generic and consistent way of handling Command objects that implements the ICommand interface
+- ADDED ICommand interface in the Savvyio.Commands namespace that defines a marker interface that specifies an intention to do something (e.g. change the state)
+- ADDED ICommandDispatcher interface in the Savvyio.Commands namespace that defines a Command dispatcher that uses Fire-and-Forget/In-Only MEP
+- ADDED ICommandHandler interface in the Savvyio.Commands namespace that defines a handler responsible for objects that implements the ICommand interface
+- ADDED SavvyioOptionsExtensions class in the Savvyio.Commands namespace that consist of extension methods for the SavvyioOptions class: AddCommandHandler, AddCommandDispatcher
+ 

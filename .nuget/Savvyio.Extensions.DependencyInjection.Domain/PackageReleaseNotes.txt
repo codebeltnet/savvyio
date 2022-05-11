@@ -1,0 +1,9 @@
+Version: 0.7.0
+Availability: .NET 6.0
+ 
+# New Features
+- ADDED IAggregateRepository interface in the Savvyio.Extensions.DependencyInjection.Domain namespace that defines a generic way to support multiple implementations of persistent repositories (CRUD) that is optimized for Domain Driven Design
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Domain namespace that consist of extension methods for the IServiceCollection interface: AddAggregateRepository
+- ADDED ITracedAggregateRepository interface in the Savvyio.Extensions.DependencyInjection.Domain.EventSourcing namespace that defines a generic way to support multiple implementations traced read- and writable repositories (CRud) that is optimized for Domain Driven Design
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Domain.EventSourcing namespace that consist of extension methods for the IServiceCollection interface: AddTracedAggregateRepository
+ 

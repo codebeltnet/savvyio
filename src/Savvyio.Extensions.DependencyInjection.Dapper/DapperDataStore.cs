@@ -6,7 +6,7 @@ using Savvyio.Extensions.Dapper;
 namespace Savvyio.Extensions.DependencyInjection.Dapper
 {
     /// <summary>
-    /// Provides a default implementation of the <see cref="IDapperDataStore"/> interface to support the actual I/O communication towards a data store using Dapper.
+    /// Provides a default implementation of the <see cref="IDapperDataStore{TMarker}"/> interface to support the actual I/O communication towards a data store using Dapper.
     /// </summary>
     /// <typeparam name="TMarker">The type used to mark the implementation that this data store represents. Optimized for Microsoft Dependency Injection.</typeparam>
     /// <seealso cref="DapperDataStore" />
