@@ -1,4 +1,4 @@
-![Savvy I/O](.nuget/icon.png)
+![Savvy I/O](.nuget/Savvyio.Core/icon.png)
 
 # Savvy I/O
 
