@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Queries", "src\Savv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Domain", "src\Savvyio.Domain\Savvyio.Domain.csproj", "{03DC4902-28E4-416F-AB32-34D645A9428C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Core", "src\Savvyio.Extensions.Core\Savvyio.Extensions.Core.csproj", "{139A77D1-93E8-4C14-996D-FFBB5457348B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Dispatchers", "src\Savvyio.Extensions.Dispatchers\Savvyio.Extensions.Dispatchers.csproj", "{139A77D1-93E8-4C14-996D-FFBB5457348B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Domain.EventSourcing", "src\Savvyio.Domain.EventSourcing\Savvyio.Domain.EventSourcing.csproj", "{6796D33B-8688-4434-9AC2-9F8690D58427}"
 EndProject
@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Commands.Tests", "t
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Assets.Tests", "test\Savvyio.Assets.Tests\Savvyio.Assets.Tests.csproj", "{9599F5E4-0B54-4AEF-ABCC-9779319C8A08}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Core.Tests", "test\Savvyio.Extensions.Core.Tests\Savvyio.Extensions.Core.Tests.csproj", "{6CC468FF-F2AC-4698-A0DA-FC255D6D7405}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Dispatchers.Tests", "test\Savvyio.Extensions.Dispatchers.Tests\Savvyio.Extensions.Dispatchers.Tests.csproj", "{6CC468FF-F2AC-4698-A0DA-FC255D6D7405}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.DependencyInjection.Tests", "test\Savvyio.Extensions.DependencyInjection.Tests\Savvyio.Extensions.DependencyInjection.Tests.csproj", "{BDD819B5-399D-4805-8D96-DEC3B4F67B37}"
 EndProject

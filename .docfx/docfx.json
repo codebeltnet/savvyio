@@ -9,7 +9,6 @@
             "Savvyio.Domain/**.csproj",
             "Savvyio.Domain.EventSourcing/**.csproj",
             "Savvyio.EventDriven/**.csproj",
-            "Savvyio.EventDriven/Messaging/**.csproj",
             "Savvyio.Queries/**.csproj"
           ],
           "src": "../src"
@@ -25,7 +24,6 @@
       "src": [
         {
           "files": [
-            "Savvyio.Extensions.Core/**.csproj",
             "Savvyio.Extensions.Dapper/**.csproj",
             "Savvyio.Extensions.DependencyInjection/**.csproj",
             "Savvyio.Extensions.DependencyInjection.Dapper/**.csproj",
@@ -33,6 +31,7 @@
             "Savvyio.Extensions.DependencyInjection.EFCore/**.csproj",
             "Savvyio.Extensions.DependencyInjection.EFCore.Domain/**.csproj",
             "Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing/**.csproj",
+            "Savvyio.Extensions.Dispatchers/**.csproj",
             "Savvyio.Extensions.EFCore/**.csproj",
             "Savvyio.Extensions.EFCore.Domain/**.csproj",
             "Savvyio.Extensions.EFCore.Domain.EventSourcing/**.csproj"
