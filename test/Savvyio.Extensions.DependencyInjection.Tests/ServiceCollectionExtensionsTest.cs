@@ -38,11 +38,13 @@ namespace Savvyio.Extensions.DependencyInjection
         }
 
         [Fact]
-        public void AddSavvyIO_ShouldIncludeCommandHandlerFromLamda()
+        public void AddSavvyIO_ShouldIncludeCommandHandlerFromLambda()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(Command).Assembly, typeof(TestCommand).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery());
+            sut1.AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(Command).Assembly, typeof(TestCommand).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery().EnableHandlerServicesDescriptor());
             var sut2 = sut1.BuildServiceProvider();
+
+            TestOutput.WriteLine(sut2.GetRequiredService<HandlerServicesDescriptor>().ToString());
 
             Assert.IsType<TestCommandHandler>(sut2.GetRequiredService<ICommandHandler>());
         }
@@ -87,8 +89,10 @@ namespace Savvyio.Extensions.DependencyInjection
         public void AddSavvyIO_ShouldIncludeDomainEventHandlerFromDelegate()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(DomainEvent).Assembly, typeof(TestDomainEvent).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery());
+            sut1.AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(DomainEvent).Assembly, typeof(TestDomainEvent).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery().EnableHandlerServicesDescriptor());
             var sut2 = sut1.BuildServiceProvider();
+
+            TestOutput.WriteLine(sut2.GetRequiredService<HandlerServicesDescriptor>().ToString());
 
             Assert.IsType<TestDomainEventHandler>(sut2.GetRequiredService<IDomainEventHandler>());
         }

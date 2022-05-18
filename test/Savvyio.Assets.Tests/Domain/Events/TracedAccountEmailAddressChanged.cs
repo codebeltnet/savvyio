@@ -2,7 +2,7 @@
 
 namespace Savvyio.Assets.Domain.Events
 {
-    public class TracedAccountEmailAddressChanged : TracedDomainEvent // if naming conflict occur, consider this naming convention (to distinguish between domain- and integration events): <Entity>Instance<Action>
+    public class TracedAccountEmailAddressChanged : TracedDomainEvent
     {
         public TracedAccountEmailAddressChanged(string emailAddress)
         {

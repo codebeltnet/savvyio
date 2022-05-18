@@ -60,7 +60,6 @@ namespace Savvyio
         /// </remarks>
         public SavvyioOptions()
         {
-            IncludeHandlerServicesDescriptor = false;
         }
 
         /// <summary>
