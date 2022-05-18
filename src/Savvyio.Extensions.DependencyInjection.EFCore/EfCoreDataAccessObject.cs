@@ -11,7 +11,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
     /// <typeparam name="TMarker">The type used to mark the implementation that this data access object represents. Optimized for Microsoft Dependency Injection.</typeparam>
     /// <seealso cref="EfCoreDataAccessObject{T}" />
     /// <seealso cref="IPersistentDataAccessObject{T,TOptions,TMarker}" />
-    public class EfCoreDataAccessObject<T, TMarker> : EfCoreDataAccessObject<T>, IPersistentDataAccessObject<T, AsyncOptions, TMarker> where T : class
+    public class EfCoreDataAccessObject<T, TMarker> : EfCoreDataAccessObject<T>, IPersistentDataAccessObject<T, EfCoreOptions<T>, TMarker> where T : class
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreDataAccessObject{T, TMarker}"/> class.

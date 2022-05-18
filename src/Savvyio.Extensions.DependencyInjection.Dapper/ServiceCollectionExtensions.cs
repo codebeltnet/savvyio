@@ -52,40 +52,54 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         public static IServiceCollection AddDapperDataStore<TImplementation>(this IServiceCollection services) where TImplementation : class, IDapperDataStore
         {
             Validator.ThrowIfNull(services, nameof(services));
-            var efCoreDataStoreType = typeof(IDapperDataStore);
+            var dapperDataStoreType = typeof(IDapperDataStore);
             var dataStoreType = typeof(IDataStore);
             services.TryAddScoped<TImplementation>();
             if (typeof(TImplementation).TryGetDependencyInjectionMarker(out var markerType))
             {
-                efCoreDataStoreType = typeof(IDapperDataStore<>).MakeGenericType(markerType);
+                dapperDataStoreType = typeof(IDapperDataStore<>).MakeGenericType(markerType);
                 dataStoreType = typeof(IDataStore<>).MakeGenericType(markerType);
             }
-            services.TryAddScoped(efCoreDataStoreType, p => p.GetRequiredService<TImplementation>());
+            services.TryAddScoped(dapperDataStoreType, p => p.GetRequiredService<TImplementation>());
             services.TryAddScoped(dataStoreType, p => p.GetRequiredService<TImplementation>());
             return services;
         }
 
         /// <summary>
-        /// Adds an <see cref="DapperDataAccessObject{T}"/> to the specified <see cref="IServiceCollection"/>.
+        /// Adds an implementation of <see cref="DapperDataAccessObject{T}"/> to the specified <see cref="IServiceCollection"/>.
+        /// </summary>
+        /// <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
+        /// <typeparam name="T">The type of the DTO.</typeparam>
+        /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
+        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
+        public static IServiceCollection AddDapperDataAccessObject<TImplementation, T>(this IServiceCollection services) 
+            where TImplementation : DapperDataAccessObject<T>
+            where T : class
+        {
+            return services.AddDataAccessObject<TImplementation, T, DapperOptions>();
+        }
+
+        /// <summary>
+        /// Adds an <see cref="DefaultDapperDataAccessObject{T}"/> to the specified <see cref="IServiceCollection"/>.
         /// </summary>
         /// <typeparam name="T">The type of the DTO.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
-        public static IServiceCollection AddDapperDataAccessObject<T>(this IServiceCollection services) where T : class
+        public static IServiceCollection AddDefaultDapperDataAccessObject<T>(this IServiceCollection services) where T : class
         {
-            return services.AddDataAccessObject<DapperDataAccessObject<T>, T, DapperOptions>();
+            return services.AddDapperDataAccessObject<DefaultDapperDataAccessObject<T>, T>();
         }
 
         /// <summary>
-        /// Adds an <see cref="DapperDataAccessObject{T,TMarker}"/> to the specified <see cref="IServiceCollection"/>.
+        /// Adds an <see cref="DefaultDapperDataAccessObject{T,TMarker}"/> to the specified <see cref="IServiceCollection"/>.
         /// </summary>
         /// <typeparam name="T">The type of the DTO.</typeparam>
         /// <typeparam name="TMarker">The type used to mark the implementation that this data access object represents. Optimized for Microsoft Dependency Injection.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
-        public static IServiceCollection AddDapperDataAccessObject<T, TMarker>(this IServiceCollection services) where T : class
+        public static IServiceCollection AddDefaultDapperDataAccessObject<T, TMarker>(this IServiceCollection services) where T : class
         {
-            return services.AddDataAccessObject<DapperDataAccessObject<T, TMarker>, T, DapperOptions>();
+            return services.AddDapperDataAccessObject<DefaultDapperDataAccessObject<T, TMarker>, T>();
         }
     }
 }

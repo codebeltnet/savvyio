@@ -6,7 +6,7 @@ using Dapper;
 namespace Savvyio.Extensions.Dapper
 {
     /// <summary>
-    /// Specifies options that is related to Dapper concept of <see cref="CommandDefinition"/>.
+    /// Specifies options that is related to <see cref="DapperDataAccessObject{T}"/>.
     /// </summary>
     /// <seealso cref="AsyncOptions" />
     public class DapperOptions : AsyncOptions

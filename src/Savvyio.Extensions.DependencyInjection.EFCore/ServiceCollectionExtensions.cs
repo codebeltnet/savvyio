@@ -107,7 +107,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
         public static IServiceCollection AddEfCoreDataAccessObject<T>(this IServiceCollection services) where T : class
         {
-            return services.AddDataAccessObject<EfCoreDataAccessObject<T>, T>();
+            return services.AddDataAccessObject<EfCoreDataAccessObject<T>, T, EfCoreOptions<T>>();
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
         public static IServiceCollection AddEfCoreDataAccessObject<T, TMarker>(this IServiceCollection services) where T : class
         {
-            return services.AddDataAccessObject<EfCoreDataAccessObject<T, TMarker>, T>();
+            return services.AddDataAccessObject<EfCoreDataAccessObject<T, TMarker>, T, EfCoreOptions<T>>();
         }
     }
 }
