@@ -88,19 +88,33 @@ namespace Savvyio
             {
                 if (node.Instance is Type ti)
                 {
-                    var children = node.GetChildren().ToList();
-                    builder.AppendLine($"<{ti.ToFriendlyName()}>");
-                    foreach (var child in children.OrderBy(h => h.Instance.As<MethodInfo>().Name, StringComparer.OrdinalIgnoreCase))
-                    {
-                        if (child.Instance is MethodInfo mi)
-                        {
-                            var p = mi.GetParameters().Single(p => p.ParameterType.HasInterfaces(serviceRequestType));
-                            builder.AppendLine($"\t*{p.ParameterType.Name} --> &{mi.Name}");
-                        }
-                    }
-                    builder.AppendLine();
+                    AppendHandlerRelations(builder, node, ti, serviceRequestType);
                 }
             }
+        }
+
+        private static void AppendHandlerRelations(StringBuilder builder, IHierarchy<object> node, Type ti, Type serviceRequestType)
+        {
+            var children = node.GetChildren().ToList();
+            builder.AppendLine($"<{ti.ToFriendlyName()}>");
+            foreach (var child in children.OrderBy(h => h.Instance.As<MethodInfo>()?.Name, StringComparer.OrdinalIgnoreCase))
+            {
+                if (child.Instance is MethodInfo mi)
+                {
+                    var p = mi.GetParameters().Single(p => p.ParameterType.HasInterfaces(serviceRequestType));
+                    builder.AppendLine($"\t*{p.ParameterType.Name} --> &{mi.Name}");
+                }
+                else if (child.Instance is Type runtimeType) // we will get here when no class dependencies is specified (eg. isolated 'method')
+                {
+                    var nestedMethods = runtimeType.GetRuntimeMethods().Where(i => i.GetParameters().Any(p => p.ParameterType.HasInterfaces(serviceRequestType)));
+                    foreach (var nested in nestedMethods)
+                    {
+                        var p = nested.GetParameters().Single();
+                        builder.AppendLine($"\t*{p.ParameterType.Name} --> &{nested.Name}");
+                    }
+                }
+            }
+            builder.AppendLine();
         }
     }
 }

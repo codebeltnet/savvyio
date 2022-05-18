@@ -21,7 +21,9 @@ namespace Savvyio.Assets
         protected override void RegisterDelegates(IRequestReplyRegistry<IQuery> handlers)
         {
             handlers.RegisterAsync<GetAccount, AccountCreated>(GetAccountAsync);
+            handlers.RegisterAsync<GetAccount, AccountCreated>(s => Task.FromResult(new AccountCreated(222, "A", "B")));
             handlers.RegisterAsync<GetFakeAccount, AccountCreated>(GetFakeAccountAsync);
+            handlers.RegisterAsync<GetFakeAccount, AccountCreated>(_ => Task.FromResult(new AccountCreated(222, "A", "B")));
         }
 
         private Task<AccountCreated> GetFakeAccountAsync(GetFakeAccount a)
