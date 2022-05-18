@@ -64,21 +64,27 @@ namespace Savvyio
         {
             var handlers = discoveredServicesGroup.Where(pair => pair.Key == serviceType).SelectMany(pair => pair.Value).ToList();
             if (handlers.Count == 0) { return; }
-            var handlerMethodsCount = handlers.SelectMany(h => h.GetChildren()).Count();
-            var text = $"Discovered {handlers.Count} {serviceType.Name} implementation{(handlers.Count > 1 ? "s" : "")} covering a total of {handlerMethodsCount} {serviceRequestType.Name} method{(handlerMethodsCount > 1 ? "s" : "")}";
-            var dashes = Generate.FixedString('-', text.Length.Max(text.Length.Max(text.Length)));
-            builder.Append(text);
+            var index = builder.Length;
+            var handlerMethodCount = 0;
             builder.AppendLine();
             foreach (var group in handlers.GroupBy(h =>
                      {
                          var ti = h.Instance.As<Type>();
                          return new Tuple<string, string>(ti.Assembly.GetName().Name, ti.Namespace);
-                     })) { AppendHandler(builder, group, serviceRequestType); }
+                     }))
+            {
+                var methodCount = 0;
+                AppendHandler(builder, group, serviceRequestType, ref methodCount);
+                handlerMethodCount += methodCount;
+            }
+            var text = $"Discovered {handlers.Count} {serviceType.Name} implementation{(handlers.Count > 1 ? "s" : "")} covering a total of {handlerMethodCount} {serviceRequestType.Name} method{(handlerMethodCount > 1 ? "s" : "")}";
+            builder.Insert(index, text);
+            var dashes = Generate.FixedString('-', text.Length.Max(text.Length.Max(text.Length)));
             builder.AppendLine(dashes);
             builder.AppendLine();
         }
 
-        private static void AppendHandler(StringBuilder builder, IGrouping<Tuple<string, string>, IHierarchy<object>> group, Type serviceRequestType)
+        private static void AppendHandler(StringBuilder builder, IGrouping<Tuple<string, string>, IHierarchy<object>> group, Type serviceRequestType, ref int methodCount)
         {
             builder.AppendLine();
             builder.AppendLine($"Assembly: {group.Key.Item1}");
@@ -88,12 +94,12 @@ namespace Savvyio
             {
                 if (node.Instance is Type ti)
                 {
-                    AppendHandlerRelations(builder, node, ti, serviceRequestType);
+                    AppendHandlerRelations(builder, node, ti, serviceRequestType, ref methodCount);
                 }
             }
         }
 
-        private static void AppendHandlerRelations(StringBuilder builder, IHierarchy<object> node, Type ti, Type serviceRequestType)
+        private static void AppendHandlerRelations(StringBuilder builder, IHierarchy<object> node, Type ti, Type serviceRequestType, ref int methodCount)
         {
             var children = node.GetChildren().ToList();
             builder.AppendLine($"<{ti.ToFriendlyName()}>");
@@ -103,6 +109,7 @@ namespace Savvyio
                 {
                     var p = mi.GetParameters().Single(p => p.ParameterType.HasInterfaces(serviceRequestType));
                     builder.AppendLine($"\t*{p.ParameterType.Name} --> &{mi.Name}");
+                    methodCount++;
                 }
                 else if (child.Instance is Type runtimeType) // we will get here when no class dependencies is specified (eg. isolated 'method')
                 {
@@ -111,6 +118,7 @@ namespace Savvyio
                     {
                         var p = nested.GetParameters().Single();
                         builder.AppendLine($"\t*{p.ParameterType.Name} --> &{nested.Name}");
+                        methodCount++;
                     }
                 }
             }
