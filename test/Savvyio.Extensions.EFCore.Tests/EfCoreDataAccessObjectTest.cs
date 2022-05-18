@@ -29,7 +29,7 @@ namespace Savvyio.Extensions.Storage
                 o.ModelConstructor = mb => mb.AddAccount();
             });
 
-            var sut2 = new EfCoreDataAccessObject<Account>(sut1);
+            var sut2 = new DefaultEfCoreDataAccessObject<Account>(sut1);
             await sut2.CreateAsync(new Account(id, name, email));
 
             var sut3 = await sut2.ReadAsync(o => o.Predicate = a => a.PlatformProviderId == id);
@@ -53,7 +53,7 @@ namespace Savvyio.Extensions.Storage
                 o.ModelConstructor = mb => mb.AddAccount();
             });
 
-            var sut2 = new EfCoreDataAccessObject<Account>(sut1);
+            var sut2 = new DefaultEfCoreDataAccessObject<Account>(sut1);
             await sut2.CreateAsync(dto);
 
             var sut3 = await sut2.ReadAsync(o => o.Predicate = a => a.PlatformProviderId == id);
@@ -81,7 +81,7 @@ namespace Savvyio.Extensions.Storage
                 o.ModelConstructor = mb => mb.AddAccount();
             });
 
-            var sut2 = new EfCoreDataAccessObject<Account>(sut1);
+            var sut2 = new DefaultEfCoreDataAccessObject<Account>(sut1);
             await sut2.CreateAsync(dto);
 
             var sut3 = await sut2.ReadAsync(o => o.Predicate = a => a.PlatformProviderId == id);

@@ -13,8 +13,7 @@ namespace Savvyio.Extensions.Dapper
     /// Provides a default implementation of the <see cref="DapperDataAccessObject{T}"/> class.
     /// </summary>
     /// <typeparam name="T">The type of the DTO.</typeparam>
-    /// <seealso cref="Disposable"/>
-    /// <seealso cref="IPersistentDataAccessObject{T,TOptions}" />
+    /// <seealso cref="DapperDataAccessObject{T}" />
     public class DefaultDapperDataAccessObject<T> : DapperDataAccessObject<T> where T : class
     {
         private readonly IDapperDataStore _dataStore;

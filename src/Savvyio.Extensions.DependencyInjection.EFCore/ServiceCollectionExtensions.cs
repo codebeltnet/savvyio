@@ -100,26 +100,40 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         }
 
         /// <summary>
-        /// Adds an <see cref="EfCoreDataAccessObject{T}"/> to the specified <see cref="IServiceCollection"/>.
+        /// Adds an implementation of <see cref="EfCoreDataAccessObject{T}"/> to the specified <see cref="IServiceCollection"/>.
+        /// </summary>
+        /// <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
+        /// <typeparam name="T">The type of the DTO.</typeparam>
+        /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
+        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
+        public static IServiceCollection AddEfCoreDataAccessObject<TImplementation, T>(this IServiceCollection services)
+            where TImplementation : EfCoreDataAccessObject<T>
+            where T : class
+        {
+            return services.AddDataAccessObject<TImplementation, T, EfCoreOptions<T>>();
+        }
+
+        /// <summary>
+        /// Adds a <see cref="DefaultEfCoreDataAccessObject{T}"/> to the specified <see cref="IServiceCollection"/>.
         /// </summary>
         /// <typeparam name="T">The type of the DTO.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
-        public static IServiceCollection AddEfCoreDataAccessObject<T>(this IServiceCollection services) where T : class
+        public static IServiceCollection AddDefaultEfCoreDataAccessObject<T>(this IServiceCollection services) where T : class
         {
-            return services.AddDataAccessObject<EfCoreDataAccessObject<T>, T, EfCoreOptions<T>>();
+            return services.AddEfCoreDataAccessObject<DefaultEfCoreDataAccessObject<T>, T>();
         }
 
         /// <summary>
-        /// Adds an <see cref="EfCoreDataAccessObject{T,TMarker}"/> to the specified <see cref="IServiceCollection"/>.
+        /// Adds a <see cref="DefaultEfCoreDataAccessObject{T,TMarker}"/> to the specified <see cref="IServiceCollection"/>.
         /// </summary>
         /// <typeparam name="T">The type of the DTO.</typeparam>
         /// <typeparam name="TMarker">The type used to mark the implementation that this data access object represents. Optimized for Microsoft Dependency Injection.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
-        public static IServiceCollection AddEfCoreDataAccessObject<T, TMarker>(this IServiceCollection services) where T : class
+        public static IServiceCollection AddDefaultEfCoreDataAccessObject<T, TMarker>(this IServiceCollection services) where T : class
         {
-            return services.AddDataAccessObject<EfCoreDataAccessObject<T, TMarker>, T, EfCoreOptions<T>>();
+            return services.AddEfCoreDataAccessObject<DefaultEfCoreDataAccessObject<T, TMarker>, T>();
         }
     }
 }

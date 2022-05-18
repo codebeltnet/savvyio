@@ -99,33 +99,7 @@ namespace Savvyio.Extensions.DependencyInjection
             foreach (var handlerType in options.HandlerImplementationTypes)
             {
                 var handlerTypeServices = handlerType.GetInterfaces().Where(type => type.HasInterfaces(options.HandlerServiceTypes.ToArray()));
-                foreach (var handlerTypeService in handlerTypeServices)
-                {
-                    var handlers = new Hierarchy<object>();
-                    if (options.IncludeHandlerServicesDescriptor) { handlers.Add(handlerType); }
-
-                    var handlerTypeInterfaceModel = handlerTypeService.GetInterface("IHandler`1")?.GenericTypeArguments.SingleOrDefault();
-                    foreach (var method in handlerType.GetTypeInfo().DeclaredMembers.Where(m => MemberIsMethodOrLambdaWithHandlerTypeInterface(m, handlerTypeInterfaceModel)))
-                    {
-                        if (options.IncludeHandlerServicesDescriptor) { handlers.Add(method); }
-                        if (!services.Any(sd => sd.ServiceType == handlerTypeService && sd.ImplementationType == handlerType))
-                        {
-                            services.Add(handlerTypeService, handlerType, options.HandlerServicesLifetime);
-                        }
-                    }
-
-                    if (options.IncludeHandlerServicesDescriptor)
-                    {
-                        if (descriptors.TryGetValue(handlerTypeService, out var list))
-                        {
-                            list.Add(handlers);
-                        }
-                        else
-                        {
-                            descriptors.Add(handlerTypeService, new List<IHierarchy<object>>() { handlers });
-                        }
-                    }
-                }
+                AddHandlersWithOptionalDescriptors(services, handlerType, handlerTypeServices, descriptors, options);
             }
 
             if (options.IncludeHandlerServicesDescriptor)
@@ -133,6 +107,49 @@ namespace Savvyio.Extensions.DependencyInjection
                 services.AddSingleton(new HandlerServicesDescriptor(descriptors.Where(pair => pair.Key.HasInterfaces(options.HandlerServiceTypes.ToArray())).GroupBy(pair => pair.Key), options.HandlerServiceTypes));
             }
 
+            AddDispatchers(services, options);
+
+            return services.AddServiceLocator();
+        }
+
+        private static void AddHandlersWithOptionalDescriptors(IServiceCollection services, Type handlerType, IEnumerable<Type> handlerTypeServices, Dictionary<Type, List<IHierarchy<object>>> descriptors, SavvyioDependencyInjectionOptions options)
+        {
+            foreach (var handlerTypeService in handlerTypeServices)
+            {
+                var handlers = new Hierarchy<object>();
+                if (options.IncludeHandlerServicesDescriptor) { handlers.Add(handlerType); }
+
+                var handlerTypeInterfaceModel = handlerTypeService.GetInterface("IHandler`1")?.GenericTypeArguments.SingleOrDefault();
+                foreach (var method in handlerType.GetTypeInfo().DeclaredMembers.Where(m => MemberIsMethodOrLambdaWithHandlerTypeInterface(m, handlerTypeInterfaceModel)))
+                {
+                    if (options.IncludeHandlerServicesDescriptor) { handlers.Add(method); }
+                    if (!services.Any(sd => sd.ServiceType == handlerTypeService && sd.ImplementationType == handlerType))
+                    {
+                        services.Add(handlerTypeService, handlerType, options.HandlerServicesLifetime);
+                    }
+                }
+
+                AddDescriptors(handlers, handlerTypeService, descriptors, options);
+            }
+        }
+
+        private static void AddDescriptors(Hierarchy<object> handlers, Type handlerTypeService, Dictionary<Type, List<IHierarchy<object>>> descriptors, SavvyioDependencyInjectionOptions options)
+        {
+            if (options.IncludeHandlerServicesDescriptor)
+            {
+                if (descriptors.TryGetValue(handlerTypeService, out var list))
+                {
+                    list.Add(handlers);
+                }
+                else
+                {
+                    descriptors.Add(handlerTypeService, new List<IHierarchy<object>>() { handlers });
+                }
+            }
+        }
+
+        private static void AddDispatchers(IServiceCollection services, SavvyioDependencyInjectionOptions options)
+        {
             foreach (var dispatcherType in options.DispatcherImplementationTypes)
             {
                 var dispatcherTypeServices = dispatcherType.GetInterfaces().Where(type => type.HasInterfaces(options.DispatcherServiceTypes.ToArray()));
@@ -141,8 +158,6 @@ namespace Savvyio.Extensions.DependencyInjection
                     services.TryAdd(dispatcherTypeService, dispatcherType, options.DispatcherServicesLifetime);
                 }
             }
-
-            return services.AddServiceLocator();
         }
 
         private static bool MemberIsMethodOrLambdaWithHandlerTypeInterface(MemberInfo m, Type handlerTypeInterfaceModel)

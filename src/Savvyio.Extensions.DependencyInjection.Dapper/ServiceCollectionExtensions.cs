@@ -80,7 +80,7 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         }
 
         /// <summary>
-        /// Adds an <see cref="DefaultDapperDataAccessObject{T}"/> to the specified <see cref="IServiceCollection"/>.
+        /// Adds a <see cref="DefaultDapperDataAccessObject{T}"/> to the specified <see cref="IServiceCollection"/>.
         /// </summary>
         /// <typeparam name="T">The type of the DTO.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
@@ -91,7 +91,7 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         }
 
         /// <summary>
-        /// Adds an <see cref="DefaultDapperDataAccessObject{T,TMarker}"/> to the specified <see cref="IServiceCollection"/>.
+        /// Adds a <see cref="DefaultDapperDataAccessObject{T,TMarker}"/> to the specified <see cref="IServiceCollection"/>.
         /// </summary>
         /// <typeparam name="T">The type of the DTO.</typeparam>
         /// <typeparam name="TMarker">The type used to mark the implementation that this data access object represents. Optimized for Microsoft Dependency Injection.</typeparam>

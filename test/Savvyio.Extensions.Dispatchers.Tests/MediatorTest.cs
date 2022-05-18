@@ -69,7 +69,7 @@ namespace Savvyio.Extensions
             {
                 services.AddSingleton(TestOutput);
                 services.AddEfCoreRepository<Account, long, Account>();
-                services.AddEfCoreDataAccessObject<PlatformProvider, PlatformProvider>();
+                services.AddDefaultEfCoreDataAccessObject<PlatformProvider, PlatformProvider>();
                 services.AddEfCoreDataStore<CustomEfCoreDataStore>();
                 services.AddEfCoreDataStore<PlatformProvider>(o =>
                 {
@@ -107,7 +107,7 @@ namespace Savvyio.Extensions
             {
                 services.AddSingleton(TestOutput);
                 services.AddEfCoreRepository<Account, long>();
-                services.AddEfCoreDataAccessObject<PlatformProvider, PlatformProvider>();
+                services.AddDefaultEfCoreDataAccessObject<PlatformProvider, PlatformProvider>();
                 services.AddEfCoreDataStore<CustomEfCoreDataStore>();
                 services.AddEfCoreAggregateDataStore<PlatformProvider>(o =>
                 {

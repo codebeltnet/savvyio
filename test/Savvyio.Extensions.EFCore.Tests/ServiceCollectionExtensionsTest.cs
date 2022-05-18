@@ -128,12 +128,12 @@ namespace Savvyio.Extensions.Storage
                 o.ContextConfigurator = builder => builder.UseInMemoryDatabase("Dummy");
                 o.ModelConstructor = builder => builder.AddAccount().AddPlatformProvider();
             });
-            sut1.AddEfCoreDataAccessObject<Account>();
-            sut1.AddEfCoreDataAccessObject<PlatformProvider>();
+            sut1.AddDefaultEfCoreDataAccessObject<Account>();
+            sut1.AddDefaultEfCoreDataAccessObject<PlatformProvider>();
             var sut2 = sut1.BuildServiceProvider();
 
-            Assert.IsType<EfCoreDataAccessObject<Account>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, EfCoreOptions<Account>>>());
-            Assert.IsType<EfCoreDataAccessObject<PlatformProvider>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, EfCoreOptions<PlatformProvider>>>());
+            Assert.IsType<DefaultEfCoreDataAccessObject<Account>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, EfCoreOptions<Account>>>());
+            Assert.IsType<DefaultEfCoreDataAccessObject<PlatformProvider>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, EfCoreOptions<PlatformProvider>>>());
         }
 
         [Fact]
@@ -145,21 +145,21 @@ namespace Savvyio.Extensions.Storage
                 o.ContextConfigurator = builder => builder.UseInMemoryDatabase("Dummy");
                 o.ModelConstructor = builder => builder.AddAccount().AddPlatformProvider();
             });
-            sut1.AddEfCoreDataAccessObject<Account, DbMarker>();
-            sut1.AddEfCoreDataAccessObject<PlatformProvider, DbMarker>();
+            sut1.AddDefaultEfCoreDataAccessObject<Account, DbMarker>();
+            sut1.AddDefaultEfCoreDataAccessObject<PlatformProvider, DbMarker>();
             sut1.AddEfCoreDataStore<AnotherDbMarker>(o =>
             {
                 o.ContextConfigurator = builder => builder.UseInMemoryDatabase("Dummy");
                 o.ModelConstructor = builder => builder.AddAccount().AddPlatformProvider();
             });
-            sut1.AddEfCoreDataAccessObject<Account, AnotherDbMarker>();
-            sut1.AddEfCoreDataAccessObject<PlatformProvider, AnotherDbMarker>();
+            sut1.AddDefaultEfCoreDataAccessObject<Account, AnotherDbMarker>();
+            sut1.AddDefaultEfCoreDataAccessObject<PlatformProvider, AnotherDbMarker>();
             var sut2 = sut1.BuildServiceProvider();
 
-            Assert.IsType<EfCoreDataAccessObject<Account, DbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, EfCoreOptions<Account>, DbMarker>>());
-            Assert.IsType<EfCoreDataAccessObject<PlatformProvider, DbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, EfCoreOptions<PlatformProvider>, DbMarker>>());
-            Assert.IsType<EfCoreDataAccessObject<Account, AnotherDbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, EfCoreOptions<Account>, AnotherDbMarker>>());
-            Assert.IsType<EfCoreDataAccessObject<PlatformProvider, AnotherDbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, EfCoreOptions<PlatformProvider>, AnotherDbMarker>>());
+            Assert.IsType<DefaultEfCoreDataAccessObject<Account, DbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, EfCoreOptions<Account>, DbMarker>>());
+            Assert.IsType<DefaultEfCoreDataAccessObject<PlatformProvider, DbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, EfCoreOptions<PlatformProvider>, DbMarker>>());
+            Assert.IsType<DefaultEfCoreDataAccessObject<Account, AnotherDbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, EfCoreOptions<Account>, AnotherDbMarker>>());
+            Assert.IsType<DefaultEfCoreDataAccessObject<PlatformProvider, AnotherDbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, EfCoreOptions<PlatformProvider>, AnotherDbMarker>>());
             Assert.NotSame(sut2.GetRequiredService<IPersistentDataAccessObject<Account, EfCoreOptions<Account>, DbMarker>>(), sut2.GetRequiredService<IPersistentDataAccessObject<Account, EfCoreOptions<Account>, AnotherDbMarker>>());
             Assert.NotSame(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, EfCoreOptions<PlatformProvider>, DbMarker>>(), sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, EfCoreOptions<PlatformProvider>, AnotherDbMarker>>());
         }

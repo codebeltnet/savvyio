@@ -15,40 +15,40 @@ namespace Savvyio.Extensions.Dapper
     public abstract class DapperDataAccessObject<T> : Disposable, IPersistentDataAccessObject<T, DapperOptions> where T : class
     {
         /// <summary>
-        /// Creates the specified <paramref name="dto"/> asynchronous.
+        /// Creates the specified <paramref name="dto"/> asynchronous in the associated <seealso cref="IDapperDataStore"/>.
         /// </summary>
-        /// <param name="dto">The object to create.</param>
-        /// <param name="setup">The <see cref="DapperOptions"/> which may be configured.</param>
+        /// <param name="dto">The object to create in the associated <seealso cref="IDapperDataStore"/>.</param>
+        /// <param name="setup">The <see cref="DapperOptions"/> that needs to be configured.</param>
         /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
         public abstract Task CreateAsync(T dto, Action<DapperOptions> setup = null);
         
         /// <summary>
-        /// Updates the specified <paramref name="dto"/> asynchronous.
+        /// Updates the specified <paramref name="dto"/> asynchronous in the associated <seealso cref="IDapperDataStore"/>.
         /// </summary>
-        /// <param name="dto">The object to update.</param>
-        /// <param name="setup">The <see cref="DapperOptions"/> which may be configured.</param>
+        /// <param name="dto">The object to update in the associated <seealso cref="IDapperDataStore"/>.</param>
+        /// <param name="setup">The <see cref="DapperOptions"/> that needs to be configured.</param>
         /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
         public abstract Task UpdateAsync(T dto, Action<DapperOptions> setup = null);
 
         /// <summary>
-        /// Finds an object from the specified <paramref name="setup"/> asynchronous.
+        /// Finds an object from the specified <paramref name="setup"/> asynchronous in the associated <seealso cref="IDapperDataStore"/>.
         /// </summary>
-        /// <param name="setup">The <see cref="DapperOptions"/> which may be configured.</param>
+        /// <param name="setup">The <see cref="DapperOptions"/> that needs to be configured.</param>
         /// <returns>A <see cref="Task{TResult}" /> that represents the asynchronous operation. The task result either contains the matching object of the operation or <c>null</c> if no match was found.</returns>
         public abstract Task<T> ReadAsync(Action<DapperOptions> setup = null);
 
         /// <summary>
-        /// Finds all objects matching the specified <paramref name="setup"/> asynchronous.
+        /// Finds all objects matching the specified <paramref name="setup"/> asynchronous in the associated <seealso cref="IDapperDataStore"/>.
         /// </summary>
-        /// <param name="setup">The <see cref="DapperOptions"/> which may be configured.</param>
+        /// <param name="setup">The <see cref="DapperOptions"/> that needs to be configured.</param>
         /// <returns>A <see cref="Task{TResult}" /> that represents the asynchronous operation. The task result either contains the matching objects of the operation or an empty sequence if no match was found.</returns>
         public abstract Task<IEnumerable<T>> ReadAllAsync(Action<DapperOptions> setup = null);
 
         /// <summary>
-        /// Deletes the specified <paramref name="dto"/> asynchronous.
+        /// Deletes the specified <paramref name="dto"/> asynchronous in the associated <seealso cref="IDapperDataStore"/>.
         /// </summary>
-        /// <param name="dto">The object to delete.</param>
-        /// <param name="setup">The <see cref="DapperOptions"/> which may be configured.</param>
+        /// <param name="dto">The object to delete in the associated <seealso cref="IDapperDataStore"/>.</param>
+        /// <param name="setup">The <see cref="DapperOptions"/> that needs to be configured.</param>
         /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
         public abstract Task DeleteAsync(T dto, Action<DapperOptions> setup = null);
     }
