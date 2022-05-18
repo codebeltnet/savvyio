@@ -1,5 +1,4 @@
-﻿using Cuemon.Threading;
-using Savvyio.Extensions.DependencyInjection.Data;
+﻿using Savvyio.Extensions.DependencyInjection.Data;
 using Savvyio.Extensions.EFCore;
 
 namespace Savvyio.Extensions.DependencyInjection.EFCore

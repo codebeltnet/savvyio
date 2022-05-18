@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Domain;
-using Savvyio.Extensions.DependencyInjection.Data;
 using Savvyio.Extensions.DependencyInjection.Domain;
 using Savvyio.Extensions.EFCore;
 using Savvyio.Extensions.EFCore.Domain;

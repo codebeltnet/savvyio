@@ -1,5 +1,4 @@
-﻿using Cuemon.Extensions.DependencyInjection;
-using Savvyio.Extensions.DependencyInjection.Domain;
+﻿using Savvyio.Extensions.DependencyInjection.Domain;
 using Savvyio.Extensions.EFCore;
 
 namespace Savvyio.Extensions.DependencyInjection.EFCore

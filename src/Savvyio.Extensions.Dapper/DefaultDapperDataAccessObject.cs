@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Cuemon;
 using Cuemon.Extensions;
 using Dapper;
-using Savvyio.Data;
 
 namespace Savvyio.Extensions.Dapper
 {
