@@ -33,7 +33,7 @@ namespace Savvyio.Assets
 
         private async Task<AccountCreated> GetAccountAsync(GetAccount arg1)
         {
-            var dao = await _accountDao.ReadAsync(null, o =>
+            var dao = await _accountDao.ReadAsync(o =>
             {
                 o.CommandText = "SELECT * FROM Account WHERE Id = @Id";
                 o.Parameters = new { arg1.Id };

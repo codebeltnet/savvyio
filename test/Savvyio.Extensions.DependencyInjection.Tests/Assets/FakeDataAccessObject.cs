@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Cuemon.Threading;
 using Savvyio.Data;
@@ -25,12 +24,12 @@ namespace Savvyio.Extensions.DependencyInjection.Assets
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<T>> ReadAllAsync(Expression<Func<T, bool>> predicate = null, Action<AsyncOptions> setup = null)
+        public Task<IEnumerable<T>> ReadAllAsync(Action<AsyncOptions> setup = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<T> ReadAsync(Expression<Func<T, bool>> predicate, Action<AsyncOptions> setup = null)
+        public Task<T> ReadAsync(Action<AsyncOptions> setup = null)
         {
             throw new NotImplementedException();
         }

@@ -76,7 +76,7 @@ namespace Savvyio.Assets.Domain.Handlers
         {
             if (_accountDao != null)
             {
-                var dao = await _accountDao.ReadAsync(null, o =>
+                var dao = await _accountDao.ReadAsync(o =>
                 {
                     o.CommandText = "SELECT * FROM Account WHERE EmailAddress = @EmailAddress";
                     o.Parameters = new { e.EmailAddress };

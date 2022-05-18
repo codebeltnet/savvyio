@@ -53,12 +53,12 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         {
             var sut1 = new ServiceCollection();
             sut1.AddDapperDataStore(o => o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:"));
-            sut1.AddDapperDataAccessObject<Account>();
-            sut1.AddDapperDataAccessObject<PlatformProvider>();
+            sut1.AddDefaultDapperDataAccessObject<Account>();
+            sut1.AddDefaultDapperDataAccessObject<PlatformProvider>();
             var sut2 = sut1.BuildServiceProvider();
 
-            Assert.IsType<DapperDataAccessObject<Account>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, DapperOptions>>());
-            Assert.IsType<DapperDataAccessObject<PlatformProvider>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, DapperOptions>>());
+            Assert.IsType<DefaultDapperDataAccessObject<Account>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, DapperOptions>>());
+            Assert.IsType<DefaultDapperDataAccessObject<PlatformProvider>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, DapperOptions>>());
         }
 
         [Fact]
@@ -66,17 +66,17 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         {
             var sut1 = new ServiceCollection();
             sut1.AddDapperDataStore<DbMarker>(o => o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:"));
-            sut1.AddDapperDataAccessObject<Account, DbMarker>();
-            sut1.AddDapperDataAccessObject<PlatformProvider, DbMarker>();
+            sut1.AddDefaultDapperDataAccessObject<Account, DbMarker>();
+            sut1.AddDefaultDapperDataAccessObject<PlatformProvider, DbMarker>();
             sut1.AddDapperDataStore<AnotherDbMarker>(o => o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:"));
-            sut1.AddDapperDataAccessObject<Account, AnotherDbMarker>();
-            sut1.AddDapperDataAccessObject<PlatformProvider, AnotherDbMarker>();
+            sut1.AddDefaultDapperDataAccessObject<Account, AnotherDbMarker>();
+            sut1.AddDefaultDapperDataAccessObject<PlatformProvider, AnotherDbMarker>();
             var sut2 = sut1.BuildServiceProvider();
 
-            Assert.IsType<DapperDataAccessObject<Account, DbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, DapperOptions, DbMarker>>());
-            Assert.IsType<DapperDataAccessObject<PlatformProvider, DbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, DapperOptions, DbMarker>>());
-            Assert.IsType<DapperDataAccessObject<Account, AnotherDbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, DapperOptions, AnotherDbMarker>>());
-            Assert.IsType<DapperDataAccessObject<PlatformProvider, AnotherDbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, DapperOptions, AnotherDbMarker>>());
+            Assert.IsType<DefaultDapperDataAccessObject<Account, DbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, DapperOptions, DbMarker>>());
+            Assert.IsType<DefaultDapperDataAccessObject<PlatformProvider, DbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, DapperOptions, DbMarker>>());
+            Assert.IsType<DefaultDapperDataAccessObject<Account, AnotherDbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, DapperOptions, AnotherDbMarker>>());
+            Assert.IsType<DefaultDapperDataAccessObject<PlatformProvider, AnotherDbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, DapperOptions, AnotherDbMarker>>());
             Assert.NotSame(sut2.GetRequiredService<IPersistentDataAccessObject<Account, DapperOptions, DbMarker>>(), sut2.GetRequiredService<IPersistentDataAccessObject<Account, DapperOptions, AnotherDbMarker>>());
             Assert.NotSame(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, DapperOptions, DbMarker>>(), sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, DapperOptions, AnotherDbMarker>>());
         }

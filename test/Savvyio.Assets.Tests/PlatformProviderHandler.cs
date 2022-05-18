@@ -9,6 +9,7 @@ using Savvyio.Commands;
 using Savvyio.EventDriven;
 using Savvyio.Extensions;
 using Savvyio.Extensions.DependencyInjection.Data;
+using Savvyio.Extensions.EFCore;
 using Savvyio.Handlers;
 using Xunit.Abstractions;
 
@@ -18,10 +19,10 @@ namespace Savvyio.Assets
     {
         private readonly IMediator _mediator;
         private readonly ITestOutputHelper _output;
-        private readonly IPersistentDataAccessObject<PlatformProvider, AsyncOptions, PlatformProvider> _activeRecordRepository;
+        private readonly IPersistentDataAccessObject<PlatformProvider, EfCoreOptions<PlatformProvider>, PlatformProvider> _activeRecordRepository;
         private readonly ITestStore<IIntegrationEvent> _testStore;
 
-        public PlatformProviderHandler(IMediator mediator = null, ITestOutputHelper output = null, ITestStore<IIntegrationEvent> testStore = null, IPersistentDataAccessObject<PlatformProvider, AsyncOptions, PlatformProvider> activeRecordRepository = null)
+        public PlatformProviderHandler(IMediator mediator = null, ITestOutputHelper output = null, ITestStore<IIntegrationEvent> testStore = null, IPersistentDataAccessObject<PlatformProvider, EfCoreOptions<PlatformProvider>, PlatformProvider> activeRecordRepository = null)
         {
             _mediator = mediator;
             _output = output;

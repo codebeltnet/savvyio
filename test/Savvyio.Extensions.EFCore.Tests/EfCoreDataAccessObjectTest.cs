@@ -31,8 +31,8 @@ namespace Savvyio.Extensions.Storage
 
             var sut2 = new EfCoreDataAccessObject<Account>(sut1);
             await sut2.CreateAsync(new Account(id, name, email));
-            
-            var sut3 = await sut2.ReadAsync(a => a.PlatformProviderId == id);
+
+            var sut3 = await sut2.ReadAsync(o => o.Predicate = a => a.PlatformProviderId == id);
 
             Assert.Equal(id, sut3.PlatformProviderId);
             Assert.Equal(name, sut3.FullName);
@@ -55,12 +55,12 @@ namespace Savvyio.Extensions.Storage
 
             var sut2 = new EfCoreDataAccessObject<Account>(sut1);
             await sut2.CreateAsync(dto);
-            
-            var sut3 = await sut2.ReadAsync(a => a.PlatformProviderId == id);
+
+            var sut3 = await sut2.ReadAsync(o => o.Predicate = a => a.PlatformProviderId == id);
 
             await sut2.DeleteAsync(dto);
 
-            var sut4 = await sut2.ReadAsync(a => a.PlatformProviderId == id);
+            var sut4 = await sut2.ReadAsync(o => o.Predicate = a => a.PlatformProviderId == id);
 
             Assert.NotNull(sut3);
             Assert.Null(sut4);
@@ -83,14 +83,14 @@ namespace Savvyio.Extensions.Storage
 
             var sut2 = new EfCoreDataAccessObject<Account>(sut1);
             await sut2.CreateAsync(dto);
-            
-            var sut3 = await sut2.ReadAsync(a => a.PlatformProviderId == id);
+
+            var sut3 = await sut2.ReadAsync(o => o.Predicate = a => a.PlatformProviderId == id);
 
             sut3.ChangeFullName(newName);
 
             await sut2.UpdateAsync(sut3);
 
-            var sut4 = await sut2.ReadAsync(a => a.PlatformProviderId == id);
+            var sut4 = await sut2.ReadAsync(o => o.Predicate = a => a.PlatformProviderId == id);
 
             Assert.NotEqual(name, sut3.FullName);
             Assert.Equal(newName, sut4.FullName);

@@ -28,10 +28,10 @@ namespace Savvyio.Extensions.Dapper
                 o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable();
             });
 
-            var sut2 = new DapperDataAccessObject<Account>(sut1);
+            var sut2 = new DefaultDapperDataAccessObject<Account>(sut1);
             await sut2.CreateAsync(new Account(id, name, email), o => o.CommandText = "INSERT INTO Account (FullName, EmailAddress) VALUES (@FullName, @EmailAddress)");
             
-            var sut3 = await sut2.ReadAsync(a => a.Id == 1, o => o.CommandText = "SELECT * FROM Account");
+            var sut3 = await sut2.ReadAsync(o => o.CommandText = "SELECT * FROM Account WHERE Id = 1");
 
             sut2.Dispose();
 
@@ -54,14 +54,14 @@ namespace Savvyio.Extensions.Dapper
                 o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable();
             });
 
-            var sut2 = new DapperDataAccessObject<Account>(sut1);
+            var sut2 = new DefaultDapperDataAccessObject<Account>(sut1);
             await sut2.CreateAsync(dto, o => o.CommandText = "INSERT INTO Account (FullName, EmailAddress) VALUES (@FullName, @EmailAddress)");
             
-            var sut3 = await sut2.ReadAsync(a => a.Id == 1, o => o.CommandText = "SELECT * FROM Account");
+            var sut3 = await sut2.ReadAsync(o => o.CommandText = "SELECT * FROM Account WHERE Id = 1");
 
             await sut2.DeleteAsync(sut3, o => o.CommandText = "DELETE FROM Account WHERE Id = @Id");
 
-            var sut4 = await sut2.ReadAsync(null, o => o.CommandText = "SELECT * FROM Account");
+            var sut4 = await sut2.ReadAsync(o => o.CommandText = "SELECT * FROM Account");
 
             sut2.Dispose();
 
@@ -85,16 +85,20 @@ namespace Savvyio.Extensions.Dapper
                 o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable();
             });
 
-            var sut2 = new DapperDataAccessObject<Account>(sut1);
+            var sut2 = new DefaultDapperDataAccessObject<Account>(sut1);
             await sut2.CreateAsync(dto, o => o.CommandText = "INSERT INTO Account (FullName, EmailAddress) VALUES (@FullName, @EmailAddress)");
             
-            var sut3 = await sut2.ReadAsync(a => a.Id == 1, o => o.CommandText = "SELECT * FROM Account");
+            var sut3 = await sut2.ReadAsync(o => o.CommandText = "SELECT * FROM Account WHERE Id = 1");
 
             sut3.ChangeFullName(newName);
 
             await sut2.UpdateAsync(sut3, o => o.CommandText = "UPDATE Account SET FullName = @FullName WHERE Id = @Id");
 
-            var sut4 = await sut2.ReadAsync(a => a.Id == sut3.Id, o => o.CommandText = "SELECT * FROM Account");
+            var sut4 = await sut2.ReadAsync(o =>
+            {
+                o.Parameters = new { sut3.Id };
+                o.CommandText = "SELECT * FROM Account WHERE Id = @Id";
+            });
 
             sut2.Dispose();
 

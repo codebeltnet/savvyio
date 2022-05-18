@@ -95,7 +95,7 @@ namespace Savvyio
         {
             var accountRepo = _sp.GetRequiredService<ISearchableRepository<Account, long, Account>>();
             var accountDao = _sp.GetRequiredService<IReadableDataAccessObject<AccountCreated, DapperOptions>>();
-            var daos = new List<AccountCreated>(await accountDao.ReadAllAsync(null, o => o.CommandText = "SELECT * FROM Account").ConfigureAwait(false));
+            var daos = new List<AccountCreated>(await accountDao.ReadAllAsync(o => o.CommandText = "SELECT * FROM Account").ConfigureAwait(false));
             var entities = new List<Account>(await accountRepo.FindAllAsync().ConfigureAwait(false));
             foreach (var entity in entities)
             {
@@ -123,8 +123,8 @@ namespace Savvyio
             }).AddEfCoreRepository<PlatformProvider, Guid, PlatformProvider>();
 
             services.AddDapperDataStore(o => o.ConnectionFactory = () => new SqliteConnection().SetDefaults().AddAccountTable().AddPlatformProviderTable())
-                .AddDapperDataAccessObject<AccountCreated>()
-                .AddDapperDataAccessObject<PlatformProviderCreated>();
+                .AddDefaultDapperDataAccessObject<AccountCreated>()
+                .AddDefaultDapperDataAccessObject<PlatformProviderCreated>();
 
             services.AddSavvyIO(o =>
             {
