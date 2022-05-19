@@ -77,10 +77,12 @@ namespace Savvyio.Extensions.DependencyInjection
         /// Adds Savvy I/O service locator used to resolve necessary dependencies.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
+        /// <param name="setup">The <see cref="ServiceLocatorOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
-        public static IServiceCollection AddServiceLocator(this IServiceCollection services)
+        public static IServiceCollection AddServiceLocator(this IServiceCollection services, Action<ServiceLocatorOptions> setup = null)
         {
-            services.TryAddScoped<IServiceLocator>(p => new ServiceLocator(p.GetServices));
+            var options = setup.Configure();
+            services.TryAdd(typeof(IServiceLocator), options.ImplementationFactory, options.Lifetime);
             return services;
         }
 
@@ -109,7 +111,11 @@ namespace Savvyio.Extensions.DependencyInjection
 
             AddDispatchers(services, options);
 
-            return services.AddServiceLocator();
+            return services.AddServiceLocator(o =>
+            {
+                o.ImplementationFactory = options.ServiceLocatorImplementationFactory;
+                o.Lifetime = options.ServiceLocatorLifetime;
+            });
         }
 
         private static void AddHandlersWithOptionalDescriptors(IServiceCollection services, Type handlerType, IEnumerable<Type> handlerTypeServices, Dictionary<Type, List<IHierarchy<object>>> descriptors, SavvyioDependencyInjectionOptions options)
