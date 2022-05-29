@@ -4,14 +4,14 @@ using System.Data;
 namespace Savvyio.Extensions.Dapper
 {
     /// <summary>
-    /// Configuration options for <see cref="IDapperDataStore"/>.
+    /// Configuration options for <see cref="IDapperDataSource"/>.
     /// </summary>
-    public class DapperDataStoreOptions
+    public class DapperDataSourceOptions
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DapperDataStoreOptions"/> class.
+        /// Initializes a new instance of the <see cref="DapperDataSourceOptions"/> class.
         /// </summary>
-        public DapperDataStoreOptions()
+        public DapperDataSourceOptions()
         {
         }
 

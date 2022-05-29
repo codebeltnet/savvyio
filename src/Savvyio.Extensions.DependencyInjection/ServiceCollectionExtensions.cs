@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Cuemon;
 using Cuemon.Extensions;
+using Cuemon.Extensions.Collections.Generic;
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -17,59 +18,27 @@ namespace Savvyio.Extensions.DependencyInjection
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds an implementation of <see cref="IDataStore" /> to the specified <see cref="IServiceCollection" />.
+        /// Adds an implementation of <see cref="IDataSource" /> to the specified <see cref="IServiceCollection" />.
         /// </summary>
-        /// <typeparam name="TDataStore">The type of the <see cref="IDataStore"/> interface to add.</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
+        /// <typeparam name="TService">The type of the <see cref="IDataSource"/> to add.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
+        /// <param name="setup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional configuration calls can be chained.</returns>
-        /// <remarks>The implementation will be type forwarded accordingly.</remarks>
-        /// <seealso cref="IDataStore"/>
-        public static IServiceCollection AddDataStore<TDataStore, TImplementation>(this IServiceCollection services)
-            where TDataStore : IDataStore
-            where TImplementation : class, TDataStore
-        {
-            return services.AddDataStore<TImplementation>();
-        }
-
-        /// <summary>
-        /// Adds an implementation of <see cref="IDataStore" /> to the specified <see cref="IServiceCollection" />.
-        /// </summary>
-        /// <typeparam name="TDataStore">The type of the <see cref="IDataStore"/> interface to add.</typeparam>
-        /// <typeparam name="TImplementation">The type of the configured implementation to use.</typeparam>
-        /// <typeparam name="TMarker">The type used to mark the implementation that this data store represents. Optimized for Microsoft Dependency Injection.</typeparam>
-        /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
-        /// <returns>A reference to <paramref name="services" /> so that additional configuration calls can be chained.</returns>
+        /// <remarks>If the underlying type of <typeparamref name="TService"/> implements <see cref="IDependencyInjectionMarker{TMarker}"/> interface then this is automatically handled. Also, the implementation will be type forwarded accordingly.</remarks>
         /// <seealso cref="IDependencyInjectionMarker{TMarker}"/>
-        /// <seealso cref="IDataStore{TMarker}"/>
-        public static IServiceCollection AddDataStore<TDataStore, TImplementation, TMarker>(this IServiceCollection services)
-            where TDataStore : IDataStore<TMarker>
-            where TImplementation : class, TDataStore
-        {
-            return services.AddDataStore<TImplementation>();
-        }
-
-        /// <summary>
-        /// Adds an implementation of <see cref="IDataStore" /> to the specified <see cref="IServiceCollection" />.
-        /// </summary>
-        /// <typeparam name="TImplementation">The type of the configured implementation to use.</typeparam>
-        /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
-        /// <returns>A reference to <paramref name="services" /> so that additional configuration calls can be chained.</returns>
-        /// <remarks>If the underlying type of <typeparamref name="TImplementation"/> implements <see cref="IDependencyInjectionMarker{TMarker}"/> interface then this is automatically handled. Also, the implementation will be type forwarded accordingly.</remarks>
-        /// <seealso cref="IDependencyInjectionMarker{TMarker}"/>
-        /// <seealso cref="IDataStore"/>
-        /// <seealso cref="IDataStore{TMarker}"/>
-        public static IServiceCollection AddDataStore<TImplementation>(this IServiceCollection services)
-            where TImplementation : class, IDataStore
+        /// <seealso cref="IDataSource"/>
+        /// <seealso cref="IDataSource{TMarker}"/>
+        public static IServiceCollection AddDataSource<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IDataSource
         {
             Validator.ThrowIfNull(services, nameof(services));
-            var dataStoreType = typeof(IDataStore);
-            services.TryAddScoped<TImplementation>();
-            if (typeof(TImplementation).TryGetDependencyInjectionMarker(out var markerType))
+            var options = setup.Configure();
+            services.TryAdd<TService, TService>(options.Lifetime);
+            var hasMarkerType = typeof(TService).TryGetDependencyInjectionMarker(out _);
+            var dataSourceGroupTypes = typeof(TService).GetInterfaces().Where(type => type.IsAssignableTo(typeof(IDataSource))).GroupBy(type => type.ToFriendlyName(o => o.ExcludeGenericArguments = true));
+            foreach (var dataSourceGroupType in dataSourceGroupTypes)
             {
-                dataStoreType = typeof(IDataStore<>).MakeGenericType(markerType);
+                services.TryAdd(hasMarkerType ? dataSourceGroupType.Last() : dataSourceGroupType.First(), p => p.GetRequiredService<TService>(), options.Lifetime);
             }
-            services.TryAddScoped(dataStoreType, p => p.GetRequiredService<TImplementation>());
             return services;
         }
 

@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 namespace Savvyio.Extensions.EFCore
 {
     /// <summary>
-    /// Configuration options for <see cref="IEfCoreDataStore"/>.
+    /// Configuration options for <see cref="IEfCoreDataSource"/>.
     /// </summary>
-    public class EfCoreDataStoreOptions
+    public class IEfCoreDataSourceOptions
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="EfCoreDataStoreOptions"/> class.
+        /// Initializes a new instance of the <see cref="IEfCoreDataSourceOptions"/> class.
         /// </summary>
-        public EfCoreDataStoreOptions()
+        public IEfCoreDataSourceOptions()
         {
         }
 
