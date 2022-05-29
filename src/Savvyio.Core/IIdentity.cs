@@ -1,7 +1,7 @@
 ﻿namespace Savvyio
 {
     /// <summary>
-    /// Defines an identity typically associated with a storage such as a database.
+    /// Defines a generic identity typically associated with a storage such as a database.
     /// </summary>
     /// <typeparam name="TKey">The type of the identifier.</typeparam>
     public interface IIdentity<out TKey>
