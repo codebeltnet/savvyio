@@ -9,39 +9,39 @@ using Savvyio.Domain;
 namespace Savvyio.Extensions.EFCore.Domain
 {
     /// <summary>
-    /// Provides an implementation of the <see cref="EfCoreDataStore"/> that is optimized for Domain Driven Design and the concept of Aggregate Root.
+    /// Provides an implementation of the <see cref="EfCoreDataSource"/> that is optimized for Domain Driven Design and the concept of Aggregate Root.
     /// </summary>
-    /// <seealso cref="EfCoreDataStore" />
-    public class EfCoreAggregateDataStore : EfCoreDataStore
+    /// <seealso cref="EfCoreDataSource" />
+    public class EfCoreAggregateDataSource : EfCoreDataSource
     {
         private readonly IDomainEventDispatcher _dispatcher;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EfCoreAggregateDataStore"/> class.
+        /// Initializes a new instance of the <see cref="EfCoreAggregateDataSource"/> class.
         /// </summary>
         /// <param name="dispatcher">The <see cref="IDomainEventDispatcher" /> that are responsible for raising domain events.</param>
         /// <param name="dbContext">The <see cref="DbContext" /> to associate with this data store.</param>
-        protected EfCoreAggregateDataStore(IDomainEventDispatcher dispatcher, DbContext dbContext) : base(dbContext)
+        protected EfCoreAggregateDataSource(IDomainEventDispatcher dispatcher, DbContext dbContext) : base(dbContext)
         {
             _dispatcher = dispatcher;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EfCoreAggregateDataStore"/> class.
+        /// Initializes a new instance of the <see cref="EfCoreAggregateDataSource"/> class.
         /// </summary>
         /// <param name="dispatcher">The <see cref="IDomainEventDispatcher" /> that are responsible for raising domain events.</param>
-        /// <param name="setup">The <see cref="EfCoreDataStoreOptions" /> which need to be configured.</param>
-        public EfCoreAggregateDataStore(IDomainEventDispatcher dispatcher, IOptions<EfCoreDataStoreOptions> setup) : base(setup)
+        /// <param name="setup">The <see cref="IEfCoreDataSourceOptions" /> which need to be configured.</param>
+        public EfCoreAggregateDataSource(IDomainEventDispatcher dispatcher, IOptions<IEfCoreDataSourceOptions> setup) : base(setup)
         {
             _dispatcher = dispatcher;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EfCoreAggregateDataStore"/> class.
+        /// Initializes a new instance of the <see cref="EfCoreAggregateDataSource"/> class.
         /// </summary>
         /// <param name="dispatcher">The <see cref="IDomainEventDispatcher" /> that are responsible for raising domain events.</param>
-        /// <param name="setup">The <see cref="EfCoreDataStoreOptions" /> which need to be configured.</param>
-        public EfCoreAggregateDataStore(IDomainEventDispatcher dispatcher, Action<EfCoreDataStoreOptions> setup) : base(setup)
+        /// <param name="setup">The <see cref="IEfCoreDataSourceOptions" /> which need to be configured.</param>
+        public EfCoreAggregateDataSource(IDomainEventDispatcher dispatcher, Action<IEfCoreDataSourceOptions> setup) : base(setup)
         {
             _dispatcher = dispatcher;
         }
