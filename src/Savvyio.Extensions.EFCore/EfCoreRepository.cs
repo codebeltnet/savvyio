@@ -12,7 +12,7 @@ using Savvyio.Domain;
 namespace Savvyio.Extensions.EFCore
 {
     /// <summary>
-    /// Provides a default implementation of the <see cref="IPersistentRepository{TEntity,TKey}"/> interface to serve as an abstraction layer before the actual I/O communication towards a data store using Microsoft Entity Framework Core.
+    /// Provides a default implementation of the <see cref="IPersistentRepository{TEntity,TKey}"/> interface to serve as an abstraction layer before the actual I/O communication with a source of data using Microsoft Entity Framework Core.
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     /// <typeparam name="TKey">The type of the key that uniquely identifies the entity.</typeparam>
@@ -24,10 +24,10 @@ namespace Savvyio.Extensions.EFCore
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreRepository{TEntity, TKey}"/> class.
         /// </summary>
-        /// <param name="dataStore">The <see cref="IEfCoreDataStore"/> that handles actual I/O communication towards a data store.</param>
-        public EfCoreRepository(IEfCoreDataStore dataStore)
+        /// <param name="dataSource">The <see cref="IEfCoreDataSource"/> that handles actual I/O communication with a source of data.</param>
+        public EfCoreRepository(IEfCoreDataSource dataSource)
         {
-            _dbSet = dataStore.Set<TEntity>();
+            _dbSet = dataSource.Set<TEntity>();
         }
 
         /// <summary>
@@ -56,21 +56,8 @@ namespace Savvyio.Extensions.EFCore
         /// <returns>A <see cref="Task{TResult}" /> that represents the asynchronous operation. The task result either contains the entity of the operation or <c>null</c> if not found.</returns>
         public Task<TEntity> GetByIdAsync(TKey id, Action<AsyncOptions> setup = null)
         {
-            return FindAsync(entity => entity.Id.Equals(id));
-        }
-
-        /// <summary>
-        /// Finds an entity from the specified <paramref name="predicate"/> asynchronous.
-        /// </summary>
-        /// <param name="predicate">The predicate that matches the entity to retrieve.</param>
-        /// <param name="setup">The <see cref="AsyncOptions"/> which may be configured.</param>
-        /// <returns>A <see cref="Task{TResult}" /> that represents the asynchronous operation. The task result either contains the matching entity of the operation or <c>null</c> if no match was found.</returns>
-        public async Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> predicate, Action<AsyncOptions> setup = null)
-        {
-            Validator.ThrowIfNull(predicate, nameof(predicate));
             var options = setup.Configure();
-            var dbValue = await _dbSet.SingleOrDefaultAsync(predicate, options.CancellationToken);
-            return dbValue ?? _dbSet.Local.SingleOrDefault(predicate.Compile());
+            return _dbSet.FindAsync(new [] { id }, options.CancellationToken).AsTask();
         }
 
         /// <summary>

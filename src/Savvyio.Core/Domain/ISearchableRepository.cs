@@ -14,15 +14,6 @@ namespace Savvyio.Domain
     /// <seealso cref="IRepository{TEntity,TKey}"/>
     public interface ISearchableRepository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : class, IIdentity<TKey>
     {
-
-        /// <summary>
-        /// Finds an entity from the specified <paramref name="predicate"/> asynchronous.
-        /// </summary>
-        /// <param name="predicate">The predicate that matches the entity to retrieve.</param>
-        /// <param name="setup">The <see cref="AsyncOptions"/> which may be configured.</param>
-        /// <returns>A <see cref="Task{TResult}" /> that represents the asynchronous operation. The task result either contains the matching entity of the operation or <c>null</c> if no match was found.</returns>
-        Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> predicate, Action<AsyncOptions> setup = null);
-
         /// <summary>
         /// Finds all entities matching the specified <paramref name="predicate"/> asynchronous.
         /// </summary>
