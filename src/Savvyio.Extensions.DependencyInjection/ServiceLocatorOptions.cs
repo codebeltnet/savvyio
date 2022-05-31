@@ -7,7 +7,7 @@ namespace Savvyio.Extensions.DependencyInjection
     /// <summary>
     /// Configuration options for <see cref="IServiceLocator"/>.
     /// </summary>
-    public class ServiceLocatorOptions
+    public class ServiceLocatorOptions : ServiceOptions
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceLocatorOptions"/> class.
@@ -20,7 +20,7 @@ namespace Savvyio.Extensions.DependencyInjection
         ///         <description>Initial Value</description>
         ///     </listheader>
         ///     <item>
-        ///         <term><see cref="Lifetime"/></term>
+        ///         <term><see cref="ServiceOptions.Lifetime"/></term>
         ///         <description><see cref="ServiceLifetime.Scoped"/></description>
         ///     </item>
         ///     <item>
@@ -40,11 +40,5 @@ namespace Savvyio.Extensions.DependencyInjection
         /// </summary>
         /// <value>The function delegate that creates an instance of an <see cref="IServiceLocator"/> implementation.</value>
         public Func<IServiceProvider, IServiceLocator> ImplementationFactory { get; set; }
-
-        /// <summary>
-        /// Gets or sets the lifetime of the <see cref="IServiceLocator"/>.
-        /// </summary>
-        /// <value>The lifetime of the <see cref="IServiceLocator"/>.</value>
-        public ServiceLifetime Lifetime { get; set; }
     }
 }

@@ -13,31 +13,31 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds an <see cref="EfCoreDataStore" /> implementation to the specified <see cref="IServiceCollection" />.
+        /// Adds an <see cref="EfCoreDataSource" /> implementation to the specified <see cref="IServiceCollection" />.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
-        /// <param name="setup">The <see cref="EfCoreDataStoreOptions" /> which need to be configured.</param>
+        /// <param name="dataSourceSetup">The <see cref="EfCoreDataSourceOptions" /> which need to be configured.</param>
+        /// <param name="serviceSetup">The <see cref="EfCoreServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
-        /// <remarks>The <see cref="EfCoreAggregateDataStore"/> will be type forwarded accordingly.</remarks>
-        public static IServiceCollection AddEfCoreAggregateDataStore(this IServiceCollection services, Action<EfCoreDataStoreOptions> setup)
+        /// <remarks>The <see cref="EfCoreAggregateDataSource"/> will be type forwarded accordingly.</remarks>
+        public static IServiceCollection AddEfCoreAggregateDataSource(this IServiceCollection services, Action<EfCoreDataSourceOptions> dataSourceSetup, Action<EfCoreServiceOptions> serviceSetup = null)
         {
-            services.AddEfCoreDataStore<EfCoreAggregateDataStore>();
-            services.Configure(setup);
-            return services;
+            services.AddEfCoreDataSource<EfCoreAggregateDataSource>(serviceSetup);
+            return services.Configure(dataSourceSetup);
         }
 
         /// <summary>
-        /// Adds an <see cref="EfCoreDataStore{TMarker}" /> implementation to the specified <see cref="IServiceCollection" />.
+        /// Adds an <see cref="EfCoreDataSource{TMarker}" /> implementation to the specified <see cref="IServiceCollection" />.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
-        /// <param name="setup">The <see cref="EfCoreDataStoreOptions{TMarker}" /> which need to be configured.</param>
+        /// <param name="dataSourceSetup">The <see cref="EfCoreDataSourceOptions" /> which need to be configured.</param>
+        /// <param name="serviceSetup">The <see cref="EfCoreServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
-        /// <remarks>The <see cref="EfCoreAggregateDataStore{TMarker}"/> will be type forwarded accordingly.</remarks>
-        public static IServiceCollection AddEfCoreAggregateDataStore<TMarker>(this IServiceCollection services, Action<EfCoreDataStoreOptions<TMarker>> setup)
+        /// <remarks>The <see cref="EfCoreAggregateDataSource{TMarker}"/> will be type forwarded accordingly.</remarks>
+        public static IServiceCollection AddEfCoreAggregateDataSource<TMarker>(this IServiceCollection services, Action<EfCoreDataSourceOptions<TMarker>> dataSourceSetup, Action<EfCoreServiceOptions> serviceSetup = null)
         {
-            services.AddEfCoreDataStore<EfCoreAggregateDataStore<TMarker>>();
-            services.Configure(setup);
-            return services;
+            services.AddEfCoreDataSource<EfCoreAggregateDataSource<TMarker>>(serviceSetup);
+            return services.Configure(dataSourceSetup);
         }
 
         /// <summary>
@@ -48,10 +48,9 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
         /// <remarks>The <see cref="EfCoreAggregateRepository{TEntity,TKey,TMarker}"/> will be type forwarded accordingly.</remarks>
         /// <seealso cref="EfCoreAggregateRepository{TEntity,TKey}"/>
-        public static IServiceCollection AddEfCoreAggregateRepository<TEntity, TKey>(this IServiceCollection services)
-            where TEntity : class, IEntity<TKey>, IAggregateRoot<IDomainEvent, TKey>
+        public static IServiceCollection AddEfCoreAggregateRepository<TEntity, TKey>(this IServiceCollection services) where TEntity : class, IAggregateRoot<IDomainEvent, TKey>
         {
-            return services.AddRepository<EfCoreAggregateRepository<TEntity, TKey>, TEntity, TKey>();
+            return services.AddAggregateRepository<EfCoreAggregateRepository<TEntity, TKey>, TEntity, TKey>();
         }
 
         /// <summary>
@@ -63,10 +62,9 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
         /// <remarks>The <see cref="EfCoreAggregateRepository{TEntity,TKey,TMarker}"/> will be type forwarded accordingly.</remarks>
         /// <seealso cref="EfCoreAggregateRepository{TEntity,TKey,TMarker}"/>
-        public static IServiceCollection AddEfCoreAggregateRepository<TEntity, TKey, TMarker>(this IServiceCollection services)
-            where TEntity : class, IEntity<TKey>, IAggregateRoot<IDomainEvent, TKey>
+        public static IServiceCollection AddEfCoreAggregateRepository<TEntity, TKey, TMarker>(this IServiceCollection services) where TEntity : class, IAggregateRoot<IDomainEvent, TKey>
         {
-            return services.AddRepository<EfCoreAggregateRepository<TEntity, TKey, TMarker>, TEntity, TKey>();
+            return services.AddAggregateRepository<EfCoreAggregateRepository<TEntity, TKey, TMarker>, TEntity, TKey>();
         }
     }
 }
