@@ -9,16 +9,16 @@ using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.Dapper
 {
-    public class DapperOptionsTest : Test
+    public class DapperQueryOptionsTest : Test
     {
-        public DapperOptionsTest(ITestOutputHelper output) : base(output)
+        public DapperQueryOptionsTest(ITestOutputHelper output) : base(output)
         {
         }
 
         [Fact]
         public void DapperOptions_Ensure_Initialization_Defaults()
         {
-            var sut = new DapperOptions();
+            var sut = new DapperQueryOptions();
 
             var cd = (CommandDefinition)sut;
 

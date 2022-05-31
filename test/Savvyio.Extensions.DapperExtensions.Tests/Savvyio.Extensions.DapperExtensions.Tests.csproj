@@ -1,16 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>Savvyio.Extensions.Dapper</RootNamespace>
+    <RootNamespace>Savvyio.Extensions.DapperExtensions</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.5" />
-    <PackageReference Include="Savvyio.Extensions.DapperExtensions" Version="0.8.0-preview.3" />
   </ItemGroup>
 
   <ItemGroup>
-    
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.DapperExtensions\Savvyio.Extensions.DapperExtensions.csproj" />
     <ProjectReference Include="..\Savvyio.Assets.Dapper.Tests\Savvyio.Assets.Dapper.Tests.csproj" />
     <ProjectReference Include="..\Savvyio.Assets.Tests\Savvyio.Assets.Tests.csproj" />
   </ItemGroup>

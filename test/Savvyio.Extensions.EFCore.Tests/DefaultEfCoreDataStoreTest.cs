@@ -10,29 +10,29 @@ using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.Storage
 {
-    public class EfCoreDataAccessObjectTest : Test
+    public class DefaultEfCoreDataStoreTest : Test
     {
-        public EfCoreDataAccessObjectTest(ITestOutputHelper output) : base(output)
+        public DefaultEfCoreDataStoreTest(ITestOutputHelper output) : base(output)
         {
         }
 
         [Fact]
-        public async Task EfCoreDataAccessObject_ShouldCreateObject()
+        public async Task DefaultEfCoreDataStore_ShouldCreateObject()
         {
             var id = Guid.NewGuid();
             var name = "Test";
             var email = "test@unit.test";
 
-            var sut1 = new EfCoreDataStore(o =>
+            var sut1 = new EfCoreDataSource(o =>
             {
                 o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy");
                 o.ModelConstructor = mb => mb.AddAccount();
             });
 
-            var sut2 = new DefaultEfCoreDataAccessObject<Account>(sut1);
+            var sut2 = new DefaultEfCoreDataStore<Account>(sut1);
             await sut2.CreateAsync(new Account(id, name, email));
 
-            var sut3 = await sut2.ReadAsync(o => o.Predicate = a => a.PlatformProviderId == id);
+            var sut3 = await sut2.FindAllAsync(o => o.Predicate = a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
             Assert.Equal(id, sut3.PlatformProviderId);
             Assert.Equal(name, sut3.FullName);
@@ -40,34 +40,34 @@ namespace Savvyio.Extensions.Storage
         }
 
         [Fact]
-        public async Task EfCoreDataAccessObject_ShouldRemoveObject()
+        public async Task DefaultEfCoreDataStore_ShouldRemoveObject()
         {
             var id = Guid.NewGuid();
             var name = "Test";
             var email = "test@unit.test";
             var dto = new Account(id, name, email);
 
-            var sut1 = new EfCoreDataStore(o =>
+            var sut1 = new EfCoreDataSource(o =>
             {
                 o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy");
                 o.ModelConstructor = mb => mb.AddAccount();
             });
 
-            var sut2 = new DefaultEfCoreDataAccessObject<Account>(sut1);
+            var sut2 = new DefaultEfCoreDataStore<Account>(sut1);
             await sut2.CreateAsync(dto);
 
-            var sut3 = await sut2.ReadAsync(o => o.Predicate = a => a.PlatformProviderId == id);
+            var sut3 = await sut2.FindAllAsync(o => o.Predicate = a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
             await sut2.DeleteAsync(dto);
 
-            var sut4 = await sut2.ReadAsync(o => o.Predicate = a => a.PlatformProviderId == id);
+            var sut4 = await sut2.FindAllAsync(o => o.Predicate = a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
             Assert.NotNull(sut3);
             Assert.Null(sut4);
         }
 
         [Fact]
-        public async Task EfCoreDataAccessObject_ShouldUpdateObject()
+        public async Task DefaultEfCoreDataStore_ShouldUpdateObject()
         {
             var id = Guid.NewGuid();
             var name = "Test";
@@ -75,22 +75,22 @@ namespace Savvyio.Extensions.Storage
             var email = "test@unit.test";
             var dto = new Account(id, name, email);
 
-            var sut1 = new EfCoreDataStore(o =>
+            var sut1 = new EfCoreDataSource(o =>
             {
                 o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy");
                 o.ModelConstructor = mb => mb.AddAccount();
             });
 
-            var sut2 = new DefaultEfCoreDataAccessObject<Account>(sut1);
+            var sut2 = new DefaultEfCoreDataStore<Account>(sut1);
             await sut2.CreateAsync(dto);
 
-            var sut3 = await sut2.ReadAsync(o => o.Predicate = a => a.PlatformProviderId == id);
+            var sut3 = await sut2.FindAllAsync(o => o.Predicate = a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
             sut3.ChangeFullName(newName);
 
             await sut2.UpdateAsync(sut3);
 
-            var sut4 = await sut2.ReadAsync(o => o.Predicate = a => a.PlatformProviderId == id);
+            var sut4 = await sut2.FindAllAsync(o => o.Predicate = a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
             Assert.NotEqual(name, sut3.FullName);
             Assert.Equal(newName, sut4.FullName);

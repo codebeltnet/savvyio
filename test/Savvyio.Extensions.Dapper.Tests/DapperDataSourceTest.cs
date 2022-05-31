@@ -14,13 +14,13 @@ namespace Savvyio.Extensions.Dapper
         }
 
         [Fact]
-        public void DapperDataStore_ShouldFailWithArgumentNullException()
+        public void DapperDataSource_ShouldFailWithArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(() => new DapperDataSource(Options.Create(new DapperDataSourceOptions())));
         }
 
         [Fact]
-        public void DapperDataStore_ShouldFailWithInvalidOperationException()
+        public void DapperDataSource_ShouldFailWithInvalidOperationException()
         {
             var sut = new DapperDataSource(o => o.ConnectionFactory = () =>
             {

@@ -1,26 +1,26 @@
-using System;
 using System.Threading.Tasks;
 using Cuemon.Extensions.Xunit;
+using DapperExtensions;
+using DapperExtensions.Sql;
 using Microsoft.Data.Sqlite;
 using Savvyio.Assets;
-using Savvyio.Assets.Domain;
-using Savvyio.Extensions.Dapper.Assets;
+using Savvyio.Assets.Queries;
+using Savvyio.Extensions.Dapper;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions.Dapper
+namespace Savvyio.Extensions.DapperExtensions
 {
-    public class DapperDataStoreTest : Test
+    public class DapperExtensionsDataStoreTest : Test
     {
-        public DapperDataStoreTest(ITestOutputHelper output) : base(output)
+        public DapperExtensionsDataStoreTest(ITestOutputHelper output) : base(output)
         {
-            
+            DapperAsyncExtensions.SqlDialect = new SqliteDialect();
         }
 
         [Fact]
-        public async Task DapperDataAccessObject_ShouldCreateObject()
+        public async Task DataStore_ShouldCreateObject()
         {
-            var id = Guid.NewGuid();
             var name = "Test";
             var email = "test@unit.test";
 
@@ -29,10 +29,10 @@ namespace Savvyio.Extensions.Dapper
                 o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable();
             });
 
-            var sut2 = new AccountData(sut1);
-            await sut2.CreateAsync(new Account(id, name, email));
-            
-            var sut3 = await sut2.FindAllAsync(o => o.CommandText = "SELECT * FROM AccountProjection WHERE Id = 1").SingleOrDefaultAsync();
+            var sut2 = new DapperExtensionsDataStore<AccountProjection>(sut1);
+            await sut2.CreateAsync(new AccountProjection(name, email));
+
+            var sut3 = await sut2.GetByIdAsync(1);
 
             sut2.Dispose();
 
@@ -43,26 +43,27 @@ namespace Savvyio.Extensions.Dapper
         }
 
         [Fact]
-        public async Task DapperDataAccessObject_ShouldRemoveObject()
+        public async Task DataStore_ShouldRemoveObject()
         {
-            var id = Guid.NewGuid();
             var name = "Test";
             var email = "test@unit.test";
-            var dto = new Account(id, name, email);
+            var dto = new AccountProjection(name, email);
 
             var sut1 = new DapperDataSource(o =>
             {
                 o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable();
             });
 
-            var sut2 = new AccountData(sut1);
+            var sut2 = new DapperExtensionsDataStore<AccountProjection>(sut1);
             await sut2.CreateAsync(dto);
-            
-            var sut3 = await sut2.FindAllAsync(o => o.CommandText = "SELECT * FROM AccountProjection WHERE Id = 1").SingleOrDefaultAsync();
+
+            var sut3 = await sut2.GetByIdAsync(1);
 
             await sut2.DeleteAsync(sut3);
 
-            var sut4 = await sut2.FindAllAsync(o => o.CommandText = "SELECT * FROM AccountProjection");
+            var sut4 = await sut2.FindAllAsync();
+
+            var sut5 = await sut2.GetByIdAsync(1);
 
             sut2.Dispose();
 
@@ -70,35 +71,35 @@ namespace Savvyio.Extensions.Dapper
             Assert.True(sut2.Disposed, "sut2.Disposed");
             Assert.NotNull(sut3);
             Assert.Empty(sut4);
+            Assert.Null(sut5);
         }
 
         [Fact]
-        public async Task DapperDataAccessObject_ShouldUpdateObject()
+        public async Task DataStore_ShouldUpdateObject()
         {
-            var id = Guid.NewGuid();
             var name = "Test";
             var newName = "Unit Test";
             var email = "test@unit.test";
-            var dto = new Account(id, name, email);
+            var dto = new AccountProjection(name, email);
 
             var sut1 = new DapperDataSource(o =>
             {
                 o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable();
             });
 
-            var sut2 = new AccountData(sut1);
+            var sut2 = new DapperExtensionsDataStore<AccountProjection>(sut1);
             await sut2.CreateAsync(dto);
-            
-            var sut3 = await sut2.FindAllAsync(o => o.CommandText = "SELECT * FROM AccountProjection WHERE Id = 1").SingleOrDefaultAsync();
 
-            sut3.ChangeFullName(newName);
+            var sut3 = await sut2.GetByIdAsync(1);
+
+            sut3.FullName = newName;
 
             await sut2.UpdateAsync(sut3);
 
             var sut4 = await sut2.FindAllAsync(o =>
             {
-                o.Parameters = new { sut3.Id };
-                o.CommandText = "SELECT * FROM AccountProjection WHERE Id = @Id";
+                o.Predicate = a => a.Id;
+                o.Value = sut3.Id;
             }).SingleOrDefaultAsync();
 
             sut2.Dispose();

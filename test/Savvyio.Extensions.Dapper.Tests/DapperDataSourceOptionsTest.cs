@@ -11,7 +11,7 @@ namespace Savvyio.Extensions.Dapper
         }
 
         [Fact]
-        public void DapperDataStoreOptions_Ensure_Initialization_Defaults()
+        public void DapperDataSourceOptions_Ensure_Initialization_Defaults()
         {
             var sut = new DapperDataSourceOptions();
 

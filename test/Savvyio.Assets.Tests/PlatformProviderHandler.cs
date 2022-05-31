@@ -18,10 +18,10 @@ namespace Savvyio.Assets
     {
         private readonly IMediator _mediator;
         private readonly ITestOutputHelper _output;
-        private readonly IPersistentDataAccessObject<PlatformProvider, EfCoreOptions<PlatformProvider>, PlatformProvider> _activeRecordRepository;
+        private readonly IPersistentDataStore<PlatformProvider, EfCoreQueryOptions<PlatformProvider>, PlatformProvider> _activeRecordRepository;
         private readonly ITestStore<IIntegrationEvent> _testStore;
 
-        public PlatformProviderHandler(IMediator mediator = null, ITestOutputHelper output = null, ITestStore<IIntegrationEvent> testStore = null, IPersistentDataAccessObject<PlatformProvider, EfCoreOptions<PlatformProvider>, PlatformProvider> activeRecordRepository = null)
+        public PlatformProviderHandler(IMediator mediator = null, ITestOutputHelper output = null, ITestStore<IIntegrationEvent> testStore = null, IPersistentDataStore<PlatformProvider, EfCoreQueryOptions<PlatformProvider>, PlatformProvider> activeRecordRepository = null)
         {
             _mediator = mediator;
             _output = output;

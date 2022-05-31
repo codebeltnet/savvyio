@@ -69,9 +69,9 @@ namespace Savvyio.Extensions
             {
                 services.AddSingleton(TestOutput);
                 services.AddEfCoreRepository<Account, long, Account>();
-                services.AddDefaultEfCoreDataAccessObject<PlatformProvider, PlatformProvider>();
-                services.AddEfCoreDataStore<CustomEfCoreDataStore>();
-                services.AddEfCoreDataStore<PlatformProvider>(o =>
+                services.AddDefaultEfCoreDataStore<PlatformProvider, PlatformProvider>();
+                services.AddEfCoreDataSource<CustomEfCoreDataSource>();
+                services.AddEfCoreDataSource<PlatformProvider>(o =>
                 {
                     o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(PlatformProvider)).EnableDetailedErrors().LogTo(Console.WriteLine);
                     o.ModelConstructor = mb => mb.AddPlatformProvider();
@@ -107,9 +107,9 @@ namespace Savvyio.Extensions
             {
                 services.AddSingleton(TestOutput);
                 services.AddEfCoreRepository<Account, long>();
-                services.AddDefaultEfCoreDataAccessObject<PlatformProvider, PlatformProvider>();
-                services.AddEfCoreDataStore<CustomEfCoreDataStore>();
-                services.AddEfCoreAggregateDataStore<PlatformProvider>(o =>
+                services.AddDefaultEfCoreDataStore<PlatformProvider, PlatformProvider>();
+                services.AddEfCoreDataSource<CustomEfCoreDataSource>();
+                services.AddEfCoreAggregateDataSource<PlatformProvider>(o =>
                 {
                     o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(PlatformProvider)).EnableDetailedErrors().LogTo(Console.WriteLine);
                     o.ModelConstructor = mb => mb.AddPlatformProvider();
@@ -149,8 +149,8 @@ namespace Savvyio.Extensions
                        services.AddSingleton(TestOutput);
                        services.AddScoped<IPersistentRepository<Account, long>, EfCoreRepository<Account, long, Account>>();
                        services.AddScoped<IPersistentRepository<PlatformProvider, Guid>, EfCoreRepository<PlatformProvider, Guid, PlatformProvider>>();
-                       services.AddEfCoreDataStore<Account>(o => o.ModelConstructor = builder => builder.AddAccount());
-                       services.AddEfCoreDataStore<PlatformProvider>(o => o.ModelConstructor = builder => builder.AddPlatformProvider());
+                       services.AddEfCoreDataSource<Account>(o => o.ModelConstructor = builder => builder.AddAccount());
+                       services.AddEfCoreDataSource<PlatformProvider>(o => o.ModelConstructor = builder => builder.AddPlatformProvider());
                        services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery());
                        services.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
                        services.AddScoped<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();

@@ -37,14 +37,14 @@ namespace Savvyio.Dispatchers
             
             var sp = sc.BuildServiceProvider();
             var sut = new QueryDispatcher(sp.GetRequiredService<IServiceLocator>());
-            var ga = new GetAccount(2313);
+            var ga = new GetFakeAccount(2313);
             var cs = sp.GetRequiredService<ITestStore<IQuery>>();
             
             var result = sut.Query(ga);
 
             Assert.NotNull(result);
             Assert.Equal(ga.Id, result.Id);
-            Assert.Equal(ga.Id, cs.QueryFor<GetAccount>().Single().Id);
+            Assert.Equal(ga.Id, cs.QueryFor<GetFakeAccount>().Single().Id);
         }
 
         [Fact]
@@ -66,14 +66,14 @@ namespace Savvyio.Dispatchers
             
             var sp = sc.BuildServiceProvider();
             var sut = new QueryDispatcher(sp.GetRequiredService<IServiceLocator>());
-            var ga = new GetAccount(74893297432);
+            var ga = new GetFakeAccount(74893297432);
             var cs = sp.GetRequiredService<ITestStore<IQuery>>();
             
             var result = await sut.QueryAsync(ga);
 
             Assert.NotNull(result);
             Assert.StartsWith(ga.Id.ToString(), result.EmailAddress);
-            Assert.Equal(ga.Id, cs.QueryFor<GetAccount>().Single().Id);
+            Assert.Equal(ga.Id, cs.QueryFor<GetFakeAccount>().Single().Id);
         }
     }
 }

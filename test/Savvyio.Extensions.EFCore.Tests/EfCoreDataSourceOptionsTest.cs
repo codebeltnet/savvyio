@@ -5,16 +5,16 @@ using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.Storage
 {
-    public class EfCoreDataStoreOptionsTest : Test
+    public class EfCoreDataSourceOptionsTest : Test
     {
-        public EfCoreDataStoreOptionsTest(ITestOutputHelper output) : base(output)
+        public EfCoreDataSourceOptionsTest(ITestOutputHelper output) : base(output)
         {
         }
 
         [Fact]
-        public void EfCoreDataStoreOptions_Ensure_Initialization_Defaults()
+        public void EfCoreDataSourceOptions_Ensure_Initialization_Defaults()
         {
-            var sut = new EfCoreDataStoreOptions();
+            var sut = new EfCoreDataSourceOptions();
 
             Assert.Null(sut.ContextConfigurator);
             Assert.Null(sut.ConventionsConfigurator);

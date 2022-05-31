@@ -72,7 +72,7 @@ namespace Savvyio.Domain.EventSourcing.Tests
             string schema = null;
             var sc = new ServiceCollection();
             sc.AddSavvyIO(o => o.AddDomainEventDispatcher().AddDomainEventHandler<AccountDomainEventHandler>());
-            sc.AddEfCoreAggregateDataStore(o =>
+            sc.AddEfCoreAggregateDataSource(o =>
             {
                 o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy").EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
                 o.ModelConstructor = mb =>
@@ -87,7 +87,7 @@ namespace Savvyio.Domain.EventSourcing.Tests
             
             var sp = sc.BuildServiceProvider();
 
-            var ds = sp.GetRequiredService<IEfCoreDataStore>();
+            var ds = sp.GetRequiredService<IEfCoreDataSource>();
             var sut4 = sp.GetRequiredService<ITracedAggregateRepository<TracedAccount, Guid>>();
 
             var id = Guid.NewGuid();

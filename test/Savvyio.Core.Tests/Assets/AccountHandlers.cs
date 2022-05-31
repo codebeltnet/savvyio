@@ -38,12 +38,12 @@ namespace Savvyio.Assets
 
         IRequestReplyActivator<IQuery> IRequestReplyHandler<IQuery>.Delegates => HandlerFactory.CreateRequestReply<IQuery>(registry =>
         {
-            registry.Register<GetAccount, AccountCreated>(a =>
+            registry.Register<GetFakeAccount, AccountCreated>(a =>
             {
                 _queryTestStore.Add(a);
                 return new AccountCreated(a.Id, $"{a.Id}___{Generate.RandomString(16)}", $"{a.Id}@no.where");
             });
-            registry.RegisterAsync<GetAccount, AccountCreated>(async a =>
+            registry.RegisterAsync<GetFakeAccount, AccountCreated>(async a =>
             {
                 await Task.Delay(TimeSpan.FromSeconds(0.5));
                 _queryTestStore.Add(a);

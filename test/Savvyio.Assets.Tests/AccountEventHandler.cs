@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Events;
+using Savvyio.Assets.Queries;
 using Savvyio.Data;
 using Savvyio.EventDriven;
 using Savvyio.Extensions.Dapper;
@@ -14,10 +15,10 @@ namespace Savvyio.Assets
     {
         private readonly ITestOutputHelper _output;
         private readonly ITestStore<IIntegrationEvent> _testStore;
-        private readonly IPersistentDataAccessObject<PlatformProviderCreated, DapperOptions> _platformProviderDao;
-        private readonly IPersistentDataAccessObject<AccountCreated, DapperOptions> _accountDao;
+        private readonly IPersistentDataStore<PlatformProviderCreated, DapperQueryOptions> _platformProviderDao;
+        private readonly IPersistentDataStore<AccountProjection, DapperQueryOptions> _accountDao;
 
-        public AccountEventHandler(ITestOutputHelper output = null, ITestStore<IIntegrationEvent> testStore = null, IPersistentDataAccessObject<AccountCreated, DapperOptions> accountDao = null, IPersistentDataAccessObject<PlatformProviderCreated, DapperOptions> platformProviderDao = null)
+        public AccountEventHandler(ITestOutputHelper output = null, ITestStore<IIntegrationEvent> testStore = null, IPersistentDataStore<AccountProjection, DapperQueryOptions> accountDao = null, IPersistentDataStore<PlatformProviderCreated, DapperQueryOptions> platformProviderDao = null)
         {
             _output = output;
             _testStore = testStore;
@@ -42,7 +43,7 @@ namespace Savvyio.Assets
         {
             _testStore?.Add(e);
             _output?.WriteLines($"IE {nameof(OnOutProcAccountCreated)}", JsonSerializer.Serialize(e));
-            _accountDao?.CreateAsync(e, o => o.CommandText = "INSERT INTO Account (Id, FullName, EmailAddress) VALUES (@Id, @FullName, @EmailAddress)");
+            _accountDao?.CreateAsync(new AccountProjection(e.Id, e.FullName, e.EmailAddress));
             return Task.CompletedTask;
         }
     }

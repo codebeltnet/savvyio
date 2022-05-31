@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Domain.Events;
-using Savvyio.Assets.Events;
+using Savvyio.Assets.Queries;
 using Savvyio.Data;
 using Savvyio.Domain;
 using Savvyio.Extensions.Dapper;
@@ -17,9 +17,9 @@ namespace Savvyio.Assets.Domain.Handlers
         private readonly ITestOutputHelper _output;
         private readonly ITestStore<IDomainEvent> _testStore;
         private readonly IDomainEventDispatcher _dispatcher;
-        private readonly IReadableDataAccessObject<AccountCreated, DapperOptions> _accountDao;
+        private readonly ISearchableDataStore<AccountProjection, DapperQueryOptions> _accountDao;
 
-        public AccountDomainEventHandler(ITestOutputHelper output = null, ITestStore<IDomainEvent> testStore = null, IDomainEventDispatcher dispatcher = null, IReadableDataAccessObject<AccountCreated, DapperOptions> accountDao = null)
+        public AccountDomainEventHandler(ITestOutputHelper output = null, ITestStore<IDomainEvent> testStore = null, IDomainEventDispatcher dispatcher = null, ISearchableDataStore<AccountProjection, DapperQueryOptions> accountDao = null)
         {
             _output = output;
             _testStore = testStore;
@@ -76,11 +76,11 @@ namespace Savvyio.Assets.Domain.Handlers
         {
             if (_accountDao != null)
             {
-                var dao = await _accountDao.ReadAsync(o =>
+                var dao = await _accountDao.FindAllAsync(o =>
                 {
-                    o.CommandText = "SELECT * FROM Account WHERE EmailAddress = @EmailAddress";
+                    o.CommandText = "SELECT * FROM AccountProjection WHERE EmailAddress = @EmailAddress";
                     o.Parameters = new { e.EmailAddress };
-                }).ConfigureAwait(false);
+                }).SingleOrDefaultAsync().ConfigureAwait(false);
 
                 if (dao != null) { throw new ValidationException("Email address has already been registered."); }
             }

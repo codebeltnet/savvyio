@@ -18,24 +18,24 @@ using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.Storage
 {
-    public class EfCoreDataStoreTest : Test
+    public class EfCoreDataSourceTest : Test
     {
-        public EfCoreDataStoreTest(ITestOutputHelper output) : base(output)
+        public EfCoreDataSourceTest(ITestOutputHelper output) : base(output)
         {
         }
 
         [Fact]
-        public async Task EfCoreDataStore_ShouldFailWithInvalidOperationException_NoDatabaseProvider()
+        public async Task EfCoreDataSource_ShouldFailWithInvalidOperationException_NoDatabaseProvider()
         {
-            var sut = new EfCoreDataStore(Options.Create(new EfCoreDataStoreOptions()));
+            var sut = new EfCoreDataSource(Options.Create(new EfCoreDataSourceOptions()));
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => sut.SaveChangesAsync());
             Assert.StartsWith("No database provider has been configured for this DbContext.", ex.Message);
         }
 
         [Fact]
-        public async Task EfCoreDataStore_ShouldFailWithObjectDisposedException()
+        public async Task EfCoreDataSource_ShouldFailWithObjectDisposedException()
         {
-            var sut = new EfCoreDataStore(o => o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy"));
+            var sut = new EfCoreDataSource(o => o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy"));
             sut.Dispose();
 
             await Assert.ThrowsAsync<ObjectDisposedException>(() => sut.SaveChangesAsync());
@@ -43,7 +43,7 @@ namespace Savvyio.Extensions.Storage
         }
 
         [Fact]
-        public async Task EfCoreDataStore_ShouldRaiseDomainEvents()
+        public async Task EfCoreDataSource_ShouldRaiseDomainEvents()
         {
             var sut1 = new ServiceCollection();
             sut1.AddServiceLocator();
@@ -51,7 +51,7 @@ namespace Savvyio.Extensions.Storage
             sut1.AddScoped<IDomainEventHandler, AccountDomainEventHandler>();
             sut1.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
             var sut2 = sut1.BuildServiceProvider();
-            var sut3 = new EfCoreAggregateDataStore(sut2.GetRequiredService<IDomainEventDispatcher>(), o =>
+            var sut3 = new EfCoreAggregateDataSource(sut2.GetRequiredService<IDomainEventDispatcher>(), o =>
             {
                 o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy");
                 o.ModelConstructor = mb => mb.AddAccount();
