@@ -9,13 +9,13 @@ namespace Savvyio.Extensions.EFCore
     /// </summary>
     /// <seealso cref="DbContext" />
     /// <seealso cref="IConfigurable{EfCoreDataStoreOptions}" />
-    public class EfCoreDbContext : DbContext, IConfigurable<EfCoreDataStoreOptions>
+    public class EfCoreDbContext : DbContext, IConfigurable<EfCoreDataSourceOptions>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreDbContext"/> class.
         /// </summary>
-        /// <param name="setup">The <see cref="EfCoreDataStoreOptions" /> which need to be configured.</param>
-        public EfCoreDbContext(IOptions<EfCoreDataStoreOptions> setup)
+        /// <param name="setup">The <see cref="EfCoreDataSourceOptions" /> which need to be configured.</param>
+        public EfCoreDbContext(IOptions<EfCoreDataSourceOptions> setup)
         {
             Options = setup.Value;
         }
@@ -81,6 +81,6 @@ namespace Savvyio.Extensions.EFCore
         /// Gets the configured options of this instance.
         /// </summary>
         /// <value>The configured options of this instance.</value>
-        public EfCoreDataStoreOptions Options { get; }
+        public EfCoreDataSourceOptions Options { get; }
     }
 }

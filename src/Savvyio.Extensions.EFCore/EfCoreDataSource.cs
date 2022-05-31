@@ -28,8 +28,8 @@ namespace Savvyio.Extensions.EFCore
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreDataSource"/> class.
         /// </summary>
-        /// <param name="setup">The <see cref="IEfCoreDataSourceOptions" /> which need to be configured.</param>
-        public EfCoreDataSource(IOptions<IEfCoreDataSourceOptions> setup)
+        /// <param name="setup">The <see cref="EfCoreDataSourceOptions" /> which need to be configured.</param>
+        public EfCoreDataSource(IOptions<EfCoreDataSourceOptions> setup)
         {
             DbContext = new EfCoreDbContext(setup);
         }
@@ -37,8 +37,8 @@ namespace Savvyio.Extensions.EFCore
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreDataSource"/> class.
         /// </summary>
-        /// <param name="setup">The <see cref="IEfCoreDataSourceOptions" /> which need to be configured.</param>
-        public EfCoreDataSource(Action<IEfCoreDataSourceOptions> setup) : this(Options.Create(setup.Configure()))
+        /// <param name="setup">The <see cref="EfCoreDataSourceOptions" /> which need to be configured.</param>
+        public EfCoreDataSource(Action<EfCoreDataSourceOptions> setup) : this(Options.Create(setup.Configure()))
         {
         }
 

@@ -17,7 +17,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain
         /// Initializes a new instance of the <see cref="EfCoreAggregateDataSource"/> class.
         /// </summary>
         /// <param name="dispatcher">The <see cref="IDomainEventDispatcher" /> that are responsible for raising domain events.</param>
-        /// <param name="setup">The <see cref="IEfCoreDataSourceOptions" /> which need to be configured.</param>
+        /// <param name="setup">The <see cref="EfCoreDataSourceOptions" /> which need to be configured.</param>
         public EfCoreAggregateDataSource(IDomainEventDispatcher dispatcher, IOptions<EfCoreDataSourceOptions<TMarker>> setup) : base(dispatcher, new EfCoreDbContext<TMarker>(setup))
         {
         }
@@ -26,7 +26,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain
         /// Initializes a new instance of the <see cref="EfCoreAggregateDataSource"/> class.
         /// </summary>
         /// <param name="dispatcher">The <see cref="IDomainEventDispatcher" /> that are responsible for raising domain events.</param>
-        /// <param name="setup">The <see cref="IEfCoreDataSourceOptions" /> which need to be configured.</param>
+        /// <param name="setup">The <see cref="EfCoreDataSourceOptions" /> which need to be configured.</param>
         public EfCoreAggregateDataSource(IDomainEventDispatcher dispatcher, Action<EfCoreDataSourceOptions<TMarker>> setup) : this(dispatcher, Options.Create(setup.Configure()))
         {
         }

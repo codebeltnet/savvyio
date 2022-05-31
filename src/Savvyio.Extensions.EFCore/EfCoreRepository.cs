@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Threading;
 using Microsoft.EntityFrameworkCore;
@@ -24,10 +23,10 @@ namespace Savvyio.Extensions.EFCore
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreRepository{TEntity, TKey}"/> class.
         /// </summary>
-        /// <param name="dataSource">The <see cref="IEfCoreDataSource"/> that handles actual I/O communication with a source of data.</param>
-        public EfCoreRepository(IEfCoreDataSource dataSource)
+        /// <param name="source">The <see cref="IEfCoreDataSource"/> that handles actual I/O communication with a source of data.</param>
+        public EfCoreRepository(IEfCoreDataSource source)
         {
-            _dbSet = dataSource.Set<TEntity>();
+            _dbSet = source.Set<TEntity>();
         }
 
         /// <summary>

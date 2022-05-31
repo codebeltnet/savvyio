@@ -20,8 +20,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
         /// <remarks>The <see cref="EfCoreAggregateRepository{TEntity,TKey,TMarker}"/> will be type forwarded accordingly.</remarks>
         /// <seealso cref="EfCoreAggregateRepository{TEntity,TKey}"/>
-        public static IServiceCollection AddEfCoreTracedAggregateRepository<TEntity, TKey>(this IServiceCollection services)
-            where TEntity : class, ITracedAggregateRoot<TKey>
+        public static IServiceCollection AddEfCoreTracedAggregateRepository<TEntity, TKey>(this IServiceCollection services) where TEntity : class, ITracedAggregateRoot<TKey>
         {
             return services.AddTracedAggregateRepository<EfCoreTracedAggregateRepository<TEntity, TKey>, TEntity, TKey>();
         }
@@ -36,8 +35,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
         /// <remarks>The <see cref="EfCoreAggregateRepository{TEntity,TKey,TMarker}"/> will be type forwarded accordingly.</remarks>
         /// <seealso cref="EfCoreAggregateRepository{TEntity,TKey,TMarker}"/>
-        public static IServiceCollection AddEfCoreTracedAggregateRepository<TEntity, TKey, TMarker>(this IServiceCollection services)
-            where TEntity : class, ITracedAggregateRoot<TKey>
+        public static IServiceCollection AddEfCoreTracedAggregateRepository<TEntity, TKey, TMarker>(this IServiceCollection services) where TEntity : class, ITracedAggregateRoot<TKey>
         {
             return services.AddTracedAggregateRepository<EfCoreTracedAggregateRepository<TEntity, TKey, TMarker>, TEntity, TKey>();
         }

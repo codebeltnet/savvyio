@@ -6,12 +6,12 @@ namespace Savvyio.Extensions.EFCore
     /// <summary>
     /// Configuration options for <see cref="IEfCoreDataSource"/>.
     /// </summary>
-    public class IEfCoreDataSourceOptions
+    public class EfCoreDataSourceOptions
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="IEfCoreDataSourceOptions"/> class.
+        /// Initializes a new instance of the <see cref="EfCoreDataSourceOptions"/> class.
         /// </summary>
-        public IEfCoreDataSourceOptions()
+        public EfCoreDataSourceOptions()
         {
         }
 

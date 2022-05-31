@@ -5,16 +5,16 @@ using Cuemon.Threading;
 namespace Savvyio.Extensions.EFCore
 {
     /// <summary>
-    /// Specifies options that is related to <see cref="DefaultEfCoreDataAccessObject{T}"/>.
+    /// Specifies options that is related to <see cref="DefaultEfCoreDataStore{T}"/>.
     /// </summary>
     /// <seealso cref="AsyncOptions" />
-    public class EfCoreOptions<T> : AsyncOptions
+    public class EfCoreQueryOptions<T> : AsyncOptions
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="EfCoreOptions{T}"/> class.
+        /// Initializes a new instance of the <see cref="EfCoreQueryOptions{T}"/> class.
         /// </summary>
         /// <remarks>
-        /// The following table shows the initial property values for an instance of <see cref="EfCoreOptions{T}"/>.
+        /// The following table shows the initial property values for an instance of <see cref="EfCoreQueryOptions{T}"/>.
         /// <list type="table">
         ///     <listheader>
         ///         <term>Property</term>
@@ -30,14 +30,14 @@ namespace Savvyio.Extensions.EFCore
         ///     </item>
         /// </list>
         /// </remarks>
-        public EfCoreOptions()
+        public EfCoreQueryOptions()
         {
         }
 
         /// <summary>
-        /// Gets or sets the predicate that matches one or more objects to retrieve in the associated <seealso cref="IEfCoreDataStore"/>.
+        /// Gets or sets the predicate that matches one or more objects to retrieve in the associated <seealso cref="IEfCoreDataSource"/>.
         /// </summary>
-        /// <value>The predicate that matches one or more objects to retrieve in the associated <seealso cref="IEfCoreDataStore"/>.</value>
+        /// <value>The predicate that matches one or more objects to retrieve in the associated <seealso cref="IEfCoreDataSource"/>.</value>
         public Expression<Func<T, bool>> Predicate { get; set; }
     }
 }
