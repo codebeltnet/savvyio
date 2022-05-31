@@ -6,23 +6,23 @@ using Dapper;
 namespace Savvyio.Extensions.Dapper
 {
     /// <summary>
-    /// Specifies options that is related to <see cref="DapperDataAccessObject{T}"/>.
+    /// Specifies options that is related to <see cref="DapperDataStore{T,TOptions}"/>.
     /// </summary>
     /// <seealso cref="AsyncOptions" />
-    public class DapperOptions : AsyncOptions
+    public class DapperQueryOptions : AsyncOptions
     {
         /// <summary>
-        /// Performs an implicit conversion from <see cref="DapperOptions"/> to <see cref="CommandDefinition"/>.
+        /// Performs an implicit conversion from <see cref="DapperQueryOptions"/> to <see cref="CommandDefinition"/>.
         /// </summary>
-        /// <param name="value">The <see cref="DapperOptions"/> to convert.</param>
+        /// <param name="value">The <see cref="DapperQueryOptions"/> to convert.</param>
         /// <returns>A <see cref="CommandDefinition"/> that is equivalent to <paramref name="value"/>.</returns>
-        public static implicit operator CommandDefinition(DapperOptions value)
+        public static implicit operator CommandDefinition(DapperQueryOptions value)
         {
             return new CommandDefinition(value.CommandText, commandTimeout: (int)value.CommandTimeout.TotalSeconds, cancellationToken: value.CancellationToken, flags: value.CommandFlags, commandType: value.CommandType, transaction: value.Transaction, parameters: value.Parameters);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DapperOptions"/> class.
+        /// Initializes a new instance of the <see cref="DapperQueryOptions"/> class.
         /// </summary>
         /// <remarks>
         /// The following table shows the initial property values for an instance of <see cref="AsyncOptions"/>.
@@ -49,7 +49,7 @@ namespace Savvyio.Extensions.Dapper
         ///     </item>
         /// </list>
         /// </remarks>
-        public DapperOptions()
+        public DapperQueryOptions()
         {
             CommandTimeout = TimeSpan.FromSeconds(30);
             CommandFlags = CommandFlags.Buffered;

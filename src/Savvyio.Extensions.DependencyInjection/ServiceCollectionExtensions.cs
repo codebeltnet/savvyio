@@ -4,10 +4,8 @@ using System.Linq;
 using System.Reflection;
 using Cuemon;
 using Cuemon.Extensions;
-using Cuemon.Extensions.Collections.Generic;
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Savvyio.Dispatchers;
 
 namespace Savvyio.Extensions.DependencyInjection
@@ -31,15 +29,7 @@ namespace Savvyio.Extensions.DependencyInjection
         public static IServiceCollection AddDataSource<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IDataSource
         {
             Validator.ThrowIfNull(services, nameof(services));
-            var options = setup.Configure();
-            services.TryAdd<TService, TService>(options.Lifetime);
-            var hasMarkerType = typeof(TService).TryGetDependencyInjectionMarker(out _);
-            var dataSourceGroupTypes = typeof(TService).GetInterfaces().Where(type => type.IsAssignableTo(typeof(IDataSource))).GroupBy(type => type.ToFriendlyName(o => o.ExcludeGenericArguments = true));
-            foreach (var dataSourceGroupType in dataSourceGroupTypes)
-            {
-                services.TryAdd(hasMarkerType ? dataSourceGroupType.Last() : dataSourceGroupType.First(), p => p.GetRequiredService<TService>(), options.Lifetime);
-            }
-            return services;
+            return Decorator.Enclose(services).AddWithNestedTypeForwarding<TService>(type => type.HasInterfaces(typeof(IDataSource)), setup);
         }
 
         /// <summary>

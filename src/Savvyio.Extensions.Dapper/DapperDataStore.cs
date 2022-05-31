@@ -1,130 +1,83 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Cuemon;
-using Cuemon.Extensions;
-using Microsoft.Extensions.Options;
+using Cuemon.Threading;
+using Savvyio.Data;
 
 namespace Savvyio.Extensions.Dapper
 {
     /// <summary>
-    /// Provides a default implementation of the <see cref="IDapperDataStore"/> interface to support the actual I/O communication towards a data store using Dapper.
+    /// Represents the base class from which all implementations of <see cref="DapperDataStore{T,TOptions}"/> should derive. This is an abstract class to serve as an abstraction layer before the actual I/O communication with a source of data using Dapper.
     /// </summary>
-    /// <seealso cref="Disposable" />
-    /// <seealso cref="IDapperDataStore" />
-    public class DapperDataStore : Disposable, IDapperDataStore
+    /// <typeparam name="T">The type of the DTO.</typeparam>
+    /// <typeparam name="TOptions">The type of options associated with this DTO.</typeparam>
+    /// <seealso cref="Disposable"/>
+    /// <seealso cref="IPersistentDataStore{T,TOptions}" />
+    public abstract class DapperDataStore<T, TOptions> : Disposable, IPersistentDataStore<T, TOptions> 
+        where T : class 
+        where TOptions : AsyncOptions, new()
     {
-        private readonly IDbConnection _dbConnection;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="DapperDataStore"/> class.
+        /// Initializes a new instance of the <see cref="DapperDataStore{T,TOptions}"/> class.
         /// </summary>
-        /// <param name="setup">The <see cref="DapperDataStoreOptions" /> which need to be configured.</param>
-        public DapperDataStore(IOptions<DapperDataStoreOptions> setup)
+        /// <param name="source">The <see cref="IDapperDataSource"/> that handles actual I/O communication with a source of data.</param>
+        protected DapperDataStore(IDapperDataSource source)
         {
-            Validator.ThrowIfNull(setup, nameof(setup));
-            Validator.ThrowIfNull(setup.Value, nameof(setup.Value));
-            Validator.ThrowIfNull(setup.Value.ConnectionFactory, nameof(setup.Value.ConnectionFactory));
-
-            _dbConnection = setup.Value.ConnectionFactory.Invoke();
-            _dbConnection.Open();
+            Source = source;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DapperDataStore"/> class.
+        /// Gets the <see cref="IDapperDataSource"/> that handles actual I/O communication with a source of data.
         /// </summary>
-        /// <param name="setup">The <see cref="DapperDataStoreOptions" /> which need to be configured.</param>
-        public DapperDataStore(Action<DapperDataStoreOptions> setup) : this(Options.Create(setup.Configure()))
-        {
-        }
+        /// <value>The <see cref="IDapperDataSource"/> that handles actual I/O communication with a source of data.</value>
+        protected IDapperDataSource Source { get; }
+
+        /// <summary>
+        /// Creates the specified <paramref name="dto"/> asynchronous in the associated <seealso cref="IDapperDataSource"/>.
+        /// </summary>
+        /// <param name="dto">The object to create in the associated <seealso cref="IDapperDataSource"/>.</param>
+        /// <param name="setup">The <see cref="AsyncOptions"/> which may be configured.</param>
+        /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
+        public abstract Task CreateAsync(T dto, Action<AsyncOptions> setup = null);
+        
+        /// <summary>
+        /// Updates the specified <paramref name="dto"/> asynchronous in the associated <seealso cref="IDapperDataSource"/>.
+        /// </summary>
+        /// <param name="dto">The object to update in the associated <seealso cref="IDapperDataSource"/>.</param>
+        /// <param name="setup">The <see cref="AsyncOptions"/> which may be configured.</param>
+        /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
+        public abstract Task UpdateAsync(T dto, Action<AsyncOptions> setup = null);
+
+        /// <summary>
+        /// Loads the object from the specified <paramref name="id"/> asynchronous.
+        /// </summary>
+        /// <param name="id">The key that uniquely identifies the object.</param>
+        /// <param name="setup">The <see cref="AsyncOptions"/> which may be configured.</param>
+        /// <returns>A <see cref="Task{TResult}" /> that represents the asynchronous operation. The task result either contains the object of the operation or <c>null</c> if not found.</returns>
+        public abstract Task<T> GetByIdAsync(object id, Action<AsyncOptions> setup = null);
+
+        /// <summary>
+        /// Finds all objects matching the specified <paramref name="setup"/> asynchronous in the associated <seealso cref="IDapperDataSource"/>.
+        /// </summary>
+        /// <param name="setup">The <typeparamref name="TOptions"/> which may be configured.</param>
+        /// <returns>A <see cref="Task{TResult}" /> that represents the asynchronous operation. The task result either contains the matching objects of the operation or an empty sequence if no match was found.</returns>
+        public abstract Task<IEnumerable<T>> FindAllAsync(Action<TOptions> setup = null);
+
+        /// <summary>
+        /// Deletes the specified <paramref name="dto"/> asynchronous in the associated <seealso cref="IDapperDataSource"/>.
+        /// </summary>
+        /// <param name="dto">The object to delete in the associated <seealso cref="IDapperDataSource"/>.</param>
+        /// <param name="setup">The <see cref="AsyncOptions"/> which may be configured.</param>
+        /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
+        public abstract Task DeleteAsync(T dto, Action<AsyncOptions> setup = null);
 
         /// <summary>
         /// Called when this object is being disposed by either <see cref="M:Cuemon.Disposable.Dispose" /> or <see cref="M:Cuemon.Disposable.Dispose(System.Boolean)" /> having <c>disposing</c> set to <c>true</c> and <see cref="P:Cuemon.Disposable.Disposed" /> is <c>false</c>.
         /// </summary>
         protected override void OnDisposeManagedResources()
         {
-            _dbConnection?.Close();
-            _dbConnection?.Dispose();
+            Source?.Dispose();
         }
-
-        /// <summary>
-        /// Begins a database transaction.
-        /// </summary>
-        /// <returns>An object representing the new transaction.</returns>
-        public IDbTransaction BeginTransaction()
-        {
-            return _dbConnection.BeginTransaction();
-        }
-
-        /// <summary>
-        /// Begins a database transaction.
-        /// </summary>
-        /// <param name="il">One of the <seealso cref="IsolationLevel"/> values.</param>
-        /// <returns>An object representing the new transaction.</returns>
-        public IDbTransaction BeginTransaction(IsolationLevel il)
-        {
-            return _dbConnection.BeginTransaction(il);
-        }
-
-        /// <summary>
-        /// Changes the current database for an open <see langword="Connection" /> object.
-        /// </summary>
-        /// <param name="databaseName">The name of the database to use in place of the current database.</param>
-        public void ChangeDatabase(string databaseName)
-        {
-            _dbConnection.ChangeDatabase(databaseName);
-        }
-
-        /// <summary>
-        /// Closes the connection to the database.
-        /// </summary>
-        public void Close()
-        {
-            _dbConnection.Close();
-        }
-
-        /// <summary>
-        /// Creates and returns a Command object associated with the connection.
-        /// </summary>
-        /// <returns>A Command object associated with the connection.</returns>
-        public IDbCommand CreateCommand()
-        {
-            return _dbConnection.CreateCommand();
-        }
-
-        /// <summary>
-        /// Opens a database connection with the settings specified by the <see langword="ConnectionString" /> property of the provider-specific Connection object.
-        /// </summary>
-        public void Open()
-        {
-            _dbConnection.Open();
-        }
-
-        /// <summary>
-        /// Gets or sets the string used to open a database.
-        /// </summary>
-        /// <value>A string containing connection settings.</value>
-        public string ConnectionString
-        {
-            get => _dbConnection.ConnectionString;
-            set => _dbConnection.ConnectionString = value;
-        }
-
-        /// <summary>
-        /// Gets the time to wait (in seconds) while trying to establish a connection before terminating the attempt and generating an error.
-        /// </summary>
-        /// <value>The time (in seconds) to wait for a connection to open. The default value is 15 seconds.</value>
-        public int ConnectionTimeout => _dbConnection.ConnectionTimeout;
-
-        /// <summary>
-        /// Gets the name of the current database or the database to be used after a connection is opened.
-        /// </summary>
-        /// <value>The name of the current database or the name of the database to be used once a connection is open. The default value is an empty string.</value>
-        public string Database => _dbConnection.Database;
-
-        /// <summary>
-        /// Gets the current state of the connection.
-        /// </summary>
-        /// <value>One of the <see cref="ConnectionState" /> values.</value>
-        public ConnectionState State => _dbConnection.State;
     }
 }
