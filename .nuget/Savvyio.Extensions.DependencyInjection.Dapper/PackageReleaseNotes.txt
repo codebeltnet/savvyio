@@ -1,3 +1,13 @@
+Version: 0.8.0
+Availability: .NET 6.0
+ 
+# Breaking Changes
+- REMOVED DapperDataAccessObject class from the Savvyio.Extensions.DependencyInjection.Dapper namespace
+- RENAMED DapperDataStore class in the Savvyio.Extensions.DependencyInjection.Dapper namespace to DapperDataSource class
+- RENAMED DapperDataStoreOptions class in the Savvyio.Extensions.DependencyInjection.Dapper namespace to DapperDataSourceOptions class
+- RENAMED IDapperDataStore interface in the Savvyio.Extensions.DependencyInjection.Dapper namespace to IDapperDataSource interface
+- CHANGED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Dapper namespace that consist of extension methods for the IServiceCollection interface: AddDapperDataSource, AddDapperDataStore
+ 
 Version: 0.7.0
 Availability: .NET 6.0
  

@@ -1,3 +1,13 @@
+Version: 0.8.0
+Availability: .NET 6.0
+ 
+# Breaking Changes
+- RENAMED DapperDataAccessObject class in the Savvyio.Extensions.Dapper namespace to DapperDataStore class
+- RENAMED DapperDataStore class in the Savvyio.Extensions.Dapper namespace to DapperDataSource class
+- RENAMED DapperDataStoreOptions class in the Savvyio.Extensions.Dapper namespace to DapperDataSourceOptions class
+- RENAMED DapperOptions class in the Savvyio.Extensions.Dapper namespace to DapperQueryOptions class
+- RENAMED IDapperDataStore interface in the Savvyio.Extensions.Dapper namespace to IDapperDataSource interface
+ 
 Version: 0.7.0
 Availability: .NET 6.0
  

@@ -1,3 +1,10 @@
+Version: 0.8.0
+Availability: .NET 6.0
+ 
+# Breaking Changes
+- RENAMED EfCoreAggregateDataStore class in the Savvyio.Extensions.DependencyInjection.EFCore.Domain namespace to EfCoreAggregateDataSource class
+- CHANGED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.EFCore.Domain namespace that consist of extension methods for the IServiceCollection interface: AddEfCoreAggregateDataSource
+ 
 Version: 0.7.0
 Availability: .NET 6.0
  

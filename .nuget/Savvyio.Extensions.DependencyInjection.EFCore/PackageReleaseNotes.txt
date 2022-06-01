@@ -1,3 +1,17 @@
+Version: 0.8.0
+Availability: .NET 6.0
+ 
+# Breaking Changes
+- REMOVED EfCoreDataAccessObject class from the Savvyio.Extensions.DependencyInjection.EFCore namespace
+- RENAMED EfCoreDataStore class in the Savvyio.Extensions.DependencyInjection.EFCore namespace to EfCoreDataSource class
+- RENAMED EfCoreDataStoreOptions class in the Savvyio.Extensions.DependencyInjection.EFCore to EfCoreDataSourceOptions class
+- RENAMED IEfCoreDataStore interface in the Savvyio.Extensions.DependencyInjection.EFCore namespace to IEfCoreDataSource interface
+- CHANGED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.EFCore namespace that consist of extension methods for the IServiceCollection interface: AddEfCoreDataSource, AddEfCoreDataStore, AddDefaultEfCoreDataStore
+ 
+# New Features
+- ADDED DefaultEfCoreDataStore class in the Savvyio.Extensions.DependencyInjection.EFCore namespace that provides a default implementation of the IPersistentDataStore{T,TOptions,TMarker} interface to support multiple implementations that serves as an abstraction layer before the actual I/O communication with a source of data using Microsoft Entity Framework Core
+- ADDED EfCoreServiceOptions class in the Savvyio.Extensions.DependencyInjection.EFCore namespace that provides configuration options for Microsoft Dependency Injection
+ 
 Version: 0.7.0
 Availability: .NET 6.0
  
