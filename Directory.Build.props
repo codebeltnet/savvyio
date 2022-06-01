@@ -20,6 +20,7 @@
     <Company>Geekle</Company>
     <Product>Savvy I/O</Product>
     <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://www.savvyio.net/</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/codebeltnet/classlib-savvyio</RepositoryUrl>
