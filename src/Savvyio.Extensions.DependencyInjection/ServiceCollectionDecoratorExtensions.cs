@@ -29,10 +29,10 @@ namespace Savvyio.Extensions.DependencyInjection
             var options = setup.Configure();
             decorator.Inner.TryAdd<TService, TService>(options.Lifetime);
             var hasMarkerType = typeof(TService).TryGetDependencyInjectionMarker(out _);
-            var groupTypes = typeof(TService).GetInterfaces().Where(predicate).GroupBy(type => type.ToFriendlyName(o => o.ExcludeGenericArguments = true));
-            foreach (var groupType in groupTypes)
+            foreach (var groupingTypes in typeof(TService).GetInterfaces().Where(predicate).GroupBy(type => type.ToFriendlyName(o => o.ExcludeGenericArguments = true)))
             {
-                decorator.Inner.TryAdd(hasMarkerType ? groupType.Last() : groupType.First(), p => p.GetRequiredService<TService>(), options.Lifetime);
+                var orderedGroupingTypes = groupingTypes.OrderBy(type => type.Name);
+                decorator.Inner.TryAdd(hasMarkerType ? orderedGroupingTypes.Last() : orderedGroupingTypes.First(), p => p.GetRequiredService<TService>(), options.Lifetime);
             }
             return decorator.Inner;
         }
