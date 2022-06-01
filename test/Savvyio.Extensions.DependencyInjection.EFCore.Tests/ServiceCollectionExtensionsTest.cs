@@ -21,7 +21,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         }
 
         [Fact]
-        public void AddEfCoreDataStore_ShouldAddDefaultImplementation()
+        public void AddEfCoreDataSource_ShouldAddDefaultImplementation()
         {
             var sut1 = new ServiceCollection();
             sut1.AddEfCoreDataSource(o => o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(AnotherDbMarker)));
@@ -34,7 +34,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         }
 
         [Fact]
-        public void AddEfCoreDataStore_ShouldAddDefaultImplementationWithMarker()
+        public void AddEfCoreDataSource_ShouldAddDefaultImplementationWithMarker()
         {
             var sut1 = new ServiceCollection();
             sut1.AddEfCoreDataSource<DbMarker>(o => o.ContextConfigurator = b => b.UseInMemoryDatabase("fake"));
