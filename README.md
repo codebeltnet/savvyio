@@ -80,15 +80,17 @@ For more information see our [code of conduct](.github/CODE_OF_CONDUCT.md).
 
 NuGet links to all projects of Savvy I/O:
 
-* [Savvyio](https://www.nuget.org/packages/Savvyio/)
 * [Savvyio.App](https://www.nuget.org/packages/Savvyio.App/) *
 * [Savvyio.Commands](https://www.nuget.org/packages/Savvyio.Commands/)
+* [Savvyio.Core](https://www.nuget.org/packages/Savvyio.Core/)
 * [Savvyio.Domain](https://www.nuget.org/packages/Savvyio.Domain/)
 * [Savvyio.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Domain.EventSourcing/)
 * [Savvyio.EventDriven](https://www.nuget.org/packages/Savvyio.EventDriven/)
 * [Savvyio.Extensions.Dapper](https://www.nuget.org/packages/Savvyio.Extensions.Dapper/)
+* [Savvyio.Extensions.DapperExtensions](https://www.nuget.org/packages/Savvyio.Extensions.DapperExtensions/)
 * [Savvyio.Extensions.DependencyInjection](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection/)
 * [Savvyio.Extensions.DependencyInjection.Dapper](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.Dapper/)
+* [Savvyio.Extensions.DependencyInjection.DapperExtensions](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.DapperExtensions/)
 * [Savvyio.Extensions.DependencyInjection.Domain](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.Domain/)
 * [Savvyio.Extensions.DependencyInjection.EFCore](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore/)
 * [Savvyio.Extensions.DependencyInjection.EFCore.Domain](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore.Domain/)

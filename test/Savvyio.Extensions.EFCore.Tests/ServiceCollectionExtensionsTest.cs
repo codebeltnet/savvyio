@@ -1,6 +1,5 @@
 ﻿using System;
 using Cuemon.Extensions.Xunit;
-using Cuemon.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -27,23 +26,23 @@ namespace Savvyio.Extensions.Storage
         public void AddEfCoreDataStore_ShouldAddDefaultImplementationWithDefaultOptions()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddEfCoreDataStore<EfCoreDataStore>();
-            sut1.Configure<EfCoreDataStoreOptions>(_ => {});
+            sut1.AddEfCoreDataSource<EfCoreDataSource>();
+            sut1.Configure<EfCoreDataSourceOptions>(_ => {});
             var sut2 = sut1.BuildServiceProvider();
 
-            Assert.IsType<EfCoreDataStore>(sut2.GetRequiredService<IEfCoreDataStore>());
-            Assert.IsType<EfCoreDataStore>(sut2.GetRequiredService<IUnitOfWork>());
-            Assert.Same(sut2.GetRequiredService<IEfCoreDataStore>(), sut2.GetRequiredService<IUnitOfWork>());
-            Assert.Null(sut2.GetRequiredService<IOptions<EfCoreDataStoreOptions>>().Value.ContextConfigurator);
-            Assert.Null(sut2.GetRequiredService<IOptions<EfCoreDataStoreOptions>>().Value.ModelConstructor);
-            Assert.Null(sut2.GetRequiredService<IOptions<EfCoreDataStoreOptions>>().Value.ConventionsConfigurator);
+            Assert.IsType<EfCoreDataSource>(sut2.GetRequiredService<IEfCoreDataSource>());
+            Assert.IsType<EfCoreDataSource>(sut2.GetRequiredService<IUnitOfWork>());
+            Assert.Same(sut2.GetRequiredService<IEfCoreDataSource>(), sut2.GetRequiredService<IUnitOfWork>());
+            Assert.Null(sut2.GetRequiredService<IOptions<EfCoreDataSourceOptions>>().Value.ContextConfigurator);
+            Assert.Null(sut2.GetRequiredService<IOptions<EfCoreDataSourceOptions>>().Value.ModelConstructor);
+            Assert.Null(sut2.GetRequiredService<IOptions<EfCoreDataSourceOptions>>().Value.ConventionsConfigurator);
         }
 
         [Fact]
         public void AddEfCoreDataStore_ShouldAddDefaultImplementation()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddEfCoreDataStore(o =>
+            sut1.AddEfCoreDataSource(o =>
             {
                 o.ContextConfigurator = builder => builder.UseInMemoryDatabase("Dummy");
                 o.ModelConstructor = builder => builder.AddAccount();
@@ -51,34 +50,34 @@ namespace Savvyio.Extensions.Storage
             });
             var sut2 = sut1.BuildServiceProvider();
 
-            Assert.IsType<EfCoreDataStore>(sut2.GetRequiredService<IEfCoreDataStore>());
-            Assert.NotNull(sut2.GetRequiredService<IOptions<EfCoreDataStoreOptions>>().Value.ContextConfigurator);
-            Assert.NotNull(sut2.GetRequiredService<IOptions<EfCoreDataStoreOptions>>().Value.ModelConstructor);
-            Assert.NotNull(sut2.GetRequiredService<IOptions<EfCoreDataStoreOptions>>().Value.ConventionsConfigurator);
+            Assert.IsType<EfCoreDataSource>(sut2.GetRequiredService<IEfCoreDataSource>());
+            Assert.NotNull(sut2.GetRequiredService<IOptions<EfCoreDataSourceOptions>>().Value.ContextConfigurator);
+            Assert.NotNull(sut2.GetRequiredService<IOptions<EfCoreDataSourceOptions>>().Value.ModelConstructor);
+            Assert.NotNull(sut2.GetRequiredService<IOptions<EfCoreDataSourceOptions>>().Value.ConventionsConfigurator);
         }
 
         [Fact]
         public void AddEfCoreDataStore_ShouldAddDefaultImplementationWithMarker()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddEfCoreDataStore<Account>(o =>
+            sut1.AddEfCoreDataSource<Account>(o =>
             {
                 o.ContextConfigurator = builder => builder.UseInMemoryDatabase("Dummy");
                 o.ModelConstructor = builder => builder.AddAccount();
             });
             var sut2 = sut1.BuildServiceProvider();
 
-            Assert.IsType<EfCoreDataStore<Account>>(sut2.GetRequiredService<IEfCoreDataStore<Account>>());
-            Assert.NotNull(sut2.GetRequiredService<IOptions<EfCoreDataStoreOptions<Account>>>().Value.ContextConfigurator);
-            Assert.NotNull(sut2.GetRequiredService<IOptions<EfCoreDataStoreOptions<Account>>>().Value.ModelConstructor);
-            Assert.Null(sut2.GetRequiredService<IOptions<EfCoreDataStoreOptions<Account>>>().Value.ConventionsConfigurator);
+            Assert.IsType<EfCoreDataSource<Account>>(sut2.GetRequiredService<IEfCoreDataSource<Account>>());
+            Assert.NotNull(sut2.GetRequiredService<IOptions<EfCoreDataSourceOptions<Account>>>().Value.ContextConfigurator);
+            Assert.NotNull(sut2.GetRequiredService<IOptions<EfCoreDataSourceOptions<Account>>>().Value.ModelConstructor);
+            Assert.Null(sut2.GetRequiredService<IOptions<EfCoreDataSourceOptions<Account>>>().Value.ConventionsConfigurator);
         }
 
         [Fact]
         public void AddEfCoreRepository_ShouldAddManyImplementations()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddEfCoreDataStore(o =>
+            sut1.AddEfCoreDataSource(o =>
             {
                 o.ContextConfigurator = builder => builder.UseInMemoryDatabase("Dummy");
                 o.ModelConstructor = builder => builder.AddAccount().AddPlatformProvider();
@@ -95,14 +94,14 @@ namespace Savvyio.Extensions.Storage
         public void AddEfCoreRepository_ShouldAddManyImplementationsWithMarkers()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddEfCoreDataStore<DbMarker>(o =>
+            sut1.AddEfCoreDataSource<DbMarker>(o =>
             {
                 o.ContextConfigurator = builder => builder.UseInMemoryDatabase("Dummy");
                 o.ModelConstructor = builder => builder.AddAccount().AddPlatformProvider();
             });
             sut1.AddEfCoreRepository<Account, long, DbMarker>();
             sut1.AddEfCoreRepository<PlatformProvider, Guid, DbMarker>();
-            sut1.AddEfCoreDataStore<AnotherDbMarker>(o =>
+            sut1.AddEfCoreDataSource<AnotherDbMarker>(o =>
             {
                 o.ContextConfigurator = builder => builder.UseInMemoryDatabase("AnotherDummy");
                 o.ModelConstructor = builder => builder.AddAccount().AddPlatformProvider();
@@ -120,48 +119,48 @@ namespace Savvyio.Extensions.Storage
         }
         
         [Fact]
-        public void AddEfCoreDataAccessObject_ShouldAddManyImplementations()
+        public void AddDefaultEfCoreDataStore_ShouldAddManyImplementations()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddEfCoreDataStore(o =>
+            sut1.AddEfCoreDataSource(o =>
             {
                 o.ContextConfigurator = builder => builder.UseInMemoryDatabase("Dummy");
                 o.ModelConstructor = builder => builder.AddAccount().AddPlatformProvider();
             });
-            sut1.AddEfCoreDataAccessObject<Account>();
-            sut1.AddEfCoreDataAccessObject<PlatformProvider>();
+            sut1.AddDefaultEfCoreDataStore<Account>();
+            sut1.AddDefaultEfCoreDataStore<PlatformProvider>();
             var sut2 = sut1.BuildServiceProvider();
 
-            Assert.IsType<EfCoreDataAccessObject<Account>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, AsyncOptions>>());
-            Assert.IsType<EfCoreDataAccessObject<PlatformProvider>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, AsyncOptions>>());
+            Assert.IsType<DefaultEfCoreDataStore<Account>>(sut2.GetRequiredService<IPersistentDataStore<Account, EfCoreQueryOptions<Account>>>());
+            Assert.IsType<DefaultEfCoreDataStore<PlatformProvider>>(sut2.GetRequiredService<IPersistentDataStore<PlatformProvider, EfCoreQueryOptions<PlatformProvider>>>());
         }
 
         [Fact]
-        public void AddEfCoreDataAccessObject_ShouldAddManyImplementationsWithMarkers()
+        public void AddDefaultEfCoreDataStore_ShouldAddManyImplementationsWithMarkers()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddEfCoreDataStore<DbMarker>(o =>
+            sut1.AddEfCoreDataSource<DbMarker>(o =>
             {
                 o.ContextConfigurator = builder => builder.UseInMemoryDatabase("Dummy");
                 o.ModelConstructor = builder => builder.AddAccount().AddPlatformProvider();
             });
-            sut1.AddEfCoreDataAccessObject<Account, DbMarker>();
-            sut1.AddEfCoreDataAccessObject<PlatformProvider, DbMarker>();
-            sut1.AddEfCoreDataStore<AnotherDbMarker>(o =>
+            sut1.AddDefaultEfCoreDataStore<Account, DbMarker>();
+            sut1.AddDefaultEfCoreDataStore<PlatformProvider, DbMarker>();
+            sut1.AddEfCoreDataSource<AnotherDbMarker>(o =>
             {
                 o.ContextConfigurator = builder => builder.UseInMemoryDatabase("Dummy");
                 o.ModelConstructor = builder => builder.AddAccount().AddPlatformProvider();
             });
-            sut1.AddEfCoreDataAccessObject<Account, AnotherDbMarker>();
-            sut1.AddEfCoreDataAccessObject<PlatformProvider, AnotherDbMarker>();
+            sut1.AddDefaultEfCoreDataStore<Account, AnotherDbMarker>();
+            sut1.AddDefaultEfCoreDataStore<PlatformProvider, AnotherDbMarker>();
             var sut2 = sut1.BuildServiceProvider();
 
-            Assert.IsType<EfCoreDataAccessObject<Account, DbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, AsyncOptions, DbMarker>>());
-            Assert.IsType<EfCoreDataAccessObject<PlatformProvider, DbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, AsyncOptions, DbMarker>>());
-            Assert.IsType<EfCoreDataAccessObject<Account, AnotherDbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<Account, AsyncOptions, AnotherDbMarker>>());
-            Assert.IsType<EfCoreDataAccessObject<PlatformProvider, AnotherDbMarker>>(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, AsyncOptions, AnotherDbMarker>>());
-            Assert.NotSame(sut2.GetRequiredService<IPersistentDataAccessObject<Account, AsyncOptions, DbMarker>>(), sut2.GetRequiredService<IPersistentDataAccessObject<Account, AsyncOptions, AnotherDbMarker>>());
-            Assert.NotSame(sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, AsyncOptions, DbMarker>>(), sut2.GetRequiredService<IPersistentDataAccessObject<PlatformProvider, AsyncOptions, AnotherDbMarker>>());
+            Assert.IsType<DefaultEfCoreDataStore<Account, DbMarker>>(sut2.GetRequiredService<IPersistentDataStore<Account, EfCoreQueryOptions<Account>, DbMarker>>());
+            Assert.IsType<DefaultEfCoreDataStore<PlatformProvider, DbMarker>>(sut2.GetRequiredService<IPersistentDataStore<PlatformProvider, EfCoreQueryOptions<PlatformProvider>, DbMarker>>());
+            Assert.IsType<DefaultEfCoreDataStore<Account, AnotherDbMarker>>(sut2.GetRequiredService<IPersistentDataStore<Account, EfCoreQueryOptions<Account>, AnotherDbMarker>>());
+            Assert.IsType<DefaultEfCoreDataStore<PlatformProvider, AnotherDbMarker>>(sut2.GetRequiredService<IPersistentDataStore<PlatformProvider, EfCoreQueryOptions<PlatformProvider>, AnotherDbMarker>>());
+            Assert.NotSame(sut2.GetRequiredService<IPersistentDataStore<Account, EfCoreQueryOptions<Account>, DbMarker>>(), sut2.GetRequiredService<IPersistentDataStore<Account, EfCoreQueryOptions<Account>, AnotherDbMarker>>());
+            Assert.NotSame(sut2.GetRequiredService<IPersistentDataStore<PlatformProvider, EfCoreQueryOptions<PlatformProvider>, DbMarker>>(), sut2.GetRequiredService<IPersistentDataStore<PlatformProvider, EfCoreQueryOptions<PlatformProvider>, AnotherDbMarker>>());
         }
     }
 }

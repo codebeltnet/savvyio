@@ -37,7 +37,20 @@ namespace Savvyio
 
         private static SavvyioOptions AddDependenciesCore<T>(SavvyioOptions options, Action<Type, Type> servicesManager, IEnumerable<Assembly> assembliesToScan)
         {
-            var definedTypes = (assembliesToScan ?? AppDomain.CurrentDomain.GetAssemblies().Except(typeof(SavvyioOptions).Assembly.Yield())).Distinct().SelectMany(assembly => assembly.DefinedTypes).Where(type => type.HasInterfaces(typeof(T))).ToList();
+            var definedTypes = new List<TypeInfo>();
+            var assemblies = (assembliesToScan ?? AppDomain.CurrentDomain.GetAssemblies().Except(typeof(SavvyioOptions).Assembly.Yield())).ToList();
+            foreach (var assembly in assemblies)
+            {
+                try
+                {
+                    definedTypes.AddRange(assembly.DefinedTypes.Where(type => type.HasInterfaces(typeof(T))));
+                }
+                catch (ReflectionTypeLoadException)
+                {
+                    // by design; ignore potential orphaned dll references causing ReflectionTypeLoadException
+                }
+            }
+            
             foreach (var contract in definedTypes.Where(type => type.IsInterface))
             {
                 var filtered = definedTypes.Where(type => SavvyioOptions.IsValid<T>(type, contract)).ToList();

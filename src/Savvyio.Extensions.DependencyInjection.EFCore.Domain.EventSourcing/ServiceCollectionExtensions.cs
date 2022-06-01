@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Cuemon;
+using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Domain.EventSourcing;
 using Savvyio.Extensions.DependencyInjection.Domain.EventSourcing;
 using Savvyio.Extensions.EFCore.Domain;
@@ -17,13 +19,13 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
         /// <typeparam name="TEntity">The type of the entity.</typeparam>
         /// <typeparam name="TKey">The type of the key that uniquely identifies the entity.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
+        /// <param name="setup">The <see cref="EfCoreServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
         /// <remarks>The <see cref="EfCoreAggregateRepository{TEntity,TKey,TMarker}"/> will be type forwarded accordingly.</remarks>
         /// <seealso cref="EfCoreAggregateRepository{TEntity,TKey}"/>
-        public static IServiceCollection AddEfCoreTracedAggregateRepository<TEntity, TKey>(this IServiceCollection services)
-            where TEntity : class, ITracedAggregateRoot<TKey>
+        public static IServiceCollection AddEfCoreTracedAggregateRepository<TEntity, TKey>(this IServiceCollection services, Action<EfCoreServiceOptions> setup = null) where TEntity : class, ITracedAggregateRoot<TKey>
         {
-            return services.AddTracedAggregateRepository<EfCoreTracedAggregateRepository<TEntity, TKey>, TEntity, TKey>();
+            return services.AddTracedAggregateRepository<EfCoreTracedAggregateRepository<TEntity, TKey>, TEntity, TKey>(Patterns.ConfigureExchange<EfCoreServiceOptions, ServiceOptions>(setup));
         }
 
         /// <summary>
@@ -33,13 +35,13 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
         /// <typeparam name="TKey">The type of the key that uniquely identifies the entity.</typeparam>
         /// <typeparam name="TMarker">The type used to mark the implementation that this repository represents. Optimized for Microsoft Dependency Injection.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
+        /// <param name="setup">The <see cref="EfCoreServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
         /// <remarks>The <see cref="EfCoreAggregateRepository{TEntity,TKey,TMarker}"/> will be type forwarded accordingly.</remarks>
         /// <seealso cref="EfCoreAggregateRepository{TEntity,TKey,TMarker}"/>
-        public static IServiceCollection AddEfCoreTracedAggregateRepository<TEntity, TKey, TMarker>(this IServiceCollection services)
-            where TEntity : class, ITracedAggregateRoot<TKey>
+        public static IServiceCollection AddEfCoreTracedAggregateRepository<TEntity, TKey, TMarker>(this IServiceCollection services, Action<EfCoreServiceOptions> setup = null) where TEntity : class, ITracedAggregateRoot<TKey>
         {
-            return services.AddTracedAggregateRepository<EfCoreTracedAggregateRepository<TEntity, TKey, TMarker>, TEntity, TKey>();
+            return services.AddTracedAggregateRepository<EfCoreTracedAggregateRepository<TEntity, TKey, TMarker>, TEntity, TKey>(Patterns.ConfigureExchange<EfCoreServiceOptions, ServiceOptions>(setup));
         }
     }
 }

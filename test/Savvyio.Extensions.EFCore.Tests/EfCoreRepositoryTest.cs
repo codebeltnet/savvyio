@@ -20,7 +20,7 @@ namespace Savvyio.Extensions.Storage
         [Fact]
         public void EfCoreRepository_ShouldFailWithInvalidModel()
         {
-            var sut1 = new EfCoreDataStore<Account>(o => o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy"));
+            var sut1 = new EfCoreDataSource<Account>(o => o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy"));
             var sut2 = new EfCoreRepository<Account, long, Account>(sut1);
             var ex = Assert.Throws<InvalidOperationException>(() => sut2.Add(new Account(1)));
             Assert.StartsWith("Cannot create a DbSet for 'Account' because this type is not included in the model for the context.", ex.Message);
@@ -33,7 +33,7 @@ namespace Savvyio.Extensions.Storage
             var name = "Test";
             var email = "test@unit.test";
 
-            var sut1 = new EfCoreDataStore(o =>
+            var sut1 = new EfCoreDataSource(o =>
             {
                 o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy");
                 o.ModelConstructor = mb => mb.AddAccount();
@@ -42,7 +42,7 @@ namespace Savvyio.Extensions.Storage
             var sut2 = new EfCoreRepository<Account, long>(sut1);
             sut2.Add(new Account(id, name, email));
             
-            var sut3 = await sut2.FindAsync(a => a.PlatformProviderId == id);
+            var sut3 = await sut2.FindAllAsync(a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
             Assert.Equal(id, sut3.PlatformProviderId);
             Assert.Equal(name, sut3.FullName);
@@ -57,7 +57,7 @@ namespace Savvyio.Extensions.Storage
             var email = "test@unit.test";
             var entity = new Account(id, name, email);
 
-            var sut1 = new EfCoreDataStore(o =>
+            var sut1 = new EfCoreDataSource(o =>
             {
                 o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy");
                 o.ModelConstructor = mb => mb.AddAccount();
@@ -66,11 +66,11 @@ namespace Savvyio.Extensions.Storage
             var sut2 = new EfCoreRepository<Account, long>(sut1);
             sut2.Add(entity);
             
-            var sut3 = await sut2.FindAsync(a => a.PlatformProviderId == id);
+            var sut3 = await sut2.FindAllAsync(a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
             sut2.Remove(entity);
 
-            var sut4 = await sut2.FindAsync(a => a.PlatformProviderId == id);
+            var sut4 = await sut2.FindAllAsync(a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
             Assert.NotNull(sut3);
             Assert.Null(sut4);
@@ -85,7 +85,7 @@ namespace Savvyio.Extensions.Storage
             var email = "test@unit.test";
             var entity = new Account(id, name, email);
 
-            var sut1 = new EfCoreDataStore(o =>
+            var sut1 = new EfCoreDataSource(o =>
             {
                 o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy");
                 o.ModelConstructor = mb => mb.AddAccount();
@@ -94,13 +94,13 @@ namespace Savvyio.Extensions.Storage
             var sut2 = new EfCoreRepository<Account, long>(sut1);
             sut2.Add(entity);
             
-            var sut3 = await sut2.FindAsync(a => a.PlatformProviderId == id);
+            var sut3 = await sut2.FindAllAsync(a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
             sut3.ChangeFullName(newName);
 
             sut2.Add(sut3);
 
-            var sut4 = await sut2.FindAsync(a => a.PlatformProviderId == id);
+            var sut4 = await sut2.FindAllAsync(a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
             Assert.NotEqual(name, sut3.FullName);
             Assert.Equal(newName, sut4.FullName);

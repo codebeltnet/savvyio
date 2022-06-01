@@ -16,8 +16,8 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreDbContext{TMarker}" /> class.
         /// </summary>
-        /// <param name="setup">The <see cref="EfCoreDataStoreOptions" /> which need to be configured.</param>
-        public EfCoreDbContext(IOptions<EfCoreDataStoreOptions<TMarker>> setup) : base(setup)
+        /// <param name="setup">The <see cref="EfCoreDataSourceOptions" /> which need to be configured.</param>
+        public EfCoreDbContext(IOptions<EfCoreDataSourceOptions<TMarker>> setup) : base(setup)
         {
         }
     }

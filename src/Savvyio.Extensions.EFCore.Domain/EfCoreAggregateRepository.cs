@@ -13,8 +13,8 @@ namespace Savvyio.Extensions.EFCore.Domain
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreRepository{TEntity,TKey}"/> class.
         /// </summary>
-        /// <param name="dataStore">The <see cref="IEfCoreDataStore"/> that handles actual I/O communication towards a data store.</param>
-        public EfCoreAggregateRepository(IEfCoreDataStore dataStore) : base(dataStore)
+        /// <param name="source">The <see cref="IEfCoreDataSource"/> that handles actual I/O communication with a source of data.</param>
+        public EfCoreAggregateRepository(IEfCoreDataSource source) : base(source)
         {
         }
     }

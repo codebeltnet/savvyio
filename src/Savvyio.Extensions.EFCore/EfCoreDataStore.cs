@@ -1,77 +1,85 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cuemon;
-using Cuemon.Extensions;
 using Cuemon.Threading;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Savvyio.Data;
 using Savvyio.Domain;
 
 namespace Savvyio.Extensions.EFCore
 {
     /// <summary>
-    /// Provides a default implementation of the <see cref="IEfCoreDataStore"/> interface to support the actual I/O communication towards a data store using Microsoft Entity Framework Core.
+    /// Represents the base class from which all implementations of <see cref="EfCoreDataStore{T,TOptions}"/> should derive. This is an abstract class to serve as an abstraction layer before the actual I/O communication with a source of data using Microsoft Entity Framework Core.
     /// </summary>
-    /// <seealso cref="Disposable" />
-    /// <seealso cref="IEfCoreDataStore" />
-    public class EfCoreDataStore : Disposable, IEfCoreDataStore
+    /// <typeparam name="T">The type of the DTO.</typeparam>
+    /// <typeparam name="TOptions">The type of options associated with this DTO.</typeparam>
+    /// <seealso cref="Disposable"/>
+    /// <seealso cref="IPersistentDataStore{T,TOptions}" />
+    public abstract class EfCoreDataStore<T, TOptions> : IPersistentDataStore<T, TOptions>
+        where T : class
+        where TOptions : AsyncOptions, new()
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="EfCoreDataStore"/> class.
+        /// Initializes a new instance of the <see cref="EfCoreDataStore{T, TOptions}"/> class.
         /// </summary>
-        /// <param name="dbContext">The <see cref="DbContext"/> to associate with this data store.</param>
-        protected EfCoreDataStore(DbContext dbContext)
+        /// <param name="source">The <see cref="IEfCoreDataSource"/> that handles actual I/O communication with a source of data.</param>
+        protected EfCoreDataStore(IEfCoreDataSource source)
         {
-            DbContext = dbContext;
+            Validator.ThrowIfNull(source, nameof(source));
+            DbSet = source.Set<T>();
+            UnitOfWork = source;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EfCoreDataStore"/> class.
+        /// Gets a <see cref="DbSet{TEntity}"/> that can be used to query and save instances of <typeparamref name="T"/>.
         /// </summary>
-        /// <param name="setup">The <see cref="EfCoreDataStoreOptions" /> which need to be configured.</param>
-        public EfCoreDataStore(IOptions<EfCoreDataStoreOptions> setup)
-        {
-            DbContext = new EfCoreDbContext(setup);
-        }
+        /// <value>The <see cref="DbSet{TEntity}"/> that can be used to query and save instances of <typeparamref name="T"/>.</value>
+        protected DbSet<T> DbSet { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EfCoreDataStore"/> class.
+        /// Gets a <see cref="IUnitOfWork"/> that can be used to save instances of <typeparamref name="T"/>.
         /// </summary>
-        /// <param name="setup">The <see cref="EfCoreDataStoreOptions" /> which need to be configured.</param>
-        public EfCoreDataStore(Action<EfCoreDataStoreOptions> setup) : this(Options.Create(setup.Configure()))
-        {
-        }
+        /// <value>The <see cref="IUnitOfWork"/> that can be used to save instances of <typeparamref name="T"/>.</value>
+        protected IUnitOfWork UnitOfWork { get; }
 
         /// <summary>
-        /// Gets the session of this data store.
+        /// Creates the specified <paramref name="dto"/> asynchronous in the associated <seealso cref="IEfCoreDataSource"/>.
         /// </summary>
-        /// <value>The session of this data store.</value>
-        protected DbContext DbContext { get; }
-
-        /// <summary>
-        /// Creates a <see cref="DbSet{TEntity}" /> that can be used to query and save instances of <typeparamref name="TEntity" />.
-        /// </summary>
-        /// <typeparam name="TEntity">The type of entity for which a set should be returned.</typeparam>
-        /// <returns>A set for the given entity type.</returns>
-        public DbSet<TEntity> Set<TEntity>() where TEntity : class => DbContext.Set<TEntity>();
-
-        /// <summary>
-        /// Saves the different <see cref="IRepository{TEntity,TKey}"/> implementations as one transaction towards a data store asynchronous.
-        /// </summary>
+        /// <param name="dto">The object to create in the associated <seealso cref="IEfCoreDataSource"/>.</param>
         /// <param name="setup">The <see cref="AsyncOptions"/> which may be configured.</param>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public virtual async Task SaveChangesAsync(Action<AsyncOptions> setup = null)
-        {
-            var options = setup.Configure();
-            await DbContext.SaveChangesAsync(options.CancellationToken).ConfigureAwait(false);
-        }
+        /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
+        public abstract Task CreateAsync(T dto, Action<AsyncOptions> setup = null);
 
         /// <summary>
-        /// Called when this object is being disposed by either <see cref="Disposable.Dispose()"/> or <see cref="Disposable.Dispose(bool)"/> having <c>disposing</c> set to <c>true</c> and <see cref="Disposable.Disposed"/> is <c>false</c>.
+        /// Updates the specified <paramref name="dto"/> asynchronous in the associated <seealso cref="IEfCoreDataSource"/>.
         /// </summary>
-        protected override void OnDisposeManagedResources()
-        {
-            DbContext?.Dispose();
-        }
+        /// <param name="dto">The object to update in the associated <seealso cref="IEfCoreDataSource"/>.</param>
+        /// <param name="setup">The <see cref="AsyncOptions"/> which may be configured.</param>
+        /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
+        public abstract Task UpdateAsync(T dto, Action<AsyncOptions> setup = null);
+
+        /// <summary>
+        /// Loads the object from the specified <paramref name="id"/> asynchronous.
+        /// </summary>
+        /// <param name="id">The key that uniquely identifies the object.</param>
+        /// <param name="setup">The <see cref="AsyncOptions"/> which may be configured.</param>
+        /// <returns>A <see cref="Task{TResult}" /> that represents the asynchronous operation. The task result either contains the object of the operation or <c>null</c> if not found.</returns>
+        public abstract Task<T> GetByIdAsync(object id, Action<AsyncOptions> setup = null);
+
+        /// <summary>
+        /// Finds all objects matching the specified <paramref name="setup"/> asynchronous in the associated <seealso cref="IEfCoreDataSource"/>.
+        /// </summary>
+        /// <param name="setup">The <typeparamref name="TOptions"/> which may be configured.</param>
+        /// <returns>A <see cref="Task{TResult}" /> that represents the asynchronous operation. The task result either contains the matching objects of the operation or an empty sequence if no match was found.</returns>
+        public abstract Task<IEnumerable<T>> FindAllAsync(Action<TOptions> setup = null);
+
+        /// <summary>
+        /// Deletes the specified <paramref name="dto"/> asynchronous in the associated <seealso cref="IEfCoreDataSource"/>.
+        /// </summary>
+        /// <param name="dto">The object to delete in the associated <seealso cref="IEfCoreDataSource"/>.</param>
+        /// <param name="setup">The <see cref="AsyncOptions"/> which may be configured.</param>
+        /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
+        public abstract Task DeleteAsync(T dto, Action<AsyncOptions> setup = null);
     }
 }

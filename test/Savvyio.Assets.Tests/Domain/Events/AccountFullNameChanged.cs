@@ -2,7 +2,7 @@
 
 namespace Savvyio.Assets.Domain.Events
 {
-    public class AccountFullNameChanged : DomainEvent // if naming conflict occur, consider this naming convention (to distinguish between domain- and integration events): <Entity>Instance<Action>
+    public class AccountFullNameChanged : DomainEvent
     {
         public AccountFullNameChanged(Account account)
         {

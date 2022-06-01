@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Cuemon.Extensions.Xunit;
 using Cuemon.Extensions.Xunit.Hosting;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +13,11 @@ using Savvyio.Assets.Domain;
 using Savvyio.Assets.Events;
 using Savvyio.Assets.Queries;
 using Savvyio.Data;
-using Savvyio.Domain;
 using Savvyio.Extensions;
 using Savvyio.Extensions.Dapper;
 using Savvyio.Extensions.DependencyInjection;
 using Savvyio.Extensions.DependencyInjection.Dapper;
+using Savvyio.Extensions.DependencyInjection.DapperExtensions;
 using Savvyio.Extensions.DependencyInjection.Domain;
 using Savvyio.Extensions.DependencyInjection.EFCore;
 using Savvyio.Extensions.DependencyInjection.EFCore.Domain;
@@ -55,7 +54,7 @@ namespace Savvyio
             
             await mediator.CommitAsync(new CreateAccount(caPpId, caFullName, caEmailAddress).SetCorrelationId(correlationId));
 
-            var entity = await accountRepo.FindAsync(a => a.Metadata.Contains(new KeyValuePair<string, object>(MetadataDictionary.CorrelationId, correlationId)));
+            var entity = await accountRepo.FindAllAsync(a => a.Metadata.Contains(new KeyValuePair<string, object>(MetadataDictionary.CorrelationId, correlationId))).SingleOrDefaultAsync();
 
             var dao = await mediator.QueryAsync(new GetAccount(entity.Id)).ConfigureAwait(false);
 
@@ -94,8 +93,8 @@ namespace Savvyio
         public async Task VerifyUsers()
         {
             var accountRepo = _sp.GetRequiredService<ISearchableRepository<Account, long, Account>>();
-            var accountDao = _sp.GetRequiredService<IReadableDataAccessObject<AccountCreated, DapperOptions>>();
-            var daos = new List<AccountCreated>(await accountDao.ReadAllAsync(null, o => o.CommandText = "SELECT * FROM Account").ConfigureAwait(false));
+            var accountDao = _sp.GetRequiredService<ISearchableDataStore<AccountProjection, DapperQueryOptions>>();
+            var daos = new List<AccountProjection>(await accountDao.FindAllAsync().ConfigureAwait(false));
             var entities = new List<Account>(await accountRepo.FindAllAsync().ConfigureAwait(false));
             foreach (var entity in entities)
             {
@@ -110,21 +109,21 @@ namespace Savvyio
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddEfCoreAggregateDataStore<Account>(o =>
+            services.AddEfCoreAggregateDataSource<Account>(o =>
             {
-                o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(Account)).EnableDetailedErrors().LogTo(Console.WriteLine);;
+                o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(Account)).EnableDetailedErrors().LogTo(Console.WriteLine);
                 o.ModelConstructor = mb => mb.AddAccount();
             }).AddEfCoreRepository<Account, long, Account>();
 
-            services.AddEfCoreAggregateDataStore<PlatformProvider>(o =>
+            services.AddEfCoreAggregateDataSource<PlatformProvider>(o =>
             {
-                o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(PlatformProvider)).EnableDetailedErrors().LogTo(Console.WriteLine);;
+                o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(PlatformProvider)).EnableDetailedErrors().LogTo(Console.WriteLine);
                 o.ModelConstructor = mb => mb.AddPlatformProvider();
             }).AddEfCoreRepository<PlatformProvider, Guid, PlatformProvider>();
 
-            services.AddDapperDataStore(o => o.ConnectionFactory = () => new SqliteConnection().SetDefaults().AddAccountTable().AddPlatformProviderTable())
-                .AddDapperDataAccessObject<AccountCreated>()
-                .AddDapperDataAccessObject<PlatformProviderCreated>();
+            services.AddDapperDataSource(o => o.ConnectionFactory = () => new SqliteConnection().SetDefaults().AddAccountTable().AddPlatformProviderTable(), o => o.Lifetime = ServiceLifetime.Scoped)
+                .AddDapperDataStore<AccountData, AccountProjection>()
+                .AddDapperExtensionsDataStore<PlatformProviderProjection>();
 
             services.AddSavvyIO(o =>
             {

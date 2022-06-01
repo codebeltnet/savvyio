@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Savvyio.Extensions.DependencyInjection.DapperExtensions</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.DapperExtensions\Savvyio.Extensions.DapperExtensions.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.DapperExtensions\Savvyio.Extensions.DependencyInjection.DapperExtensions.csproj" />
+    <ProjectReference Include="..\Savvyio.Assets.Tests\Savvyio.Assets.Tests.csproj" />
+  </ItemGroup>
+
+</Project>

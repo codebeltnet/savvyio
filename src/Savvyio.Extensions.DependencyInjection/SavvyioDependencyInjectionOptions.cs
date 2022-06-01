@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Cuemon.Extensions.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
+using Savvyio.Dispatchers;
 
 namespace Savvyio.Extensions.DependencyInjection
 {
@@ -11,6 +13,7 @@ namespace Savvyio.Extensions.DependencyInjection
     public class SavvyioDependencyInjectionOptions : SavvyioOptions
     {
         private readonly IList<Assembly> _assemblies = new List<Assembly>();
+        private readonly ServiceLocatorOptions _serviceLocatorOptions = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SavvyioDependencyInjectionOptions"/> class.
@@ -35,6 +38,14 @@ namespace Savvyio.Extensions.DependencyInjection
         ///         <description><c>false</c></description>
         ///     </item>
         ///     <item>
+        ///         <term><see cref="ServiceLocatorLifetime"/></term>
+        ///         <description><see cref="ServiceLifetime.Scoped"/></description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="ServiceLocatorImplementationFactory"/></term>
+        ///         <description><c>p => new ServiceLocator(p.GetServices)</c></description>
+        ///     </item>
+        ///     <item>
         ///         <term><see cref="DispatcherServicesLifetime"/></term>
         ///         <description><see cref="ServiceLifetime.Scoped"/></description>
         ///     </item>
@@ -52,8 +63,22 @@ namespace Savvyio.Extensions.DependencyInjection
         {
             HandlerServicesLifetime = ServiceLifetime.Transient;
             DispatcherServicesLifetime = ServiceLifetime.Scoped;
+            ServiceLocatorImplementationFactory = _serviceLocatorOptions.ImplementationFactory;
+            ServiceLocatorLifetime = _serviceLocatorOptions.Lifetime;
         }
         
+        /// <summary>
+        /// Gets or sets the function delegate that creates an instance of an <see cref="IServiceLocator"/> implementation.
+        /// </summary>
+        /// <value>The function delegate that creates an instance of an <see cref="IServiceLocator"/> implementation.</value>
+        public Func<IServiceProvider, IServiceLocator> ServiceLocatorImplementationFactory { get; set; }
+
+        /// <summary>
+        /// Gets or sets the lifetime of the <see cref="IServiceLocator"/>.
+        /// </summary>
+        /// <value>The lifetime of the <see cref="IServiceLocator"/>.</value>
+        public ServiceLifetime ServiceLocatorLifetime { get; set; }
+
         /// <summary>
         /// Gets or sets the lifetime of the handler services.
         /// </summary>

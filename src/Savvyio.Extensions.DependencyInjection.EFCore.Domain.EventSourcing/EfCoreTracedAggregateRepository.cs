@@ -20,8 +20,8 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreTracedAggregateRepository{TEntity, TKey, TMarker}"/> class.
         /// </summary>
-        /// <param name="dataStore">The <see cref="IEfCoreDataStore{TMarker}"/> that handles actual I/O communication towards a data store.</param>
-        public EfCoreTracedAggregateRepository(IEfCoreDataStore<TMarker> dataStore) : base(dataStore)
+        /// <param name="source">The <see cref="IEfCoreDataSource{TMarker}"/> that handles actual I/O communication with a source of data.</param>
+        public EfCoreTracedAggregateRepository(IEfCoreDataSource<TMarker> source) : base(source)
         {
         }
     }

@@ -2,7 +2,7 @@
 
 namespace Savvyio.Assets.Domain.Events
 {
-    public class TracedAccountFullNameChanged : TracedDomainEvent // if naming conflict occur, consider this naming convention (to distinguish between domain- and integration events): <Entity>Instance<Action>
+    public class TracedAccountFullNameChanged : TracedDomainEvent
     {
         public TracedAccountFullNameChanged(string fullName)
         {

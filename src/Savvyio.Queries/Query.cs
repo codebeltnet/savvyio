@@ -3,7 +3,7 @@
     /// <summary>
     /// Provides a default implementation of of the <see cref="IQuery{TResult}" /> interface.
     /// </summary>
-    /// <typeparam name="TResult">The type of the t result.</typeparam>
+    /// <typeparam name="TResult">The type of the result to return.</typeparam>
     /// <seealso cref="IQuery{TResult}" />
     /// <seealso cref="Request" />
     public abstract class Query<TResult> : Request, IQuery<TResult>

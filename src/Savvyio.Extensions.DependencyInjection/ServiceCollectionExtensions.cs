@@ -6,7 +6,6 @@ using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Savvyio.Dispatchers;
 
 namespace Savvyio.Extensions.DependencyInjection
@@ -17,70 +16,32 @@ namespace Savvyio.Extensions.DependencyInjection
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds an implementation of <see cref="IDataStore" /> to the specified <see cref="IServiceCollection" />.
+        /// Adds an implementation of <see cref="IDataSource" /> to the specified <see cref="IServiceCollection" />.
         /// </summary>
-        /// <typeparam name="TDataStore">The type of the <see cref="IDataStore"/> interface to add.</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
+        /// <typeparam name="TService">The type of the <see cref="IDataSource"/> to add.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
+        /// <param name="setup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional configuration calls can be chained.</returns>
-        /// <remarks>The implementation will be type forwarded accordingly.</remarks>
-        /// <seealso cref="IDataStore"/>
-        public static IServiceCollection AddDataStore<TDataStore, TImplementation>(this IServiceCollection services)
-            where TDataStore : IDataStore
-            where TImplementation : class, TDataStore
-        {
-            return services.AddDataStore<TImplementation>();
-        }
-
-        /// <summary>
-        /// Adds an implementation of <see cref="IDataStore" /> to the specified <see cref="IServiceCollection" />.
-        /// </summary>
-        /// <typeparam name="TDataStore">The type of the <see cref="IDataStore"/> interface to add.</typeparam>
-        /// <typeparam name="TImplementation">The type of the configured implementation to use.</typeparam>
-        /// <typeparam name="TMarker">The type used to mark the implementation that this data store represents. Optimized for Microsoft Dependency Injection.</typeparam>
-        /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
-        /// <returns>A reference to <paramref name="services" /> so that additional configuration calls can be chained.</returns>
+        /// <remarks>If the underlying type of <typeparamref name="TService"/> implements <see cref="IDependencyInjectionMarker{TMarker}"/> interface then this is automatically handled. Also, the implementation will be type forwarded accordingly.</remarks>
         /// <seealso cref="IDependencyInjectionMarker{TMarker}"/>
-        /// <seealso cref="IDataStore{TMarker}"/>
-        public static IServiceCollection AddDataStore<TDataStore, TImplementation, TMarker>(this IServiceCollection services)
-            where TDataStore : IDataStore<TMarker>
-            where TImplementation : class, TDataStore
-        {
-            return services.AddDataStore<TImplementation>();
-        }
-
-        /// <summary>
-        /// Adds an implementation of <see cref="IDataStore" /> to the specified <see cref="IServiceCollection" />.
-        /// </summary>
-        /// <typeparam name="TImplementation">The type of the configured implementation to use.</typeparam>
-        /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
-        /// <returns>A reference to <paramref name="services" /> so that additional configuration calls can be chained.</returns>
-        /// <remarks>If the underlying type of <typeparamref name="TImplementation"/> implements <see cref="IDependencyInjectionMarker{TMarker}"/> interface then this is automatically handled. Also, the implementation will be type forwarded accordingly.</remarks>
-        /// <seealso cref="IDependencyInjectionMarker{TMarker}"/>
-        /// <seealso cref="IDataStore"/>
-        /// <seealso cref="IDataStore{TMarker}"/>
-        public static IServiceCollection AddDataStore<TImplementation>(this IServiceCollection services)
-            where TImplementation : class, IDataStore
+        /// <seealso cref="IDataSource"/>
+        /// <seealso cref="IDataSource{TMarker}"/>
+        public static IServiceCollection AddDataSource<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IDataSource
         {
             Validator.ThrowIfNull(services, nameof(services));
-            var dataStoreType = typeof(IDataStore);
-            services.TryAddScoped<TImplementation>();
-            if (typeof(TImplementation).TryGetDependencyInjectionMarker(out var markerType))
-            {
-                dataStoreType = typeof(IDataStore<>).MakeGenericType(markerType);
-            }
-            services.TryAddScoped(dataStoreType, p => p.GetRequiredService<TImplementation>());
-            return services;
+            return Decorator.Enclose(services).AddWithNestedTypeForwarding<TService>(type => type.HasInterfaces(typeof(IDataSource)), setup);
         }
 
         /// <summary>
         /// Adds Savvy I/O service locator used to resolve necessary dependencies.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
+        /// <param name="setup">The <see cref="ServiceLocatorOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
-        public static IServiceCollection AddServiceLocator(this IServiceCollection services)
+        public static IServiceCollection AddServiceLocator(this IServiceCollection services, Action<ServiceLocatorOptions> setup = null)
         {
-            services.TryAddScoped<IServiceLocator>(p => new ServiceLocator(p.GetServices));
+            var options = setup.Configure();
+            services.TryAdd(typeof(IServiceLocator), options.ImplementationFactory, options.Lifetime);
             return services;
         }
 
@@ -99,33 +60,7 @@ namespace Savvyio.Extensions.DependencyInjection
             foreach (var handlerType in options.HandlerImplementationTypes)
             {
                 var handlerTypeServices = handlerType.GetInterfaces().Where(type => type.HasInterfaces(options.HandlerServiceTypes.ToArray()));
-                foreach (var handlerTypeService in handlerTypeServices)
-                {
-                    var handlers = new Hierarchy<object>();
-                    if (options.IncludeHandlerServicesDescriptor) { handlers.Add(handlerType); }
-
-                    var handlerTypeInterfaceModel = handlerTypeService.GetInterface("IHandler`1")?.GenericTypeArguments.SingleOrDefault();
-                    foreach (var method in handlerType.GetTypeInfo().DeclaredMembers.Where(m => MemberIsMethodOrLambdaWithHandlerTypeInterface(m, handlerTypeInterfaceModel)))
-                    {
-                        if (options.IncludeHandlerServicesDescriptor) { handlers.Add(method); }
-                        if (!services.Any(sd => sd.ServiceType == handlerTypeService && sd.ImplementationType == handlerType))
-                        {
-                            services.Add(handlerTypeService, handlerType, options.HandlerServicesLifetime);
-                        }
-                    }
-
-                    if (options.IncludeHandlerServicesDescriptor)
-                    {
-                        if (descriptors.TryGetValue(handlerTypeService, out var list))
-                        {
-                            list.Add(handlers);
-                        }
-                        else
-                        {
-                            descriptors.Add(handlerTypeService, new List<IHierarchy<object>>() { handlers });
-                        }
-                    }
-                }
+                AddHandlersWithOptionalDescriptors(services, handlerType, handlerTypeServices, descriptors, options);
             }
 
             if (options.IncludeHandlerServicesDescriptor)
@@ -133,6 +68,53 @@ namespace Savvyio.Extensions.DependencyInjection
                 services.AddSingleton(new HandlerServicesDescriptor(descriptors.Where(pair => pair.Key.HasInterfaces(options.HandlerServiceTypes.ToArray())).GroupBy(pair => pair.Key), options.HandlerServiceTypes));
             }
 
+            AddDispatchers(services, options);
+
+            return services.AddServiceLocator(o =>
+            {
+                o.ImplementationFactory = options.ServiceLocatorImplementationFactory;
+                o.Lifetime = options.ServiceLocatorLifetime;
+            });
+        }
+
+        private static void AddHandlersWithOptionalDescriptors(IServiceCollection services, Type handlerType, IEnumerable<Type> handlerTypeServices, Dictionary<Type, List<IHierarchy<object>>> descriptors, SavvyioDependencyInjectionOptions options)
+        {
+            foreach (var handlerTypeService in handlerTypeServices)
+            {
+                var handlers = new Hierarchy<object>();
+                if (options.IncludeHandlerServicesDescriptor) { handlers.Add(handlerType); }
+
+                var handlerTypeInterfaceModel = handlerTypeService.GetInterface("IHandler`1")?.GenericTypeArguments.SingleOrDefault();
+                foreach (var method in handlerType.GetTypeInfo().DeclaredMembers.Where(m => MemberIsMethodOrLambdaWithHandlerTypeInterface(m, handlerTypeInterfaceModel)))
+                {
+                    if (options.IncludeHandlerServicesDescriptor) { handlers.Add(method); }
+                    if (!services.Any(sd => sd.ServiceType == handlerTypeService && sd.ImplementationType == handlerType))
+                    {
+                        services.Add(handlerTypeService, handlerType, options.HandlerServicesLifetime);
+                    }
+                }
+
+                AddDescriptors(handlers, handlerTypeService, descriptors, options);
+            }
+        }
+
+        private static void AddDescriptors(Hierarchy<object> handlers, Type handlerTypeService, Dictionary<Type, List<IHierarchy<object>>> descriptors, SavvyioDependencyInjectionOptions options)
+        {
+            if (options.IncludeHandlerServicesDescriptor)
+            {
+                if (descriptors.TryGetValue(handlerTypeService, out var list))
+                {
+                    list.Add(handlers);
+                }
+                else
+                {
+                    descriptors.Add(handlerTypeService, new List<IHierarchy<object>>() { handlers });
+                }
+            }
+        }
+
+        private static void AddDispatchers(IServiceCollection services, SavvyioDependencyInjectionOptions options)
+        {
             foreach (var dispatcherType in options.DispatcherImplementationTypes)
             {
                 var dispatcherTypeServices = dispatcherType.GetInterfaces().Where(type => type.HasInterfaces(options.DispatcherServiceTypes.ToArray()));
@@ -141,8 +123,6 @@ namespace Savvyio.Extensions.DependencyInjection
                     services.TryAdd(dispatcherTypeService, dispatcherType, options.DispatcherServicesLifetime);
                 }
             }
-
-            return services.AddServiceLocator();
         }
 
         private static bool MemberIsMethodOrLambdaWithHandlerTypeInterface(MemberInfo m, Type handlerTypeInterfaceModel)

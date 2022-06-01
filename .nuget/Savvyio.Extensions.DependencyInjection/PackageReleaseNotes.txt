@@ -1,3 +1,21 @@
+Version: 0.8.0
+Availability: .NET 6.0
+ 
+# Breaking Changes
+- RENAMED IDataStore interface in the Savvyio.Extensions.DependencyInjection namespace to IDataSource interface
+- RENAMED IDataAccessObject interface in the Savvyio.Extensions.DependencyInjection.Data namespace to IDataStore interface
+- RENAMED IDeletableDataAccessObject interface in the Savvyio.Extensions.DependencyInjection.Data namespace to IDeletableDataStore interface
+- RENAMED IPersistentDataAccessObject interface in the Savvyio.Extensions.DependencyInjection.Data namespace to IPersistentDataStore interface
+- RENAMED IReadableDataAccessObject interface in the Savvyio.Extensions.DependencyInjection.Data namespace to IReadableDataStore interface
+- RENAMED IWritableDataAccessObject interface in the Savvyio.Extensions.DependencyInjection.Data namespace to IWritableDataStore interface
+- CHANGED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Data namespace that consist of extension methods for the IServiceCollection interface: AddDataStore
+- CHANGED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace that consist of extension methods for the IServiceCollection interface: AddDataSource
+ 
+# New Features
+- ADDED ISearchableDataStore interface in the Savvyio.Extensions.DependencyInjection.Data namespace that defines a generic way to support multiple implementations of searchable data access objects (cRud)
+- ADDED ServiceLocatorOptions class in the in the Savvyio.Extensions.DependencyInjection that provides configuration options for IServiceLocator
+- ADDED ServiceOptions class in the in the Savvyio.Extensions.DependencyInjection that provides configuration options for Microsoft Dependency Injection
+ 
 Version: 0.7.0
 Availability: .NET 6.0
  

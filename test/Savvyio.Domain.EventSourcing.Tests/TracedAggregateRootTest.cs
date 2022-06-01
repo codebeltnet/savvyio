@@ -8,13 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Savvyio.Assets;
 using Savvyio.Assets.Domain;
 using Savvyio.Assets.Domain.Events;
 using Savvyio.Assets.Domain.EventSourcing;
 using Savvyio.Assets.Domain.Handlers;
 using Savvyio.Extensions.DependencyInjection;
-using Savvyio.Extensions.DependencyInjection.Domain;
 using Savvyio.Extensions.DependencyInjection.EFCore.Domain;
 using Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing;
 using Savvyio.Extensions.EFCore;
@@ -74,7 +72,7 @@ namespace Savvyio.Domain.EventSourcing.Tests
             string schema = null;
             var sc = new ServiceCollection();
             sc.AddSavvyIO(o => o.AddDomainEventDispatcher().AddDomainEventHandler<AccountDomainEventHandler>());
-            sc.AddEfCoreAggregateDataStore(o =>
+            sc.AddEfCoreAggregateDataSource(o =>
             {
                 o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy").EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
                 o.ModelConstructor = mb =>
@@ -89,7 +87,7 @@ namespace Savvyio.Domain.EventSourcing.Tests
             
             var sp = sc.BuildServiceProvider();
 
-            var ds = sp.GetRequiredService<IEfCoreDataStore>();
+            var ds = sp.GetRequiredService<IEfCoreDataSource>();
             var sut4 = sp.GetRequiredService<ITracedAggregateRepository<TracedAccount, Guid>>();
 
             var id = Guid.NewGuid();

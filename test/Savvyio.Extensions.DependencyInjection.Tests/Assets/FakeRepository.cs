@@ -10,7 +10,7 @@ namespace Savvyio.Extensions.DependencyInjection.Assets
 {
     public class FakeRepository<TEntity, TKey> : IPersistentRepository<TEntity, TKey> where TEntity : class, IIdentity<TKey>
     {
-        public FakeRepository(IDataStore ds)
+        public FakeRepository(IDataSource ds)
         {
             
         }
@@ -53,7 +53,7 @@ namespace Savvyio.Extensions.DependencyInjection.Assets
 
     public class FakeRepository<TEntity, TKey, TMarker> : FakeRepository<TEntity, TKey>, IPersistentRepository<TEntity, TKey, TMarker> where TEntity : class, IIdentity<TKey>
     {
-        public FakeRepository(IDataStore<TMarker> ds) : base(ds)
+        public FakeRepository(IDataSource<TMarker> ds) : base(ds)
         {
             
         }

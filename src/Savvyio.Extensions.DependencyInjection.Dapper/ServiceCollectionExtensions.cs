@@ -1,8 +1,6 @@
 ﻿using System;
-using Cuemon;
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Savvyio.Extensions.Dapper;
 using Savvyio.Extensions.DependencyInjection.Data;
 
@@ -14,78 +12,59 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds an <see cref="DapperDataStore" /> implementation to the specified <see cref="IServiceCollection" />.
+        /// Adds an <see cref="DapperDataSource" /> implementation to the specified <see cref="IServiceCollection" />.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
-        /// <param name="setup">The <see cref="DapperDataStoreOptions" /> which need to be configured.</param>
+        /// <param name="dataSourceSetup">The <see cref="DapperDataSourceOptions" /> that needs to be configured.</param>
+        /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
-        public static IServiceCollection AddDapperDataStore(this IServiceCollection services, Action<DapperDataStoreOptions> setup)
+        public static IServiceCollection AddDapperDataSource(this IServiceCollection services, Action<DapperDataSourceOptions> dataSourceSetup, Action<ServiceOptions> serviceSetup = null)
         {
-            services.AddDapperDataStore<DapperDataStore>();
-            return services.Configure(setup);
+            return services.AddDapperDataSource<DapperDataSource>(serviceSetup).Configure(dataSourceSetup);
         }
 
         /// <summary>
-        /// Adds an <see cref="DapperDataStore{TMarker}" /> implementation to the specified <see cref="IServiceCollection" />.
+        /// Adds an <see cref="DapperDataSource{TMarker}" /> implementation to the specified <see cref="IServiceCollection" />.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
-        /// <param name="setup">The <see cref="DapperDataStoreOptions{TMarker}" /> which need to be configured.</param>
+        /// <param name="dataSourceSetup">The <see cref="DapperDataSourceOptions{TMarker}" /> that needs to be configured.</param>
+        /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
-        public static IServiceCollection AddDapperDataStore<TMarker>(this IServiceCollection services, Action<DapperDataStoreOptions<TMarker>> setup)
+        public static IServiceCollection AddDapperDataSource<TMarker>(this IServiceCollection services, Action<DapperDataSourceOptions<TMarker>> dataSourceSetup, Action<ServiceOptions> serviceSetup = null)
         {
-            services.AddDapperDataStore<DapperDataStore<TMarker>>();
-            return services.Configure(setup);
+            return services.AddDapperDataSource<DapperDataSource<TMarker>>(serviceSetup).Configure(dataSourceSetup);
         }
 
         /// <summary>
-        /// Adds an implementation of <see cref="IDapperDataStore" /> to the specified <see cref="IServiceCollection" />.
+        /// Adds an implementation of <see cref="IDapperDataSource" /> to the specified <see cref="IServiceCollection" />.
         /// </summary>
-        /// <typeparam name="TImplementation">The type of the configured implementation to use.</typeparam>
+        /// <typeparam name="TService">The type of the <see cref="IDapperDataSource"/> interface to add.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
+        /// <param name="setup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional configuration calls can be chained.</returns>
-        /// <remarks>If the underlying type of <typeparamref name="TImplementation"/> implements <see cref="IDependencyInjectionMarker{TMarker}"/> interface then this is automatically handled. Also, the implementation will be type forwarded accordingly.</remarks>
+        /// <remarks>If the underlying type of <typeparamref name="TService"/> implements <see cref="IDependencyInjectionMarker{TMarker}"/> interface then this is automatically handled. Also, the implementation will be type forwarded accordingly.</remarks>
         /// <seealso cref="IDependencyInjectionMarker{TMarker}"/>
-        /// <seealso cref="IDapperDataStore"/>
-        /// <seealso cref="IDapperDataStore{TMarker}"/>
-        public static IServiceCollection AddDapperDataStore<TImplementation>(this IServiceCollection services) where TImplementation : class, IDapperDataStore
+        /// <seealso cref="IDapperDataSource"/>
+        /// <seealso cref="IDapperDataSource{TMarker}"/>
+        public static IServiceCollection AddDapperDataSource<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IDapperDataSource
         {
-            Validator.ThrowIfNull(services, nameof(services));
-            var efCoreDataStoreType = typeof(IDapperDataStore);
-            var dataStoreType = typeof(IDataStore);
-            services.TryAddScoped<TImplementation>();
-            if (typeof(TImplementation).TryGetDependencyInjectionMarker(out var markerType))
-            {
-                efCoreDataStoreType = typeof(IDapperDataStore<>).MakeGenericType(markerType);
-                dataStoreType = typeof(IDataStore<>).MakeGenericType(markerType);
-            }
-            services.TryAddScoped(efCoreDataStoreType, p => p.GetRequiredService<TImplementation>());
-            services.TryAddScoped(dataStoreType, p => p.GetRequiredService<TImplementation>());
-            return services;
+            return services.AddDataSource<TService>(setup);
         }
 
         /// <summary>
-        /// Adds an <see cref="DapperDataAccessObject{T}"/> to the specified <see cref="IServiceCollection"/>.
+        /// Adds an implementation of <see cref="DapperDataStore{T,TOptions}"/> to the specified <see cref="IServiceCollection"/>.
         /// </summary>
-        /// <typeparam name="T">The type of the DTO.</typeparam>
+        /// <typeparam name="TService">The type of the <see cref="DapperDataStore{T,TOptions}"/> abstraction to add.</typeparam>
+        /// <typeparam name="T">The type of the DTO to use.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
-        public static IServiceCollection AddDapperDataAccessObject<T>(this IServiceCollection services) where T : class
+        public static IServiceCollection AddDapperDataStore<TService, T>(this IServiceCollection services) 
+            where TService : DapperDataStore<T, DapperQueryOptions>
+            where T : class
         {
-            return services.AddDataAccessObject<DapperDataAccessObject<T>, T, DapperOptions>();
-        }
-
-        /// <summary>
-        /// Adds an <see cref="DapperDataAccessObject{T,TMarker}"/> to the specified <see cref="IServiceCollection"/>.
-        /// </summary>
-        /// <typeparam name="T">The type of the DTO.</typeparam>
-        /// <typeparam name="TMarker">The type used to mark the implementation that this data access object represents. Optimized for Microsoft Dependency Injection.</typeparam>
-        /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
-        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
-        public static IServiceCollection AddDapperDataAccessObject<T, TMarker>(this IServiceCollection services) where T : class
-        {
-            return services.AddDataAccessObject<DapperDataAccessObject<T, TMarker>, T, DapperOptions>();
+            return services.AddDataStore<TService, T, DapperQueryOptions>();
         }
     }
 }
