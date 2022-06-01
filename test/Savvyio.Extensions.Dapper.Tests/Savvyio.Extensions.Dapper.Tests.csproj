@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.5" />
-    <PackageReference Include="Savvyio.Extensions.DapperExtensions" Version="0.8.0-preview.3" />
   </ItemGroup>
 
   <ItemGroup>
