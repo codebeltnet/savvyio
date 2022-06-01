@@ -90,6 +90,7 @@ NuGet links to all projects of Savvy I/O:
 * [Savvyio.Extensions.DapperExtensions](https://www.nuget.org/packages/Savvyio.Extensions.DapperExtensions/)
 * [Savvyio.Extensions.DependencyInjection](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection/)
 * [Savvyio.Extensions.DependencyInjection.Dapper](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.Dapper/)
+* [Savvyio.Extensions.DependencyInjection.DapperExtensions](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.DapperExtensions/)
 * [Savvyio.Extensions.DependencyInjection.Domain](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.Domain/)
 * [Savvyio.Extensions.DependencyInjection.EFCore](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore/)
 * [Savvyio.Extensions.DependencyInjection.EFCore.Domain](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore.Domain/)
