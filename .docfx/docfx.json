@@ -4,8 +4,8 @@
       "src": [
         {
           "files": [
-            "Savvyio.Core/**.csproj",
             "Savvyio.Commands/**.csproj",
+            "Savvyio.Core/**.csproj",
             "Savvyio.Domain/**.csproj",
             "Savvyio.Domain.EventSourcing/**.csproj",
             "Savvyio.EventDriven/**.csproj",
@@ -25,8 +25,10 @@
         {
           "files": [
             "Savvyio.Extensions.Dapper/**.csproj",
+            "Savvyio.Extensions.DapperExtensions/**.csproj",
             "Savvyio.Extensions.DependencyInjection/**.csproj",
             "Savvyio.Extensions.DependencyInjection.Dapper/**.csproj",
+            "Savvyio.Extensions.DependencyInjection.DapperExtensions/**.csproj",
             "Savvyio.Extensions.DependencyInjection.Domain/**.csproj",
             "Savvyio.Extensions.DependencyInjection.EFCore/**.csproj",
             "Savvyio.Extensions.DependencyInjection.EFCore.Domain/**.csproj",
