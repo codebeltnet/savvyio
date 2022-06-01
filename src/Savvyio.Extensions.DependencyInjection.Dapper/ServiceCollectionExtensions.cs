@@ -1,5 +1,4 @@
 ﻿using System;
-using Cuemon;
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Extensions.Dapper;
@@ -22,8 +21,7 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
         public static IServiceCollection AddDapperDataSource(this IServiceCollection services, Action<DapperDataSourceOptions> dataSourceSetup, Action<ServiceOptions> serviceSetup = null)
         {
-            services.AddDapperDataSource<DapperDataSource>(serviceSetup);
-            return services.Configure(dataSourceSetup);
+            return services.AddDapperDataSource<DapperDataSource>(serviceSetup).Configure(dataSourceSetup);
         }
 
         /// <summary>
@@ -36,8 +34,7 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
         public static IServiceCollection AddDapperDataSource<TMarker>(this IServiceCollection services, Action<DapperDataSourceOptions<TMarker>> dataSourceSetup, Action<ServiceOptions> serviceSetup = null)
         {
-            services.AddDapperDataSource<DapperDataSource<TMarker>>(serviceSetup);
-            return services.Configure(dataSourceSetup);
+            return services.AddDapperDataSource<DapperDataSource<TMarker>>(serviceSetup).Configure(dataSourceSetup);
         }
 
         /// <summary>
@@ -53,7 +50,6 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         /// <seealso cref="IDapperDataSource{TMarker}"/>
         public static IServiceCollection AddDapperDataSource<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IDapperDataSource
         {
-            Validator.ThrowIfNull(services, nameof(services));
             return services.AddDataSource<TService>(setup);
         }
 
