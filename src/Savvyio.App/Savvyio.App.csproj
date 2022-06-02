@@ -13,9 +13,7 @@
     <ProjectReference Include="..\Savvyio.Domain.EventSourcing\Savvyio.Domain.EventSourcing.csproj" />
     <ProjectReference Include="..\Savvyio.Domain\Savvyio.Domain.csproj" />
     <ProjectReference Include="..\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
-    <ProjectReference Include="..\Savvyio.Extensions.DapperExtensions\Savvyio.Extensions.DapperExtensions.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.Dapper\Savvyio.Extensions.Dapper.csproj" />
-    <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.DapperExtensions\Savvyio.Extensions.DependencyInjection.DapperExtensions.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.Dapper\Savvyio.Extensions.DependencyInjection.Dapper.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.Domain\Savvyio.Extensions.DependencyInjection.Domain.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing\Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing.csproj" />
