@@ -103,15 +103,15 @@ namespace Savvyio
         {
             var children = node.GetChildren().ToList();
             builder.AppendLine($"<{ti.ToFriendlyName()}>");
-            foreach (var child in children.OrderBy(h => h.Instance.As<MethodInfo>()?.Name, StringComparer.OrdinalIgnoreCase))
+            foreach (var child in children.Select(h => h.Instance).OrderBy(h => h.As<MethodInfo>()?.Name, StringComparer.OrdinalIgnoreCase))
             {
-                if (child.Instance is MethodInfo mi)
+                if (child is MethodInfo mi)
                 {
                     var p = mi.GetParameters().Single(p => p.ParameterType.HasInterfaces(serviceRequestType));
                     builder.AppendLine($"\t*{p.ParameterType.Name} --> &{mi.Name}");
                     methodCount++;
                 }
-                else if (child.Instance is Type runtimeType) // we will get here when no class dependencies is specified (eg. isolated 'method')
+                else if (child is Type runtimeType) // we will get here when no class dependencies is specified (eg. isolated 'method')
                 {
                     var nestedMethods = runtimeType.GetRuntimeMethods().Where(i => i.GetParameters().Any(p => p.ParameterType.HasInterfaces(serviceRequestType)));
                     foreach (var nested in nestedMethods)
