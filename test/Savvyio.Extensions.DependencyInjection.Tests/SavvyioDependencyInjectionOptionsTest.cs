@@ -19,8 +19,9 @@ namespace Savvyio.Extensions.DependencyInjection
             Assert.False(sut.AutomaticDispatcherDiscovery);
             Assert.False(sut.AutomaticHandlerDiscovery);
             Assert.False(sut.IncludeHandlerServicesDescriptor);
+            Assert.Equal(ServiceLifetime.Transient, sut.ServiceLocatorLifetime);
             Assert.Equal(ServiceLifetime.Transient, sut.HandlerServicesLifetime);
-            Assert.Equal(ServiceLifetime.Scoped, sut.DispatcherServicesLifetime);
+            Assert.Equal(ServiceLifetime.Transient, sut.DispatcherServicesLifetime);
             Assert.Empty(sut.DispatcherImplementationTypes);
             Assert.Empty(sut.DispatcherServiceTypes);
             Assert.Empty(sut.HandlerImplementationTypes);

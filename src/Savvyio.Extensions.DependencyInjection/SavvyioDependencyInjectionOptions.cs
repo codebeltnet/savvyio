@@ -62,7 +62,7 @@ namespace Savvyio.Extensions.DependencyInjection
         public SavvyioDependencyInjectionOptions()
         {
             HandlerServicesLifetime = ServiceLifetime.Transient;
-            DispatcherServicesLifetime = ServiceLifetime.Scoped;
+            DispatcherServicesLifetime = ServiceLifetime.Transient;
             ServiceLocatorImplementationFactory = _serviceLocatorOptions.ImplementationFactory;
             ServiceLocatorLifetime = _serviceLocatorOptions.Lifetime;
         }
