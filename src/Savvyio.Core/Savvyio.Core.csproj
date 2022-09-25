@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Extensions.Core" Version="6.4.1" />
-    <PackageReference Include="Cuemon.Extensions.Collections.Generic" Version="6.4.1" />
-    <PackageReference Include="Cuemon.Extensions.Reflection" Version="6.4.1" />
+    <PackageReference Include="Cuemon.Extensions.Core" Version="7.0.0-preview.153" />
+    <PackageReference Include="Cuemon.Extensions.Collections.Generic" Version="7.0.0-preview.153" />
+    <PackageReference Include="Cuemon.Extensions.Reflection" Version="7.0.0-preview.153" />
   </ItemGroup>
 
 </Project>
