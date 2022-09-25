@@ -4,7 +4,7 @@ using Savvyio.Domain;
 
 namespace Savvyio.Assets.Domain
 {
-    public class ThirdLevelDomainName : SingleValueObject<string>
+    public record ThirdLevelDomainName : SingleValueObject<string>
     {
         public static implicit operator ThirdLevelDomainName(string value)
         {

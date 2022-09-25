@@ -5,7 +5,7 @@
     /// </summary>
     /// <seealso cref="IMetadata" />
     /// <seealso cref="IRequest" />
-    public abstract class Request : IRequest, IMetadata
+    public abstract record Request : IRequest, IMetadata
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Request"/> class.

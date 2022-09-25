@@ -17,4 +17,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="Cuemon.Extensions.Xunit.App" Version="7.0.0-preview.153" />
+  </ItemGroup>
+
 </Project>

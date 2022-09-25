@@ -3,7 +3,7 @@ using Savvyio.Domain;
 
 namespace Savvyio.Assets.Domain
 {
-    public class Name : SingleValueObject<string>
+    public record Name : SingleValueObject<string>
     {
         public static implicit operator Name(string value)
         {

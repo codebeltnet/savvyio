@@ -3,7 +3,7 @@ using Savvyio.Queries;
 
 namespace Savvyio.Extensions.DependencyInjection.Assets
 {
-    internal class TestQuery : Query<Guid>
+    internal record TestQuery : Query<Guid>
     {
     }
 }

@@ -4,7 +4,7 @@ using Savvyio.Domain;
 
 namespace Savvyio.Assets.Domain
 {
-    public class TracedAccountId : SingleValueObject<Guid>
+    public record TracedAccountId : SingleValueObject<Guid>
     {
         public static implicit operator TracedAccountId(Guid value)
         {

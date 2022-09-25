@@ -3,7 +3,7 @@ using Savvyio.Domain;
 
 namespace Savvyio.Assets.Domain
 {
-    public class PlatformProviderAccountPolicy : ValueObject
+    public record PlatformProviderAccountPolicy : ValueObject
     {
         public PlatformProviderAccountPolicy() : this(8, 0, TimeSpan.Zero, TimeSpan.Zero, 10, TimeSpan.Zero, TimeSpan.Zero, true)
         {

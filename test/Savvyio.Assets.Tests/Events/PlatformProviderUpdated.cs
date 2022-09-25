@@ -4,7 +4,7 @@ using Savvyio.EventDriven;
 
 namespace Savvyio.Assets.Events
 {
-    public class PlatformProviderUpdated : IntegrationEvent
+    public record PlatformProviderUpdated : IntegrationEvent
     {
         PlatformProviderUpdated()
         {

@@ -3,7 +3,7 @@ using Savvyio.Commands;
 
 namespace Savvyio.Assets.Commands
 {
-    public class CreateAccount : Command
+    public record CreateAccount : Command
     {
         public CreateAccount(Guid platformProviderId, string fullName, string emailAddress)
         {

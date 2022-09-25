@@ -8,4 +8,8 @@
     <ProjectReference Include="..\Savvyio.Assets.EfCore.Tests\Savvyio.Assets.EfCore.Tests.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="Cuemon.Extensions.Xunit.App" Version="7.0.0-preview.153" />
+  </ItemGroup>
+
 </Project>

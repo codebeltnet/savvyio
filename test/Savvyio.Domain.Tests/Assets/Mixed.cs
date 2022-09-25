@@ -3,7 +3,7 @@ using Savvyio.Assets.Domain;
 
 namespace Savvyio.Domain.Assets
 {
-    public class Mixed : ValueObject
+    public record Mixed : ValueObject
     {
         public Mixed()
         {

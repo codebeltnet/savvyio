@@ -3,18 +3,14 @@ using Savvyio.Domain;
 
 namespace Savvyio.Assets.Domain
 {
-    public class Description : SingleValueObject<string>
+    public record Description : SingleValueObject<string>
     {
         public static implicit operator Description(string value)
         {
             return new Description(value);
         }
 
-        public Description() : this(null)
-        {
-        }
-
-        public Description(string value) : base(value)
+        public Description(string value = null) : base(value)
         {
             Validator.CheckParameter(value, () =>
             {

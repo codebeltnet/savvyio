@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Cuemon;
 using Cuemon.Extensions;
@@ -11,10 +10,10 @@ namespace Savvyio.Domain
     /// Represents an object whose equality is based on the value rather than identity as specified in Domain Driven Design.
     /// </summary>
     /// <seealso cref="T:IEquatable{ValueObject}" />
-    public abstract class ValueObject : IEquatable<ValueObject>
+    public abstract record ValueObject
     {
         private const int NullHashCode = 472074819;
-        private readonly object _locker = new object();
+        private readonly object _locker = new();
         private IEnumerable<object> _equalityComponents;
 
         /// <summary>
@@ -22,29 +21,6 @@ namespace Savvyio.Domain
         /// </summary>
         protected ValueObject()
         {
-        }
-
-        /// <summary>
-        /// Indicates whether two <see cref="ValueObject"/> instances are equal.
-        /// </summary>
-        /// <param name="vo1">The first <see cref="ValueObject"/> to compare.</param>
-        /// <param name="vo2">The second <see cref="ValueObject"/> to compare.</param>
-        /// <returns><c>true</c> if the values of <paramref name="vo1"/> and <paramref name="vo2"/> are equal; otherwise, false. </returns>
-        public static bool operator ==(ValueObject vo1, ValueObject vo2)
-        {
-            if (ReferenceEquals(vo1, null) ^ ReferenceEquals(vo2, null)) { return false; }
-            return ReferenceEquals(vo1, null) || vo1.Equals(vo2);
-        }
-
-        /// <summary>
-        /// Indicates whether two <see cref="ValueObject"/> instances are not equal.
-        /// </summary>
-        /// <param name="vo1">The first <see cref="ValueObject"/> to compare.</param>
-        /// <param name="vo2">The second <see cref="ValueObject"/> to compare.</param>
-        /// <returns><c>true</c> if the values of <paramref name="vo1"/> and <paramref name="vo2"/> are not equal; otherwise, false.</returns>
-        public static bool operator !=(ValueObject vo1, ValueObject vo2)
-        {
-            return !(vo1 == vo2);
         }
 
         /// <summary>
@@ -70,17 +46,6 @@ namespace Savvyio.Domain
                 }
             }
             return _equalityComponents;
-        }
-
-        /// <summary>
-        /// Determines whether the specified <see cref="object" /> is equal to this instance.
-        /// </summary>
-        /// <param name="obj">The <see cref="object"/> to compare with the current object.</param>
-        /// <returns><c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
-        {
-            if (!(obj is ValueObject)) { return false; }
-            return Equals((ValueObject)obj);
         }
 
         /// <summary>

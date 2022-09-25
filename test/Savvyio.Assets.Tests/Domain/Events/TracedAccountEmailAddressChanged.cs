@@ -2,7 +2,7 @@
 
 namespace Savvyio.Assets.Domain.Events
 {
-    public class TracedAccountEmailAddressChanged : TracedDomainEvent
+    public record TracedAccountEmailAddressChanged : TracedDomainEvent
     {
         public TracedAccountEmailAddressChanged(string emailAddress)
         {

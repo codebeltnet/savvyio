@@ -2,7 +2,7 @@
 
 namespace Savvyio.Assets.Domain.Events
 {
-    public class UserAccountFailedLogonAttemptCreated : DomainEvent
+    public record UserAccountFailedLogonAttemptCreated : DomainEvent
     {
         public UserAccountFailedLogonAttemptCreated()
         {

@@ -2,7 +2,7 @@
 
 namespace Savvyio.Extensions.DependencyInjection.Assets
 {
-    public class TestDomainEvent : DomainEvent
+    public record TestDomainEvent : DomainEvent
     {
     }
 }

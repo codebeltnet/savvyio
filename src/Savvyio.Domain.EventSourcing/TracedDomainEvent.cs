@@ -7,7 +7,7 @@ namespace Savvyio.Domain.EventSourcing
     /// </summary>
     /// <seealso cref="DomainEvent" />
     /// <seealso cref="ITracedDomainEvent" />
-    public abstract class TracedDomainEvent : DomainEvent, ITracedDomainEvent
+    public abstract record TracedDomainEvent : DomainEvent, ITracedDomainEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ITracedDomainEvent" /> class.

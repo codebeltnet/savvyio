@@ -2,7 +2,7 @@
 
 namespace Savvyio.Assets.Domain.Events
 {
-    public class TracedAccountFullNameChanged : TracedDomainEvent
+    public record TracedAccountFullNameChanged : TracedDomainEvent
     {
         public TracedAccountFullNameChanged(string fullName)
         {

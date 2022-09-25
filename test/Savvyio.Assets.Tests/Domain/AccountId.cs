@@ -3,7 +3,7 @@ using Savvyio.Domain;
 
 namespace Savvyio.Assets.Domain
 {
-    public sealed class AccountId : SingleValueObject<long>
+    public sealed record AccountId : SingleValueObject<long>
     {
         public static implicit operator AccountId(long value)
         {

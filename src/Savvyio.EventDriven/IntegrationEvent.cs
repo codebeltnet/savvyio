@@ -7,7 +7,7 @@ namespace Savvyio.EventDriven
     /// </summary>
     /// <seealso cref="IIntegrationEvent" />
     /// <seealso cref="Request"/>
-    public abstract class IntegrationEvent : Request, IIntegrationEvent
+    public abstract record IntegrationEvent : Request, IIntegrationEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegrationEvent"/> class.

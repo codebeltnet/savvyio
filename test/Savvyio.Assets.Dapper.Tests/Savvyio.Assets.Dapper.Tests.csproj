@@ -12,4 +12,8 @@
     <ProjectReference Include="..\..\src\Savvyio.Extensions.Dapper\Savvyio.Extensions.Dapper.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="Cuemon.Extensions.Xunit.App" Version="7.0.0-preview.153" />
+  </ItemGroup>
+
 </Project>

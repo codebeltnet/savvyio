@@ -2,7 +2,7 @@
 
 namespace Savvyio.Assets.Domain.Events
 {
-    public class UserAccountInitiated : DomainEvent
+    public record UserAccountInitiated : DomainEvent
     {
         public UserAccountInitiated()
         {

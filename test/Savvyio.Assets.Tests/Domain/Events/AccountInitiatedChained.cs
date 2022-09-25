@@ -2,7 +2,7 @@
 
 namespace Savvyio.Assets.Domain.Events
 {
-    public class AccountInitiatedChained : DomainEvent
+    public record AccountInitiatedChained : DomainEvent
     {
         public AccountInitiatedChained()
         {

@@ -2,7 +2,7 @@
 
 namespace Savvyio.Assets
 {
-    internal class FakeQuery : Query<int>
+    internal record FakeQuery : Query<int>
     {
     }
 }
