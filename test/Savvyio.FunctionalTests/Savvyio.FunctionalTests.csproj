@@ -33,8 +33,4 @@
     <ProjectReference Include="..\Savvyio.Domain.EventSourcing.Tests\Savvyio.Domain.EventSourcing.Tests.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Update="Cuemon.Extensions.Xunit.App" Version="7.0.0-preview.153" />
-  </ItemGroup>
-
 </Project>

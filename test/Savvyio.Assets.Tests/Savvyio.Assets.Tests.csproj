@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Security.Cryptography" Version="7.0.0-preview.153" />
+    <PackageReference Include="Cuemon.Security.Cryptography" Version="7.0.0-preview.155" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
@@ -22,10 +22,6 @@
     <ProjectReference Include="..\..\src\Savvyio.Extensions.EFCore.Domain.EventSourcing\Savvyio.Extensions.EFCore.Domain.EventSourcing.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.EFCore.Domain\Savvyio.Extensions.EFCore.Domain.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Queries\Savvyio.Queries.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="Cuemon.Extensions.Xunit.App" Version="7.0.0-preview.153" />
   </ItemGroup>
 
 </Project>

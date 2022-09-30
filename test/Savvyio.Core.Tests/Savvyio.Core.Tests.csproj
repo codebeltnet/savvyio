@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Security.Cryptography" Version="7.0.0-preview.153" />
+    <PackageReference Include="Cuemon.Security.Cryptography" Version="7.0.0-preview.155" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,10 +15,6 @@
     <ProjectReference Include="..\..\src\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Queries\Savvyio.Queries.csproj" />
     <ProjectReference Include="..\Savvyio.Assets.Tests\Savvyio.Assets.Tests.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="Cuemon.Extensions.Xunit.App" Version="7.0.0-preview.153" />
   </ItemGroup>
 
 </Project>
