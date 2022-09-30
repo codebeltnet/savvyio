@@ -54,8 +54,13 @@ namespace Savvyio.Extensions.DependencyInjection
         public static IServiceCollection AddSavvyIO(this IServiceCollection services, Action<SavvyioDependencyInjectionOptions> setup = null)
         {
             var options = setup.Configure();
-            if (options.AutomaticDispatcherDiscovery) { options.AddDispatchers(options.AssembliesToScan?.ToArray()); }
-            if (options.AutomaticHandlerDiscovery) { options.AddHandlers(options.AssembliesToScan?.ToArray()); }
+
+            if (options.AssembliesToScan != null)
+            {
+                if (options.AllowDispatcherDiscovery) { options.AddDispatchers(options.AssembliesToScan.ToArray()); }
+                if (options.AllowHandlerDiscovery) { options.AddHandlers(options.AssembliesToScan.ToArray()); }
+            }
+
             var descriptors = new Dictionary<Type, List<IHierarchy<object>>>();
             foreach (var handlerType in options.HandlerImplementationTypes)
             {

@@ -20,6 +20,10 @@
 - ADDED ServiceLocatorOptions class in the in the Savvyio.Extensions.DependencyInjection that provides configuration options for IServiceLocator
 - ADDED ServiceOptions class in the in the Savvyio.Extensions.DependencyInjection that provides configuration options for Microsoft Dependency Injection
 
+#### Savvyio.Extensions.Dispatchers
+
+- EXTENDED SavvyioOptionsExtensions class in the Savvyio.Extensions namespace with two new static members: UseAutomaticDispatcherDiscovery, UseAutomaticHandlerDiscovery
+
 #### Savvyio.Extensions.DependencyInjection.DapperExtensions
 
 - ADDED DapperExtensionsDataStore class in the Savvyio.Extensions.DependencyInjection.DapperExtensions namespace that provides a default implementation of the IPersistentDataStore{T,TOptions,TMarker} interface to support multiple implementations that is tailored for Plain Old CLR Objects (POCO) usage by DapperExtensions
@@ -46,6 +50,11 @@
 - RENAMED IPersistentDataAccessObject interface in the Savvyio.Data namespace to IPersistentDataStore interface
 - RENAMED IReadableDataAccessObject interface in the Savvyio.Data namespace to IReadableDataStore interface
 - RENAMED IWritableDataAccessObject interface in the Savvyio.Data namespace to IWritableDataStore interface
+- RENAMED AutomaticDispatcherDiscovery property on the SavvyioOptions class in the Savvyio namespace to AllowDispatcherDiscovery
+- RENAMED AutomaticHandlerDiscovery property on the SavvyioOptions class in the Savvyio namespace to AllowHandlerDiscovery
+- RENAMED EnableAutomaticDispatcherDiscovery method on the SavvyioOptions class in the Savvyio namespace to EnableDispatcherDiscovery
+- RENAMED EnableAutomaticHandlerDiscovery method on the SavvyioOptions class in the Savvyio namespace to EnableHandlerDiscovery
+- CHANGED SavvyioOptionsExtensions class in the Savvyio namespace to abide SRP for extension methods: AddDispatchers, AddHandlers
 
 #### Savvyio.Extensions.Dapper
 

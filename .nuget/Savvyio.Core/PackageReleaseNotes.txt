@@ -8,6 +8,11 @@ Availability: .NET 6.0
 - RENAMED IPersistentDataAccessObject interface in the Savvyio.Data namespace to IPersistentDataStore interface
 - RENAMED IReadableDataAccessObject interface in the Savvyio.Data namespace to IReadableDataStore interface
 - RENAMED IWritableDataAccessObject interface in the Savvyio.Data namespace to IWritableDataStore interface
+- RENAMED AutomaticDispatcherDiscovery property on the SavvyioOptions class in the Savvyio namespace to AllowDispatcherDiscovery
+- RENAMED AutomaticHandlerDiscovery property on the SavvyioOptions class in the Savvyio namespace to AllowHandlerDiscovery
+- RENAMED EnableAutomaticDispatcherDiscovery method on the SavvyioOptions class in the Savvyio namespace to EnableDispatcherDiscovery
+- RENAMED EnableAutomaticHandlerDiscovery method on the SavvyioOptions class in the Savvyio namespace to EnableHandlerDiscovery
+- CHANGED SavvyioOptionsExtensions class in the Savvyio namespace to abide SRP for extension methods: AddDispatchers, AddHandlers
  
 # New Features
 - ADDED ISearchableDataStore interface in the Savvyio.Data namespace that defines a generic way of abstracting searchable data access objects (cRud)

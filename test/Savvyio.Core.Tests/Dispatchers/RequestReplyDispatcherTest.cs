@@ -32,7 +32,7 @@ namespace Savvyio.Dispatchers
         public void Dispatch_ShouldDispatchCommandToDesignatedHandler()
         {
             var sc = new ServiceCollection()
-                .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(RequestReplyDispatcherTest).Assembly, typeof(IQuery).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery())
+                .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(RequestReplyDispatcherTest).Assembly, typeof(IQuery).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery())
                 .AddScoped<ITestStore<IQuery>, InMemoryTestStore<IQuery>>();
             
             var sp = sc.BuildServiceProvider();
@@ -61,7 +61,7 @@ namespace Savvyio.Dispatchers
         public async Task DispatchAsync_ShouldDispatchCommandToDesignatedHandlerAsync()
         {
             var sc = new ServiceCollection()
-                .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(RequestReplyDispatcherTest).Assembly, typeof(IQuery).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery())
+                .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(RequestReplyDispatcherTest).Assembly, typeof(IQuery).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery())
                 .AddScoped<ITestStore<IQuery>, InMemoryTestStore<IQuery>>();
             
             var sp = sc.BuildServiceProvider();

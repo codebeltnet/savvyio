@@ -127,7 +127,7 @@ namespace Savvyio
 
             services.AddSavvyIO(o =>
             {
-                o.EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery().EnableHandlerServicesDescriptor().AddMediator<Mediator>();
+                o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery().UseAutomaticHandlerDiscovery().AddMediator<Mediator>();
             });
         }
     }

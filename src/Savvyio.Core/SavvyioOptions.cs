@@ -45,12 +45,12 @@ namespace Savvyio
         ///         <description>Initial Value</description>
         ///     </listheader>
         ///     <item>
-        ///         <term><see cref="AutomaticDispatcherDiscovery"/></term>
-        ///         <description><c>true</c></description>
+        ///         <term><see cref="AllowDispatcherDiscovery"/></term>
+        ///         <description><c>false</c></description>
         ///     </item>
         ///     <item>
-        ///         <term><see cref="AutomaticHandlerDiscovery"/></term>
-        ///         <description><c>true</c></description>
+        ///         <term><see cref="AllowHandlerDiscovery"/></term>
+        ///         <description><c>false</c></description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="IncludeHandlerServicesDescriptor"/></term>
@@ -63,43 +63,43 @@ namespace Savvyio
         }
 
         /// <summary>
-        /// Gets a value indicating whether automatic discovery of <see cref="IHandler"/> implementations is enabled.
+        /// Gets a value indicating whether discovery of <see cref="IHandler"/> implementations using assembly scanning is enabled.
         /// </summary>
-        /// <value><c>true</c> automatic discovery of <see cref="IHandler"/> implementations is enabled; otherwise, <c>false</c>.</value>
-        public bool AutomaticHandlerDiscovery { get; private set; } = false;
+        /// <value><c>true</c> discovery of <see cref="IHandler"/> implementations using assembly scanning is enabled; otherwise, <c>false</c>.</value>
+        public bool AllowHandlerDiscovery { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether automatic discovery of <see cref="IDispatcher"/> implementations is enabled.
+        /// Gets a value indicating whether discovery of <see cref="IDispatcher"/> implementations using assembly scanning is enabled.
         /// </summary>
-        /// <value><c>true</c> automatic discovery of <see cref="IDispatcher"/> implementations is enabled; otherwise, <c>false</c>.</value>
-        public bool AutomaticDispatcherDiscovery { get; private set; } = false;
+        /// <value><c>true</c> discovery of <see cref="IDispatcher"/> implementations using assembly scanning is enabled; otherwise, <c>false</c>.</value>
+        public bool AllowDispatcherDiscovery { get; private set; }
 
 
         /// <summary>
         /// Gets a value indicating whether the <see cref="HandlerServicesDescriptor"/> is enabled.
         /// </summary>
         /// <value><c>true</c> if the <see cref="HandlerServicesDescriptor"/> is enabled; otherwise, <c>false</c>.</value>
-        public bool IncludeHandlerServicesDescriptor { get; private set; } = false;
+        public bool IncludeHandlerServicesDescriptor { get; private set; }
 
         /// <summary>
-        /// Enables the automatic discovery of handlers implementing the <see cref="IHandler"/> interface.
+        /// Enables discovery of handlers implementing the <see cref="IHandler"/> interface using assembly scanning.
         /// </summary>
-        /// <param name="autoDiscoverHandlers"><c>true</c> if handlers implementing the <see cref="IHandler"/> interface should be automatically discovered; otherwise, <c>false</c>.</param>
+        /// <param name="allowHandlerDiscovery"><c>true</c> if handlers implementing the <see cref="IHandler"/> interface are allowed to be discovered using assembly scanning; otherwise, <c>false</c>.</param>
         /// <returns>A reference to this instance so that additional configuration calls can be chained.</returns>
-        public SavvyioOptions EnableAutomaticHandlerDiscovery(bool autoDiscoverHandlers = true)
+        public SavvyioOptions EnableHandlerDiscovery(bool allowHandlerDiscovery = true)
         {
-            AutomaticHandlerDiscovery = autoDiscoverHandlers;
+            AllowHandlerDiscovery = allowHandlerDiscovery;
             return this;
         }
 
         /// <summary>
-        /// Enables the automatic discovery of handlers implementing the <see cref="IDispatcher"/> interface.
+        /// Enables discovery of dispatchers implementing the <see cref="IDispatcher"/> interface using assembly scanning.
         /// </summary>
-        /// <param name="autoDiscoverDispatchers"><c>true</c> if handlers implementing the <see cref="IDispatcher"/> interface should be automatically discovered; otherwise, <c>false</c>.</param>
+        /// <param name="allowDispatcherDiscovery"><c>true</c> if dispatchers implementing the <see cref="IDispatcher"/> interface are allowed to be discovered using assembly scanning; otherwise, <c>false</c>.</param>
         /// <returns>A reference to this instance so that additional configuration calls can be chained.</returns>
-        public SavvyioOptions EnableAutomaticDispatcherDiscovery(bool autoDiscoverDispatchers = true)
+        public SavvyioOptions EnableDispatcherDiscovery(bool allowDispatcherDiscovery = true)
         {
-            AutomaticDispatcherDiscovery = autoDiscoverDispatchers;
+            AllowDispatcherDiscovery = allowDispatcherDiscovery;
             return this;
         }
 

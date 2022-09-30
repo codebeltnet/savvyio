@@ -26,7 +26,7 @@ namespace Savvyio.Domain
         public void RaiseMany_ShouldRaiseOneEventFromAggregate()
         {
             var sc = new ServiceCollection()
-                .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(DomainEventDispatcher).Assembly, typeof(DomainEventDispatcherExtensionsTest).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery())
+                .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(DomainEventDispatcher).Assembly, typeof(DomainEventDispatcherExtensionsTest).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery())
                 .AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
 
             var firstName = "   Michael";
@@ -54,7 +54,7 @@ namespace Savvyio.Domain
         public void RaiseMany_ShouldRaiseManyEventsFromAggregate()
         {
             var sc = new ServiceCollection()
-                .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(DomainEventDispatcher).Assembly, typeof(DomainEventDispatcherExtensionsTest).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery())
+                .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(DomainEventDispatcher).Assembly, typeof(DomainEventDispatcherExtensionsTest).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery())
                 .AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
 
             var sp = sc.BuildServiceProvider();
@@ -101,7 +101,7 @@ namespace Savvyio.Domain
         public async Task RaiseManyAsync_ShouldRaiseOneEventFromAggregateAsync()
         {
             var sc = new ServiceCollection()
-                .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(DomainEventDispatcher).Assembly, typeof(DomainEventDispatcherExtensionsTest).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery())
+                .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(DomainEventDispatcher).Assembly, typeof(DomainEventDispatcherExtensionsTest).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery())
                 .AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
 
             var firstName = "   Michael";
@@ -129,7 +129,7 @@ namespace Savvyio.Domain
         public async Task RaiseManyAsync_ShouldRaiseManyEventsFromAggregateAsync()
         {
             var sc = new ServiceCollection()
-                .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(DomainEventDispatcher).Assembly, typeof(DomainEventDispatcherExtensionsTest).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery())
+                .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(DomainEventDispatcher).Assembly, typeof(DomainEventDispatcherExtensionsTest).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery())
                 .AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
 
             var sp = sc.BuildServiceProvider();

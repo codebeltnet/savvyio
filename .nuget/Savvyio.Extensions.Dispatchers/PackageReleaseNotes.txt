@@ -1,3 +1,9 @@
+Version: 0.8.0
+Availability: .NET 6.0
+ 
+# New Features
+- EXTENDED SavvyioOptionsExtensions class in the Savvyio.Extensions namespace with two new static members: UseAutomaticDispatcherDiscovery, UseAutomaticHandlerDiscovery
+ 
 Version: 0.7.0
 Availability: .NET 6.0
  

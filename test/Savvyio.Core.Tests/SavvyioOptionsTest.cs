@@ -15,8 +15,8 @@ namespace Savvyio
         {
             var sut = new SavvyioOptions();
 
-            Assert.False(sut.AutomaticDispatcherDiscovery);
-            Assert.False(sut.AutomaticHandlerDiscovery);
+            Assert.False(sut.AllowDispatcherDiscovery);
+            Assert.False(sut.AllowHandlerDiscovery);
             Assert.False(sut.IncludeHandlerServicesDescriptor);
             Assert.Empty(sut.DispatcherImplementationTypes);
             Assert.Empty(sut.DispatcherServiceTypes);

@@ -41,7 +41,7 @@ namespace Savvyio.Extensions.DependencyInjection
         public void AddSavvyIO_ShouldIncludeCommandHandlerFromLambda()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(Command).Assembly, typeof(TestCommand).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery().EnableHandlerServicesDescriptor());
+            sut1.AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(Command).Assembly, typeof(TestCommand).Assembly).EnableHandlerServicesDescriptor().EnableDispatcherDiscovery().EnableHandlerDiscovery());
             var sut2 = sut1.BuildServiceProvider();
 
             TestOutput.WriteLine(sut2.GetRequiredService<HandlerServicesDescriptor>().ToString());
@@ -53,7 +53,7 @@ namespace Savvyio.Extensions.DependencyInjection
         public void AddSavvyIO_ShouldIncludeCommandDispatchers()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddSavvyIO(o => o.AddAssemblyToScan(typeof(Command).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery());
+            sut1.AddSavvyIO(o => o.AddAssemblyToScan(typeof(Command).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery());
             var sut2 = sut1.BuildServiceProvider();
 
             Assert.IsType<CommandDispatcher>(sut2.GetRequiredService<ICommandDispatcher>());
@@ -89,7 +89,7 @@ namespace Savvyio.Extensions.DependencyInjection
         public void AddSavvyIO_ShouldIncludeDomainEventHandlerFromDelegate()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(DomainEvent).Assembly, typeof(TestDomainEvent).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery().EnableHandlerServicesDescriptor());
+            sut1.AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(DomainEvent).Assembly, typeof(TestDomainEvent).Assembly).EnableHandlerServicesDescriptor().EnableDispatcherDiscovery().EnableHandlerDiscovery());
             var sut2 = sut1.BuildServiceProvider();
 
             TestOutput.WriteLine(sut2.GetRequiredService<HandlerServicesDescriptor>().ToString());
@@ -101,7 +101,7 @@ namespace Savvyio.Extensions.DependencyInjection
         public void AddSavvyIO_ShouldIncludeDomainEventDispatchers()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddSavvyIO(o => o.AddAssemblyToScan(typeof(DomainEvent).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery());
+            sut1.AddSavvyIO(o => o.AddAssemblyToScan(typeof(DomainEvent).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery());
             var sut2 = sut1.BuildServiceProvider();
 
             Assert.IsType<DomainEventDispatcher>(sut2.GetRequiredService<IDomainEventDispatcher>());
@@ -137,7 +137,7 @@ namespace Savvyio.Extensions.DependencyInjection
         public void AddSavvyIO_ShouldIncludeIntegrationEventHandlerFromDeclaredMethod()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(IntegrationEvent).Assembly, typeof(TestIntegrationEvent).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery());
+            sut1.AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(IntegrationEvent).Assembly, typeof(TestIntegrationEvent).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery());
             var sut2 = sut1.BuildServiceProvider();
 
             Assert.IsType<TestIntegrationEventHandler>(sut2.GetRequiredService<IIntegrationEventHandler>());
@@ -147,7 +147,7 @@ namespace Savvyio.Extensions.DependencyInjection
         public void AddSavvyIO_ShouldIncludeIntegrationEventDispatchers()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddSavvyIO(o => o.AddAssemblyToScan(typeof(IntegrationEvent).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery());
+            sut1.AddSavvyIO(o => o.AddAssemblyToScan(typeof(IntegrationEvent).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery());
             var sut2 = sut1.BuildServiceProvider();
 
             Assert.IsType<IntegrationEventDispatcher>(sut2.GetRequiredService<IIntegrationEventDispatcher>());
@@ -183,7 +183,7 @@ namespace Savvyio.Extensions.DependencyInjection
         public void AddSavvyIO_ShouldIncludeQueryHandlerFromDeclaredMethod()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(Query<>).Assembly, typeof(TestQuery).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery());
+            sut1.AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(Query<>).Assembly, typeof(TestQuery).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery());
             var sut2 = sut1.BuildServiceProvider();
 
             Assert.IsType<TestQueryHandler>(sut2.GetRequiredService<IQueryHandler>());
@@ -193,7 +193,7 @@ namespace Savvyio.Extensions.DependencyInjection
         public void AddSavvyIO_ShouldIncludeQueryDispatchers()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddSavvyIO(o => o.AddAssemblyToScan(typeof(Query<>).Assembly).EnableAutomaticDispatcherDiscovery().EnableAutomaticHandlerDiscovery());
+            sut1.AddSavvyIO(o => o.AddAssemblyToScan(typeof(Query<>).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery());
             var sut2 = sut1.BuildServiceProvider();
 
             Assert.IsType<QueryDispatcher>(sut2.GetRequiredService<IQueryDispatcher>());

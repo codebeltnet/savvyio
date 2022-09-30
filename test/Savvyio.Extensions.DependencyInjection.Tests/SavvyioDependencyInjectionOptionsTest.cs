@@ -16,8 +16,8 @@ namespace Savvyio.Extensions.DependencyInjection
         {
             var sut = new SavvyioDependencyInjectionOptions();
 
-            Assert.False(sut.AutomaticDispatcherDiscovery);
-            Assert.False(sut.AutomaticHandlerDiscovery);
+            Assert.False(sut.AllowDispatcherDiscovery);
+            Assert.False(sut.AllowHandlerDiscovery);
             Assert.False(sut.IncludeHandlerServicesDescriptor);
             Assert.Equal(ServiceLifetime.Transient, sut.ServiceLocatorLifetime);
             Assert.Equal(ServiceLifetime.Transient, sut.HandlerServicesLifetime);

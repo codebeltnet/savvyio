@@ -26,12 +26,12 @@ namespace Savvyio.Extensions.DependencyInjection
         ///         <description>Initial Value</description>
         ///     </listheader>
         ///     <item>
-        ///         <term><see cref="SavvyioOptions.AutomaticDispatcherDiscovery"/></term>
-        ///         <description><c>true</c></description>
+        ///         <term><see cref="SavvyioOptions.AllowDispatcherDiscovery"/></term>
+        ///         <description><c>false</c></description>
         ///     </item>
         ///     <item>
-        ///         <term><see cref="SavvyioOptions.AutomaticHandlerDiscovery"/></term>
-        ///         <description><c>true</c></description>
+        ///         <term><see cref="SavvyioOptions.AllowHandlerDiscovery"/></term>
+        ///         <description><c>false</c></description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="SavvyioOptions.IncludeHandlerServicesDescriptor"/></term>
