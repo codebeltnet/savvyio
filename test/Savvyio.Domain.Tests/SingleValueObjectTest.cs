@@ -38,12 +38,13 @@ namespace Savvyio.Domain
         }
 
         [Fact]
-        public void SingleValueObject_EmailAddress_ShouldConvertToString()
+        public void SingleValueObject_EmailAddress_ShouldConvertBiderictional()
         {
             var email = "root@gimlichael.dev";
             var sut = new EmailAddress(email);
 
             Assert.Equal(email, sut);
+            Assert.Equal((EmailAddress)email, sut);
         }
     }
 }
