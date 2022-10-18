@@ -155,7 +155,7 @@ namespace Savvyio.Domain.EventSourcing.Tests
 Annotations: 
   BaseTypeDiscoveryConvention:DerivedTypes: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.List`1[Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType]]
   NonNullableConventionState: Microsoft.EntityFrameworkCore.Metadata.Conventions.NonNullableConventionBase+NonNullabilityConventionState
-  ProductVersion: 6.0.9
+  ProductVersion: 6.0.10
   RelationshipDiscoveryConvention:InverseNavigationCandidates: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.SortedSet`1[System.Type]]", schema, ignoreLineEndingDifferences: true);
         }
 
