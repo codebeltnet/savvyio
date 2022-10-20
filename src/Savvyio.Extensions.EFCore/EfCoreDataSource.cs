@@ -43,10 +43,10 @@ namespace Savvyio.Extensions.EFCore
         }
 
         /// <summary>
-        /// Gets the session of this data store.
+        /// Gets the session of this data source.
         /// </summary>
-        /// <value>The session of this data store.</value>
-        protected DbContext DbContext { get; }
+        /// <value>The session of this data source.</value>
+        public DbContext DbContext { get; }
 
         /// <summary>
         /// Creates a <see cref="DbSet{TEntity}" /> that can be used to query and save instances of <typeparamref name="TEntity" />.
