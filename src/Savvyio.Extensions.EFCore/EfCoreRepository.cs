@@ -68,10 +68,7 @@ namespace Savvyio.Extensions.EFCore
         public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> predicate = null, Action<AsyncOptions> setup = null)
         {
             var options = setup.Configure();
-            var dbValues = await (predicate == null ? _dbSet.ToListAsync(options.CancellationToken).ConfigureAwait(false) : _dbSet.Where(predicate).ToListAsync(options.CancellationToken).ConfigureAwait(false));
-            return dbValues.Any() 
-                ? dbValues 
-                : predicate == null ? _dbSet.Local.ToList() : _dbSet.Local.Where(predicate.Compile()).ToList();
+            return await (predicate == null ? _dbSet.ToListAsync(options.CancellationToken).ConfigureAwait(false) : _dbSet.Where(predicate).ToListAsync(options.CancellationToken).ConfigureAwait(false));
         }
 
         /// <summary>
