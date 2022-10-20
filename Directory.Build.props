@@ -82,6 +82,6 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
-    <PackageReference Include="Cuemon.Extensions.Xunit.App" Version="7.0.0-preview.155" />
+    <PackageReference Include="Cuemon.Extensions.Xunit.App" Version="7.0.0-alpha.2" />
   </ItemGroup>
 </Project>

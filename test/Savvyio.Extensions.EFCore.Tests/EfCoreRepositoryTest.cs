@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cuemon.Extensions.Xunit;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +42,8 @@ namespace Savvyio.Extensions.Storage
 
             var sut2 = new EfCoreRepository<Account, long>(sut1);
             sut2.Add(new Account(id, name, email));
-            
+            await sut1.SaveChangesAsync();
+
             var sut3 = await sut2.FindAllAsync(a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
             Assert.Equal(id, sut3.PlatformProviderId);
@@ -65,10 +67,12 @@ namespace Savvyio.Extensions.Storage
 
             var sut2 = new EfCoreRepository<Account, long>(sut1);
             sut2.Add(entity);
+            await sut1.SaveChangesAsync();
             
             var sut3 = await sut2.FindAllAsync(a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
             sut2.Remove(entity);
+            await sut1.SaveChangesAsync();
 
             var sut4 = await sut2.FindAllAsync(a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
@@ -91,19 +95,37 @@ namespace Savvyio.Extensions.Storage
                 o.ModelConstructor = mb => mb.AddAccount();
             });
 
+            var events = new List<string>();
+
+            sut1.DbContext.ChangeTracker.StateChanged += (sender, args) =>
+            {
+                var trace = $"{sender}: {args.OldState} --> {args.NewState}";
+                events.Add(trace);
+                TestOutput.WriteLine(trace);
+            };
+
             var sut2 = new EfCoreRepository<Account, long>(sut1);
+            
             sut2.Add(entity);
+            
+            await sut1.SaveChangesAsync();
             
             var sut3 = await sut2.FindAllAsync(a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
+            Assert.Equal(entity, sut3);
+
             sut3.ChangeFullName(newName);
 
-            sut2.Add(sut3);
+            await sut1.SaveChangesAsync(); // modified
 
             var sut4 = await sut2.FindAllAsync(a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
             Assert.NotEqual(name, sut3.FullName);
             Assert.Equal(newName, sut4.FullName);
+            Assert.Collection(events,
+                s => Assert.Equal("Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker: Added --> Unchanged", s),
+                s => Assert.Equal("Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker: Unchanged --> Modified", s),
+                s => Assert.Equal("Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker: Modified --> Unchanged", s));
         }
     }
 }
