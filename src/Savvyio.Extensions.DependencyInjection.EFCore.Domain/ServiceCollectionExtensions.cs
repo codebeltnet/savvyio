@@ -1,5 +1,6 @@
 ﻿using System;
 using Cuemon;
+using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Domain;
 using Savvyio.Extensions.DependencyInjection.Domain;

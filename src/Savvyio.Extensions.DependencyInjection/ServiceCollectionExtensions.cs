@@ -28,8 +28,13 @@ namespace Savvyio.Extensions.DependencyInjection
         /// <seealso cref="IDataSource{TMarker}"/>
         public static IServiceCollection AddDataSource<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IDataSource
         {
-            Validator.ThrowIfNull(services, nameof(services));
-            return Decorator.Enclose(services).AddWithNestedTypeForwarding<TService>(type => type.HasInterfaces(typeof(IDataSource)), setup);
+            Validator.ThrowIfNull(services);
+            var options = Patterns.Configure(setup);
+            return services.Add<TService>(o =>
+            {
+                o.Lifetime = options.Lifetime;
+                o.NestedTypePredicate = type => type.HasInterfaces(typeof(IDataSource));
+            });
         }
 
         /// <summary>

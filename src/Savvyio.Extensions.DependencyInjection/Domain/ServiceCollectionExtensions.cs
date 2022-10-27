@@ -3,6 +3,7 @@ using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
+using Savvyio.Data;
 using Savvyio.Domain;
 
 namespace Savvyio.Extensions.DependencyInjection.Domain
@@ -37,8 +38,13 @@ namespace Savvyio.Extensions.DependencyInjection.Domain
             where TService : class, IPersistentRepository<TEntity, TKey>
             where TEntity : class, IIdentity<TKey>
         {
-            Validator.ThrowIfNull(services, nameof(services));
-            return Decorator.Enclose(services).AddWithNestedTypeForwarding<TService>(type => type.HasInterfaces(typeof(IRepository<,>)), setup);
+            Validator.ThrowIfNull(services);
+            var options = Patterns.Configure(setup);
+            return services.Add<TService>(o =>
+            {
+                o.Lifetime = options.Lifetime;
+                o.NestedTypePredicate = type => type.HasInterfaces(typeof(IRepository<,>));
+            });
         }
     }
 }

@@ -34,8 +34,13 @@ namespace Savvyio.Extensions.DependencyInjection.Domain.EventSourcing
             where TService : class, ITracedAggregateRepository<TEntity, TKey>
             where TEntity : class, ITracedAggregateRoot<TKey>
         {
-            Validator.ThrowIfNull(services, nameof(services));
-            return Decorator.Enclose(services).AddWithNestedTypeForwarding<TService>(type => type.HasInterfaces(typeof(ITracedAggregateRepository<,>), typeof(IWritableRepository<,>), typeof(IReadableRepository<,>)), setup);
+            Validator.ThrowIfNull(services);
+            var options = Patterns.Configure(setup);
+            return services.Add<TService>(o =>
+            {
+                o.Lifetime = options.Lifetime;
+                o.NestedTypePredicate = type => type.HasInterfaces(typeof(ITracedAggregateRepository<,>), typeof(IWritableRepository<,>), typeof(IReadableRepository<,>));
+            });
         }
     }
 }

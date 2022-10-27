@@ -1,4 +1,5 @@
 ﻿using System;
+using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Dispatchers;
 
@@ -7,6 +8,7 @@ namespace Savvyio.Extensions.DependencyInjection
     /// <summary>
     /// Configuration options for <see cref="IServiceLocator"/>.
     /// </summary>
+    /// <seealso cref="ServiceOptions"/>
     public class ServiceLocatorOptions : ServiceOptions
     {
         /// <summary>
