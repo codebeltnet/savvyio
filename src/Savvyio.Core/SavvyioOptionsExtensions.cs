@@ -46,7 +46,7 @@ namespace Savvyio
 
         private static SavvyioOptions AddDependenciesCore<T>(SavvyioOptions options, Action<Type, Type> servicesManager, IEnumerable<Assembly> assemblies)
         {
-            Validator.ThrowIfNull(assemblies, nameof(assemblies));
+            Validator.ThrowIfNull(assemblies);
 
             var definedTypes = new List<TypeInfo>();
 

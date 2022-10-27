@@ -18,19 +18,19 @@ namespace Savvyio.Handlers
 
         public void Register<T>(Action<T> handler) where T : class, TRequest
         {
-            Validator.ThrowIfNull(handler, nameof(handler));
+            Validator.ThrowIfNull(handler);
             _handlers.TryAdd(typeof(T), e => handler(e as T));
         }
 
         public void RegisterAsync<T>(Func<T, CancellationToken, Task> handler) where T : class, TRequest
         {
-            Validator.ThrowIfNull(handler, nameof(handler));
+            Validator.ThrowIfNull(handler);
             _asyncHandlers.TryAdd(typeof(T), async (h, t) => await handler(h as T, t));
         }
 
         public bool TryInvoke(TRequest request)
         {
-            Validator.ThrowIfNull(request, nameof(request));
+            Validator.ThrowIfNull(request);
             if (_handlers.TryGetValue(request.GetType(), out var handler))
             {
                 handler.Invoke(request);
@@ -41,7 +41,7 @@ namespace Savvyio.Handlers
 
         public async Task<ConditionalValue> TryInvokeAsync(TRequest request, CancellationToken ct = default)
         {
-            Validator.ThrowIfNull(request, nameof(request));
+            Validator.ThrowIfNull(request);
             if (_asyncHandlers.TryGetValue(request.GetType(), out var handler))
             {
                 await handler(request, ct).ConfigureAwait(false);

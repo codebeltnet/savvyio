@@ -26,7 +26,7 @@ namespace Savvyio.Extensions.EFCore
         /// <param name="source">The <see cref="IEfCoreDataSource"/> that handles actual I/O communication with a source of data.</param>
         protected EfCoreDataStore(IEfCoreDataSource source)
         {
-            Validator.ThrowIfNull(source, nameof(source));
+            Validator.ThrowIfNull(source);
             DbSet = source.Set<T>();
             UnitOfWork = source;
         }

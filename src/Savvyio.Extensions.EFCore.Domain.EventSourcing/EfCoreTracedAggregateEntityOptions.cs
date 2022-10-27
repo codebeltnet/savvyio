@@ -99,7 +99,7 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
             get => _tableName;
             set
             {
-                Validator.ThrowIfNullOrWhitespace(value, nameof(value));
+                Validator.ThrowIfNullOrWhitespace(value);
                 _tableName = value;
             }
         }
@@ -113,7 +113,7 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
             get => _compositePrimaryKeyIdColumnName;
             set
             {
-                Validator.ThrowIfNullOrWhitespace(value, nameof(value));
+                Validator.ThrowIfNullOrWhitespace(value);
                 _compositePrimaryKeyIdColumnName = value;
             }
         }
@@ -127,7 +127,7 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
             get => _compositePrimaryKeyIdColumnType;
             set
             {
-                Validator.ThrowIfNullOrWhitespace(value, nameof(value));
+                Validator.ThrowIfNullOrWhitespace(value);
                 _compositePrimaryKeyIdColumnType = value;
             }
         }
@@ -141,7 +141,7 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
             get => _compositePrimaryKeyVersionColumnName;
             set
             {
-                Validator.ThrowIfNullOrWhitespace(value, nameof(value));
+                Validator.ThrowIfNullOrWhitespace(value);
                 _compositePrimaryKeyVersionColumnName = value;
             }
         }
@@ -155,7 +155,7 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
             get => _compositePrimaryKeyVersionColumnType;
             set
             {
-                Validator.ThrowIfNullOrWhitespace(value, nameof(value));
+                Validator.ThrowIfNullOrWhitespace(value);
                 _compositePrimaryKeyVersionColumnType = value;
             }
         }
@@ -169,7 +169,7 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
             get => _timestampColumnName;
             set
             {
-                Validator.ThrowIfNullOrWhitespace(value, nameof(value));
+                Validator.ThrowIfNullOrWhitespace(value);
                 _timestampColumnName = value;
             }
         }
@@ -183,7 +183,7 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
             get => _timestampColumnType;
             set
             {
-                Validator.ThrowIfNullOrWhitespace(value, nameof(value));
+                Validator.ThrowIfNullOrWhitespace(value);
                 _timestampColumnType = value;
             }
         }
@@ -197,7 +197,7 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
             get => _typeColumnName;
             set
             {
-                Validator.ThrowIfNullOrWhitespace(value, nameof(value));
+                Validator.ThrowIfNullOrWhitespace(value);
                 _typeColumnName = value;
             }
         }
@@ -211,7 +211,7 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
             get => _typeColumnType;
             set
             {
-                Validator.ThrowIfNullOrWhitespace(value, nameof(value));
+                Validator.ThrowIfNullOrWhitespace(value);
                 _typeColumnType = value;
             }
         }
@@ -225,7 +225,7 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
             get => _payloadColumnName;
             set
             {
-                Validator.ThrowIfNullOrWhitespace(value, nameof(value));
+                Validator.ThrowIfNullOrWhitespace(value);
                 _payloadColumnName = value;
             }
         }
@@ -239,7 +239,7 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
             get => _payloadColumnType;
             set
             {
-                Validator.ThrowIfNullOrWhitespace(value, nameof(value));
+                Validator.ThrowIfNullOrWhitespace(value);
                 _payloadColumnType = value;
             }
         }

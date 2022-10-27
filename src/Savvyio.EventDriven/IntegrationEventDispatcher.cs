@@ -27,7 +27,7 @@ namespace Savvyio.EventDriven
         /// <param name="request">The <see cref="IIntegrationEvent"/> to publish.</param>
         public void Publish(IIntegrationEvent request)
         {
-            Validator.ThrowIfNull(request, nameof(request));
+            Validator.ThrowIfNull(request);
             Dispatch<IIntegrationEvent, IIntegrationEventHandler>(request, handler => handler.Delegates);
         }
 
@@ -39,7 +39,7 @@ namespace Savvyio.EventDriven
         /// <returns>A <see cref="Task"/> that represents the asynchronous operation.</returns>
         public Task PublishAsync(IIntegrationEvent request, Action<AsyncOptions> setup = null)
         {
-            Validator.ThrowIfNull(request, nameof(request));
+            Validator.ThrowIfNull(request);
             return DispatchAsync<IIntegrationEvent, IIntegrationEventHandler>(request, handler => handler.Delegates, setup);
         }
     }

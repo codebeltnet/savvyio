@@ -58,7 +58,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         /// <seealso cref="IUnitOfWork{TMarker}"/>
         public static IServiceCollection AddEfCoreDataSource<TService>(this IServiceCollection services, Action<EfCoreServiceOptions> setup = null) where TService : class, IEfCoreDataSource
         {
-            Validator.ThrowIfNull(services, nameof(services));
+            Validator.ThrowIfNull(services);
             var options = setup.Configure();
             var unitOfWorkType = typeof(IUnitOfWork);
             if (typeof(TService).TryGetDependencyInjectionMarker(out var markerType))

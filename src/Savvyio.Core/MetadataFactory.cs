@@ -41,8 +41,8 @@ namespace Savvyio
         /// </exception>
         public static T Set<T>(T request, string key, object value) where T : IMetadata
         {
-            Validator.ThrowIfNull(request, nameof(request));
-            Validator.ThrowIfNull(key, nameof(key));
+            Validator.ThrowIfNull(request);
+            Validator.ThrowIfNull(key);
 
             if (request.Metadata.ContainsKey(key))
             {

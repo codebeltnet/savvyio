@@ -27,7 +27,7 @@ namespace Savvyio.Domain
         /// <param name="request">The <see cref="IDomainEvent" /> to raise.</param>
         public void Raise(IDomainEvent request)
         {
-            Validator.ThrowIfNull(request, nameof(request));
+            Validator.ThrowIfNull(request);
             Dispatch<IDomainEvent, IDomainEventHandler>(request, handler => handler.Delegates);
         }
 
@@ -39,7 +39,7 @@ namespace Savvyio.Domain
         /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
         public Task RaiseAsync(IDomainEvent request, Action<AsyncOptions> setup = null)
         {
-            Validator.ThrowIfNull(request, nameof(request));
+            Validator.ThrowIfNull(request);
             return DispatchAsync<IDomainEvent, IDomainEventHandler>(request, handler => handler.Delegates, setup);
         }
     }

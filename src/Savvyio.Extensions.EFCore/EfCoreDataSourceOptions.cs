@@ -1,4 +1,5 @@
 ﻿using System;
+using Cuemon.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace Savvyio.Extensions.EFCore
@@ -6,7 +7,7 @@ namespace Savvyio.Extensions.EFCore
     /// <summary>
     /// Configuration options for <see cref="IEfCoreDataSource"/>.
     /// </summary>
-    public class EfCoreDataSourceOptions
+    public class EfCoreDataSourceOptions : IParameterObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreDataSourceOptions"/> class.
