@@ -1,11 +1,12 @@
 ﻿using Cuemon;
+using Cuemon.Configuration;
 
 namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
 {
     /// <summary>
     /// Configuration options for <see cref="EfCoreTracedAggregateEntity"/>.
     /// </summary>
-    public class EfCoreTracedAggregateEntityOptions
+    public class EfCoreTracedAggregateEntityOptions : IParameterObject
     {
         private string _payloadColumnType;
         private string _payloadColumnName;

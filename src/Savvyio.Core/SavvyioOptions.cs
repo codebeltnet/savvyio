@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cuemon.Configuration;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Collections.Generic;
 using Savvyio.Dispatchers;
@@ -9,7 +10,7 @@ namespace Savvyio
     /// <summary>
     /// Specifies options that is related to setting up Savvy I/O services.
     /// </summary>
-    public class SavvyioOptions
+    public class SavvyioOptions : IParameterObject
     {
         private readonly List<Type> _handlerServiceTypes = new(); // the handler service types to tie one or more handler implementation types
         private readonly List<Type> _handlerImplementationTypes = new(); // the handler implementation types to tie one or more handler service types
