@@ -52,7 +52,7 @@
   </ItemGroup>
 
   <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
-    <TargetFrameworks>net7.0</TargetFrameworks>
+    <TargetFramework>net7.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <RunAnalyzers>false</RunAnalyzers>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
