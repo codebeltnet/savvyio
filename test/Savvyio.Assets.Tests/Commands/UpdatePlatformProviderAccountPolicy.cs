@@ -3,7 +3,7 @@ using Savvyio.Commands;
 
 namespace Savvyio.Assets.Commands
 {
-    public class UpdatePlatformProviderAccountPolicy : Command
+    public record UpdatePlatformProviderAccountPolicy : Command
     {
         public UpdatePlatformProviderAccountPolicy(Guid id, int minimumPasswordLength, int enforcePasswordHistory, TimeSpan minimumPasswordAge, TimeSpan maximumPasswordAge, int accountLockoutThreshold, TimeSpan accountLockoutDuration, TimeSpan accountLockoutCounterReset, bool passwordComplexityRequirement)
         {

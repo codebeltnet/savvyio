@@ -1,10 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Cuemon.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Savvyio.Extensions.DependencyInjection.EFCore
 {
     /// <summary>
     /// Configuration options for Microsoft Dependency Injection.
     /// </summary>
+    /// <seealso cref="ServiceOptions"/>
     public class EfCoreServiceOptions : ServiceOptions
     {
         /// <summary>

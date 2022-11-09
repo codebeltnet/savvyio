@@ -1,5 +1,5 @@
-Version: 0.7.0
-Availability: .NET 6.0
+Version: 1.0.0
+Availability: .NET 7.0, .NET 6.0
  
 # New Features
 - ADDED EfCoreTracedAggregateRepository class in the Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing namespace that provides an implementation of the EfCoreTracedAggregateRepository{TEntity,TKey} that is optimized for Domain Driven Design and Event Sourcing

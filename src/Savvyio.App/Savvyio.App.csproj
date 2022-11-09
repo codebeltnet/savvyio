@@ -3,7 +3,8 @@
   <PropertyGroup>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IncludeSymbols>false</IncludeSymbols>
-    <Description>Provides a complete and convenient set of API additions for building a DDD, CQRS and Event Sourcing enabled .NET application using default dependency injection.</Description>
+    <Description>Provides a complete and convenient set of API additions for building a DDD, CQRS and Event Sourcing enabled .NET application using Microsoft Dependency Injection, Microsoft Entity Framework Core and Dapper.</Description>
+    <PackageTags>ddd domain-driven-design cqrs command-query-responsibility-segregation es event-sourcing datastore data-store datasource data-source dataaccessobject data-access-object repository de domain-event ie integration-event valueobject value-object entity aggregate aggregate-root eventdriven event-driven ef-core ef entity-framework entity-framework-core di dependency-injection</PackageTags>
     <Title>Savvyio.App</Title>
   </PropertyGroup>
 
@@ -13,7 +14,6 @@
     <ProjectReference Include="..\Savvyio.Domain.EventSourcing\Savvyio.Domain.EventSourcing.csproj" />
     <ProjectReference Include="..\Savvyio.Domain\Savvyio.Domain.csproj" />
     <ProjectReference Include="..\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
-    <ProjectReference Include="..\Savvyio.Extensions.DapperExtensions\Savvyio.Extensions.DapperExtensions.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.Dapper\Savvyio.Extensions.Dapper.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.DapperExtensions\Savvyio.Extensions.DependencyInjection.DapperExtensions.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.Dapper\Savvyio.Extensions.DependencyInjection.Dapper.csproj" />

@@ -1,5 +1,5 @@
-Version: 0.7.0
-Availability: .NET 6.0
+Version: 1.0.0
+Availability: .NET 7.0, .NET 6.0
  
 # New Features
 - ADDED EfCoreTracedAggregateEntity class in the Savvyio.Extensions.EFCore.Domain.EventSourcing namespace that provides a generic way for EF Core to surrogate and support an implementation of ITracedAggregateRoot{TKey}

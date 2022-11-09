@@ -7,7 +7,7 @@ namespace Savvyio.Domain
     /// </summary>
     /// <typeparam name="T">The type of the object.</typeparam>
     /// <seealso cref="ValueObject" />
-    public abstract class SingleValueObject<T> : ValueObject
+    public abstract record SingleValueObject<T> : ValueObject
     {
         /// <summary>
         /// Performs an implicit conversion from <see cref="SingleValueObject{T}"/> to <typeparamref name="T"/>.

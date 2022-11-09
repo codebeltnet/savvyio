@@ -2,7 +2,7 @@
 
 namespace Savvyio.Assets.Domain.Events
 {
-    public class UserAccountRemoved : DomainEvent
+    public record UserAccountRemoved : DomainEvent
     {
         public UserAccountRemoved()
         {

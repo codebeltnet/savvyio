@@ -3,7 +3,7 @@ using Savvyio.Domain;
 
 namespace Savvyio.Assets.Domain.Events
 {
-    public class AccountInitiated : DomainEvent
+    public record AccountInitiated : DomainEvent
     {
         public AccountInitiated()
         {

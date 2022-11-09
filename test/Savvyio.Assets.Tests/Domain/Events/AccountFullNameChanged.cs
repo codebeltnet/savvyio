@@ -2,7 +2,7 @@
 
 namespace Savvyio.Assets.Domain.Events
 {
-    public class AccountFullNameChanged : DomainEvent
+    public record AccountFullNameChanged : DomainEvent
     {
         public AccountFullNameChanged(Account account)
         {

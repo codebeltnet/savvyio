@@ -3,7 +3,7 @@ using Savvyio.Commands;
 
 namespace Savvyio.Assets
 {
-    internal class FakeCommand : Command
+    internal record FakeCommand : Command
     {
         public FakeCommand()
         {
@@ -15,7 +15,7 @@ namespace Savvyio.Assets
         public Type Type { get; protected set; }
     }
 
-    internal class FakeCommand<T> : FakeCommand
+    internal record FakeCommand<T> : FakeCommand
     {
         public FakeCommand()
         {

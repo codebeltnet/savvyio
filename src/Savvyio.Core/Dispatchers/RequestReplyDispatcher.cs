@@ -36,8 +36,8 @@ namespace Savvyio.Dispatchers
             where TRequest : IRequest
             where THandler : IHandler<TRequest>
         {
-            Validator.ThrowIfNull(request, nameof(request));
-            Validator.ThrowIfNull(handlerFactory, nameof(handlerFactory));
+            Validator.ThrowIfNull(request);
+            Validator.ThrowIfNull(handlerFactory);
             var handlerType = typeof(THandler);
             if (ServiceFactory(handlerType) is IEnumerable<THandler> handlers)
             {
@@ -67,8 +67,8 @@ namespace Savvyio.Dispatchers
             where TRequest : IRequest
             where THandler : IHandler<TRequest>
         {
-            Validator.ThrowIfNull(request, nameof(request));
-            Validator.ThrowIfNull(handlerFactory, nameof(handlerFactory));
+            Validator.ThrowIfNull(request);
+            Validator.ThrowIfNull(handlerFactory);
             var options = setup.Configure();
             var handlerType = typeof(THandler);
             if (ServiceFactory(handlerType) is IEnumerable<THandler> handlers)

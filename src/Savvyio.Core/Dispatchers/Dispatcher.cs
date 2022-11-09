@@ -16,7 +16,7 @@ namespace Savvyio.Dispatchers
         /// <param name="serviceLocator">The provider of service implementations.</param>
         protected Dispatcher(IServiceLocator serviceLocator)
         {
-            Validator.ThrowIfNull(serviceLocator, nameof(serviceLocator));
+            Validator.ThrowIfNull(serviceLocator);
             ServiceFactory = serviceLocator.GetServices;
         }
 

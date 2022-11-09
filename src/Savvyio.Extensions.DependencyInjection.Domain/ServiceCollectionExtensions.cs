@@ -31,8 +31,13 @@ namespace Savvyio.Extensions.DependencyInjection.Domain
             where TService : class, IAggregateRepository<TEntity, TKey>
             where TEntity : class, IAggregateRoot<IDomainEvent, TKey>
         {
-            Validator.ThrowIfNull(services, nameof(services));
-            return Decorator.Enclose(services).AddWithNestedTypeForwarding<TService>(type => type.HasInterfaces(typeof(IAggregateRepository<,>)), setup).AddRepository<TService, TEntity, TKey>(setup);
+            Validator.ThrowIfNull(services);
+            var options = Patterns.Configure(setup);
+            return services.Add<TService>(o =>
+            {
+                o.Lifetime = options.Lifetime;
+                o.NestedTypePredicate = type => type.HasInterfaces(typeof(IAggregateRepository<,>));
+            }).AddRepository<TService, TEntity, TKey>(setup);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cuemon.Extensions.Xunit;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
@@ -13,10 +14,23 @@ namespace Savvyio.Extensions.Dapper
         {
         }
 
-        [Fact]
-        public void DapperDataSource_ShouldFailWithArgumentNullException()
+        [Theory]
+        [MemberData(nameof(GetDapperDataSourceOptions))]
+        public void DapperDataSource_ShouldFailWithArgumentNullException(IOptions<DapperDataSourceOptions> options)
         {
-            Assert.Throws<ArgumentNullException>(() => new DapperDataSource(Options.Create(new DapperDataSourceOptions())));
+            var sut = options == null 
+                ? Assert.Throws<ArgumentNullException>(() => new DapperDataSource(options))
+                : Assert.Throws<ArgumentException>(() => new DapperDataSource(options));
+            TestOutput.WriteLine(sut.ToString());
+        }
+
+        private static IEnumerable<object[]> GetDapperDataSourceOptions()
+        {
+            return new List<object[]>
+            {
+                new object[] { null },
+                new object[] { Options.Create(new DapperDataSourceOptions()) }
+            };
         }
 
         [Fact]

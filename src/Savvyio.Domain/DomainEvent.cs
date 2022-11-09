@@ -7,7 +7,7 @@ namespace Savvyio.Domain
     /// </summary>
     /// <seealso cref="IDomainEvent" />
     /// <seealso cref="Request"/>
-    public abstract class DomainEvent : Request, IDomainEvent
+    public abstract record DomainEvent : Request, IDomainEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainEvent" /> class.

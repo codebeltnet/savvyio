@@ -2,7 +2,7 @@
 
 namespace Savvyio.Extensions.DependencyInjection.Assets
 {
-    public class TestCommand : Command
+    public record TestCommand : Command
     {
     }
 }

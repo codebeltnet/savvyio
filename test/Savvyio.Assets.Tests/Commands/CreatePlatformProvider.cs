@@ -2,7 +2,7 @@
 
 namespace Savvyio.Assets.Commands
 {
-    public class CreatePlatformProvider : Command
+    public record CreatePlatformProvider : Command
     {
         public CreatePlatformProvider(string name, string thirdLevelDomainName, string description = null)
         {

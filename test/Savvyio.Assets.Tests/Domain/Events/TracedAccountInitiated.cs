@@ -3,7 +3,7 @@ using Savvyio.Domain.EventSourcing;
 
 namespace Savvyio.Assets.Domain.Events
 {
-    public class TracedAccountInitiated : TracedDomainEvent
+    public record TracedAccountInitiated : TracedDomainEvent
     {
         public TracedAccountInitiated(Guid id, Guid platformProviderId, string fullName, string emailAddress)
         {

@@ -2,7 +2,7 @@
 
 namespace Savvyio.Assets.Events
 {
-    public class AccountCreated : IntegrationEvent
+    public record AccountCreated : IntegrationEvent
     {
         AccountCreated()
         {

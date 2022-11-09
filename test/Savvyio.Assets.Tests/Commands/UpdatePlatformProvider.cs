@@ -3,7 +3,7 @@ using Savvyio.Commands;
 
 namespace Savvyio.Assets.Commands
 {
-    public class UpdatePlatformProvider : Command
+    public record UpdatePlatformProvider : Command
     {
         public UpdatePlatformProvider(Guid id, string name, string thirdLevelDomainName, string description = null)
         {

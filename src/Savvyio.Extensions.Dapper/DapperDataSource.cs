@@ -21,11 +21,8 @@ namespace Savvyio.Extensions.Dapper
         /// <param name="setup">The <see cref="DapperDataSourceOptions" /> which need to be configured.</param>
         public DapperDataSource(IOptions<DapperDataSourceOptions> setup)
         {
-            Validator.ThrowIfNull(setup, nameof(setup));
-            Validator.ThrowIfNull(setup.Value, nameof(setup.Value));
-            Validator.ThrowIfNull(setup.Value.ConnectionFactory, nameof(setup.Value.ConnectionFactory));
-
-            _dbConnection = setup.Value.ConnectionFactory.Invoke();
+            Validator.ThrowIfInvalidOptions(setup?.Value, nameof(setup));
+            _dbConnection = setup!.Value.ConnectionFactory.Invoke();
             _dbConnection.Open();
         }
 

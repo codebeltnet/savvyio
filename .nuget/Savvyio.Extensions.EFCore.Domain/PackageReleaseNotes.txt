@@ -1,14 +1,8 @@
-Version: 0.8.0
-Availability: .NET 6.0
- 
-# Breaking Changes
-- RENAMED EfCoreAggregateDataStore class in the Savvyio.Extensions.EFCore.Domain namespace to EfCoreAggregateDataSource class
- 
-Version: 0.7.0
-Availability: .NET 6.0
+Version: 1.0.0
+Availability: .NET 7.0, .NET 6.0
  
 # New Features
 - ADDED DomainEventDispatcherExtensions class in the Savvyio.Extensions.EFCore.Domain namespace that consist of extension methods for the IDomainEventDispatcher interface: RaiseMany, RaiseManyAsync
-- ADDED EfCoreAggregateDataStore class in the Savvyio.Extensions.EFCore.Domain namespace that provides an implementation of the EfCoreDataStore that is optimized for Domain Driven Design and the concept of Aggregate Root
+- ADDED EfCoreAggregateDataSource class in the Savvyio.Extensions.EFCore.Domain namespace that provides an implementation of the EfCoreDataSource that is optimized for Domain Driven Design and the concept of Aggregate Root
 - ADDED EfCoreAggregateRepository class in the Savvyio.Extensions.EFCore.Domain namespace that provides an implementation of the EfCoreRepository{TEntity,TKey} that is optimized for Domain Driven Design
  

@@ -29,7 +29,7 @@ namespace Savvyio.Queries
         /// <returns>TResult.</returns>
         public TResult Query<TResult>(IQuery<TResult> request)
         {
-            Validator.ThrowIfNull(request, nameof(request));
+            Validator.ThrowIfNull(request);
             return Dispatch<IQuery, IQueryHandler, TResult>(request, handler => handler.Delegates);
         }
 
@@ -42,7 +42,7 @@ namespace Savvyio.Queries
         /// <returns>A <see cref="Task{TResult}" /> that represents the asynchronous operation. The task result contains the outcome of the query operation.</returns>
         public Task<TResult> QueryAsync<TResult>(IQuery<TResult> request, Action<AsyncOptions> setup = null)
         {
-            Validator.ThrowIfNull(request, nameof(request));
+            Validator.ThrowIfNull(request);
             return DispatchAsync<IQuery, IQueryHandler, TResult>(request, handler => handler.Delegates, setup);
         }
     }

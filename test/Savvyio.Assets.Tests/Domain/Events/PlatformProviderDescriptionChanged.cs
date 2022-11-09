@@ -3,7 +3,7 @@ using Savvyio.Domain;
 
 namespace Savvyio.Assets.Domain.Events
 {
-    public class PlatformProviderDescriptionChanged : DomainEvent
+    public record PlatformProviderDescriptionChanged : DomainEvent
     {
         PlatformProviderDescriptionChanged()
         {

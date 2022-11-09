@@ -62,8 +62,13 @@ namespace Savvyio.Extensions.DependencyInjection.Data
             where T : class
             where TOptions : AsyncOptions, new()
         {
-            Validator.ThrowIfNull(services, nameof(services));
-            return Decorator.Enclose(services).AddWithNestedTypeForwarding<TService>(type => type.HasInterfaces(typeof(IDataStore<>)), setup);
+            Validator.ThrowIfNull(services);
+            var options = Patterns.Configure(setup);
+            return services.Add<TService>(o =>
+            {
+                o.Lifetime = options.Lifetime;
+                o.NestedTypePredicate = type => type.HasInterfaces(typeof(IDataStore<>));
+            });
         }
     }
 }

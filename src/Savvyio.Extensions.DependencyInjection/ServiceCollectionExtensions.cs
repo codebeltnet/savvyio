@@ -28,8 +28,13 @@ namespace Savvyio.Extensions.DependencyInjection
         /// <seealso cref="IDataSource{TMarker}"/>
         public static IServiceCollection AddDataSource<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IDataSource
         {
-            Validator.ThrowIfNull(services, nameof(services));
-            return Decorator.Enclose(services).AddWithNestedTypeForwarding<TService>(type => type.HasInterfaces(typeof(IDataSource)), setup);
+            Validator.ThrowIfNull(services);
+            var options = Patterns.Configure(setup);
+            return services.Add<TService>(o =>
+            {
+                o.Lifetime = options.Lifetime;
+                o.NestedTypePredicate = type => type.HasInterfaces(typeof(IDataSource));
+            });
         }
 
         /// <summary>
@@ -54,8 +59,13 @@ namespace Savvyio.Extensions.DependencyInjection
         public static IServiceCollection AddSavvyIO(this IServiceCollection services, Action<SavvyioDependencyInjectionOptions> setup = null)
         {
             var options = setup.Configure();
-            if (options.AutomaticDispatcherDiscovery) { options.AddDispatchers(options.AssembliesToScan?.ToArray()); }
-            if (options.AutomaticHandlerDiscovery) { options.AddHandlers(options.AssembliesToScan?.ToArray()); }
+
+            if (options.AssembliesToScan != null)
+            {
+                if (options.AllowDispatcherDiscovery) { options.AddDispatchers(options.AssembliesToScan.ToArray()); }
+                if (options.AllowHandlerDiscovery) { options.AddHandlers(options.AssembliesToScan.ToArray()); }
+            }
+
             var descriptors = new Dictionary<Type, List<IHierarchy<object>>>();
             foreach (var handlerType in options.HandlerImplementationTypes)
             {

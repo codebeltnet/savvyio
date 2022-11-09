@@ -1,24 +1,13 @@
-Version: 0.8.0
-Availability: .NET 6.0
- 
-# Breaking Changes
-- RENAMED EfCoreDataAccessObject class in the Savvyio.Extensions.EFCore namespace to EfCoreDataSource class
-- RENAMED EfCoreDataStoreOptions class in the Savvyio.Extensions.EFCore namespace to EfCoreDataSourceOptions class
-- RENAMED IEfCoreDataStore interface in the Savvyio.Extensions.EFCore namespace to IEfCoreDataSource interface
+Version: 1.0.0
+Availability: .NET 7.0, .NET 6.0
  
 # New Features
 - ADDED DefaultEfCoreDataStore class in the Savvyio.Extensions.EFCore namespace that provides a default implementation of the EfCoreDataStore{T,TOptions} class
+- ADDED EfCoreDataSource class in the Savvyio.Extensions.EFCore namespace that provides a default implementation of the IEfCoreDataSource interface to support the actual I/O communication towards a data store using Microsoft Entity Framework Core
+- ADDED EfCoreDataSourceOptions class in the Savvyio.Extensions.EFCore namespace that provides configuration options for IEfCoreDataStore
 - ADDED EfCoreDataStore class in the Savvyio.Extensions.EFCore namespace that represents the base class from which all implementations of EfCoreDataStore{T,TOptions} should derive
-- ADDED EfCoreQueryOptions class in the Savvyio.Extensions.EFCore namespace that provides configuration options for DefaultEfCoreDataStore{T}
- 
-Version: 0.7.0
-Availability: .NET 6.0
- 
-# New Features
-- ADDED EfCoreDataAccessObject class in the Savvyio.Extensions.EFCore namespace that provides a default implementation of the IPersistentDataAccessObject{T,TOptions} interface to serve as an abstraction layer before the actual I/O communication towards a data store using Microsoft Entity Framework Core
-- ADDED EfCoreDataStore class in the Savvyio.Extensions.EFCore namespace that provides a default implementation of the IEfCoreDataStore interface to support the actual I/O communication towards a data store using Microsoft Entity Framework Core
-- ADDED EfCoreDataStoreOptions class in the Savvyio.Extensions.EFCore namespace that provides configuration options for IEfCoreDataStore
-- ADDED EfCoreDbContext class in the Savvyio.Extensions.EFCore namespace that provides a default implementation of the DbContext class to support Savvy I/O extensions of Microsoft Entity Framework Core
-- ADDED EfCoreRepository class in the Savvyio.Extensions.EFCore namespace that provides a default implementation of the IPersistentRepository{TEntity,TKey} interface to serve as an abstraction layer before the actual I/O communication towards a data store using Microsoft Entity Framework Core
-- ADDED IEfCoreDataStore interface in the Savvyio.Extensions.EFCore namespace that defines a generic way to support the actual I/O communication towards a data store using Microsoft Entity Framework Core
+- ADDED EfCoreDbContext class in the Savvyio.Extensions.EFCore namespace that provides a default implementation of the DbContext class to support Savvy I/O extensions of Microsoft Entity Framework Core in multiple implementations
+- ADDED EfCoreQueryOptions class in the Savvyio.Extensions.EFCore namespace that provides configuration options that is related to DefaultEfCoreDataStore{T}
+- ADDED EfCoreRepository class in the Savvyio.Extensions.EFCore namespace that provides a default implementation of the IPersistentRepository{TEntity,TKey,TMarker} interface to serve as an abstraction layer before the actual I/O communication towards a data store using Microsoft Entity Framework Core
+- ADDED IEfCoreDataStore interface in the Savvyio.Extensions.EFCore namespace that defines a generic way to support the actual I/O communication with a source of data - tailored to Microsoft Entity Framework Core
  

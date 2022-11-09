@@ -17,7 +17,7 @@ namespace Savvyio
         /// <returns>An implementation of the <see cref="IFireForgetActivator{TRequest}"/> interface responsible of invoking delegates that handles <typeparamref name="TRequest"/>.</returns>
         public static IFireForgetActivator<TRequest> CreateFireForget<TRequest>(Action<IFireForgetRegistry<TRequest>> handlerRegistrar)
         {
-            Validator.ThrowIfNull(handlerRegistrar, nameof(handlerRegistrar));
+            Validator.ThrowIfNull(handlerRegistrar);
             var handlerManager = new FireForgetManager<TRequest>();
             handlerRegistrar(handlerManager);
             return handlerManager;
@@ -31,7 +31,7 @@ namespace Savvyio
         /// <returns>An implementation of the <see cref="IRequestReplyActivator{TRequest}"/> interface responsible of invoking delegates that handles <typeparamref name="TRequest"/>.</returns>
         public static IRequestReplyActivator<TRequest> CreateRequestReply<TRequest>(Action<IRequestReplyRegistry<TRequest>> handlerRegistrar)
         {
-            Validator.ThrowIfNull(handlerRegistrar, nameof(handlerRegistrar));
+            Validator.ThrowIfNull(handlerRegistrar);
             var handlerManager = new RequestReplyManager<TRequest>();
             handlerRegistrar(handlerManager);
             return handlerManager;

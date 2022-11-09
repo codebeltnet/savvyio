@@ -3,7 +3,7 @@ using Savvyio.Queries;
 
 namespace Savvyio.Assets.Queries
 {
-    public class GetAccount : Query<AccountProjection>
+    public record GetAccount : Query<AccountProjection>
     {
         public GetAccount(long id)
         {

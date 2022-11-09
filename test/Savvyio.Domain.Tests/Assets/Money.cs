@@ -8,7 +8,7 @@ namespace Savvyio.Domain.Assets
         MYR
     }
 
-    public class Money : ValueObject
+    public record Money : ValueObject
     {
         public Currency Currency { get; init; }
         public decimal Amount { get; init; }

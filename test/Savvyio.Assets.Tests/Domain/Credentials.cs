@@ -6,7 +6,7 @@ using Savvyio.Domain;
 
 namespace Savvyio.Assets.Domain
 {
-    public class Credentials : ValueObject
+    public record Credentials : ValueObject
     {
         public Credentials(string username, string password, string salt)
         {

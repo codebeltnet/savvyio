@@ -5,7 +5,7 @@
     /// </summary>
     /// <seealso cref="ICommand" />
     /// <seealso cref="Request"/>
-    public abstract class Command : Request, ICommand
+    public abstract record Command : Request, ICommand
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Command"/> class.

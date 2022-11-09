@@ -1,4 +1,5 @@
 ﻿using System;
+using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Dispatchers;
 
@@ -7,6 +8,7 @@ namespace Savvyio.Extensions.DependencyInjection
     /// <summary>
     /// Configuration options for <see cref="IServiceLocator"/>.
     /// </summary>
+    /// <seealso cref="ServiceOptions"/>
     public class ServiceLocatorOptions : ServiceOptions
     {
         /// <summary>
@@ -20,10 +22,6 @@ namespace Savvyio.Extensions.DependencyInjection
         ///         <description>Initial Value</description>
         ///     </listheader>
         ///     <item>
-        ///         <term><see cref="ServiceOptions.Lifetime"/></term>
-        ///         <description><see cref="ServiceLifetime.Scoped"/></description>
-        ///     </item>
-        ///     <item>
         ///         <term><see cref="ImplementationFactory"/></term>
         ///         <description><c>p => new ServiceLocator(p.GetServices)</c></description>
         ///     </item>
@@ -31,7 +29,6 @@ namespace Savvyio.Extensions.DependencyInjection
         /// </remarks>
         public ServiceLocatorOptions()
         {
-            Lifetime = ServiceLifetime.Scoped;
             ImplementationFactory = p => new ServiceLocator(p.GetServices);
         }
 

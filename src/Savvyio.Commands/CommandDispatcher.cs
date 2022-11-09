@@ -27,7 +27,7 @@ namespace Savvyio.Commands
         /// <param name="request">The <see cref="ICommand" /> to commit.</param>
         public void Commit(ICommand request)
         {
-            Validator.ThrowIfNull(request, nameof(request));
+            Validator.ThrowIfNull(request);
             Dispatch<ICommand, ICommandHandler>(request, handler => handler.Delegates);
         }
 
@@ -39,7 +39,7 @@ namespace Savvyio.Commands
         /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
         public Task CommitAsync(ICommand request, Action<AsyncOptions> setup = null)
         {
-            Validator.ThrowIfNull(request, nameof(request));
+            Validator.ThrowIfNull(request);
             return DispatchAsync<ICommand, ICommandHandler>(request, handler => handler.Delegates, setup);
         }
     }
