@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Extensions.IO" Version="7.0.0-rc.2" />
-    <PackageReference Include="Cuemon.Extensions.Newtonsoft.Json" Version="7.0.0-rc.2" />
+    <PackageReference Include="Cuemon.Extensions.IO" Version="7.0.0" />
+    <PackageReference Include="Cuemon.Extensions.Newtonsoft.Json" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>

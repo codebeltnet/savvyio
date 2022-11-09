@@ -154,8 +154,8 @@ namespace Savvyio.Domain.EventSourcing.Tests
       RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]
 Annotations: 
   BaseTypeDiscoveryConvention:DerivedTypes: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.List`1[Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType]]
-  NonNullableConventionState: Microsoft.EntityFrameworkCore.Metadata.Conventions.NonNullableConventionBase+NonNullabilityConventionState
-  ProductVersion: 6.0.10
+  NonNullableConventionState: System.Reflection.NullabilityInfoContext
+  ProductVersion: 7.0.0
   RelationshipDiscoveryConvention:InverseNavigationCandidates: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.SortedSet`1[System.Type]]", schema, ignoreLineEndingDifferences: true);
         }
 
