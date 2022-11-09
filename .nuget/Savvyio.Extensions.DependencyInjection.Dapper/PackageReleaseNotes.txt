@@ -1,20 +1,9 @@
-Version: 0.8.0
-Availability: .NET 6.0
- 
-# Breaking Changes
-- REMOVED DapperDataAccessObject class from the Savvyio.Extensions.DependencyInjection.Dapper namespace
-- RENAMED DapperDataStore class in the Savvyio.Extensions.DependencyInjection.Dapper namespace to DapperDataSource class
-- RENAMED DapperDataStoreOptions class in the Savvyio.Extensions.DependencyInjection.Dapper namespace to DapperDataSourceOptions class
-- RENAMED IDapperDataStore interface in the Savvyio.Extensions.DependencyInjection.Dapper namespace to IDapperDataSource interface
-- CHANGED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Dapper namespace that consist of extension methods for the IServiceCollection interface: AddDapperDataSource, AddDapperDataStore
- 
-Version: 0.7.0
-Availability: .NET 6.0
+Version: 1.0.0
+Availability: .NET 7.0, .NET 6.0
  
 # New Features
-- ADDED DapperDataAccessObject class in the Savvyio.Extensions.DependencyInjection.Dapper namespace that provides a default implementation of the IPersistentDataAccessObject{T,TOptions} interface to support multiple implementations that serves as an abstraction layer before the actual I/O communication towards a data store using Dapper
-- ADDED DapperDataStore class in the Savvyio.Extensions.DependencyInjection.Dapper namespace that provides a default implementation of the IDapperDataStore{TMarker} interface to support the actual I/O communication towards a data store using Dapper
-- ADDED DapperDataStoreOptions class in the Savvyio.Extensions.DependencyInjection.Dapper namespace that provides configuration options for IDapperDataStore{TMarker}
-- ADDED IDapperDataStore interface in the Savvyio.Extensions.DependencyInjection.Dapper namespace that defines a generic way to support multiple implementations that does the actual I/O communication towards a data store optimized for Dapper
-- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Dapper namespace that consist of extension methods for the IServiceCollection interface: AddDapperDataStore, AddDapperDataAccessObject
+- ADDED DapperDataSource class in the Savvyio.Extensions.DependencyInjection.Dapper namespace that provides a default implementation of the IDapperDataSource{TMarker} interface to support the actual I/O communication towards a data store using Dapper
+- ADDED DapperDataSourceOptions class in the Savvyio.Extensions.DependencyInjection.Dapper namespace that provides configuration options for IDapperDataSource{TMarker}
+- ADDED IDapperDataSource interface in the Savvyio.Extensions.DependencyInjection.Dapper namespace that defines a generic way to support multiple implementations that does the actual I/O communication towards a data store optimized for Dapper
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Dapper namespace that consist of extension methods for the IServiceCollection interface: AddDapperDataSource, AddDapperDataStore
  

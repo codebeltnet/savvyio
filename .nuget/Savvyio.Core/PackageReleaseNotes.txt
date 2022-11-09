@@ -1,30 +1,10 @@
-Version: 0.8.0
-Availability: .NET 6.0
- 
-# Breaking Changes
-- RENAMED IDataStore interface in the Savvyio namespace to IDataSource interface
-- RENAMED IDataAccessObject interface in the Savvyio.Data namespace to IDataStore interface
-- RENAMED IDeletableDataAccessObject interface in the Savvyio.Data namespace to IDeletableDataStore interface
-- RENAMED IPersistentDataAccessObject interface in the Savvyio.Data namespace to IPersistentDataStore interface
-- RENAMED IReadableDataAccessObject interface in the Savvyio.Data namespace to IReadableDataStore interface
-- RENAMED IWritableDataAccessObject interface in the Savvyio.Data namespace to IWritableDataStore interface
-- RENAMED AutomaticDispatcherDiscovery property on the SavvyioOptions class in the Savvyio namespace to AllowDispatcherDiscovery
-- RENAMED AutomaticHandlerDiscovery property on the SavvyioOptions class in the Savvyio namespace to AllowHandlerDiscovery
-- RENAMED EnableAutomaticDispatcherDiscovery method on the SavvyioOptions class in the Savvyio namespace to EnableDispatcherDiscovery
-- RENAMED EnableAutomaticHandlerDiscovery method on the SavvyioOptions class in the Savvyio namespace to EnableHandlerDiscovery
-- CHANGED SavvyioOptionsExtensions class in the Savvyio namespace to abide SRP for extension methods: AddDispatchers, AddHandlers
- 
-# New Features
-- ADDED ISearchableDataStore interface in the Savvyio.Data namespace that defines a generic way of abstracting searchable data access objects (cRud)
-- ADDED TaskExtensions class that in the Savvyio namespace that consist of extension methods for the Task{IEnumerable} class: SingleOrDefaultAsync
- 
-Version: 0.7.0
-Availability: .NET 6.0
+Version: 1.0.0
+Availability: .NET 7.0, .NET 6.0
  
 # New Features
 - ADDED HandlerFactory class in the Savvyio namespace that provides access to factory methods for creating and configuring generic handlers that supports MEP
 - ADDED HandlerServicesDescriptor class in the Savvyio namespace that provides information, in a developer friendly way, about implementations of the IHandler{TRequest} interface such as name, declared members and what type of request they handle
-- ADDED IDataStore interface in the Savvyio namespace that defines a marker interface that specifies the actual I/O communication with a data store
+- ADDED IDataSource interface in the Savvyio namespace that defines a marker interface that specifies the actual I/O communication with a source of data
 - ADDED IHandler interface in the Savvyio namespace that defines a marker interface that specifies a handler
 - ADDED IIdentity interface in the Savvyio namespace that an identity typically associated with a storage such as a database
 - ADDED IMetadata interface in the Savvyio namespace that defines a generic way to associate metadata with any type of object
@@ -33,20 +13,23 @@ Availability: .NET 6.0
 - ADDED MetadataDictionary class in the Savvyio namespace that provides a default implementation of the IMetadataDictionary interface
 - ADDED MetadataExtensions class in the Savvyio namespace that consist of extension methods for the IMetadata interface: GetCausationId, GetCorrelationId, SetCausationId, SetCorrelationId, SetEventId, SetTimestamp, SetMemberType, SaveMetadata, MergeMetadata
 - ADDED MetadataFactory class in the Savvyio namespace that provides access to factory methods for maintaining metadata in models
-- ADDED Request class in the Savvyio namespace that represents the base class from which all implementations of the IRequest interface should derive
+- ADDED Request record in the Savvyio namespace that represents the base class from which all implementations of the IRequest interface should derive
 - ADDED SavvyioOptions class in the Savvyio namespace that specifies options that is related to setting up Savvy I/O services
 - ADDED SavvyioOptionsExtensions class in the Savvyio namespace that consist of extension methods for the SavvyioOptions class: AddDispatchers, AddHandlers
-- ADDED IDataAccessObject interface in the Savvyio.Data namespace that defines a marker interface that specifies an abstraction of persistent data access based on the Data Access Object pattern
-- ADDED IDeletableDataAccessObject interface in the Savvyio.Data namespace that defines a generic way of abstracting deletable data access objects (cruD)
-- ADDED IPersistentDataAccessObject interface in the Savvyio.Data namespace that defines a generic way of abstracting persistent data access objects (CRUD)
-- ADDED IReadableDataAccessObject interface in the Savvyio.Data namespace that defines a generic way of abstracting readable data access objects (cRud)
-- ADDED IWritableDataAccessObject interface in the Savvyio.Data namespace that defines a generic way of abstracting writable data access objects (CrUd)
+- ADDED TaskExtensions class in the Savvyio namespace that consist of extension methods for the Task{T} class: SingleOrDefaultAsync
+- ADDED IDataStore interface in the Savvyio.Data namespace that defines a marker interface that specifies an abstraction of persistent data access based on the Data Access Object pattern
+- ADDED IDeletableDataStore interface in the Savvyio.Data namespace that defines a generic way of abstracting deletable data access objects (cruD)
+- ADDED IPersistentDataStore interface in the Savvyio.Data namespace that defines a generic way of abstracting persistent data access objects (CRUD)
+- ADDED IReadableDataStore interface in the Savvyio.Data namespace that defines a generic way of abstracting readable data access objects (cRud)
+- ADDED ISearchableDataStore interface in the Savvyio.Data namespace that defines a generic way of abstracting searchable data access objects (cRud)
+- ADDED IWritableDataStore interface in the Savvyio.Data namespace that defines a generic way of abstracting writable data access objects (CrUd)
 - ADDED Dispatcher class in the Savvyio.Dispatchers namespace that represents the base class from which all implementations of the dispatcher concept should derive
 - ADDED FireForgetDispatcher class in the Savvyio.Dispatchers namespace that provides a generic dispatcher that uses Fire-and-Forget/In-Only MEP
 - ADDED IDispatcher interface in the Savvyio.Dispatchers namespace that defines a marker interface that specifies a dispatcher that encapsulates how a set of objects interact
 - ADDED IServiceLocator interface in the Savvyio.Dispatchers namespace that provides a generic way to locate implementations of service objects
 - ADDED RequestReplyDispatcher class in the Savvyio.Dispatchers namespace that provides a generic dispatcher that uses Request-Reply/In-Out MEP
 - ADDED ServiceLocator class in the Savvyio.Dispatchers namespace that provides a default implementation of the IServiceLocator interface
+- ADDED DomainException class in the Savvyio.Domain namespace that is the exception that is thrown when a domain model is not in a valid state
 - ADDED IDeletableRepository interface in the Savvyio.Domain namespace that defines a generic way of abstracting deletable repositories (cruD)
 - ADDED IPersistentRepository interface in the Savvyio.Domain namespace that defines a generic way of abstracting persistent repositories (CRUD)
 - ADDED IReadableRepository interface in the Savvyio.Domain namespace that defines a generic way of abstracting readable repositories (cRud)

@@ -1,6 +1,6 @@
 # Savvyio.App
 
-Provides a complete and convenient set of API additions for building a DDD, CQRS and Event Sourcing enabled .NET application using default dependency injection.
+Provides a complete and convenient set of API additions for building a DDD, CQRS and Event Sourcing enabled .NET application using Microsoft Dependency Injection, Microsoft Entity Framework Core and Dapper.
 
 ## About
 
