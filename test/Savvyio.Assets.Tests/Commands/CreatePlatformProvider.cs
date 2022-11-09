@@ -1,10 +1,11 @@
-﻿using Savvyio.Commands;
+﻿using Savvyio.Assets.Domain;
+using Savvyio.Commands;
 
 namespace Savvyio.Assets.Commands
 {
     public record CreatePlatformProvider : Command
     {
-        public CreatePlatformProvider(string name, string thirdLevelDomainName, string description = null)
+        public CreatePlatformProvider(Name name, ThirdLevelDomainName thirdLevelDomainName, Description description = null)
         {
             Name = name;
             ThirdLevelDomainName = thirdLevelDomainName;

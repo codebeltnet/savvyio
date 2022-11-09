@@ -22,8 +22,8 @@ namespace Savvyio.Commands
             Assert.IsAssignableFrom<ICommandHandler>(sut);
             Assert.True(sut.Delegates.TryInvoke(new DefaultCommand()));
             Assert.True((await sut.Delegates.TryInvokeAsync(new DefaultCommand())).Succeeded);
-            Assert.False(sut.Delegates.TryInvoke(new CreatePlatformProvider("", "", "")));
-            Assert.False((await sut.Delegates.TryInvokeAsync(new CreatePlatformProvider("", "", ""))).Succeeded);
+            Assert.False(sut.Delegates.TryInvoke(new CreatePlatformProvider("Name", "Tld", "Description")));
+            Assert.False((await sut.Delegates.TryInvokeAsync(new CreatePlatformProvider("Name", "Tld", "Description"))).Succeeded);
         }
     }
 }
