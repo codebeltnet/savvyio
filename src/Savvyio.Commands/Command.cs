@@ -1,4 +1,6 @@
-﻿namespace Savvyio.Commands
+﻿using System;
+
+namespace Savvyio.Commands
 {
     /// <summary>
     /// Provides a default implementation of the <see cref="ICommand"/> interface.
@@ -13,6 +15,7 @@
         /// <param name="metadata">The optional metadata to merge with this instance.</param>
         protected Command(IMetadata metadata = null)
         {
+            this.SetCorrelationId(Guid.NewGuid().ToString("N"));
             this.MergeMetadata(metadata);
         }
     }
