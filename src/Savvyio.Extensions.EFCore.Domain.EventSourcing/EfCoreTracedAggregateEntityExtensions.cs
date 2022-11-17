@@ -3,6 +3,7 @@ using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Newtonsoft.Json;
 using Cuemon.Extensions.Newtonsoft.Json.Formatters;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Savvyio.Domain.EventSourcing;
 
 namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
@@ -24,6 +25,14 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
         {
             var formatter = new JsonFormatter(o =>
             {
+                o.Settings.ContractResolver = new CamelCasePropertyNamesContractResolver
+                {
+                    IgnoreSerializableInterface = true,
+                    NamingStrategy = new CamelCaseNamingStrategy
+                    {
+                        ProcessDictionaryKeys = false
+                    }
+                };
                 o.Settings.Converters.Add(DynamicJsonConverter.Create<IMetadataDictionary>(null, MetadataReader));
             });
             return (ITracedDomainEvent)formatter.Deserialize(entity.Payload.ToStream(), tracedDomainEventType);
