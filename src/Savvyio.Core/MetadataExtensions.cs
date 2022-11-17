@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Reflection;
@@ -109,12 +110,13 @@ namespace Savvyio
         /// <paramref name="request" /> cannot be null -or-
         /// <paramref name="key"/> cannot be null.
         /// </exception>
-        /// <exception cref="ReservedKeywordException">
-        /// <paramref name="key"/> is a reserved keyword.
-        /// </exception>
         public static T SaveMetadata<T>(this T request, string key, object value) where T : IMetadata
         {
-            MetadataFactory.Set(request, key, value);
+            Validator.ThrowIfNull(request);
+            Validator.ThrowIfNull(key);
+
+            var parsedKey = MetadataDictionary.EnsureReservedKeywordCapitalization(key);
+            MetadataFactory.Set(request, parsedKey, value);
             return request;
         }
 

@@ -36,9 +36,6 @@ namespace Savvyio
         /// <paramref name="request" /> cannot be null -or-
         /// <paramref name="key"/> cannot be null.
         /// </exception>
-        /// <exception cref="ReservedKeywordException">
-        /// <paramref name="key"/> is a reserved keyword.
-        /// </exception>
         public static T Set<T>(T request, string key, object value) where T : IMetadata
         {
             Validator.ThrowIfNull(request);
