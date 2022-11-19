@@ -7,9 +7,9 @@ namespace Savvyio.Messaging
     /// <summary>
     /// Provides a default implementation of the <see cref="IMessage{TData}"/> interface.
     /// </summary>
-    /// <typeparam name="TData">The type of the payload.</typeparam>
+    /// <typeparam name="T">The type of the payload constraint to the <see cref="IRequest"/> interface.</typeparam>
     /// <seealso cref="IMessage{TData}" />
-    public record Message<TData> : IMessage<TData> where TData : IRequest
+    public record Message<T> : IMessage<T> where T : IRequest
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Message{TData}"/> class.
@@ -28,7 +28,7 @@ namespace Savvyio.Messaging
         /// <paramref name="id"/> cannot be empty or consist only of white-space characters - or -
         /// <paramref name="time"/> was not expressed as the Coordinated Universal Time (UTC).
         /// </exception>
-        public Message(string id, Uri source, TData data, Type type = null, DateTime? time = null)
+        public Message(string id, Uri source, T data, Type type = null, DateTime? time = null)
         {
             Validator.ThrowIfNullOrWhitespace(id);
             Validator.ThrowIfNull(source);
@@ -70,6 +70,6 @@ namespace Savvyio.Messaging
         /// Gets the payload of the message. The payload depends on the <see cref="Type" />.
         /// </summary>
         /// <value>The payload of the message.</value>
-        public TData Data { get; }
+        public T Data { get; }
     }
 }
