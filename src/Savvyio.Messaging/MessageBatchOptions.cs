@@ -4,7 +4,7 @@ using Cuemon.Threading;
 namespace Savvyio.Messaging
 {
     /// <summary>
-    /// Configuration options that is related to implementations that leverage the usage of <see cref="IMessage{TData}"/>.
+    /// Configuration options that is related to implementations that leverage the usage of <see cref="IMessage{T}"/>.
     /// </summary>
     public class MessageBatchOptions : AsyncOptions
     {
