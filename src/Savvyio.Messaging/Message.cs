@@ -5,14 +5,14 @@ using Cuemon.Extensions.Reflection;
 namespace Savvyio.Messaging
 {
     /// <summary>
-    /// Provides a default implementation of the <see cref="IMessage{TData}"/> interface.
+    /// Provides a default implementation of the <see cref="IMessage{T}"/> interface.
     /// </summary>
     /// <typeparam name="T">The type of the payload constraint to the <see cref="IRequest"/> interface.</typeparam>
-    /// <seealso cref="IMessage{TData}" />
+    /// <seealso cref="IMessage{T}" />
     public record Message<T> : IMessage<T> where T : IRequest
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Message{TData}"/> class.
+        /// Initializes a new instance of the <see cref="Message{T}"/> class.
         /// </summary>
         /// <param name="id">The identifier of the message.</param>
         /// <param name="source">The context that describes the origin of the message.</param>

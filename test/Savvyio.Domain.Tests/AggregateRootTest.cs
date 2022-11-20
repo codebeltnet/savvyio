@@ -31,12 +31,12 @@ namespace Savvyio.Domain
             Assert.Collection(sut.Metadata, 
                 pair =>
                 {
-                    Assert.Equal(pair.Key, MetadataDictionary.CausationId);
+                    Assert.Equal(pair.Key, MetadataDictionary.CorrelationId);
                     Assert.Equal(pair.Value, idString);
                 },
                 pair =>
                 {
-                    Assert.Equal(pair.Key, MetadataDictionary.CorrelationId);
+                    Assert.Equal(pair.Key, MetadataDictionary.CausationId);
                     Assert.Equal(pair.Value, idString);
                 });
 

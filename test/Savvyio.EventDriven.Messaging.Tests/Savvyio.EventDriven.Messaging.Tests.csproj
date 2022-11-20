@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Savvyio.EventDriven.Messaging</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cuemon.Extensions.Core" Version="7.0.0" />
+    <PackageReference Include="Cuemon.Extensions.IO" Version="7.0.0" />
+    <PackageReference Include="Xunit.Priority" Version="1.1.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Savvyio.EventDriven.Messaging\Savvyio.EventDriven.Messaging.csproj" />
+  </ItemGroup>
+
+</Project>

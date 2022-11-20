@@ -21,7 +21,7 @@ namespace Savvyio.Commands
             Assert.IsAssignableFrom<Request>(sut);
             Assert.IsAssignableFrom<IRequest>(sut);
             Assert.IsAssignableFrom<IMetadata>(sut);
-            Assert.Empty(sut.Metadata);
+            Assert.Contains(sut.Metadata, pair => pair.Key == MetadataDictionary.CorrelationId);
         }
     }
 }
