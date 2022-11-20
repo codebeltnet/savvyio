@@ -4,6 +4,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## 1.1.0
+
+### Added
+
+#### Savvyio.Commands.Messaging
+
+- CommandExtensions class in the Savvyio.Commands.Messaging namespace that consist of extension methods for the ICommand interface: EncloseToMessage{T}
+- ICommandBus interface in the Savvyio.Commands.Messaging namespace that specifies an interface for a bus that is used for interacting with other subsystems (out-process/inter-application) to do something (e.g. change the state)
+- ICommandReceiver interface in the Savvyio.Commands.Messaging namespace that specifies the consumer/receiver of a bus used used by subsystems to receive a command and perform one or more actions (e.g. change the state)
+- ICommandSender interface in the Savvyio.Commands.Messaging namespace that specifies the producer/sender of a bus used for interacting with other subsystems (out-process/inter-application) to do something (e.g. change the state)
+- MemoryCommandBus class in the Savvyio.Commands.Messaging namespace that provides an in-memory implementation of the ICommandBus interface useful for unit testing and the likes thereof
+
+#### Savvyio.EventDriven.Messaging
+
+- IIntegrationEventBus interface in the Savvyio.EventDriven.Messaging namespace that specifies an interface for a bus that is used for interacting with other subsystems (out-process/inter-application) to be made aware of that something has happened
+- IIntegrationEventPublisher interface in the Savvyio.EventDriven.Messaging namespace that specifies the publisher/sender of a bus used for interacting with other subsystems (out-process/inter-application) to be made aware of that something happened
+- IIntegrationEventSubscriber interface in the Savvyio.EventDriven.Messaging namespace that specifies the subscriber/receiver of a bus used by subsystems to subscribe to events and be made aware of that something happened
+- IntegrationEventExtensions class in the Savvyio.EventDriven.Messaging namespace that consist of extension methods for the IIntegrationEvent interface: EncloseToMessage{T}
+- MemoryCommandBus class in the Savvyio.EventDriven.Messaging namespace that provides an in-memory implementation of the IIntegrationEventBus interface useful for unit testing and the likes thereof
+
+#### Savvyio.Messaging
+
+- IMessage{T} interface in the Savvyio.Messaging namespace that defines a generic way to wrap an IRequest inside a message
+- Message record in the Savvyio.Messaging namespace that provides a default implementation of the IMessage{T} interface
+- MessageBatchOptions class in the Savvyio.Messaging namespace that specifies options that is related to implementations that leverage the usage of IMessage{T}
+- MessageBatchOptions class in the Savvyio.Messaging namespace that specifies options that is related to wrapping an IRequest implementation inside a message
+
 ## 1.0.0
 
 ### Added

@@ -1,0 +1,10 @@
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED IIntegrationEventBus interface in the Savvyio.EventDriven.Messaging namespace that specifies an interface for a bus that is used for interacting with other subsystems (out-process/inter-application) to be made aware of that something has happened
+- ADDED IIntegrationEventPublisher interface in the Savvyio.EventDriven.Messaging namespace that specifies the publisher/sender of a bus used for interacting with other subsystems (out-process/inter-application) to be made aware of that something happened
+- ADDED IIntegrationEventSubscriber interface in the Savvyio.EventDriven.Messaging namespace that specifies the subscriber/receiver of a bus used by subsystems to subscribe to events and be made aware of that something happened
+- ADDED IntegrationEventExtensions class in the Savvyio.EventDriven.Messaging namespace that consist of extension methods for the IIntegrationEvent interface: EncloseToMessage{T}
+- ADDED MemoryCommandBus class in the Savvyio.EventDriven.Messaging namespace that provides an in-memory implementation of the IIntegrationEventBus interface useful for unit testing and the likes thereof
+ 

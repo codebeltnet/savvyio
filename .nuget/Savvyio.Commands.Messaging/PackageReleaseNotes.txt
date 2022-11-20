@@ -1,0 +1,10 @@
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED CommandExtensions class in the Savvyio.Commands.Messaging namespace that consist of extension methods for the ICommand interface: EncloseToMessage{T}
+- ADDED ICommandBus interface in the Savvyio.Commands.Messaging namespace that specifies an interface for a bus that is used for interacting with other subsystems (out-process/inter-application) to do something (e.g. change the state)
+- ADDED ICommandReceiver interface in the Savvyio.Commands.Messaging namespace that specifies the consumer/receiver of a bus used used by subsystems to receive a command and perform one or more actions (e.g. change the state)
+- ADDED ICommandSender interface in the Savvyio.Commands.Messaging namespace that specifies the producer/sender of a bus used for interacting with other subsystems (out-process/inter-application) to do something (e.g. change the state)
+- ADDED MemoryCommandBus class in the Savvyio.Commands.Messaging namespace that provides an in-memory implementation of the ICommandBus interface useful for unit testing and the likes thereof
+ 
