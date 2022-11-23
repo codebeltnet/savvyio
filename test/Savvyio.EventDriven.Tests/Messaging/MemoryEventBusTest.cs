@@ -7,7 +7,7 @@ using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Xunit;
 using Cuemon.Threading;
-using Savvyio.EventDriven.Messaging.Assets;
+using Savvyio.EventDriven.Assets;
 using Savvyio.Messaging;
 using Xunit;
 using Xunit.Abstractions;

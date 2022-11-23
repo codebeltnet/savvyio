@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Commands.Messaging.Assets
+﻿namespace Savvyio.Commands.Assets
 {
     internal record CreateMemberCommand : Command
     {

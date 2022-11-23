@@ -7,7 +7,7 @@ using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Newtonsoft.Json.Formatters;
 using Cuemon.Extensions.Xunit;
 using Cuemon.Threading;
-using Savvyio.Commands.Messaging.Assets;
+using Savvyio.Commands.Assets;
 using Savvyio.Messaging;
 using Xunit;
 using Xunit.Abstractions;

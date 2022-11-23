@@ -9,12 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Savvyio.Commands.Messaging\Savvyio.Commands.Messaging.csproj" />
     <ProjectReference Include="..\Savvyio.Commands\Savvyio.Commands.csproj" />
     <ProjectReference Include="..\Savvyio.Core\Savvyio.Core.csproj" />
     <ProjectReference Include="..\Savvyio.Domain.EventSourcing\Savvyio.Domain.EventSourcing.csproj" />
     <ProjectReference Include="..\Savvyio.Domain\Savvyio.Domain.csproj" />
-    <ProjectReference Include="..\Savvyio.EventDriven.Messaging\Savvyio.EventDriven.Messaging.csproj" />
     <ProjectReference Include="..\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.Dapper\Savvyio.Extensions.Dapper.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.DapperExtensions\Savvyio.Extensions.DependencyInjection.DapperExtensions.csproj" />

@@ -9,10 +9,9 @@ using Savvyio.Messaging;
 namespace Savvyio.Commands.Messaging
 {
     /// <summary>
-    /// Provides an in-memory implementation of the <see cref="ICommandBus"/> interface useful for unit testing and the likes thereof.
+    /// Provides an in-memory implementation of the <see cref="IPointToPointChannel{TRequest}"/> interface useful for unit testing and the likes thereof.
     /// </summary>
-    /// <seealso cref="ICommandBus" />
-    public class MemoryCommandBus : ICommandBus
+    public class MemoryCommandBus : IPointToPointChannel<ICommand>
     {
         private readonly Channel<IMessage<ICommand>> _channel = Channel.CreateUnbounded<IMessage<ICommand>>();
 
@@ -29,22 +28,11 @@ namespace Savvyio.Commands.Messaging
         }
 
         /// <summary>
-        /// Receive a single command asynchronous using Point-to-Point Channel/P2P MEP.
-        /// </summary>
-        /// <param name="setup">The <see cref="AsyncOptions" /> which may be configured.</param>
-        /// <returns>A task that represents the asynchronous operation. The task result contains an <see cref="IMessage{T}"/> whose generic type argument is <see cref="ICommand"/>.</returns>
-        public Task<IMessage<ICommand>> ReceiveAsync(Action<AsyncOptions> setup = null)
-        {
-            var options = setup.Configure();
-            return _channel.Reader.ReadAsync(options.CancellationToken).AsTask();
-        }
-
-        /// <summary>
         /// Receive one or more command(s) asynchronous using Point-to-Point Channel/P2P MEP.
         /// </summary>
-        /// <param name="setup">The <see cref="MessageBatchOptions" /> which may be configured.</param>
+        /// <param name="setup">The <see cref="ReceiveAsyncOptions" /> which may be configured.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a sequence of <see cref="IMessage{T}"/> whose generic type argument is <see cref="ICommand"/>.</returns>
-        public async Task<IEnumerable<IMessage<ICommand>>> ReceiveManyAsync(Action<MessageBatchOptions> setup = null)
+        public async Task<IEnumerable<IMessage<ICommand>>> ReceiveAsync(Action<ReceiveAsyncOptions> setup = null)
         {
             var options = setup.Configure();
             var messages = new List<IMessage<ICommand>>();
