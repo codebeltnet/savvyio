@@ -1,27 +1,28 @@
 ﻿using Cuemon.Extensions.Xunit;
+using Savvyio.Messaging;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Messaging
+namespace Savvyio.Commands.Messaging
 {
-    public class MessageBatchOptionsTest : Test
+    public class ReceiveManyAsyncOptionsTest : Test
     {
-        public MessageBatchOptionsTest(ITestOutputHelper output) : base(output)
+        public ReceiveManyAsyncOptionsTest(ITestOutputHelper output) : base(output)
         {
         }
 
         [Fact]
-        public void MessageBatchOptions_ShouldHaveDefaultValues()
+        public void Ctor_ShouldHaveDefaultValues()
         {
-            var sut = new MessageBatchOptions();
+            var sut = new ReceiveAsyncOptions();
 
             Assert.Equal(10, sut.MaxNumberOfMessages);
         }
 
         [Fact]
-        public void MessageBatchOptions_ShouldClampValue_WhenOutsideRangeOfAllowedLimits()
+        public void MaxNumberOfMessages_ShouldClampValue_WhenOutsideRangeOfAllowedLimits()
         {
-            var sut = new MessageBatchOptions();
+            var sut = new ReceiveAsyncOptions();
 
             sut.MaxNumberOfMessages = int.MinValue;
             Assert.Equal(1, sut.MaxNumberOfMessages);

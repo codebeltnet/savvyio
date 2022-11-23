@@ -45,7 +45,7 @@ namespace Savvyio.Commands.Messaging
         public async Task ReceiveAsync_CreateMemberCommand_OneTime()
         {
             var sut1 = Comparer.Query(message => message.Source == "https://fancy.io/members").Single();
-            var sut2 = await Bus.ReceiveAsync();
+            var sut2 = await Bus.ReceiveAsync().SingleOrDefaultAsync();
 
             Assert.Equal(sut1.Data, sut2.Data);
             Assert.Equal(sut1.Time, sut2.Time);
@@ -74,7 +74,7 @@ namespace Savvyio.Commands.Messaging
         public async Task ReceiveAsync_CreateMemberCommand_All()
         {
             var sut1 = Comparer.Query(message => message.Source.StartsWith("urn")).ToList();
-            var sut2 = (await Bus.ReceiveManyAsync(o =>
+            var sut2 = (await Bus.ReceiveAsync(o =>
             {
                 o.MaxNumberOfMessages = int.MaxValue;
             })).ToList();

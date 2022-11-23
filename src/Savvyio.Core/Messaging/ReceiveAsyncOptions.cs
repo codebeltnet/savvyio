@@ -4,14 +4,15 @@ using Cuemon.Threading;
 namespace Savvyio.Messaging
 {
     /// <summary>
-    /// Configuration options that is related to implementations that leverage the usage of <see cref="IMessage{T}"/>.
+    /// Configuration options that is related to implementations of the <see cref="IReceiver{TRequest}"/> interface.
     /// </summary>
-    public class MessageBatchOptions : AsyncOptions
+    /// <seealso cref="AsyncOptions"/>
+    public class ReceiveAsyncOptions : AsyncOptions
     {
         private int _maxNumberOfMessages;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MessageBatchOptions"/> class.
+        /// Initializes a new instance of the <see cref="ReceiveAsyncOptions"/> class.
         /// </summary>
         /// <remarks>
         /// The following table shows the initial property values for an instance of <see cref="AsyncOptions"/>.
@@ -26,7 +27,7 @@ namespace Savvyio.Messaging
         ///     </item>
         /// </list>
         /// </remarks>
-        public MessageBatchOptions()
+        public ReceiveAsyncOptions()
         {
             MaxNumberOfMessages = 10;
         }

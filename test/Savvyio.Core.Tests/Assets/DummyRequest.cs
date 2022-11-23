@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Savvyio.Messaging.Assets
+namespace Savvyio.Assets
 {
     public record DummyRequest(Guid Uuid, int Number) : Request
     {

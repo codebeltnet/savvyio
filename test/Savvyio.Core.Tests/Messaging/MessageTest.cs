@@ -4,7 +4,7 @@ using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Reflection;
 using Cuemon.Extensions.Xunit;
-using Savvyio.Messaging.Assets;
+using Savvyio.Assets;
 using Xunit;
 using Xunit.Abstractions;
 

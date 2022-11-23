@@ -1,9 +1,0 @@
-Version: 1.1.0
-Availability: .NET 7.0, .NET 6.0
- 
-# New Features
-- ADDED IMessage{T} interface in the Savvyio.Messaging namespace that defines a generic way to wrap an IRequest inside a message
-- ADDED Message record in the Savvyio.Messaging namespace that provides a default implementation of the IMessage{T} interface
-- ADDED MessageBatchOptions class in the Savvyio.Messaging namespace that specifies options that is related to implementations that leverage the usage of IMessage{T}
-- ADDED MessageBatchOptions class in the Savvyio.Messaging namespace that specifies options that is related to wrapping an IRequest implementation inside a message
- 

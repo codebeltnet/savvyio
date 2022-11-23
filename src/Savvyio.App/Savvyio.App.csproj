@@ -28,7 +28,6 @@
     <ProjectReference Include="..\Savvyio.Extensions.EFCore.Domain.EventSourcing\Savvyio.Extensions.EFCore.Domain.EventSourcing.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.EFCore.Domain\Savvyio.Extensions.EFCore.Domain.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.EFCore\Savvyio.Extensions.EFCore.csproj" />
-    <ProjectReference Include="..\Savvyio.Messaging\Savvyio.Messaging.csproj" />
     <ProjectReference Include="..\Savvyio.Queries\Savvyio.Queries.csproj" />
   </ItemGroup>
 
