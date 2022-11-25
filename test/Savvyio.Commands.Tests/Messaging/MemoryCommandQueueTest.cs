@@ -16,12 +16,12 @@ using Xunit.Priority;
 namespace Savvyio.Commands.Messaging
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class MemoryCommandBusTest : Test
+    public class MemoryCommandQueueTest : Test
     {
-        private static readonly MemoryCommandBus Bus = new();
+        private static readonly MemoryCommandQueue Queue = new();
         private static readonly InMemoryTestStore<IMessage<ICommand>> Comparer = new();
 
-        public MemoryCommandBusTest(ITestOutputHelper output) : base(output)
+        public MemoryCommandQueueTest(ITestOutputHelper output) : base(output)
         {
         }
 
@@ -38,14 +38,14 @@ namespace Savvyio.Commands.Messaging
 
             Comparer.Add(sut3);
 
-            await Bus.SendAsync(sut3);
+            await Queue.SendAsync(sut3);
         }
 
         [Fact, Priority(1)]
         public async Task ReceiveAsync_CreateMemberCommand_OneTime()
         {
             var sut1 = Comparer.Query(message => message.Source == "https://fancy.io/members").Single();
-            var sut2 = await Bus.ReceiveAsync().SingleOrDefaultAsync();
+            var sut2 = await Queue.ReceiveAsync().SingleOrDefaultAsync();
 
             Assert.Equal(sut1.Data, sut2.Data);
             Assert.Equal(sut1.Time, sut2.Time);
@@ -66,7 +66,7 @@ namespace Savvyio.Commands.Messaging
             await ParallelFactory.ForEachAsync(messages, (message, token) =>
             {
                 Comparer.Add(message);
-                return Bus.SendAsync(message, o => o.CancellationToken = token);
+                return Queue.SendAsync(message, o => o.CancellationToken = token);
             });
         }
 
@@ -74,7 +74,7 @@ namespace Savvyio.Commands.Messaging
         public async Task ReceiveAsync_CreateMemberCommand_All()
         {
             var sut1 = Comparer.Query(message => message.Source.StartsWith("urn")).ToList();
-            var sut2 = (await Bus.ReceiveAsync(o =>
+            var sut2 = (await Queue.ReceiveAsync(o =>
             {
                 o.MaxNumberOfMessages = int.MaxValue;
             })).ToList();
