@@ -3,7 +3,7 @@
   <PropertyGroup>
     <RootNamespace>Savvyio</RootNamespace>
     <Description>Provides the fundamental abstractions and classes for supporting a complete flow of DDD, CQRS and Event Sourcing concepts including the option to scale out using distributed subsystems.</Description>
-    <PackageTags>ddd domain-driven-design dispatchers dispatcher data-store repository dao data-access-object handler handlers fire-forget-handler request-reply-handler message-exchange-pattern request metadata messaging microservice microservices</PackageTags>
+    <PackageTags>ddd domain-driven-design dispatchers dispatcher data-store repository dao data-access-object handler handlers fire-forget-handler request-reply-handler message-exchange-pattern request metadata messaging microservice microservices queue bus pub-sub p2p</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

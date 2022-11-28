@@ -5,9 +5,9 @@ using Xunit.Abstractions;
 
 namespace Savvyio.Commands.Messaging
 {
-    public class ReceiveManyAsyncOptionsTest : Test
+    public class ReceiveAsyncOptionsTest : Test
     {
-        public ReceiveManyAsyncOptionsTest(ITestOutputHelper output) : base(output)
+        public ReceiveAsyncOptionsTest(ITestOutputHelper output) : base(output)
         {
         }
 
