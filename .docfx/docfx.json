@@ -10,8 +10,6 @@
             "Savvyio.Domain/**.csproj",
             "Savvyio.Domain.EventSourcing/**.csproj",
             "Savvyio.EventDriven/**.csproj",
-            "Savvyio.EventDriven.Messaging/**.csproj",
-            "Savvyio.Messaging/**.csproj",
             "Savvyio.Queries/**.csproj"
           ],
           "src": "../src"
@@ -39,7 +37,8 @@
             "Savvyio.Extensions.Dispatchers/**.csproj",
             "Savvyio.Extensions.EFCore/**.csproj",
             "Savvyio.Extensions.EFCore.Domain/**.csproj",
-            "Savvyio.Extensions.EFCore.Domain.EventSourcing/**.csproj"
+            "Savvyio.Extensions.EFCore.Domain.EventSourcing/**.csproj",
+            "Savvyio.Extensions.SimpleQueueService/**.csproj"
           ],
           "src": "../src"
         }
