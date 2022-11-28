@@ -1,5 +1,4 @@
-﻿using Cuemon.Extensions.DependencyInjection;
-using Savvyio.Messaging;
+﻿using Savvyio.Messaging;
 
 namespace Savvyio.Extensions.DependencyInjection.Messaging
 {
@@ -9,8 +8,9 @@ namespace Savvyio.Extensions.DependencyInjection.Messaging
     /// <typeparam name="TRequest">The type of the model to invoke on a handler.</typeparam>
     /// <typeparam name="TMarker">The type used to mark the implementation that this queue represents. Optimized for Microsoft Dependency Injection.</typeparam>
     /// <seealso cref="IPointToPointChannel{TRequest}"/>
-    /// <seealso cref="IDependencyInjectionMarker{TMarker}"/>
-    public interface IPointToPointChannel<TRequest, TMarker> : IPointToPointChannel<TRequest>, IDependencyInjectionMarker<TMarker> where TRequest : IRequest
+    /// <seealso cref="ISender{TRequest,TMarker}"/>
+    /// <seealso cref="IReceiver{TRequest,TMarker}"/>
+    public interface IPointToPointChannel<TRequest, TMarker> : IPointToPointChannel<TRequest>, ISender<TRequest, TMarker>, IReceiver<TRequest, TMarker> where TRequest : IRequest
     {
     }
 }

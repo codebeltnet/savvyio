@@ -1,5 +1,4 @@
-﻿using Cuemon.Extensions.DependencyInjection;
-using Savvyio.Messaging;
+﻿using Savvyio.Messaging;
 
 namespace Savvyio.Extensions.DependencyInjection.Messaging
 {
@@ -9,8 +8,9 @@ namespace Savvyio.Extensions.DependencyInjection.Messaging
     /// <typeparam name="TRequest">The type of the model to invoke on a handler.</typeparam>
     /// <typeparam name="TMarker">The type used to mark the implementation that this bus represents. Optimized for Microsoft Dependency Injection.</typeparam>
     /// <seealso cref="IPublishSubscribeChannel{TRequest}"/>
-    /// <seealso cref="IDependencyInjectionMarker{TMarker}"/>
-    public interface IPublishSubscribeChannel<TRequest, TMarker> : IPublishSubscribeChannel<TRequest>, IDependencyInjectionMarker<TMarker> where TRequest : IRequest
+    /// <seealso cref="IPublisher{TRequest,TMarker}"/>
+    /// <seealso cref="ISubscriber{TRequest,TMarker}"/>
+    public interface IPublishSubscribeChannel<TRequest, TMarker> : IPublishSubscribeChannel<TRequest>, IPublisher<TRequest, TMarker>, ISubscriber<TRequest, TMarker> where TRequest : IRequest
     {
     }
 }
