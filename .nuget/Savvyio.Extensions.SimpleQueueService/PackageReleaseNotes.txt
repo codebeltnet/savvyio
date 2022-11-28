@@ -1,0 +1,13 @@
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace that specifies options that provides a default implementation of the AmazonQueue{TRequest} class tailored for messages holding an ICommand implementation
+- ADDED AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace that specifies options that provides a default implementation of the AmazonBus{TRequest} class tailored for messages holding an IIntegrationEvent implementation
+- ADDED StringExtensions class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace that consist of extension methods for the string class: ToSnsUri
+- ADDED AmazonBus{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace that represents the base class from which all implementations in need of bus capabilities should derive
+- ADDED AmazonMessage{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace that represents the base class from which all implementations of AWS SQS should derive
+- ADDED AmazonMessageOptions class in the Savvyio.Extensions.SimpleQueueService namespace that specifies options that is related to AWS SQS and AWS SNS
+- ADDED AmazonQueue{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace that represents the base class from which all implementations in need of queue capabilities should derive
+- ADDED AmazonResourceNameOptions class in the Savvyio.Extensions.SimpleQueueService namespace that specifies options that is related to Amazon Resource Name (ARN)
+ 

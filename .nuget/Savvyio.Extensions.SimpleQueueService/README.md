@@ -1,6 +1,6 @@
-# Savvyio.Domain
+# Savvyio.Extensions.SimpleQueueService
 
-Provides the fundamental classes and interfaces to work with the concepts of DDD (Domain Driven Design).
+Extend the Savvy I/O core assemblies with support for Amazon Simple Queue Service (AWS SQS) paired with Amazon Simple Notification Service (AWS SNS).
 
 ## About
 
