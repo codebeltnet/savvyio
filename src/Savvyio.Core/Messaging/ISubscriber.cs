@@ -7,6 +7,7 @@ namespace Savvyio.Messaging
     /// <summary>
     /// Defines a subscriber/receiver channel used by subsystems to subscribe to messages (typically events) to be made aware of something that has happened.
     /// </summary>
+    /// <typeparam name="TRequest">The type of the model to invoke on a handler.</typeparam>
     public interface ISubscriber<out TRequest> where TRequest : IRequest
     {
         /// <summary>

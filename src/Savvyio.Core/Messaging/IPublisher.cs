@@ -7,6 +7,7 @@ namespace Savvyio.Messaging
     /// <summary>
     /// Defines a publisher/sender channel for interacting with other subsystems (out-process/inter-application) to be notified (e.g., made aware of something that has happened).
     /// </summary>
+    /// <typeparam name="TRequest">The type of the model to invoke on a handler.</typeparam>
     public interface IPublisher<in TRequest> where TRequest : IRequest
     {
         /// <summary>

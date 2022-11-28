@@ -7,6 +7,7 @@ namespace Savvyio.Messaging
     /// <summary>
     /// Defines a producer/sender channel used for interacting with other subsystems (out-process/inter-application) to do something (e.g., change the state).
     /// </summary>
+    /// <typeparam name="TRequest">The type of the model to invoke on a handler.</typeparam>
     public interface ISender<in TRequest> where TRequest : IRequest
     {
         /// <summary>

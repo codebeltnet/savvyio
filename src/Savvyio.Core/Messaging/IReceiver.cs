@@ -7,6 +7,7 @@ namespace Savvyio.Messaging
     /// <summary>
     /// Defines a consumer/receiver channel used by subsystems to receive a command and perform one or more actions (e.g., change the state).
     /// </summary>
+    /// <typeparam name="TRequest">The type of the model to invoke on a handler.</typeparam>
     public interface IReceiver<TRequest> where TRequest : IRequest
     {
         /// <summary>
