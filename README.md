@@ -80,12 +80,10 @@ For more information see our [code of conduct](.github/CODE_OF_CONDUCT.md).
 
 * [Savvyio.App](https://www.nuget.org/packages/Savvyio.App/) 🏭
 * [Savvyio.Commands](https://www.nuget.org/packages/Savvyio.Commands/) 📦
-* [Savvyio.Commands.Messaging](https://www.nuget.org/packages/Savvyio.Commands.Messaging/) 📦
 * [Savvyio.Core](https://www.nuget.org/packages/Savvyio.Core/) 📦
 * [Savvyio.Domain](https://www.nuget.org/packages/Savvyio.Domain/) 📦
 * [Savvyio.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Domain.EventSourcing/) 📦
 * [Savvyio.EventDriven](https://www.nuget.org/packages/Savvyio.EventDriven/) 📦
-* [Savvyio.EventDriven.Messaging](https://www.nuget.org/packages/Savvyio.EventDriven.Messaging/) 📦
 * [Savvyio.Extensions.Dapper](https://www.nuget.org/packages/Savvyio.Extensions.Dapper/) 📦
 * [Savvyio.Extensions.DapperExtensions](https://www.nuget.org/packages/Savvyio.Extensions.DapperExtensions/) 📦
 * [Savvyio.Extensions.DependencyInjection](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection/) 📦
@@ -95,11 +93,12 @@ For more information see our [code of conduct](.github/CODE_OF_CONDUCT.md).
 * [Savvyio.Extensions.DependencyInjection.EFCore](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore/) 📦
 * [Savvyio.Extensions.DependencyInjection.EFCore.Domain](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore.Domain/) 📦
 * [Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing/) 📦
+* [Savvyio.Extensions.DependencyInjection.SimpleQueueService](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.SimpleQueueService/) 📦
 * [Savvyio.Extensions.Dispatchers](https://www.nuget.org/packages/Savvyio.Extensions.Dispatchers/) 📦
 * [Savvyio.Extensions.EFCore](https://www.nuget.org/packages/Savvyio.Extensions.EFCore/) 📦
 * [Savvyio.Extensions.EFCore.Domain](https://www.nuget.org/packages/Savvyio.Extensions.EFCore.Domain/) 📦
 * [Savvyio.Extensions.EFCore.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Extensions.EFCore.Domain.EventSourcing/) 📦
-* [Savvyio.Messaging](https://www.nuget.org/packages/Savvyio.Messaging/) 📦
+* [Savvyio.Extensions.SimpleQueueService](https://www.nuget.org/packages/Savvyio.Extensions.SimpleQueueService/) 📦
 * [Savvyio.Queries](https://www.nuget.org/packages/Savvyio.Queries/) 📦
 
 *) Provides a convenient set of default API additions for building DDD, CQRS and Event Sourcing .NET projects using Microsoft Dependency Injection, Microsoft Entity Framework Core and Dapper
