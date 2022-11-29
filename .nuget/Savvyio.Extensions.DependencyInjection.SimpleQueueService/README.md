@@ -1,6 +1,6 @@
-# Savvyio.EventDriven
+# Savvyio.Extensions.DependencyInjection.SimpleQueueService
 
-Provides the fundamental classes and interfaces to work with the concepts of Integration Events that complements both CQRS (Command and Query Responsibility Segregation) and DDD (Domain Driven Design) for a distributed architecture.
+Extend the Savvy I/O support for Microsoft Dependency Injection with Amazon Simple Queue Service (AWS SQS) paired with Amazon Simple Notification Service (AWS SNS) implementations.
 
 ## About
 
