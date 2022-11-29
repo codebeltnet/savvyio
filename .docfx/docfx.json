@@ -34,6 +34,7 @@
             "Savvyio.Extensions.DependencyInjection.EFCore/**.csproj",
             "Savvyio.Extensions.DependencyInjection.EFCore.Domain/**.csproj",
             "Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing/**.csproj",
+            "Savvyio.Extensions.DependencyInjection.SimpleQueueService/**.csproj",
             "Savvyio.Extensions.Dispatchers/**.csproj",
             "Savvyio.Extensions.EFCore/**.csproj",
             "Savvyio.Extensions.EFCore.Domain/**.csproj",
