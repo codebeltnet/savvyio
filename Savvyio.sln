@@ -91,6 +91,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.SimpleQu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.SimpleQueueService.Tests", "test\Savvyio.Extensions.SimpleQueueService.Tests\Savvyio.Extensions.SimpleQueueService.Tests.csproj", "{084EBC42-B932-4546-8B83-67FE63AEAC2D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savvyio.Extensions.DependencyInjection.SimpleQueueService", "src\Savvyio.Extensions.DependencyInjection.SimpleQueueService\Savvyio.Extensions.DependencyInjection.SimpleQueueService.csproj", "{0AAD0FA2-89A7-44A1-9F63-A29439F4168E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savvyio.Extensions.DependencyInjection.SimpleQueueService.Tests", "test\Savvyio.Extensions.DependencyInjection.SimpleQueueService.Tests\Savvyio.Extensions.DependencyInjection.SimpleQueueService.Tests.csproj", "{D0A0D57D-EA95-4588-A8D0-1941894F3AD2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -265,6 +269,14 @@ Global
 		{084EBC42-B932-4546-8B83-67FE63AEAC2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{084EBC42-B932-4546-8B83-67FE63AEAC2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{084EBC42-B932-4546-8B83-67FE63AEAC2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AAD0FA2-89A7-44A1-9F63-A29439F4168E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AAD0FA2-89A7-44A1-9F63-A29439F4168E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AAD0FA2-89A7-44A1-9F63-A29439F4168E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AAD0FA2-89A7-44A1-9F63-A29439F4168E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0A0D57D-EA95-4588-A8D0-1941894F3AD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0A0D57D-EA95-4588-A8D0-1941894F3AD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0A0D57D-EA95-4588-A8D0-1941894F3AD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0A0D57D-EA95-4588-A8D0-1941894F3AD2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -312,6 +324,8 @@ Global
 		{6CDF1E30-A3E5-4F93-8F64-55C3C16876F4} = {407762FB-26D8-435F-AE16-C76791EC9FEC}
 		{376530FE-D4C3-49A9-AC66-ED34EDC0D79F} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
 		{084EBC42-B932-4546-8B83-67FE63AEAC2D} = {407762FB-26D8-435F-AE16-C76791EC9FEC}
+		{0AAD0FA2-89A7-44A1-9F63-A29439F4168E} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
+		{D0A0D57D-EA95-4588-A8D0-1941894F3AD2} = {407762FB-26D8-435F-AE16-C76791EC9FEC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8DDAD51-08E6-42B5-970B-2DC88D44297B}

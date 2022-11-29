@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Cuemon.Extensions;
 using Cuemon.Threading;
 using Dapper;
-using Savvyio.Assets.Domain;
 using Savvyio.Assets.Queries;
 using Savvyio.Extensions.Dapper;
 

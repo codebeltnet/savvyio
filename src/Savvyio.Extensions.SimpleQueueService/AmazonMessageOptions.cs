@@ -15,6 +15,27 @@ namespace Savvyio.Extensions.SimpleQueueService
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonMessageOptions"/> class.
         /// </summary>
+        /// <remarks>
+        /// The following table shows the initial property values for an instance of <see cref="EfCoreServiceOptions"/>.
+        /// <list type="table">
+        ///     <listheader>
+        ///         <term>Property</term>
+        ///         <description>Initial Value</description>
+        ///     </listheader>
+        ///     <item>
+        ///         <term><see cref="Credentials"/></term>
+        ///         <description><c>null</c></description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="Endpoint"/></term>
+        ///         <description><c>null</c></description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="SourceQueue"/></term>
+        ///         <description><c>null</c></description>
+        ///     </item>
+        /// </list>
+        /// </remarks>
         public AmazonMessageOptions()
         {
         }

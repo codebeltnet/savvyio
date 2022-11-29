@@ -24,8 +24,8 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonEventBus"/> class.
         /// </summary>
-        /// <param name="options">The <see cref="AmazonMessageOptions" /> which need to be configured.</param>
-        public AmazonEventBus(IOptions<AmazonMessageOptions> options) : base(options.Value)
+        /// <param name="options">The <see cref="AmazonEventBusOptions" /> which need to be configured.</param>
+        public AmazonEventBus(IOptions<AmazonEventBusOptions> options) : base(options.Value)
         {
         }
 

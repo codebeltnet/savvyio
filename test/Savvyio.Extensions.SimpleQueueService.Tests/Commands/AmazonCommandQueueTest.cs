@@ -98,7 +98,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(new AmazonCommandQueue(new OptionsWrapper<AmazonMessageOptions>(new AmazonMessageOptions
+            services.AddSingleton(new AmazonCommandQueue(new OptionsWrapper<AmazonCommandQueueOptions>(new AmazonCommandQueueOptions
             {
                 Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]),
                 Endpoint = RegionEndpoint.EUWest1,

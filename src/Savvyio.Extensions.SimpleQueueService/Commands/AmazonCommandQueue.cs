@@ -22,8 +22,8 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonCommandQueue"/> class.
         /// </summary>
-        /// <param name="options">The <see cref="AmazonMessageOptions" /> which need to be configured.</param>
-        public AmazonCommandQueue(IOptions<AmazonMessageOptions> options) : base(options.Value)
+        /// <param name="options">The <see cref="AmazonCommandQueueOptions" /> which need to be configured.</param>
+        public AmazonCommandQueue(IOptions<AmazonCommandQueueOptions> options) : base(options.Value)
         {
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Cuemon.Extensions;
 using Cuemon.Extensions.Xunit.Hosting;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -10,8 +11,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Assets;
 using Savvyio.Assets.Commands;
 using Savvyio.Assets.Domain;
+using Savvyio.Assets.Events;
 using Savvyio.Assets.Queries;
+using Savvyio.Commands;
+using Savvyio.Commands.Messaging;
 using Savvyio.Data;
+using Savvyio.EventDriven;
+using Savvyio.EventDriven.Messaging;
 using Savvyio.Extensions;
 using Savvyio.Extensions.Dapper;
 using Savvyio.Extensions.DependencyInjection;
@@ -20,6 +26,7 @@ using Savvyio.Extensions.DependencyInjection.DapperExtensions;
 using Savvyio.Extensions.DependencyInjection.Domain;
 using Savvyio.Extensions.DependencyInjection.EFCore;
 using Savvyio.Extensions.DependencyInjection.EFCore.Domain;
+using Savvyio.Messaging;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Priority;
@@ -27,11 +34,11 @@ using Xunit.Priority;
 namespace Savvyio
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class MediatorTest : HostTest<HostFixture>
+    public class ExternalMediatorTest : HostTest<HostFixture>
     {
         private readonly IServiceProvider _sp;
 
-        public MediatorTest(HostFixture hostFixture, ITestOutputHelper output) : base(hostFixture, output)
+        public ExternalMediatorTest(HostFixture hostFixture, ITestOutputHelper output) : base(hostFixture, output)
         {
             _sp = hostFixture.ServiceProvider;
         }
@@ -50,8 +57,30 @@ namespace Savvyio
             TestOutput.WriteLine(hsd.ToString());
 
             var accountRepo = _sp.GetRequiredService<ISearchableRepository<Account, long, Account>>();
-            
-            await mediator.CommitAsync(new CreateAccount(caPpId, caFullName, caEmailAddress).SetCorrelationId(correlationId));
+
+            var createAccount = new CreateAccount(caPpId, caFullName, caEmailAddress).SetCorrelationId(correlationId);
+
+            var cq = _sp.GetRequiredService<IPointToPointChannel<ICommand>>();
+
+            await cq.SendAsync(createAccount.EncloseToMessage("urn:command:create-account".ToUri()));
+
+            var simulatedExternalCreateAccount = await cq.ReceiveAsync().SingleOrDefaultAsync();
+
+            Assert.IsType<CreateAccount>(simulatedExternalCreateAccount.Data);
+
+            await mediator.CommitAsync(simulatedExternalCreateAccount.Data);
+
+            var eb = _sp.GetRequiredService<IPublishSubscribeChannel<IIntegrationEvent>>();
+
+            await eb.SubscribeAsync((message, token) =>
+            {
+                var acEvent = message.Data as AccountCreated;
+                Assert.IsType<AccountCreated>(message.Data);
+                Assert.Equal(createAccount.EmailAddress, acEvent.EmailAddress);
+                Assert.Equal(createAccount.FullName, acEvent.FullName);
+                Assert.Equal(createAccount.GetCorrelationId(), acEvent.GetCorrelationId());
+                return Task.CompletedTask;
+            });
 
             var entity = await accountRepo.FindAllAsync(a => a.Metadata.Contains(new KeyValuePair<string, object>(MetadataDictionary.CorrelationId, correlationId))).SingleOrDefaultAsync();
 
@@ -72,8 +101,29 @@ namespace Savvyio
             var caEmailAddress = "root@gimlichael.dev";
 
             var mediator = _sp.GetRequiredService<IMediator>();
-            
-            await Assert.ThrowsAsync<ValidationException>(() => mediator.CommitAsync(new CreateAccount(caPpId, caFullName, caEmailAddress).SetCorrelationId(correlationId)));
+
+            var createAccount = new CreateAccount(caPpId, caFullName, caEmailAddress).SetCorrelationId(correlationId);
+
+            var cq = _sp.GetRequiredService<IPointToPointChannel<ICommand>>();
+
+            await cq.SendAsync(createAccount.EncloseToMessage("urn:command:create-account".ToUri()));
+
+            var simulatedExternalCreateAccount = await cq.ReceiveAsync().SingleOrDefaultAsync();
+
+            Assert.IsType<CreateAccount>(simulatedExternalCreateAccount.Data);
+
+            await Assert.ThrowsAsync<ValidationException>(() => mediator.CommitAsync(simulatedExternalCreateAccount.Data));
+
+            var eb = _sp.GetRequiredService<IPublishSubscribeChannel<IIntegrationEvent>>();
+
+            var invocationCount = 0;
+            await eb.SubscribeAsync((message, token) =>
+            {
+                invocationCount++;
+                return Task.CompletedTask;
+            });
+
+            Assert.Equal(0, invocationCount); // validation exception; should not send integration event
         }
 
         [Fact, Priority(2)]
@@ -84,8 +134,18 @@ namespace Savvyio
             var caEmailAddress = "makemyday@us.gov";
 
             var mediator = _sp.GetRequiredService<IMediator>();
-            
-            await mediator.CommitAsync(new CreateAccount(caPpId, caFullName, caEmailAddress));
+
+            var createAccount = new CreateAccount(caPpId, caFullName, caEmailAddress);
+
+            var cq = _sp.GetRequiredService<IPointToPointChannel<ICommand>>();
+
+            await cq.SendAsync(createAccount.EncloseToMessage("urn:command:create-account".ToUri()));
+
+            var simulatedExternalCreateAccount = await cq.ReceiveAsync().SingleOrDefaultAsync();
+
+            Assert.IsType<CreateAccount>(simulatedExternalCreateAccount.Data);
+
+            await mediator.CommitAsync(simulatedExternalCreateAccount.Data);
         }
 
         [Fact, Priority(3)]
@@ -123,6 +183,9 @@ namespace Savvyio
             services.AddDapperDataSource(o => o.ConnectionFactory = () => new SqliteConnection().SetDefaults().AddAccountTable().AddPlatformProviderTable(), o => o.Lifetime = ServiceLifetime.Scoped)
                 .AddDapperDataStore<AccountData, AccountProjection>()
                 .AddDapperExtensionsDataStore<PlatformProviderProjection>();
+
+            services.AddMessageQueue<MemoryCommandQueue, ICommand>();
+            services.AddMessageBus<MemoryEventBus, IIntegrationEvent>();
 
             services.AddSavvyIO(o =>
             {

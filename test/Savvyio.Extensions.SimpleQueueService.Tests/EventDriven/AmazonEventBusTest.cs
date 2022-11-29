@@ -105,7 +105,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(new AmazonEventBus(new OptionsWrapper<AmazonMessageOptions>(new AmazonMessageOptions
+            services.AddSingleton(new AmazonEventBus(new OptionsWrapper<AmazonEventBusOptions>(new AmazonEventBusOptions
             {
                 Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]),
                 Endpoint = RegionEndpoint.EUWest1,
