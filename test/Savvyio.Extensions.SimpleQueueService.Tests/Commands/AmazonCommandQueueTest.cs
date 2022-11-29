@@ -19,12 +19,14 @@ using Savvyio.Messaging;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Priority;
+using System.Runtime.InteropServices;
 
 namespace Savvyio.Extensions.SimpleQueueService.Commands
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
     public class AmazonCommandQueueTest : HostTest<HostFixture>
     {
+        private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
         private readonly AmazonCommandQueue _queue;
         private static readonly InMemoryTestStore<IMessage<ICommand>> Comparer = new();
 
@@ -98,11 +100,12 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 
         public override void ConfigureServices(IServiceCollection services)
         {
+            var queue = IsLinux ? "savvyio-commands" : "savvyio-commands.fifo";
             services.AddSingleton(new AmazonCommandQueue(new OptionsWrapper<AmazonCommandQueueOptions>(new AmazonCommandQueueOptions
             {
                 Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]),
                 Endpoint = RegionEndpoint.EUWest1,
-                SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/savvyio-commands.fifo")
+                SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}")
             })));
         }
     }

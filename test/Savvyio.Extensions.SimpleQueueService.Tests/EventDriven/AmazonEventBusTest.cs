@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon;
@@ -24,6 +25,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
     public class AmazonEventBusTest : HostTest<HostFixture>
     {
+        private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
         private readonly AmazonEventBus _bus;
         private static readonly InMemoryTestStore<IMessage<IIntegrationEvent>> Comparer = new();
 
@@ -36,7 +38,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         public async Task PublishAsync_MemberCreated_OneTime()
         {
             var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
-            var sut2 = "member-events-one.fifo".ToSnsUri();
+            var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
             var sut3 = sut1.EncloseToMessage(sut2);
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
@@ -50,7 +52,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         public async Task SubscribeAsync_MemberCreated_OneTime()
         {
             var handlerInvocations = 0;
-            var sut1 = Comparer.Query(message => message.Source.EndsWith("member-events-one.fifo")).Single();
+            var sut1 = Comparer.Query(message => message.Source.Contains("member-events-one")).Single();
             
             await _bus.SubscribeAsync((sut2, _) =>
             {
@@ -71,7 +73,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var messages = Generate.RangeOf(1000, _ =>
             {
                 var email = $"{Generate.RandomString(5)}@outlook.com";
-                return new MemberCreated(Generate.RandomString(10), email).EncloseToMessage("member-events-many.fifo".ToSnsUri());
+                return new MemberCreated(Generate.RandomString(10), email).EncloseToMessage((IsLinux ? "member-events-many" : "member-events-many.fifo").ToSnsUri());
             });
 
             await ParallelFactory.ForEachAsync(messages, (message, token) =>
@@ -84,7 +86,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         [Fact, Priority(3)]
         public async Task SubscribeAsync_MemberCreated_All()
         {
-            var sut1 = Comparer.Query(message => message.Source.EndsWith("member-events-many.fifo")).ToList();
+            var sut1 = Comparer.Query(message => message.Source.Contains("member-events-many")).ToList();
             var sut2 = new List<IMessage<IIntegrationEvent>>();
             var sut3 = new CancellationTokenSource(TimeSpan.FromSeconds(30));
 
@@ -105,11 +107,12 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
 
         public override void ConfigureServices(IServiceCollection services)
         {
+            var queue = IsLinux ? "savvyio-events" : "savvyio-events.fifo";
             services.AddSingleton(new AmazonEventBus(new OptionsWrapper<AmazonEventBusOptions>(new AmazonEventBusOptions
             {
                 Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]),
                 Endpoint = RegionEndpoint.EUWest1,
-                SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/savvyio-events.fifo")
+                SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}")
             })));
             AmazonResourceNameOptions.DefaultAccountId = Configuration["AWS:CallerIdentity"];
         }

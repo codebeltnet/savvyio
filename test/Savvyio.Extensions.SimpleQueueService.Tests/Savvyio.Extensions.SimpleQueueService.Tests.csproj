@@ -12,4 +12,10 @@
     <ProjectReference Include="..\..\src\Savvyio.Extensions.SimpleQueueService\Savvyio.Extensions.SimpleQueueService.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -21,6 +21,7 @@
     <ProjectReference Include="..\..\src\Savvyio.Extensions.Dispatchers\Savvyio.Extensions.Dispatchers.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.EFCore.Domain.EventSourcing\Savvyio.Extensions.EFCore.Domain.EventSourcing.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.EFCore.Domain\Savvyio.Extensions.EFCore.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.SimpleQueueService\Savvyio.Extensions.SimpleQueueService.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Queries\Savvyio.Queries.csproj" />
   </ItemGroup>
 
