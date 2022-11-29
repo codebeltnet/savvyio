@@ -41,10 +41,10 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var sns = new AmazonSimpleNotificationServiceClient(Options.Credentials, Options.Endpoint);
             var request = new PublishRequest
             {
-                TargetArn = @event.Source,
+                TopicArn = @event.Source,
                 Message = await JsonFormatter.SerializeObject(@event).ToEncodedStringAsync().ConfigureAwait(false),
-                MessageGroupId = @event.Source,
-                MessageDeduplicationId = @event.Id,
+                MessageGroupId = UseFirstInFirstOut ? @event.Source : null,
+                MessageDeduplicationId = UseFirstInFirstOut ? @event.Id : null,
                 MessageAttributes = new Dictionary<string, MessageAttributeValue>
                 {
                     {
@@ -56,7 +56,6 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                     }
                 }
             };
-
             await sns.PublishAsync(request, options.CancellationToken).ConfigureAwait(false);
         }
 

@@ -40,8 +40,8 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
             var request = new SendMessageRequest
             {
                 QueueUrl = Options.SourceQueue.OriginalString,
-                MessageGroupId = command.Source,
-                MessageDeduplicationId = command.Id,
+                MessageGroupId = UseFirstInFirstOut ? command.Source : null,
+                MessageDeduplicationId = UseFirstInFirstOut ? command.Id : null,
                 MessageBody = await JsonFormatter.SerializeObject(command).ToEncodedStringAsync().ConfigureAwait(false),
                 MessageAttributes = new Dictionary<string, MessageAttributeValue>
                 {
@@ -54,7 +54,6 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
                     }
                 }
             };
-
             await sqs.SendMessageAsync(request, options.CancellationToken).ConfigureAwait(false);
         }
 

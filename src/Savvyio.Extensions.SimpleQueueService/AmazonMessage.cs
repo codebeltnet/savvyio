@@ -13,7 +13,6 @@ using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Newtonsoft.Json;
 using Cuemon.Extensions.Newtonsoft.Json.Formatters;
-using Cuemon.Threading;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -50,7 +49,14 @@ namespace Savvyio.Extensions.SimpleQueueService
         {
             Validator.ThrowIfInvalidOptions(options, nameof(options));
             Options = options;
+            UseFirstInFirstOut = options.SourceQueue.OriginalString.Contains(".fifo", StringComparison.OrdinalIgnoreCase);
         }
+
+        /// <summary>
+        /// Gets a value indicating whether AWS SQS is configured for FIFO.
+        /// </summary>
+        /// <value><c>true</c> if AWS SQS is configured for FIFO; otherwise, <c>false</c>.</value>
+        protected bool UseFirstInFirstOut { get; }
 
         /// <summary>
         /// Gets the configured <see cref="AmazonMessageOptions"/> of this instance.
@@ -69,15 +75,25 @@ namespace Savvyio.Extensions.SimpleQueueService
             var sqs = new AmazonSQSClient(Options.Credentials, Options.Endpoint);
 
             var approximateNumberOfMessages = await FetchApproximateNumberOfMessagesAsync(sqs).ConfigureAwait(false);
-            var maxNumberOfMessages = Math.Clamp(approximateNumberOfMessages, AwsMaxNumberOfMessages, options.MaxNumberOfMessages);
-            var partitions = (int)Math.Ceiling(Convert.ToDouble(maxNumberOfMessages) / AwsMaxNumberOfMessages);
-            
-            var messages = new ConcurrentDictionary<int, IList<IMessage<TRequest>>>();
-            await ParallelFactory.ForAsync(0, partitions, async (partition, ct) =>
+            var maxNumberOfMessages = Math.Max(approximateNumberOfMessages, options.MaxNumberOfMessages);
+            var receivedMessages = new ConcurrentDictionary<int, IList<IMessage<TRequest>>>();
+
+            var total = 0;
+            var counter = 0;
+            var lastRetreived = -1;
+            while (lastRetreived != 0 || total >= maxNumberOfMessages)
             {
-                messages.TryAdd(partition, await ProcessMessagesAsync(sqs, maxNumberOfMessages, ct).ConfigureAwait(false));
-            }, o => o.CancellationToken = options.CancellationToken).ConfigureAwait(false);
-            return messages.SelectMany(pair => pair.Value);
+                var messages = await ProcessMessagesAsync(sqs, maxNumberOfMessages, options.CancellationToken).ConfigureAwait(false);
+                if (messages.Any())
+                {
+                    receivedMessages.TryAdd(counter, messages);
+                    counter++;
+                }
+                lastRetreived = messages.Count;
+                total += messages.Count;
+            }
+
+            return receivedMessages.SelectMany(pair => pair.Value);
         }
 
         private async Task<int> FetchApproximateNumberOfMessagesAsync(IAmazonSQS sqs)
