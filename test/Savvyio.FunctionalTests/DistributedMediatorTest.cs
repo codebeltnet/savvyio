@@ -120,7 +120,7 @@ namespace Savvyio
 
                 await mediator.CommitAsync(createAccountMessage.Data);
 
-                var accounts = host.ServiceProvider.GetRequiredService<ISearchableRepository<Account, long, Account>>();
+                var accounts = host.ServiceProvider.GetRequiredService<IPersistentRepository<Account, long, Account>>();
 
                 var entity = await accounts.FindAllAsync(account => account.EmailAddress == "root@aws.dev").SingleOrDefaultAsync();
 
@@ -129,6 +129,12 @@ namespace Savvyio
                 Assert.Equal(entity.Id, dao.Id);
                 Assert.Equal(entity.EmailAddress, dao.EmailAddress);
                 Assert.Equal(entity.FullName, dao.FullName);
+
+                var uow = host.ServiceProvider.GetRequiredService<IUnitOfWork<Account>>();
+
+                accounts.Remove(entity);
+                await uow.SaveChangesAsync();
+
             }
         }
 
