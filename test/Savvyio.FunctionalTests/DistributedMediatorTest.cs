@@ -26,6 +26,7 @@ using Savvyio.Extensions.DependencyInjection.Domain;
 using Savvyio.Extensions.DependencyInjection.EFCore;
 using Savvyio.Extensions.DependencyInjection.EFCore.Domain;
 using Savvyio.Extensions.DependencyInjection.SimpleQueueService;
+using Savvyio.Extensions.Newtonsoft.Json.Converters;
 using Savvyio.Extensions.SimpleQueueService;
 using Savvyio.Messaging;
 using Xunit;

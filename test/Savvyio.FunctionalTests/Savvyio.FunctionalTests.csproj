@@ -35,4 +35,10 @@
     <ProjectReference Include="..\Savvyio.Domain.EventSourcing.Tests\Savvyio.Domain.EventSourcing.Tests.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
