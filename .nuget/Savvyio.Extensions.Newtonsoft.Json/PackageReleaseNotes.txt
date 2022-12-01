@@ -1,0 +1,8 @@
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED AggregateRootConverter{TKey} class in the Savvyio.Extensions.Newtonsoft.Json.Converters namespace that converts an AggregateRoot{TKey} to or from JSON
+- ADDED ValueObjectConverter class in the Savvyio.Extensions.Newtonsoft.Json.Converters namespace that converts a ValueObject to or from JSON
+- ADDED JsonConverterExtensions class in the Savvyio.Extensions.Newtonsoft.Json namespace that consist of extension methods for the JsonConverter class: AddValueObjectConverter, AddAggregateRootConverter{TKey}, AddMetadataDictionaryConverter
+ 

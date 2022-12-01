@@ -11,10 +11,10 @@ using System;
 using System.Collections.Concurrent;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Newtonsoft.Json;
 using Cuemon.Extensions.Newtonsoft.Json.Formatters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Savvyio.Extensions.Newtonsoft.Json;
 
 namespace Savvyio.Extensions.SimpleQueueService
 {
@@ -139,16 +139,7 @@ namespace Savvyio.Extensions.SimpleQueueService
                             ProcessDictionaryKeys = false
                         }
                     };
-                    o.Settings.Converters.Add(DynamicJsonConverter.Create<IMetadataDictionary>(null, (reader, _, _, _) =>
-                    {
-                        var md = new MetadataDictionary();
-                        var result = JData.ReadAll(reader);
-                        foreach (var entry in result)
-                        {
-                            md.Add(entry.PropertyName, entry.Value);
-                        }
-                        return md;
-                    }));
+                    o.Settings.Converters.AddMetadataDictionaryConverter();
                 });
                 messages.Add(deserialized as IMessage<TRequest>);
             }

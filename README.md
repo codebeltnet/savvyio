@@ -98,6 +98,7 @@ For more information see our [code of conduct](.github/CODE_OF_CONDUCT.md).
 * [Savvyio.Extensions.EFCore](https://www.nuget.org/packages/Savvyio.Extensions.EFCore/) 📦
 * [Savvyio.Extensions.EFCore.Domain](https://www.nuget.org/packages/Savvyio.Extensions.EFCore.Domain/) 📦
 * [Savvyio.Extensions.EFCore.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Extensions.EFCore.Domain.EventSourcing/) 📦
+* [Savvyio.Extensions.Newtonsoft.Json](https://www.nuget.org/packages/Savvyio.Extensions.Newtonsoft.Json/) 📦
 * [Savvyio.Extensions.SimpleQueueService](https://www.nuget.org/packages/Savvyio.Extensions.SimpleQueueService/) 📦
 * [Savvyio.Queries](https://www.nuget.org/packages/Savvyio.Queries/) 📦
 
