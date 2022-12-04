@@ -68,9 +68,9 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         }
 
         [Fact, Priority(2)]
-        public async Task PublishAsync_MemberCreated_ThousandTimes()
+        public async Task PublishAsync_MemberCreated_HundredTimes() // reduced as SNS is not part of free tier (FIFO)
         {
-            var messages = Generate.RangeOf(1000, _ =>
+            var messages = Generate.RangeOf(100, _ =>
             {
                 var email = $"{Generate.RandomString(5)}@outlook.com";
                 return new MemberCreated(Generate.RandomString(10), email).EncloseToMessage((IsLinux ? "member-events-many" : "member-events-many.fifo").ToSnsUri());
