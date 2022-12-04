@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.Runtime;
@@ -77,13 +76,13 @@ namespace Savvyio
                    {
                        services.AddEfCoreAggregateDataSource<Account>(o =>
                        {
-                           o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(Account)).EnableDetailedErrors().LogTo(Console.WriteLine);
+                           o.ContextConfigurator = b => b.UseInMemoryDatabase($"AWS{nameof(Account)}").EnableDetailedErrors().LogTo(Console.WriteLine);
                            o.ModelConstructor = mb => mb.AddAccount();
                        }).AddEfCoreRepository<Account, long, Account>();
 
                        services.AddEfCoreAggregateDataSource<PlatformProvider>(o =>
                        {
-                           o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(PlatformProvider)).EnableDetailedErrors().LogTo(Console.WriteLine);
+                           o.ContextConfigurator = b => b.UseInMemoryDatabase($"AWS{nameof(PlatformProvider)}").EnableDetailedErrors().LogTo(Console.WriteLine);
                            o.ModelConstructor = mb => mb.AddPlatformProvider();
                        }).AddEfCoreRepository<PlatformProvider, Guid, PlatformProvider>();
 
@@ -130,12 +129,6 @@ namespace Savvyio
                 Assert.Equal(entity.Id, dao.Id);
                 Assert.Equal(entity.EmailAddress, dao.EmailAddress);
                 Assert.Equal(entity.FullName, dao.FullName);
-
-                var uow = host.ServiceProvider.GetRequiredService<IUnitOfWork<Account>>();
-
-                accounts.Remove(entity);
-                await uow.SaveChangesAsync();
-
             }
         }
 
