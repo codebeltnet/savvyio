@@ -1,3 +1,27 @@
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# References
+- Savvyio
+- Savvyio.Commands
+- Savvyio.Domain
+- Savvyio.Domain.EventSourcing
+- Savvyio.EventDriven
+- Savvyio.Extensions.Dapper
+- Savvyio.Extensions.DependencyInjection
+- Savvyio.Extensions.DependencyInjection.Dapper
+- Savvyio.Extensions.DependencyInjection.Domain
+- Savvyio.Extensions.DependencyInjection.EFCore
+- Savvyio.Extensions.DependencyInjection.EFCore.Domain
+- Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
+- Savvyio.Extensions.DependencyInjection.SimpleQueueService
+- Savvyio.Extensions.Dispatchers
+- Savvyio.Extensions.EFCore
+- Savvyio.Extensions.EFCore.Domain
+- Savvyio.Extensions.EFCore.Domain.EventSourcing
+- Savvyio.Extensions.SimpleQueueService
+- Savvyio.Queries
+ 
 Version: 1.0.0
 Availability: .NET 7.0, .NET 6.0
  
@@ -8,7 +32,6 @@ Availability: .NET 7.0, .NET 6.0
 - Savvyio.Domain.EventSourcing
 - Savvyio.EventDriven
 - Savvyio.Extensions.Dapper
-- Savvyio.Extensions.DapperExtensions
 - Savvyio.Extensions.DependencyInjection
 - Savvyio.Extensions.DependencyInjection.Dapper
 - Savvyio.Extensions.DependencyInjection.DapperExtensions

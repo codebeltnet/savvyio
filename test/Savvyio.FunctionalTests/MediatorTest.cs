@@ -10,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Assets;
 using Savvyio.Assets.Commands;
 using Savvyio.Assets.Domain;
-using Savvyio.Assets.Events;
 using Savvyio.Assets.Queries;
 using Savvyio.Data;
 using Savvyio.Extensions;
@@ -98,6 +97,7 @@ namespace Savvyio
             var entities = new List<Account>(await accountRepo.FindAllAsync().ConfigureAwait(false));
             foreach (var entity in entities)
             {
+                TestOutput.WriteLine(entity.EmailAddress);
                 Assert.Equal(entity.Id, daos.Single(ac => ac.Id == entity.Id).Id);
                 Assert.Equal(entity.EmailAddress, daos.Single(ac => ac.Id == entity.Id).EmailAddress);
                 Assert.Equal(entity.FullName, daos.Single(ac => ac.Id == entity.Id).FullName);

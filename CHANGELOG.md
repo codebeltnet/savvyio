@@ -4,6 +4,75 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## 1.1.0
+
+### Added
+
+#### Savvyio.Core
+
+- IMessage{T} interface in the Savvyio.Messaging namespace that defines a generic way to wrap an IRequest inside a message
+- IPointToPointChannel{TRequest} interface in the Savvyio.Messaging namespace that defines an interface for a bus that is used for interacting with other subsystems (out-process/inter-application) to do something (e.g., change the state)
+- IPublisher{TRequest} interface in the Savvyio.Messaging namespace that defines a publisher/sender channel for interacting with other subsystems (out-process/inter-application) to be notified (e.g., made aware of something that has happened)
+- IPublishSubscribeChannel{TRequest} interface in the Savvyio.Messaging namespace that defines an interface for a bus that is used for interacting with other subsystems (out-process/inter-application) to be notified (e.g., made aware of something that has happened)
+- IReceiver{TRequest} interface in the Savvyio.Messaging namespace that defines a consumer/receiver channel used by subsystems to receive a command and perform one or more actions (e.g., change the state)
+- ISender{TRequest} interface in the Savvyio.Messaging namespace that defines a producer/sender channel used for interacting with other subsystems (out-process/inter-application) to do something (e.g., change the state)
+- ISubscriber{TRequest} interface in the Savvyio.Messaging namespace that defines a subscriber/receiver channel used by subsystems to subscribe to messages (typically events) to be made aware of something that has happened
+- Message record in the Savvyio.Messaging namespace that provides a default implementation of the IMessage{T} interface
+- MessageOptions class in the Savvyio.Messaging namespace that specifies options that is related to wrapping an IRequest implementation inside a message
+- ReceiveAsyncOptions class in the Savvyio.Messaging namespace that specifies options that is related to implementations of the IReceiver{TRequest} interface
+- SubscribeAsyncOptions class in the Savvyio.Messaging namespace that specifies options that is related to implementations of the ISubscriber{TRequest} interface
+
+#### Savvyio.Commands
+
+- CommandExtensions class in the Savvyio.Commands.Messaging namespace that consist of extension methods for the ICommand interface: EncloseToMessage{T}
+- MemoryCommandQueue class in the Savvyio.Commands.Messaging namespace that provides an in-memory implementation of the IPointToPointChannel{TRequest} interface useful for unit testing and the likes thereof
+- Command record in the Savvyio.Commands namespace to include a default/fallback correlation identifier
+
+#### Savvyio.EventDriven
+
+- IntegrationEventExtensions class in the Savvyio.EventDriven.Messaging namespace that consist of extension methods for the IIntegrationEvent interface: EncloseToMessage{T}
+- MemoryEventBus class in the Savvyio.EventDriven.Messaging namespace that provides an in-memory implementation of the IPublishSubscribeChannel{TRequest} interface useful for unit testing and the likes thereof
+- IntegrationEvent record in the Savvyio.EventDriven namespace to not care for member type (retrospective: this is only relevant for TracedDomainEvents)
+
+#### Savvyio.Extensions.SimpleQueueService
+
+- AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace that specifies options that provides a default implementation of the AmazonQueue{TRequest} class tailored for messages holding an ICommand implementation
+- AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace that specifies options that provides a default implementation of the AmazonBus{TRequest} class tailored for messages holding an IIntegrationEvent implementation
+- StringExtensions class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace that consist of extension methods for the string class: ToSnsUri
+- AmazonBus{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace that represents the base class from which all implementations in need of bus capabilities should derive
+- AmazonMessage{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace that represents the base class from which all implementations of AWS SQS should derive
+- AmazonMessageOptions class in the Savvyio.Extensions.SimpleQueueService namespace that specifies options that is related to AWS SQS and AWS SNS
+- AmazonQueue{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace that represents the base class from which all implementations in need of queue capabilities should derive
+- AmazonResourceNameOptions class in the Savvyio.Extensions.SimpleQueueService namespace that specifies options that is related to Amazon Resource Name (ARN)
+
+#### Savvyio.Extensions.Newtonsoft.Json
+
+- AggregateRootConverter{TKey} class in the Savvyio.Extensions.Newtonsoft.Json.Converters namespace that converts an AggregateRoot{TKey} to or from JSON
+- ValueObjectConverter class in the Savvyio.Extensions.Newtonsoft.Json.Converters namespace that converts a ValueObject to or from JSON
+- JsonConverterExtensions class in the Savvyio.Extensions.Newtonsoft.Json namespace that consist of extension methods for the JsonConverter class: AddValueObjectConverter, AddAggregateRootConverter{TKey}, AddMetadataDictionaryConverter
+
+#### Savvyio.Extensions.DependencyInjection
+
+- IPointToPointChannel{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a bus that is used for interacting with other subsystems (out-process/inter-application) to do something (e.g., change the state)
+- IPublisher{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a publisher/sender channel for interacting with other subsystems (out-process/inter-application) to be notified (e.g., made aware of something that has happened)
+- IPublishSubscribeChannel{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a bus that is used for interacting with other subsystems (out-process/inter-application) to be notified (e.g., made aware of something that has happened)
+- IReceiver{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a consumer/receiver channel used by subsystems to receive a command and perform one or more actions (e.g., change the state)
+- ISender{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a producer/sender channel used for interacting with other subsystems (out-process/inter-application) to do something (e.g., change the state)
+- ISubscriber{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a subscriber/receiver channel used by subsystems to subscribe to messages (typically events) to be made aware of something that has happened
+- ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Messaging namespace that consist of extension methods for the IServiceCollection interface: AddMessageQueue, AddMessageBus
+
+#### Savvyio.Extensions.DependencyInjection.SimpleQueueService
+
+- AmazonCommandQueue{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.Commands namespace that provides a default implementation of the AmazonQueue{TRequest} class tailored for messages holding an ICommand implementation
+- AmazonCommandQueueOptions{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.Commands namespace that provides configuration options for AmazonCommandQueue{TMarker}
+- AmazonEventBus{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.EventDriven namespace that provides a default implementation of the AmazonBus{TRequest} class tailored for messages holding an IIntegrationEvent implementation
+- AmazonEventBusOptions{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.EventDriven namespace that provides configuration options for AmazonEventBus{TMarker}
+- ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService namespace that consist of extension methods for the IServiceCollection interface: AddAmazonCommandQueue, AddAmazonEventBus
+
+#### Savvyio.Extensions.EFCore.Domain.EventSourcing
+
+- ToTracedDomainEvent extension method on the EfCoreTracedAggregateEntityExtensions class in the Savvyio.Extensions.EFCore.Domain.EventSourcing to not interfere with the casing of dictionary keys
+
 ## 1.0.0
 
 ### Added

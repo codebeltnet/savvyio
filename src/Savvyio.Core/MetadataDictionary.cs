@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Cuemon;
 using Cuemon.Collections.Generic;
 
 namespace Savvyio
@@ -20,6 +19,11 @@ namespace Savvyio
         /// </summary>
         /// <value>A list of the reserved keywords.</value>
         public static IReadOnlyCollection<string> ReservedKeywords { get; } = Arguments.ToEnumerableOf(Timestamp, MemberType, CorrelationId, CausationId, EventId, AggregateVersion).ToList();
+
+        internal static string EnsureReservedKeywordCapitalization(string key)
+        {
+            return ReservedKeywords.SingleOrDefault(rk => rk.Equals(key, StringComparison.OrdinalIgnoreCase)) ?? key;
+        }
 
         /// <summary>
         /// Timestamp is a reserved keyword.
@@ -66,7 +70,11 @@ namespace Savvyio
         public object this[string key]
         {
             get => _dictionary[key];
-            set => _dictionary[key] = value;
+            set
+            {
+                var parsedKey = EnsureReservedKeywordCapitalization(key);
+                _dictionary[parsedKey] = value;
+            }
         }
 
         /// <summary>
@@ -107,12 +115,10 @@ namespace Savvyio
         /// </summary>
         /// <param name="key">The object to use as the key of the element to add.</param>
         /// <param name="value">The object to use as the value of the element to add.</param>
-        /// <exception cref="ReservedKeywordException">
-        /// The specified <paramref name="key"/> is a reserved keyword.
-        /// </exception>
         public void Add(string key, object value)
         {
-            _dictionary.Add(key, value);
+            var parsedKey = EnsureReservedKeywordCapitalization(key);
+            _dictionary.Add(parsedKey, value);
         }
 
         /// <summary>

@@ -1,3 +1,19 @@
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED IMessage{T} interface in the Savvyio.Messaging namespace that defines a generic way to wrap an IRequest inside a message
+- ADDED IPointToPointChannel{TRequest} interface in the Savvyio.Messaging namespace that defines an interface for a bus that is used for interacting with other subsystems (out-process/inter-application) to do something (e.g., change the state)
+- ADDED IPublisher{TRequest} interface in the Savvyio.Messaging namespace that defines a publisher/sender channel for interacting with other subsystems (out-process/inter-application) to be notified (e.g., made aware of something that has happened)
+- ADDED IPublishSubscribeChannel{TRequest} interface in the Savvyio.Messaging namespace that defines an interface for a bus that is used for interacting with other subsystems (out-process/inter-application) to be notified (e.g., made aware of something that has happened)
+- ADDED IReceiver{TRequest} interface in the Savvyio.Messaging namespace that defines a consumer/receiver channel used by subsystems to receive a command and perform one or more actions (e.g., change the state)
+- ADDED ISender{TRequest} interface in the Savvyio.Messaging namespace that defines a producer/sender channel used for interacting with other subsystems (out-process/inter-application) to do something (e.g., change the state)
+- ADDED ISubscriber{TRequest} interface in the Savvyio.Messaging namespace that defines a subscriber/receiver channel used by subsystems to subscribe to messages (typically events) to be made aware of something that has happened
+- ADDED Message record in the Savvyio.Messaging namespace that provides a default implementation of the IMessage{T} interface
+- ADDED MessageOptions class in the Savvyio.Messaging namespace that is related to wrapping an IRequest implementation inside a message
+- ADDED ReceiveAsyncOptions class in the Savvyio.Messaging namespace that specifies options that is related to implementations of the IReceiver{TRequest} interface
+- ADDED SubscribeAsyncOptions class in the Savvyio.Messaging namespace that specifies options that is related to implementations of the ISubscriber{TRequest} interface
+ 
 Version: 1.0.0
 Availability: .NET 7.0, .NET 6.0
  

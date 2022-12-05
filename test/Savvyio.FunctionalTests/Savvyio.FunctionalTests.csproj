@@ -21,16 +21,24 @@
     <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing\Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.EFCore.Domain\Savvyio.Extensions.DependencyInjection.EFCore.Domain.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.EFCore\Savvyio.Extensions.DependencyInjection.EFCore.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.SimpleQueueService\Savvyio.Extensions.DependencyInjection.SimpleQueueService.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection\Savvyio.Extensions.DependencyInjection.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.Dispatchers\Savvyio.Extensions.Dispatchers.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.EFCore.Domain.EventSourcing\Savvyio.Extensions.EFCore.Domain.EventSourcing.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.EFCore.Domain\Savvyio.Extensions.EFCore.Domain.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.EFCore\Savvyio.Extensions.EFCore.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.SimpleQueueService\Savvyio.Extensions.SimpleQueueService.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Queries\Savvyio.Queries.csproj" />
     <ProjectReference Include="..\Savvyio.Assets.Dapper.Tests\Savvyio.Assets.Dapper.Tests.csproj" />
     <ProjectReference Include="..\Savvyio.Assets.EfCore.Tests\Savvyio.Assets.EfCore.Tests.csproj" />
     <ProjectReference Include="..\Savvyio.Assets.Tests\Savvyio.Assets.Tests.csproj" />
     <ProjectReference Include="..\Savvyio.Domain.EventSourcing.Tests\Savvyio.Domain.EventSourcing.Tests.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

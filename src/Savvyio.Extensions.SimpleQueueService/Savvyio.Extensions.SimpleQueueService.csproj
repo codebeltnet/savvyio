@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Extend the Savvy I/O core assemblies with support for Amazon Simple Queue Service (AWS SQS) paired with Amazon Simple Notification Service (AWS SNS).</Description>
+    <PackageTags>aws amazon awssqs awssns simplequeueservice sqs simplenotificationservice sns queue bus</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.100.29" />
+    <PackageReference Include="AWSSDK.SQS" Version="3.7.100.28" />
+    <PackageReference Include="Cuemon.Extensions.IO" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Savvyio.Core\Savvyio.Core.csproj" />
+    <ProjectReference Include="..\Savvyio.Commands\Savvyio.Commands.csproj" />
+    <ProjectReference Include="..\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.Newtonsoft.Json\Savvyio.Extensions.Newtonsoft.Json.csproj" />
+  </ItemGroup>
+
+</Project>

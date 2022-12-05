@@ -1,9 +1,9 @@
 ﻿using System;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Newtonsoft.Json;
 using Cuemon.Extensions.Newtonsoft.Json.Formatters;
-using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Savvyio.Domain.EventSourcing;
+using Savvyio.Extensions.Newtonsoft.Json;
 
 namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
 {
@@ -24,20 +24,17 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
         {
             var formatter = new JsonFormatter(o =>
             {
-                o.Settings.Converters.Add(DynamicJsonConverter.Create<IMetadataDictionary>(null, MetadataReader));
+                o.Settings.ContractResolver = new CamelCasePropertyNamesContractResolver
+                {
+                    IgnoreSerializableInterface = true,
+                    NamingStrategy = new CamelCaseNamingStrategy
+                    {
+                        ProcessDictionaryKeys = false
+                    }
+                };
+                o.Settings.Converters.AddMetadataDictionaryConverter();
             });
             return (ITracedDomainEvent)formatter.Deserialize(entity.Payload.ToStream(), tracedDomainEventType);
-        }
-
-        private static IMetadataDictionary MetadataReader(JsonReader reader, Type type, IMetadataDictionary dictionary, JsonSerializer serializer)
-        {
-            var md = new MetadataDictionary();
-            var result = JData.ReadAll(reader);
-            foreach (var entry in result)
-            {
-               md.Add(entry.PropertyName, entry.Value);
-            }
-            return md;
         }
     }
 }
