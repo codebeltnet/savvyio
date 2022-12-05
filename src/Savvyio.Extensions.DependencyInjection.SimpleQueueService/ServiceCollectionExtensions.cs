@@ -3,6 +3,7 @@ using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Commands;
 using Savvyio.EventDriven;
+using Savvyio.Extensions.DependencyInjection.Messaging;
 using Savvyio.Extensions.DependencyInjection.SimpleQueueService.Commands;
 using Savvyio.Extensions.DependencyInjection.SimpleQueueService.EventDriven;
 using Savvyio.Extensions.SimpleQueueService.Commands;
