@@ -1,3 +1,13 @@
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED IntegrationEventExtensions class in the Savvyio.EventDriven.Messaging namespace that consist of extension methods for the IIntegrationEvent interface: EncloseToMessage{T}
+- ADDED MemoryEventBus class in the Savvyio.EventDriven.Messaging namespace that provides an in-memory implementation of the IPublishSubscribeChannel{TRequest} interface useful for unit testing and the likes thereof
+ 
+# Improvements
+- CHANGED IntegrationEvent record in the Savvyio.EventDriven namespace to not care for member type (retrospective: this is only relevant for TracedDomainEvents)
+ 
 Version: 1.0.0
 Availability: .NET 7.0, .NET 6.0
  

@@ -102,4 +102,4 @@ For more information see our [code of conduct](.github/CODE_OF_CONDUCT.md).
 * [Savvyio.Extensions.SimpleQueueService](https://www.nuget.org/packages/Savvyio.Extensions.SimpleQueueService/) 📦
 * [Savvyio.Queries](https://www.nuget.org/packages/Savvyio.Queries/) 📦
 
-*) Provides a convenient set of default API additions for building DDD, CQRS and Event Sourcing .NET projects using Microsoft Dependency Injection, Microsoft Entity Framework Core and Dapper
+*) Provides a convenient set of default API additions for building DDD, CQRS and Event Sourcing .NET projects using Microsoft Dependency Injection, Microsoft Entity Framework Core, Dapper, Newtonsoft JSON  and AWS SNS/SQS

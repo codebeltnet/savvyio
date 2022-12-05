@@ -1,3 +1,9 @@
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- CHANGED ToTracedDomainEvent extension method on the EfCoreTracedAggregateEntityExtensions class in the Savvyio.Extensions.EFCore.Domain.EventSourcing to not interfere with the casing of dictionary keys
+ 
 Version: 1.0.0
 Availability: .NET 7.0, .NET 6.0
  

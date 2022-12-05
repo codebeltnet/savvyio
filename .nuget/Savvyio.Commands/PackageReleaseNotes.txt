@@ -1,3 +1,13 @@
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED CommandExtensions class in the Savvyio.Commands.Messaging namespace that consist of extension methods for the ICommand interface: EncloseToMessage{T}
+- ADDED MemoryCommandQueue class in the Savvyio.Commands.Messaging namespace that provides an in-memory implementation of the IPointToPointChannel{TRequest} interface useful for unit testing and the likes thereof
+ 
+# Improvements
+- CHANGED Command record in the Savvyio.Commands namespace to include a default/fallback correlation identifier
+ 
 Version: 1.0.0
 Availability: .NET 7.0, .NET 6.0
  
