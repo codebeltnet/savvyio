@@ -1,3 +1,15 @@
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED IPointToPointChannel{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a bus that is used for interacting with other subsystems (out-process/inter-application) to do something (e.g., change the state)
+- ADDED IPublisher{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a publisher/sender channel for interacting with other subsystems (out-process/inter-application) to be notified (e.g., made aware of something that has happened)
+- ADDED IPublishSubscribeChannel{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a bus that is used for interacting with other subsystems (out-process/inter-application) to be notified (e.g., made aware of something that has happened)
+- ADDED IReceiver{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a consumer/receiver channel used by subsystems to receive a command and perform one or more actions (e.g., change the state)
+- ADDED ISender{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a producer/sender channel used for interacting with other subsystems (out-process/inter-application) to do something (e.g., change the state)
+- ADDED ISubscriber{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a subscriber/receiver channel used by subsystems to subscribe to messages (typically events) to be made aware of something that has happened
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Messaging namespace that consist of extension methods for the IServiceCollection interface: AddMessageQueue, AddMessageBus
+ 
 Version: 1.0.0
 Availability: .NET 7.0, .NET 6.0
  

@@ -1,4 +1,5 @@
 ﻿using System;
+using Cuemon;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Domain;
 using Savvyio.Assets.Domain.Events;
@@ -43,8 +44,9 @@ namespace Savvyio.Domain
 
             var account = new Account(id, fullname, email)
                 .SaveMetadata("Key1", "Key1Value")
-                .SaveMetadata("Key2", "Key2Value");
-            
+                .SaveMetadata("Key2", "Key2Value")
+                .SaveMetadata("correlationid", "makingSureCorrelationIdIsWrittenPascalCase");
+
             var sut = new AccountInitiated(account).MergeMetadata(account);
             var ts = DateTime.UtcNow;
 
@@ -55,8 +57,9 @@ namespace Savvyio.Domain
                 s => Assert.Equal(s, MetadataDictionary.EventId),
                 s => Assert.Equal(s, MetadataDictionary.Timestamp),
                 s => Assert.Equal(s, "Key1"),
-                s => Assert.Equal(s, "Key2"));
-            Assert.True(sut.Metadata.Count == 4, "sut.Metadata.Count == 4");
+                s => Assert.Equal(s, "Key2"),
+                s => Assert.Equal(s, MetadataDictionary.CorrelationId));;
+            Assert.True(sut.Metadata.Count == 5, "sut.Metadata.Count == 5");
             Assert.InRange(DateTime.UtcNow, sut.GetTimestamp(), ts.AddSeconds(1));
         }
     }

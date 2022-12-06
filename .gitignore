@@ -238,3 +238,5 @@ ModelManifest.xml
 # Ignore all local history of files
 .history
 .ionide
+/test/Savvyio.Extensions.SimpleQueueService.Tests/appsettings.json
+/test/Savvyio.FunctionalTests/appsettings.json
