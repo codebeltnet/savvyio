@@ -24,7 +24,7 @@ namespace Savvyio.Commands.Messaging
         /// <exception cref="ArgumentException">
         /// <paramref name="setup"/> failed to configure an instance of <see cref="MessageOptions"/> in a valid state.
         /// </exception>
-        public static IMessage<T> EncloseToMessage<T>(this T command, Uri source, Action<MessageOptions> setup = null) where T : ICommand
+        public static IMessage<T> ToMessage<T>(this T command, Uri source, Action<MessageOptions> setup = null) where T : ICommand
         {
             Validator.ThrowIfNull(command);
             Validator.ThrowIfNull(source);
