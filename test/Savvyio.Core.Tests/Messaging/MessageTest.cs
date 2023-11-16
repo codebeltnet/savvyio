@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Reflection;
@@ -29,13 +28,13 @@ namespace Savvyio.Messaging
 
             TestOutput.WriteLine(sut.Data.ToString());
 
-            var convertedTime = DateTime.Parse(sut.Time, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
+            var convertedTime = sut.Time!;
             Assert.Equal(id, sut.Id);
             Assert.Equal(source.OriginalString, sut.Source);
             Assert.Equal(data, sut.Data);
             Assert.Equal(data.GetType().ToFullNameIncludingAssemblyName(), sut.Type);
-            Assert.Equal(DateTimeKind.Utc, convertedTime.Kind);
-            Assert.InRange(convertedTime, utcNow.Subtract(TimeSpan.FromSeconds(2)), utcNow.Add(TimeSpan.FromSeconds(2)));
+            Assert.Equal(DateTimeKind.Utc, convertedTime.Value.Kind);
+            Assert.InRange(convertedTime.Value, utcNow.Subtract(TimeSpan.FromSeconds(2)), utcNow.Add(TimeSpan.FromSeconds(2)));
         }
 
         [Fact]
@@ -52,12 +51,12 @@ namespace Savvyio.Messaging
 
             TestOutput.WriteLine(sut1.Data.ToString());
 
-            var convertedTime = DateTime.Parse(sut1.Time, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
+            var convertedTime = sut1.Time!;
             Assert.Equal(id, sut1.Id);
             Assert.Equal(source.OriginalString, sut1.Source);
             Assert.Equal(data, sut1.Data);
             Assert.Equal(dataType.ToFullNameIncludingAssemblyName(), sut1.Type);
-            Assert.Equal(DateTimeKind.Utc, convertedTime.Kind);
+            Assert.Equal(DateTimeKind.Utc, convertedTime.Value.Kind);
             Assert.Equal(utcNow, convertedTime);
         }
     }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>Provides the fundamental classes and interfaces to work with the Command part of the CQRS pattern (Command and Query Responsibility Segregation) including the option to scale out using distributed subsystems.</Description>

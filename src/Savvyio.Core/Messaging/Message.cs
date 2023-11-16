@@ -34,12 +34,11 @@ namespace Savvyio.Messaging
             Validator.ThrowIfNull(source);
             Validator.ThrowIfNull(data);
             Validator.ThrowIfTrue(() => time.HasValue && time.Value.Kind != DateTimeKind.Utc, nameof(time), "Time must be expressed as the Coordinated Universal Time (UTC).");
-
             Id = id;
             Source = source.OriginalString;
             Data = data;
             Type = (type ?? data.GetType()).ToFullNameIncludingAssemblyName();
-            Time = (time ?? DateTime.UtcNow).ToString("O");
+            Time = (time ?? DateTime.UtcNow);
         }
 
         /// <summary>
@@ -64,7 +63,7 @@ namespace Savvyio.Messaging
         /// Gets the time, expressed as the Coordinated Universal Time (UTC), at which the message was generated.
         /// </summary>
         /// <value>The time at which the message was generated.</value>
-        public string Time { get; }
+        public DateTime? Time { get; }
 
         /// <summary>
         /// Gets the payload of the message. The payload depends on the <see cref="Type" />.

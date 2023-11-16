@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Globalization;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Reflection;
 using Cuemon.Extensions.Text.Json.Formatters;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Commands.Assets;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Commands.Messaging
+namespace Savvyio.Commands.Messaging.Cryptography
 {
     public class CommandExtensionsTest : Test
     {
@@ -17,41 +17,29 @@ namespace Savvyio.Commands.Messaging
         }
 
         [Fact]
-        public void EncloseToMessage_CreateMemberCommand_ShouldBeWrappedInMessage()
+        public void EncloseToSignedMessage_ShouldSerialize_WithSignature()
         {
-            var sut1 = new CreateMemberCommand("Jane Doe", 21, "jd@office.com");
-            var sut2 = "https://fancy.api/members".ToUri();
-            var sut3 = sut1.ToMessage(sut2);
-
-            Assert.Equal(sut1.EmailAddress, sut3.Data.EmailAddress);
-            Assert.Equal(sut1.Age, sut3.Data.Age);
-            Assert.Equal(sut1.Name, sut3.Data.Name);
-            Assert.NotNull(sut3.Id);
-            Assert.NotNull(sut3.Time);
-            Assert.Equal(sut1.GetType().ToFullNameIncludingAssemblyName(), sut3.Type);
-            Assert.Equal(sut2.OriginalString, sut3.Source);
-        }
-
-        [Fact]
-        public void EncloseToMessage_ShouldSerialize_WithoutSignature()
-        {
-            var utcNow = DateTime.UtcNow;
+            var utc = DateTime.Parse("2023-11-16T23:24:17.8414532Z", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
             var sut1 = new CreateMemberCommand("Jane Doe", 21, "jd@office.com").SetCorrelationId("3eefdef050c340bfba100bd49c58c181");
             var sut2 = sut1.ToMessage("https://fancy.api/members".ToUri(), o =>
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
-                o.Time = utcNow;
+                o.Time = utc;
+            }).Sign(o =>
+            {
+                o.SerializerFactory = message => JsonFormatter.SerializeObject(message);
+                o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
             var json = JsonFormatter.SerializeObject(sut2);
             var jsonString = json.ToEncodedString();
             TestOutput.WriteLine(jsonString);
 
-            Assert.Equal($$"""
+            Assert.Equal("""
                          {
                            "id": "2d4030d32a254ee8a27046e5bafe696a",
                            "source": "https://fancy.api/members",
                            "type": "Savvyio.Commands.Assets.CreateMemberCommand, Savvyio.Commands.Tests",
-                           "time": "{{utcNow:O}}",
+                           "time": "2023-11-16T23:24:17.8414532Z",
                            "data": {
                              "name": "Jane Doe",
                              "age": 21,
@@ -59,7 +47,8 @@ namespace Savvyio.Commands.Messaging
                              "metadata": {
                                "correlationId": "3eefdef050c340bfba100bd49c58c181"
                              }
-                           }
+                           },
+                           "signature": "c25fd37ae917ddcd3eddab395ddc8bc0ebe1954be185b4291d09af0abaded935"
                          }
                          """, jsonString);
         }

@@ -24,11 +24,11 @@ namespace Savvyio.EventDriven.Messaging
         /// <exception cref="ArgumentException">
         /// <paramref name="setup"/> failed to configure an instance of <see cref="MessageOptions"/> in a valid state.
         /// </exception>
-        public static IMessage<T> EncloseToMessage<T>(this T @event, Uri source, Action<MessageOptions> setup = null) where T : IIntegrationEvent
+        public static IMessage<T> ToMessage<T>(this T @event, Uri source, Action<MessageOptions> setup = null) where T : IIntegrationEvent
         {
             Validator.ThrowIfNull(@event);
             Validator.ThrowIfNull(source);
-            Validator.ThrowIfInvalidConfigurator(setup, nameof(setup), out var options);
+            Validator.ThrowIfInvalidConfigurator(setup, out var options);
             return new Message<T>(options.MessageId, source, @event, options.Type, options.Time);
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace Savvyio.Messaging
+﻿using System;
+
+namespace Savvyio.Messaging
 {
     /// <summary>
     /// Defines a generic way to wrap an <see cref="IRequest" /> inside a message.
@@ -29,7 +31,7 @@
         /// Gets the time, expressed as the Coordinated Universal Time (UTC), at which this message was generated.
         /// </summary>
         /// <value>The time at which this message was generated.</value>
-        string Time { get; }
+        DateTime? Time { get; }
 
         /// <summary>
         /// Gets the payload of the message. The payload depends on the <see cref="Type"/>.

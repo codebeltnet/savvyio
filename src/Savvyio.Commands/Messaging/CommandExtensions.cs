@@ -28,7 +28,7 @@ namespace Savvyio.Commands.Messaging
         {
             Validator.ThrowIfNull(command);
             Validator.ThrowIfNull(source);
-            Validator.ThrowIfInvalidConfigurator(setup, nameof(setup), out var options);
+            Validator.ThrowIfInvalidConfigurator(setup, out var options);
             return new Message<T>(options.MessageId, source, command, options.Type, options.Time);
         }
     }
