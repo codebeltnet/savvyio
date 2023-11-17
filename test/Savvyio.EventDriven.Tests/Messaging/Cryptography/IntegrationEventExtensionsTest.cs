@@ -50,7 +50,7 @@ namespace Savvyio.EventDriven.Messaging.Cryptography
                            },
                            "signature": "ce716b47cb6405e24be4200b12a5fc75d7e453189998352c8df5fadc81640018"
                          }
-                         """, jsonString);
+                         """.ReplaceLineEndings(), jsonString);
         }
     }
 }

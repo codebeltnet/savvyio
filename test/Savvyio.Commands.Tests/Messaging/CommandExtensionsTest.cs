@@ -61,7 +61,7 @@ namespace Savvyio.Commands.Messaging
                              }
                            }
                          }
-                         """, jsonString);
+                         """.ReplaceLineEndings(), jsonString);
         }
     }
 }

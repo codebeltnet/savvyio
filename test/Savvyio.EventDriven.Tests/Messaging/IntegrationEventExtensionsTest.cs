@@ -60,7 +60,7 @@ namespace Savvyio.EventDriven.Messaging
                                }
                              }
                            }
-                           """, jsonString);
+                           """.ReplaceLineEndings(), jsonString);
         }
     }
 }

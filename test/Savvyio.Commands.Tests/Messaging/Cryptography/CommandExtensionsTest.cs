@@ -50,7 +50,7 @@ namespace Savvyio.Commands.Messaging.Cryptography
                            },
                            "signature": "c25fd37ae917ddcd3eddab395ddc8bc0ebe1954be185b4291d09af0abaded935"
                          }
-                         """, jsonString);
+                         """.ReplaceLineEndings(), jsonString);
         }
     }
 }
