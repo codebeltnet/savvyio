@@ -42,7 +42,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var request = new PublishRequest
             {
                 TopicArn = @event.Source,
-                Message = await JsonFormatter.SerializeObject(@event).ToEncodedStringAsync().ConfigureAwait(false),
+                Message = await NewtonsoftJsonFormatter.SerializeObject(@event).ToEncodedStringAsync().ConfigureAwait(false),
                 MessageGroupId = UseFirstInFirstOut ? @event.Source : null,
                 MessageDeduplicationId = UseFirstInFirstOut ? @event.Id : null,
                 MessageAttributes = new Dictionary<string, MessageAttributeValue>

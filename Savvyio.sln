@@ -95,7 +95,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Dependen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.DependencyInjection.SimpleQueueService.Tests", "test\Savvyio.Extensions.DependencyInjection.SimpleQueueService.Tests\Savvyio.Extensions.DependencyInjection.SimpleQueueService.Tests.csproj", "{D0A0D57D-EA95-4588-A8D0-1941894F3AD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savvyio.Extensions.Newtonsoft.Json", "src\Savvyio.Extensions.Newtonsoft.Json\Savvyio.Extensions.Newtonsoft.Json.csproj", "{8203BCB1-BA8F-46EC-B3C4-CB2F0C1E00FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Newtonsoft.Json", "src\Savvyio.Extensions.Newtonsoft.Json\Savvyio.Extensions.Newtonsoft.Json.csproj", "{8203BCB1-BA8F-46EC-B3C4-CB2F0C1E00FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -69,9 +69,9 @@ namespace Savvyio.Extensions.SimpleQueueService
         /// </exception>
         public void ValidateOptions()
         {
-            Validator.ThrowIfObjectInDistress(Credentials == null);
-            Validator.ThrowIfObjectInDistress(Endpoint == null);
-            Validator.ThrowIfObjectInDistress(SourceQueue == null);
+            Validator.ThrowIfInvalidState(Credentials == null);
+            Validator.ThrowIfInvalidState(Endpoint == null);
+            Validator.ThrowIfInvalidState(SourceQueue == null);
         }
     }
 }

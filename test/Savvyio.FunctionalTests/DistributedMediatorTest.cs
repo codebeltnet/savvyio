@@ -38,13 +38,13 @@ namespace Savvyio
     {
         public DistributedMediatorTest()
         {
-            JsonFormatterOptions.DefaultConverters += list => list.Add(new ValueObjectConverter());
+            NewtonsoftJsonFormatterOptions.DefaultConverters += list => list.Add(new ValueObjectConverter());
         }
 
         [Fact, Priority(0)]
         public async Task EmulateWebApi_Controller_SendCommand()
         {
-            using (var host = WebApplicationTestFactory.CreateWithHostBuilderContext((context, app) => { }, (context, services) =>
+            using (var host = WebApplicationTestFactory.CreateWithHostBuilderContext((context, services) =>
                    {
                        services.AddAmazonCommandQueue(o =>
                        {
@@ -65,14 +65,14 @@ namespace Savvyio
 
                 var commandQueue = host.ServiceProvider.GetRequiredService<IPointToPointChannel<ICommand>>();
 
-                await commandQueue.SendAsync(createAccount.EncloseToMessage("urn:command:create-account".ToUri())).ConfigureAwait(false);
+                await commandQueue.SendAsync(createAccount.ToMessage("urn:command:create-account".ToUri())).ConfigureAwait(false);
             }
         }
 
         [Fact, Priority(1)]
         public async Task EmulateWorker_ReceiveCommand()
         {
-            using (var host = WebApplicationTestFactory.CreateWithHostBuilderContext((context, app) => { }, (context, services) =>
+            using (var host = WebApplicationTestFactory.CreateWithHostBuilderContext((context, services) =>
                    {
                        services.AddEfCoreAggregateDataSource<Account>(o =>
                        {
@@ -112,6 +112,9 @@ namespace Savvyio
                        AmazonResourceNameOptions.DefaultAccountId = context.Configuration["AWS:CallerIdentity"];
                    }))
             {
+
+                await Task.Delay(TimeSpan.FromSeconds(5));
+
                 var commandQueue = host.ServiceProvider.GetRequiredService<IPointToPointChannel<ICommand>>();
                 var mediator = host.ServiceProvider.GetRequiredService<IMediator>();
                 var createAccountMessage = await commandQueue.ReceiveAsync().SingleOrDefaultAsync().ConfigureAwait(false);
@@ -135,7 +138,7 @@ namespace Savvyio
         [Fact, Priority(2)]
         public async Task EmulateAnotherWorker_SubscribingToAccountCreated()
         {
-            using (var host = WebApplicationTestFactory.CreateWithHostBuilderContext((context, app) => { }, (context, services) =>
+            using (var host = WebApplicationTestFactory.CreateWithHostBuilderContext((context, services) =>
                    {
                        services.AddAmazonEventBus(o =>
                        {

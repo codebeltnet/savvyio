@@ -128,7 +128,7 @@ namespace Savvyio.Extensions.SimpleQueueService
             {
                 var dataType = Type.GetType(message.MessageAttributes[MessageAttributeTypeKey].StringValue);
                 var messageDataType = typeof(Message<>).MakeGenericType(dataType!);
-                var deserialized = JsonFormatter.DeserializeObject(message.Body.ToStream(), messageDataType, o =>
+                var deserialized = NewtonsoftJsonFormatter.DeserializeObject(message.Body.ToStream(), messageDataType, o =>
                 {
                     o.Settings.DateParseHandling = DateParseHandling.DateTime;
                     o.Settings.ContractResolver = new CamelCasePropertyNamesContractResolver

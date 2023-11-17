@@ -26,7 +26,7 @@ namespace Savvyio.Extensions.DependencyInjection
             Assert.Empty(sut.DispatcherServiceTypes);
             Assert.Empty(sut.HandlerImplementationTypes);
             Assert.Empty(sut.HandlerServiceTypes);
-            Assert.Null(sut.AssembliesToScan);
+            Assert.Empty(sut.AssembliesToScan);
         }
     }
 }

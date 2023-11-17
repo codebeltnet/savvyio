@@ -32,7 +32,7 @@ namespace Savvyio.Extensions
         [Fact]
         public void Host_MediatorShouldBeRegistered_UsingDefaultOptions()
         {
-            using (var host = GenericHostTestFactory.CreateGenericHostTest(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>())))
+            using (var host = GenericHostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>())))
             {
                 var mediator = host.ServiceProvider.GetRequiredService<IMediator>();
 
@@ -43,7 +43,7 @@ namespace Savvyio.Extensions
         [Fact]
         public void Host_MediatorDescriptorShouldNotBeRegistered_UsingDefaultOptions()
         {
-            using (var host = GenericHostTestFactory.CreateGenericHostTest(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>())))
+            using (var host = GenericHostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>())))
             {
                 Assert.Throws<InvalidOperationException>(() => host.ServiceProvider.GetRequiredService<HandlerServicesDescriptor>());
             }
@@ -52,7 +52,7 @@ namespace Savvyio.Extensions
         [Fact]
         public void Host_MediatorDescriptorShouldBeRegistered()
         {
-            using (var host = GenericHostTestFactory.CreateGenericHostTest(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>().EnableHandlerServicesDescriptor())))
+            using (var host = GenericHostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>().EnableHandlerServicesDescriptor())))
             {
                 var descriptor = host.ServiceProvider.GetRequiredService<HandlerServicesDescriptor>();
 
@@ -65,7 +65,7 @@ namespace Savvyio.Extensions
         [Fact]
         public async Task Mediator_ShouldInvoke_CreateAccountAsync_OnInProcAccountCreated_OnOutProcAccountCreated()
         {
-            using (var host = GenericHostTestFactory.CreateGenericHostTest(services =>
+            using (var host = GenericHostTestFactory.Create(services =>
             {
                 services.AddSingleton(TestOutput);
                 services.AddEfCoreRepository<Account, long, Account>();
@@ -103,7 +103,7 @@ namespace Savvyio.Extensions
         [Fact]
         public async Task Mediator_ShouldInvoke_CreatePlatformProviderAsyncLambda_OnInProcPlatformProviderInitiated_OnOutProcPlatformProviderCreated()
         {
-            using (var host = GenericHostTestFactory.CreateGenericHostTest(services =>
+            using (var host = GenericHostTestFactory.Create(services =>
             {
                 services.AddSingleton(TestOutput);
                 services.AddEfCoreRepository<Account, long>();
@@ -144,7 +144,7 @@ namespace Savvyio.Extensions
         [Fact]
         public async Task QueryTest()
         {
-            using (var host = GenericHostTestFactory.CreateGenericHostTest(services =>
+            using (var host = GenericHostTestFactory.Create(services =>
                    {
                        services.AddSingleton(TestOutput);
                        services.AddScoped<IPersistentRepository<Account, long>, EfCoreRepository<Account, long, Account>>();

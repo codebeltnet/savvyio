@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Cuemon;
@@ -76,7 +77,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
                 var property = properties.Single();
                 if (property.DeclaringType?.IsAssignableFrom(objectType) ?? false)
                 {
-                    return Activator.CreateInstance(objectType, _options.Flags, _options.Binder, new[] { Decorator.Enclose(reader.Value).ChangeType(property.PropertyType) }, _options.FormatProvider) as ValueObject;
+                    return Activator.CreateInstance(objectType, _options.Flags, _options.Binder, new[] { Decorator.Enclose(reader.Value).ChangeType(property.PropertyType) }, _options.FormatProvider as CultureInfo) as ValueObject;
                 }
             }
 

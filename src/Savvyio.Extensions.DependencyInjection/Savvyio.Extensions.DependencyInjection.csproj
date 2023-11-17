@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Cuemon.Extensions.DependencyInjection" Version="8.0.0" />
   </ItemGroup>
 
 </Project>

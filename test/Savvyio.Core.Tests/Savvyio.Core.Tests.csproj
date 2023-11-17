@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Security.Cryptography" Version="7.0.0" />
+    <PackageReference Include="Cuemon.Extensions.Core" Version="8.0.0" />
+    <PackageReference Include="Cuemon.Extensions.Text.Json" Version="8.0.0" />
+    <PackageReference Include="Cuemon.Security.Cryptography" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

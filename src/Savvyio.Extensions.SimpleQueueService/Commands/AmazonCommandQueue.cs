@@ -42,7 +42,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
                 QueueUrl = Options.SourceQueue.OriginalString,
                 MessageGroupId = UseFirstInFirstOut ? command.Source : null,
                 MessageDeduplicationId = UseFirstInFirstOut ? command.Id : null,
-                MessageBody = await JsonFormatter.SerializeObject(command).ToEncodedStringAsync().ConfigureAwait(false),
+                MessageBody = await NewtonsoftJsonFormatter.SerializeObject(command).ToEncodedStringAsync().ConfigureAwait(false),
                 MessageAttributes = new Dictionary<string, MessageAttributeValue>
                 {
                     {

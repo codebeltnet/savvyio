@@ -6,10 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.100.29" />
-    <PackageReference Include="AWSSDK.SQS" Version="3.7.100.28" />
-    <PackageReference Include="Cuemon.Extensions.IO" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
+    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.300.1" />
+    <PackageReference Include="AWSSDK.SQS" Version="3.7.300.1" />
+    <PackageReference Include="Cuemon.Extensions.IO" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -22,7 +22,7 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
         /// <returns>ITracedDomainEvent.</returns>
         public static ITracedDomainEvent ToTracedDomainEvent<TEntity, TKey>(this EfCoreTracedAggregateEntity<TEntity, TKey> entity, Type tracedDomainEventType) where TEntity : class, ITracedAggregateRoot<TKey>
         {
-            var formatter = new JsonFormatter(o =>
+            var formatter = new NewtonsoftJsonFormatter(o =>
             {
                 o.Settings.ContractResolver = new CamelCasePropertyNamesContractResolver
                 {
