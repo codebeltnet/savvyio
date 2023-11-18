@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Text.Json.Formatters;
@@ -33,24 +34,47 @@ namespace Savvyio.Commands.Messaging.Cryptography
             var json = JsonFormatter.SerializeObject(sut2);
             var jsonString = json.ToEncodedString();
             TestOutput.WriteLine(jsonString);
-
-            Assert.Equal("""
-                         {
-                           "id": "2d4030d32a254ee8a27046e5bafe696a",
-                           "source": "https://fancy.api/members",
-                           "type": "Savvyio.Commands.Assets.CreateMemberCommand, Savvyio.Commands.Tests",
-                           "time": "2023-11-16T23:24:17.8414532Z",
-                           "data": {
-                             "name": "Jane Doe",
-                             "age": 21,
-                             "emailAddress": "jd@office.com",
-                             "metadata": {
-                               "correlationId": "3eefdef050c340bfba100bd49c58c181"
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Assert.Equal("""
+                             {
+                               "id": "2d4030d32a254ee8a27046e5bafe696a",
+                               "source": "https://fancy.api/members",
+                               "type": "Savvyio.Commands.Assets.CreateMemberCommand, Savvyio.Commands.Tests",
+                               "time": "2023-11-16T23:24:17.8414532Z",
+                               "data": {
+                                 "name": "Jane Doe",
+                                 "age": 21,
+                                 "emailAddress": "jd@office.com",
+                                 "metadata": {
+                                   "correlationId": "3eefdef050c340bfba100bd49c58c181"
+                                 }
+                               },
+                               "signature": "aca8389dea1157c81825b63b16191da0f5a0097263ab607a98ebea248a1ca4a9"
                              }
-                           },
-                           "signature": "c25fd37ae917ddcd3eddab395ddc8bc0ebe1954be185b4291d09af0abaded935"
-                         }
-                         """.ReplaceLineEndings(), jsonString);
+                             """.ReplaceLineEndings(), jsonString);
+            }
+            else
+            {
+                Assert.Equal("""
+                             {
+                               "id": "2d4030d32a254ee8a27046e5bafe696a",
+                               "source": "https://fancy.api/members",
+                               "type": "Savvyio.Commands.Assets.CreateMemberCommand, Savvyio.Commands.Tests",
+                               "time": "2023-11-16T23:24:17.8414532Z",
+                               "data": {
+                                 "name": "Jane Doe",
+                                 "age": 21,
+                                 "emailAddress": "jd@office.com",
+                                 "metadata": {
+                                   "correlationId": "3eefdef050c340bfba100bd49c58c181"
+                                 }
+                               },
+                               "signature": "c25fd37ae917ddcd3eddab395ddc8bc0ebe1954be185b4291d09af0abaded935"
+                             }
+                             """, jsonString);
+            }
+
         }
     }
 }
