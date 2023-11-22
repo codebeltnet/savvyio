@@ -51,12 +51,12 @@ namespace Savvyio.Assets
             _testStore?.Add(e);
             if (_eventBus != null)
             {
-                await _eventBus.PublishAsync(e.ToMessage("account-created-flow-test.fifo".ToSnsUri()));
+                await _eventBus.PublishAsync(e.ToMessage("account-created-flow-test.fifo".ToSnsUri())).ConfigureAwait(false);
             }
             _output?.WriteLines($"IE {nameof(OnOutProcAccountCreated)}", JsonSerializer.Serialize(e));
             if (_accountDao != null)
             {
-                await _accountDao.CreateAsync(new AccountProjection(e.Id, e.FullName, e.EmailAddress));
+                await _accountDao.CreateAsync(new AccountProjection(e.Id, e.FullName, e.EmailAddress)).ConfigureAwait(false);
             }
         }
     }

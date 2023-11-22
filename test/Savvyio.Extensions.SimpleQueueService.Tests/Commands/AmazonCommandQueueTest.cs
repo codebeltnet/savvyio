@@ -73,10 +73,10 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
                 return new CreateMemberCommand(Generate.RandomString(10), (byte)Generate.RandomNumber(byte.MaxValue), email).ToMessage($"urn:{i}:{email}".ToUri());
             });
 
-            await ParallelFactory.ForEachAsync(messages, (message, token) =>
+            await ParallelFactory.ForEachAsync(messages, async (message, token) =>
             {
                 Comparer.Add(message);
-                return _queue.SendAsync(message, o => o.CancellationToken = token);
+                await _queue.SendAsync(message, o => o.CancellationToken = token).ConfigureAwait(false);
             }).ConfigureAwait(false);
         }
 

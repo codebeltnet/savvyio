@@ -132,6 +132,8 @@ namespace Savvyio
                 Assert.Equal(entity.Id, dao.Id);
                 Assert.Equal(entity.EmailAddress, dao.EmailAddress);
                 Assert.Equal(entity.FullName, dao.FullName);
+
+                await Task.Delay(TimeSpan.FromSeconds(5));
             }
         }
 
@@ -158,7 +160,7 @@ namespace Savvyio
                     invocationCount++;
                     Assert.IsType<AccountCreated>(message.Data);
                     return Task.CompletedTask;
-                });
+                }).ConfigureAwait(false);
                 Assert.Equal(1, invocationCount);
             }
         }
