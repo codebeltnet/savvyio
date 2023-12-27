@@ -18,7 +18,11 @@ namespace Savvyio.Extensions.EFCore
     /// <seealso cref="IPersistentRepository{TEntity, TKey}" />
     public class EfCoreRepository<TEntity, TKey> : IPersistentRepository<TEntity, TKey> where TEntity : class, IIdentity<TKey>
     {
-        private readonly DbSet<TEntity> _dbSet;
+        /// <summary>
+        /// Gets the associated <see cref="DbSet{TEntity}"/> for this repository.
+        /// </summary>
+        /// <value>The associated <see cref="DbSet{TEntity}"/> for this repository.</value>
+        protected DbSet<TEntity> Set { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreRepository{TEntity, TKey}"/> class.
@@ -26,25 +30,25 @@ namespace Savvyio.Extensions.EFCore
         /// <param name="source">The <see cref="IEfCoreDataSource"/> that handles actual I/O communication with a source of data.</param>
         public EfCoreRepository(IEfCoreDataSource source)
         {
-            _dbSet = source.Set<TEntity>();
+            Set = source.Set<TEntity>();
         }
 
         /// <summary>
         /// Marks the specified <paramref name="entity"/> to be added in the data store when <see cref="IUnitOfWork.SaveChangesAsync"/> is called.
         /// </summary>
         /// <param name="entity">The entity to add.</param>
-        public void Add(TEntity entity)
+        public virtual void Add(TEntity entity)
         {
-            _dbSet.Add(entity);
+            Set.Add(entity);
         }
 
         /// <summary>
         /// Marks the specified <paramref name="entities"/> to be added in the data store when <see cref="IUnitOfWork.SaveChangesAsync"/> is called.
         /// </summary>
         /// <param name="entities">The entities to add.</param>
-        public void AddRange(IEnumerable<TEntity> entities)
+        public virtual void AddRange(IEnumerable<TEntity> entities)
         {
-            _dbSet.AddRange(entities);
+            Set.AddRange(entities);
         }
 
         /// <summary>
@@ -53,10 +57,10 @@ namespace Savvyio.Extensions.EFCore
         /// <param name="id">The key that uniquely identifies the entity.</param>
         /// <param name="setup">The <see cref="AsyncOptions"/> which may be configured.</param>
         /// <returns>A <see cref="Task{TResult}" /> that represents the asynchronous operation. The task result either contains the entity of the operation or <c>null</c> if not found.</returns>
-        public Task<TEntity> GetByIdAsync(TKey id, Action<AsyncOptions> setup = null)
+        public virtual Task<TEntity> GetByIdAsync(TKey id, Action<AsyncOptions> setup = null)
         {
             var options = setup.Configure();
-            return _dbSet.FindAsync(new object[] { id }, options.CancellationToken).AsTask();
+            return Set.FindAsync(new object[] { id }, options.CancellationToken).AsTask();
         }
 
         /// <summary>
@@ -65,10 +69,10 @@ namespace Savvyio.Extensions.EFCore
         /// <param name="predicate">The predicate that matches the entities to retrieve.</param>
         /// <param name="setup">The <see cref="AsyncOptions"/> which may be configured.</param>
         /// <returns>A <see cref="Task{TResult}" /> that represents the asynchronous operation. The task result either contains the matching entities of the operation or an empty sequence if no match was found.</returns>
-        public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> predicate = null, Action<AsyncOptions> setup = null)
+        public virtual async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> predicate = null, Action<AsyncOptions> setup = null)
         {
             var options = setup.Configure();
-            return await (predicate == null ? _dbSet.ToListAsync(options.CancellationToken).ConfigureAwait(false) : _dbSet.Where(predicate).ToListAsync(options.CancellationToken).ConfigureAwait(false));
+            return await (predicate == null ? Set.ToListAsync(options.CancellationToken).ConfigureAwait(false) : Set.Where(predicate).ToListAsync(options.CancellationToken).ConfigureAwait(false));
         }
 
         /// <summary>
@@ -77,7 +81,7 @@ namespace Savvyio.Extensions.EFCore
         /// <param name="entity">The entity to remove.</param>
         public virtual void Remove(TEntity entity)
         {
-            _dbSet.Remove(entity);
+            Set.Remove(entity);
         }
 
         /// <summary>
@@ -86,7 +90,7 @@ namespace Savvyio.Extensions.EFCore
         /// <param name="entities">The entities to remove.</param>
         public virtual void RemoveRange(IEnumerable<TEntity> entities)
         {
-            _dbSet.RemoveRange(entities);
+            Set.RemoveRange(entities);
         }
     }
 }
