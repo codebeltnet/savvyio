@@ -2,7 +2,7 @@
 using Savvyio.Assets.Domain;
 using Savvyio.EventDriven;
 
-namespace Savvyio.Assets.Events
+namespace Savvyio.Assets.EventDriven
 {
     public record PlatformProviderCreated : IntegrationEvent
     {

@@ -1,15 +1,18 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Text.Json.Formatters;
 using Cuemon.Extensions.Xunit;
-using Savvyio.Commands.Assets;
+using Savvyio.Assets.Commands;
+using Savvyio.Commands.Messaging;
+using Savvyio.Commands.Messaging.Cryptography;
+using Savvyio.Messaging;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Commands.Messaging.Cryptography
+namespace Savvyio.Extensions.Text.Json.Commands.Messaging.Cryptography
 {
     public class CommandExtensionsTest : Test
     {
@@ -26,21 +29,35 @@ namespace Savvyio.Commands.Messaging.Cryptography
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
-            }).Sign(o =>
+            });
+
+            var sut3 = sut2.Sign(o =>
             {
                 o.SerializerFactory = message => JsonFormatter.SerializeObject(message);
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
-            var json = JsonFormatter.SerializeObject(sut2);
-            var jsonString = json.ToEncodedString();
+
+            var json = JsonFormatter.SerializeObject(sut3);
+            var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
+
             TestOutput.WriteLine(jsonString);
+
+            var sut4 = JsonFormatter.DeserializeObject<IMessage<CreateMemberCommand>>(json, o =>
+            {
+                o.Settings.Converters
+                    .AddMessageConverter()
+                    .AddMetadataDictionaryConverter();
+            });
+
+            Assert.Equivalent(sut2, sut4, true);
+
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 Assert.Equal("""
                              {
                                "id": "2d4030d32a254ee8a27046e5bafe696a",
                                "source": "https://fancy.api/members",
-                               "type": "Savvyio.Commands.Assets.CreateMemberCommand, Savvyio.Commands.Tests",
+                               "type": "Savvyio.Assets.Commands.CreateMemberCommand, Savvyio.Assets.Tests",
                                "time": "2023-11-16T23:24:17.8414532Z",
                                "data": {
                                  "name": "Jane Doe",
@@ -50,7 +67,7 @@ namespace Savvyio.Commands.Messaging.Cryptography
                                    "correlationId": "3eefdef050c340bfba100bd49c58c181"
                                  }
                                },
-                               "signature": "aca8389dea1157c81825b63b16191da0f5a0097263ab607a98ebea248a1ca4a9"
+                               "signature": "7dd0057afb708575df6446e1ef01b8ba8f28d999180642acff3998716a1d1c4f"
                              }
                              """.ReplaceLineEndings(), jsonString);
             }
@@ -60,7 +77,7 @@ namespace Savvyio.Commands.Messaging.Cryptography
                              {
                                "id": "2d4030d32a254ee8a27046e5bafe696a",
                                "source": "https://fancy.api/members",
-                               "type": "Savvyio.Commands.Assets.CreateMemberCommand, Savvyio.Commands.Tests",
+                               "type": "Savvyio.Assets.Commands.CreateMemberCommand, Savvyio.Assets.Tests",
                                "time": "2023-11-16T23:24:17.8414532Z",
                                "data": {
                                  "name": "Jane Doe",
@@ -70,7 +87,7 @@ namespace Savvyio.Commands.Messaging.Cryptography
                                    "correlationId": "3eefdef050c340bfba100bd49c58c181"
                                  }
                                },
-                               "signature": "c25fd37ae917ddcd3eddab395ddc8bc0ebe1954be185b4291d09af0abaded935"
+                               "signature": "c81ef53400b1abe68353e5ca951631cb76a0af6e49bb1240989501fb3294efbd"
                              }
                              """, jsonString);
             }

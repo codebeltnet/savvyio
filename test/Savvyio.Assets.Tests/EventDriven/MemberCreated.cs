@@ -1,4 +1,6 @@
-﻿namespace Savvyio.EventDriven.Assets
+﻿using Savvyio.EventDriven;
+
+namespace Savvyio.Assets.EventDriven
 {
     public record MemberCreated : IntegrationEvent
     {

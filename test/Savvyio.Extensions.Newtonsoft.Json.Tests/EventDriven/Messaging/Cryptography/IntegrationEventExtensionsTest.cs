@@ -3,13 +3,15 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Text.Json.Formatters;
+using Cuemon.Extensions.Newtonsoft.Json.Formatters;
 using Cuemon.Extensions.Xunit;
-using Savvyio.EventDriven.Assets;
+using Savvyio.Assets.EventDriven;
+using Savvyio.EventDriven.Messaging;
+using Savvyio.EventDriven.Messaging.Cryptography;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.EventDriven.Messaging.Cryptography
+namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
 {
     public class IntegrationEventExtensionsTest : Test
     {
@@ -28,10 +30,10 @@ namespace Savvyio.EventDriven.Messaging.Cryptography
                 o.Time = utc;
             }).Sign(o =>
             {
-                o.SerializerFactory = message => JsonFormatter.SerializeObject(message);
+                o.SerializerFactory = message => NewtonsoftJsonFormatter.SerializeObject(message);
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
-            var json = JsonFormatter.SerializeObject(sut2);
+            var json = NewtonsoftJsonFormatter.SerializeObject(sut2);
             var jsonString = json.ToEncodedString();
             TestOutput.WriteLine(jsonString);
 
@@ -41,7 +43,7 @@ namespace Savvyio.EventDriven.Messaging.Cryptography
                              {
                                "id": "2d4030d32a254ee8a27046e5bafe696a",
                                "source": "https://fancy.api/members",
-                               "type": "Savvyio.EventDriven.Assets.MemberCreated, Savvyio.EventDriven.Tests",
+                               "type": "Savvyio.Assets.EventDriven.MemberCreated, Savvyio.Assets.Tests",
                                "time": "2023-11-16T23:24:17.8414532Z",
                                "data": {
                                  "name": "Jane Doe",
@@ -51,7 +53,7 @@ namespace Savvyio.EventDriven.Messaging.Cryptography
                                    "timestamp": "2023-11-16T23:24:17.8414532Z"
                                  }
                                },
-                               "signature": "c8393ba35d9fd7839ffcc0fef055aae5450ed4fed9c10b773e5ef209dd03b335"
+                               "signature": "29c15ce3ef20a18da73f1ba2a26118fdf90dfa8be81326a36a1817972592ebb8"
                              }
                              """.ReplaceLineEndings(), jsonString);
             }
@@ -61,7 +63,7 @@ namespace Savvyio.EventDriven.Messaging.Cryptography
                              {
                                "id": "2d4030d32a254ee8a27046e5bafe696a",
                                "source": "https://fancy.api/members",
-                               "type": "Savvyio.EventDriven.Assets.MemberCreated, Savvyio.EventDriven.Tests",
+                               "type": "Savvyio.Assets.EventDriven.MemberCreated, Savvyio.Assets.Tests",
                                "time": "2023-11-16T23:24:17.8414532Z",
                                "data": {
                                  "name": "Jane Doe",
@@ -71,7 +73,7 @@ namespace Savvyio.EventDriven.Messaging.Cryptography
                                    "timestamp": "2023-11-16T23:24:17.8414532Z"
                                  }
                                },
-                               "signature": "ce716b47cb6405e24be4200b12a5fc75d7e453189998352c8df5fadc81640018"
+                               "signature": "ddb014461c70aac8d8fdc346b152481e4c1a117e100b079428e498f2cebcf612"
                              }
                              """.ReplaceLineEndings(), jsonString);
             }

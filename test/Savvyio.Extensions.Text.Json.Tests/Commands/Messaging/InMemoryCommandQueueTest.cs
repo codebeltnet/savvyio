@@ -4,24 +4,26 @@ using System.Threading.Tasks;
 using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Newtonsoft.Json.Formatters;
+using Cuemon.Extensions.Text.Json.Formatters;
 using Cuemon.Extensions.Xunit;
 using Cuemon.Threading;
-using Savvyio.Commands.Assets;
+using Savvyio.Assets.Commands;
+using Savvyio.Commands;
+using Savvyio.Commands.Messaging;
 using Savvyio.Messaging;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Priority;
 
-namespace Savvyio.Commands.Messaging
+namespace Savvyio.Extensions.Text.Json.Commands.Messaging
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class MemoryCommandQueueTest : Test
+    public class InMemoryCommandQueueTest : Test
     {
-        private static readonly MemoryCommandQueue Queue = new();
+        private static readonly InMemoryCommandQueue Queue = new();
         private static readonly InMemoryTestStore<IMessage<ICommand>> Comparer = new();
 
-        public MemoryCommandQueueTest(ITestOutputHelper output) : base(output)
+        public InMemoryCommandQueueTest(ITestOutputHelper output) : base(output)
         {
         }
 
@@ -34,7 +36,7 @@ namespace Savvyio.Commands.Messaging
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
 
-            TestOutput.WriteLine(NewtonsoftJsonFormatter.SerializeObject(sut2).ToEncodedString());
+            TestOutput.WriteLine(JsonFormatter.SerializeObject(sut2).ToEncodedString());
 
             Comparer.Add(sut3);
 

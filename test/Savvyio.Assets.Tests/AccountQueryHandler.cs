@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Cuemon;
-using Savvyio.Assets.Events;
+using Savvyio.Assets.EventDriven;
 using Savvyio.Assets.Queries;
 using Savvyio.Data;
 using Savvyio.Handlers;

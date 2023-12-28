@@ -1,6 +1,6 @@
 ﻿using Savvyio.EventDriven;
 
-namespace Savvyio.Assets.Events
+namespace Savvyio.Assets.EventDriven
 {
     public record AccountUpdated : IntegrationEvent
     {

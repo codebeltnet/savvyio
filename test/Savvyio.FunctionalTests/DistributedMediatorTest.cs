@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Assets;
 using Savvyio.Assets.Commands;
 using Savvyio.Assets.Domain;
-using Savvyio.Assets.Events;
+using Savvyio.Assets.EventDriven;
 using Savvyio.Assets.Queries;
 using Savvyio.Commands;
 using Savvyio.Commands.Messaging;

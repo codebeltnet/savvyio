@@ -10,7 +10,7 @@ using Savvyio.Assets;
 using Savvyio.Assets.Commands;
 using Savvyio.Assets.Domain;
 using Savvyio.Assets.Domain.Events;
-using Savvyio.Assets.Events;
+using Savvyio.Assets.EventDriven;
 using Savvyio.Assets.Queries;
 using Savvyio.Domain;
 using Savvyio.EventDriven;

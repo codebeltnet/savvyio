@@ -1,6 +1,8 @@
-﻿namespace Savvyio.Commands.Assets
+﻿using Savvyio.Commands;
+
+namespace Savvyio.Assets.Commands
 {
-    internal record CreateMemberCommand : Command
+    public record CreateMemberCommand : Command
     {
         public CreateMemberCommand(string name, byte age, string emailAddress)
         {

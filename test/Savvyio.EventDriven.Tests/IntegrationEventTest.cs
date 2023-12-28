@@ -1,6 +1,6 @@
 ﻿using System;
 using Cuemon.Extensions.Xunit;
-using Savvyio.Assets.Events;
+using Savvyio.Assets.EventDriven;
 using Xunit;
 using Xunit.Abstractions;
 

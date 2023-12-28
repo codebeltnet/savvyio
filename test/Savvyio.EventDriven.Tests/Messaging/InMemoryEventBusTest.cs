@@ -7,7 +7,7 @@ using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Xunit;
 using Cuemon.Threading;
-using Savvyio.EventDriven.Assets;
+using Savvyio.Assets.EventDriven;
 using Savvyio.Messaging;
 using Xunit;
 using Xunit.Abstractions;
@@ -16,12 +16,12 @@ using Xunit.Priority;
 namespace Savvyio.EventDriven.Messaging
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class MemoryEventBusTest : Test
+    public class InMemoryEventBusTest : Test
     {
-        private static readonly MemoryEventBus Bus = new();
+        private static readonly InMemoryEventBus Bus = new();
         private static readonly InMemoryTestStore<IMessage<IIntegrationEvent>> Comparer = new();
 
-        public MemoryEventBusTest(ITestOutputHelper output) : base(output)
+        public InMemoryEventBusTest(ITestOutputHelper output) : base(output)
         {
         }
 
