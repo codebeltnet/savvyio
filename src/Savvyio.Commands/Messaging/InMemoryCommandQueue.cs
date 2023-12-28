@@ -11,7 +11,7 @@ namespace Savvyio.Commands.Messaging
     /// <summary>
     /// Provides an in-memory implementation of the <see cref="IPointToPointChannel{TRequest}"/> interface useful for unit testing and the likes thereof.
     /// </summary>
-    public class MemoryCommandQueue : IPointToPointChannel<ICommand>
+    public class InMemoryCommandQueue : IPointToPointChannel<ICommand>
     {
         private readonly Channel<IMessage<ICommand>> _channel = Channel.CreateUnbounded<IMessage<ICommand>>();
 

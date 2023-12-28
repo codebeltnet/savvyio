@@ -12,7 +12,7 @@ namespace Savvyio.EventDriven.Messaging
     /// <summary>
     /// Provides an in-memory implementation of the <see cref="IPublishSubscribeChannel{TRequest}"/> interface useful for unit testing and the likes thereof.
     /// </summary>
-    public class MemoryEventBus : IPublishSubscribeChannel<IIntegrationEvent>
+    public class InMemoryEventBus : IPublishSubscribeChannel<IIntegrationEvent>
     {
         private readonly Channel<IMessage<IIntegrationEvent>> _channel = Channel.CreateUnbounded<IMessage<IIntegrationEvent>>();
 
