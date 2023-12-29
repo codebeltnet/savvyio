@@ -16,7 +16,6 @@
     <ProjectReference Include="..\Savvyio.Core\Savvyio.Core.csproj" />
     <ProjectReference Include="..\Savvyio.Commands\Savvyio.Commands.csproj" />
     <ProjectReference Include="..\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
-    <ProjectReference Include="..\Savvyio.Extensions.Newtonsoft.Json\Savvyio.Extensions.Newtonsoft.Json.csproj" />
   </ItemGroup>
 
 </Project>

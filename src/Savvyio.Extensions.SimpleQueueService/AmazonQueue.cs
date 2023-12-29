@@ -18,22 +18,25 @@ namespace Savvyio.Extensions.SimpleQueueService
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonQueue{TRequest}"/> class.
         /// </summary>
+        /// <param name="serializerContext">The <see cref="ISerializerContext"/> that is used when converting models to messages.</param>
         /// <param name="setup">The <see cref="AmazonMessageOptions" /> which need to be configured.</param>
-        protected AmazonQueue(Action<AmazonMessageOptions> setup) : this(setup.Configure())
+        protected AmazonQueue(ISerializerContext serializerContext, Action<AmazonMessageOptions> setup) : this(serializerContext, setup.Configure())
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonQueue{TRequest}"/> class.
         /// </summary>
+        /// <param name="serializerContext">The <see cref="ISerializerContext"/> that is used when converting models to messages.</param>
         /// <param name="options">The configured <see cref="AmazonMessageOptions"/>.</param>
         /// <exception cref="ArgumentNullException">
+        /// <paramref name="serializerContext"/> cannot be null -or-
         /// <paramref name="options"/> cannot be null.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// <paramref name="options"/> are not in a valid state.
         /// </exception>
-        protected AmazonQueue(AmazonMessageOptions options) : base(options)
+        protected AmazonQueue(ISerializerContext serializerContext, AmazonMessageOptions options) : base(serializerContext, options)
         {
         }
 

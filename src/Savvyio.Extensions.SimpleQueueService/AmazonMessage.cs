@@ -11,10 +11,6 @@ using System;
 using System.Collections.Concurrent;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Newtonsoft.Json.Formatters;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Savvyio.Extensions.Newtonsoft.Json;
 
 namespace Savvyio.Extensions.SimpleQueueService
 {
@@ -38,16 +34,20 @@ namespace Savvyio.Extensions.SimpleQueueService
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonMessage{TRequest}"/> class.
         /// </summary>
+        /// <param name="serializerContext">The <see cref="ISerializerContext"/> that is used when converting models to messages.</param>
         /// <param name="options">The configured <see cref="AmazonMessageOptions"/>.</param>
         /// <exception cref="ArgumentNullException">
+        /// <paramref name="serializerContext"/> cannot be null -or-
         /// <paramref name="options"/> cannot be null.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// <paramref name="options"/> are not in a valid state.
         /// </exception>
-        protected AmazonMessage(AmazonMessageOptions options)
+        protected AmazonMessage(ISerializerContext serializerContext, AmazonMessageOptions options)
         {
+            Validator.ThrowIfNull(serializerContext);
             Validator.ThrowIfInvalidOptions(options, nameof(options));
+            SerializerContext = serializerContext;
             Options = options;
             UseFirstInFirstOut = options.SourceQueue.OriginalString.Contains(".fifo", StringComparison.OrdinalIgnoreCase);
         }
@@ -57,6 +57,12 @@ namespace Savvyio.Extensions.SimpleQueueService
         /// </summary>
         /// <value><c>true</c> if AWS SQS is configured for FIFO; otherwise, <c>false</c>.</value>
         protected bool UseFirstInFirstOut { get; }
+
+        /// <summary>
+        /// Gets the by constructor provided serializer context.
+        /// </summary>
+        /// <value>The by constructor provided serializer context.</value>
+        protected ISerializerContext SerializerContext { get; }
 
         /// <summary>
         /// Gets the configured <see cref="AmazonMessageOptions"/> of this instance.
@@ -127,20 +133,8 @@ namespace Savvyio.Extensions.SimpleQueueService
             foreach (var message in response.Messages)
             {
                 var dataType = Type.GetType(message.MessageAttributes[MessageAttributeTypeKey].StringValue);
-                var messageDataType = typeof(Message<>).MakeGenericType(dataType!);
-                var deserialized = NewtonsoftJsonFormatter.DeserializeObject(message.Body.ToStream(), messageDataType, o =>
-                {
-                    o.Settings.DateParseHandling = DateParseHandling.DateTime;
-                    o.Settings.ContractResolver = new CamelCasePropertyNamesContractResolver
-                    {
-                        IgnoreSerializableInterface = true,
-                        NamingStrategy = new CamelCaseNamingStrategy
-                        {
-                            ProcessDictionaryKeys = false
-                        }
-                    };
-                    o.Settings.Converters.AddMetadataDictionaryConverter();
-                });
+                var messageDataType = typeof(IMessage<>).MakeGenericType(dataType!);
+                var deserialized = SerializerContext.Deserialize(message.Body.ToStream(), messageDataType);
                 messages.Add(deserialized as IMessage<TRequest>);
             }
 

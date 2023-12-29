@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.Runtime;
-using Cuemon.Extensions.Newtonsoft.Json.Formatters;
 using Cuemon.Extensions;
 using Cuemon;
 using Cuemon.Extensions.IO;
@@ -11,7 +10,6 @@ using Cuemon.Extensions.Xunit;
 using Cuemon.Extensions.Xunit.Hosting;
 using Cuemon.Threading;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Savvyio.Commands;
 using Savvyio.Commands.Messaging;
 using Savvyio.Extensions.SimpleQueueService.Assets;
@@ -20,19 +18,24 @@ using Xunit;
 using Xunit.Abstractions;
 using Xunit.Priority;
 using System.Runtime.InteropServices;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Savvyio.Extensions.Newtonsoft.Json;
 
 namespace Savvyio.Extensions.SimpleQueueService.Commands
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class AmazonCommandQueueTest : HostTest<HostFixture>
+    public class AmazonCommandQueueNewtonsoftJsonSerializerContextTest : HostTest<HostFixture>
     {
         private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
         private readonly AmazonCommandQueue _queue;
         private static readonly InMemoryTestStore<IMessage<ICommand>> Comparer = new();
+        private readonly ISerializerContext _serializer;
 
-        public AmazonCommandQueueTest(HostFixture fixture, ITestOutputHelper output) : base(fixture, output)
+        public AmazonCommandQueueNewtonsoftJsonSerializerContextTest(HostFixture fixture, ITestOutputHelper output) : base(fixture, output)
         {
             _queue = fixture.ServiceProvider.GetRequiredService<AmazonCommandQueue>();
+            _serializer = fixture.ServiceProvider.GetRequiredService<ISerializerContext>();
         }
 
         [Fact, Priority(0)]
@@ -44,7 +47,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
 
-            TestOutput.WriteLine(NewtonsoftJsonFormatter.SerializeObject(sut2).ToEncodedString());
+            TestOutput.WriteLine(_serializer.Serialize(sut2).ToEncodedString());
 
             Comparer.Add(sut3);
 
@@ -100,13 +103,35 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            var queue = IsLinux ? "savvyio-commands" : "savvyio-commands.fifo";
-            services.AddSingleton(new AmazonCommandQueue(new OptionsWrapper<AmazonCommandQueueOptions>(new AmazonCommandQueueOptions
+            services.AddTransient<ISerializerContext, NewtonsoftJsonSerializerContext>(_ =>
             {
-                Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]),
-                Endpoint = RegionEndpoint.EUWest1,
-                SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}")
-            })));
+                var newtonsoftjsonSerializer = new NewtonsoftJsonSerializerContext(o =>
+                {
+                    o.Settings.DateParseHandling = DateParseHandling.DateTime;
+                    o.Settings.ContractResolver = new CamelCasePropertyNamesContractResolver
+                    {
+                        IgnoreSerializableInterface = true,
+                        NamingStrategy = new CamelCaseNamingStrategy
+                        {
+                            ProcessDictionaryKeys = false
+                        }
+                    };
+                    o.Settings.Converters
+                        .AddMessageConverter()
+                        .AddMetadataDictionaryConverter();
+                });
+                return newtonsoftjsonSerializer;
+            });
+
+            services.Configure<AmazonCommandQueueOptions>(o =>
+            {
+                var queue = IsLinux ? "newtonsoft-savvyio-commands" : "newtonsoft-savvyio-commands.fifo";
+                o.Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]);
+                o.Endpoint = RegionEndpoint.EUWest1;
+                o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}");
+            });
+
+            services.AddScoped<AmazonCommandQueue>();
         }
     }
 }

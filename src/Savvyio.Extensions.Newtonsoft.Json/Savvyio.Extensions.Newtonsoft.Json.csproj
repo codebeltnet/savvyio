@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>Extend the Savvy I/O core assemblies with support for Newtonsoft JSON.</Description>
-    <PackageTags>json converters converter</PackageTags>
+    <PackageTags>newtonsoft json converters converter</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

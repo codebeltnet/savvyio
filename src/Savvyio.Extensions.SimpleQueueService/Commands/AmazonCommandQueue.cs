@@ -5,7 +5,6 @@ using Amazon.SQS;
 using Amazon.SQS.Model;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Newtonsoft.Json.Formatters;
 using Cuemon.Threading;
 using Microsoft.Extensions.Options;
 using Savvyio.Commands;
@@ -22,8 +21,16 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonCommandQueue"/> class.
         /// </summary>
+        /// <param name="serializerContext">The <see cref="ISerializerContext"/> that is used when converting <see cref="ICommand"/> implementations to messages.</param>
         /// <param name="options">The <see cref="AmazonCommandQueueOptions" /> which need to be configured.</param>
-        public AmazonCommandQueue(IOptions<AmazonCommandQueueOptions> options) : base(options.Value)
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="serializerContext"/> cannot be null -or-
+        /// <paramref name="options"/> cannot be null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="options"/> are not in a valid state.
+        /// </exception>
+        public AmazonCommandQueue(ISerializerContext serializerContext, IOptions<AmazonCommandQueueOptions> options) : base(serializerContext, options.Value)
         {
         }
 
@@ -42,7 +49,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
                 QueueUrl = Options.SourceQueue.OriginalString,
                 MessageGroupId = UseFirstInFirstOut ? command.Source : null,
                 MessageDeduplicationId = UseFirstInFirstOut ? command.Id : null,
-                MessageBody = await NewtonsoftJsonFormatter.SerializeObject(command).ToEncodedStringAsync().ConfigureAwait(false),
+                MessageBody = await SerializerContext.Serialize(command).ToEncodedStringAsync().ConfigureAwait(false),
                 MessageAttributes = new Dictionary<string, MessageAttributeValue>
                 {
                     {

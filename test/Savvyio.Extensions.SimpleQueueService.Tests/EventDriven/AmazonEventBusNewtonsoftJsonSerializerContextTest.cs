@@ -11,9 +11,11 @@ using Cuemon.Extensions.Xunit;
 using Cuemon.Extensions.Xunit.Hosting;
 using Cuemon.Threading;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 using Savvyio.EventDriven;
 using Savvyio.EventDriven.Messaging;
+using Savvyio.Extensions.Newtonsoft.Json;
 using Savvyio.Extensions.SimpleQueueService.Assets;
 using Savvyio.Messaging;
 using Xunit;
@@ -23,13 +25,13 @@ using Xunit.Priority;
 namespace Savvyio.Extensions.SimpleQueueService.EventDriven
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class AmazonEventBusTest : HostTest<HostFixture>
+    public class AmazonEventBusNewtonsoftJsonSerializerContextTest : HostTest<HostFixture>
     {
         private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
         private readonly AmazonEventBus _bus;
         private static readonly InMemoryTestStore<IMessage<IIntegrationEvent>> Comparer = new();
 
-        public AmazonEventBusTest(HostFixture fixture, ITestOutputHelper output) : base(fixture, output)
+        public AmazonEventBusNewtonsoftJsonSerializerContextTest(HostFixture fixture, ITestOutputHelper output) : base(fixture, output)
         {
             _bus = fixture.ServiceProvider.GetRequiredService<AmazonEventBus>();
         }
@@ -38,7 +40,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         public async Task PublishAsync_MemberCreated_OneTime()
         {
             var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
-            var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
+            var sut2 = (IsLinux ? "newtonsoft-member-events-one" : "newtonsoft-member-events-one.fifo").ToSnsUri();
             var sut3 = sut1.ToMessage(sut2);
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
@@ -52,7 +54,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         public async Task SubscribeAsync_MemberCreated_OneTime()
         {
             var handlerInvocations = 0;
-            var sut1 = Comparer.Query(message => message.Source.Contains("member-events-one")).Single();
+            var sut1 = Comparer.Query(message => message.Source.Contains("newtonsoft-member-events-one")).Single();
             
             await _bus.SubscribeAsync((sut2, _) =>
             {
@@ -73,7 +75,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var messages = Generate.RangeOf(100, _ =>
             {
                 var email = $"{Generate.RandomString(5)}@outlook.com";
-                return new MemberCreated(Generate.RandomString(10), email).ToMessage((IsLinux ? "member-events-many" : "member-events-many.fifo").ToSnsUri());
+                return new MemberCreated(Generate.RandomString(10), email).ToMessage((IsLinux ? "newtonsoft-member-events-many" : "newtonsoft-member-events-many.fifo").ToSnsUri());
             });
 
             await ParallelFactory.ForEachAsync(messages, (message, token) =>
@@ -86,7 +88,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         [Fact, Priority(3)]
         public async Task SubscribeAsync_MemberCreated_All()
         {
-            var sut1 = Comparer.Query(message => message.Source.Contains("member-events-many")).ToList();
+            var sut1 = Comparer.Query(message => message.Source.Contains("newtonsoft-member-events-many")).ToList();
             var sut2 = new List<IMessage<IIntegrationEvent>>();
             var sut3 = new CancellationTokenSource(TimeSpan.FromSeconds(30));
 
@@ -107,14 +109,37 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            var queue = IsLinux ? "savvyio-events" : "savvyio-events.fifo";
-            services.AddSingleton(new AmazonEventBus(new OptionsWrapper<AmazonEventBusOptions>(new AmazonEventBusOptions
-            {
-                Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]),
-                Endpoint = RegionEndpoint.EUWest1,
-                SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}")
-            })));
             AmazonResourceNameOptions.DefaultAccountId = Configuration["AWS:CallerIdentity"];
+            
+            services.AddTransient<ISerializerContext, NewtonsoftJsonSerializerContext>(_ =>
+            {
+                var newtonsoftjsonSerializer = new NewtonsoftJsonSerializerContext(o =>
+                {
+                    o.Settings.DateParseHandling = DateParseHandling.DateTime;
+                    o.Settings.ContractResolver = new CamelCasePropertyNamesContractResolver
+                    {
+                        IgnoreSerializableInterface = true,
+                        NamingStrategy = new CamelCaseNamingStrategy
+                        {
+                            ProcessDictionaryKeys = true
+                        }
+                    };
+                    o.Settings.Converters
+                        .AddMessageConverter()
+                        .AddMetadataDictionaryConverter();
+                });
+                return newtonsoftjsonSerializer;
+            });
+
+            services.Configure<AmazonEventBusOptions>(o =>
+            {
+                var queue = IsLinux ? "newtonsoft-savvyio-events" : "newtonsoft-savvyio-events.fifo";
+                o.Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]);
+                o.Endpoint = RegionEndpoint.EUWest1;
+                o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}");
+            });
+
+            services.AddScoped<AmazonEventBus>();
         }
     }
 }
