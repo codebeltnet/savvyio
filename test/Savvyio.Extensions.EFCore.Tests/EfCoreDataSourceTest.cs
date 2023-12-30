@@ -11,12 +11,11 @@ using Savvyio.Assets.Domain.Events;
 using Savvyio.Assets.Domain.Handlers;
 using Savvyio.Domain;
 using Savvyio.Extensions.DependencyInjection;
-using Savvyio.Extensions.EFCore;
 using Savvyio.Extensions.EFCore.Domain;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions.Storage
+namespace Savvyio.Extensions.EFCore
 {
     public class EfCoreDataSourceTest : Test
     {

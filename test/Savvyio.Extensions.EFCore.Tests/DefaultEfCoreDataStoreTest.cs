@@ -4,11 +4,10 @@ using Cuemon.Extensions.Xunit;
 using Microsoft.EntityFrameworkCore;
 using Savvyio.Assets;
 using Savvyio.Assets.Domain;
-using Savvyio.Extensions.EFCore;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions.Storage
+namespace Savvyio.Extensions.EFCore
 {
     public class DefaultEfCoreDataStoreTest : Test
     {

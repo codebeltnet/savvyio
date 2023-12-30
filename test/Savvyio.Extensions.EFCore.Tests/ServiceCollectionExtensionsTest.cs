@@ -10,11 +10,10 @@ using Savvyio.Domain;
 using Savvyio.Extensions.DependencyInjection.Data;
 using Savvyio.Extensions.DependencyInjection.Domain;
 using Savvyio.Extensions.DependencyInjection.EFCore;
-using Savvyio.Extensions.EFCore;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions.Storage
+namespace Savvyio.Extensions.EFCore
 {
     public class ServiceCollectionExtensionsTest : Test
     {

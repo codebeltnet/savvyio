@@ -1,9 +1,8 @@
 ﻿using Cuemon.Extensions.Xunit;
-using Savvyio.Extensions.EFCore;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions.Storage
+namespace Savvyio.Extensions.EFCore
 {
     public class EfCoreDataSourceOptionsTest : Test
     {

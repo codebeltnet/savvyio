@@ -6,11 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Savvyio.Assets;
 using Savvyio.Assets.Domain;
 using Savvyio.Extensions.DependencyInjection.EFCore;
-using Savvyio.Extensions.EFCore;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions.Storage
+namespace Savvyio.Extensions.EFCore
 {
     public class EfCoreRepositoryTest : Test
     {
