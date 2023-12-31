@@ -21,7 +21,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging
         {
             var utcNow = DateTime.UtcNow;
             var sut1 = new MemberCreated("Jane Doe", "jd@office.com").SetEventId("69bccf3b1117425397c5ed9ed757bb0f").SetTimestamp(utcNow);
-            var sut2 = sut1.ToMessage("https://fancy.api/members".ToUri(), o =>
+            var sut2 = sut1.ToMessage("https://fancy.api/members".ToUri(), nameof(MemberCreated), o =>
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utcNow;
@@ -34,12 +34,13 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging
                            {
                              "id": "2d4030d32a254ee8a27046e5bafe696a",
                              "source": "https://fancy.api/members",
-                             "type": "Savvyio.Assets.EventDriven.MemberCreated, Savvyio.Assets.Tests",
+                             "type": "MemberCreated",
                              "time": "{{utcNow:O}}",
                              "data": {
                                "name": "Jane Doe",
                                "emailAddress": "jd@office.com",
                                "metadata": {
+                                 "memberType": "Savvyio.Assets.EventDriven.MemberCreated, Savvyio.Assets.Tests",
                                  "eventId": "69bccf3b1117425397c5ed9ed757bb0f",
                                  "timestamp": "{{utcNow:O}}"
                                }

@@ -29,7 +29,7 @@ namespace Savvyio.Messaging.Cryptography
             var uuid = Guid.NewGuid();
             var fullName = "John Doe";
             var email = "jdoe@me.com";
-            var message = new Message<CreateAccount>("MyId", "uri:source".ToUri(), new CreateAccount(uuid, fullName, email));
+            var message = new Message<CreateAccount>("MyId", "uri:source".ToUri(), nameof(CreateAccount), new CreateAccount(uuid, fullName, email));
             var ex = Assert.Throws<ArgumentNullException>(() => new SignedMessage<CreateAccount>(message, null));
 
             TestOutput.WriteLine(ex.Message);
@@ -43,7 +43,7 @@ namespace Savvyio.Messaging.Cryptography
             var uuid = Guid.NewGuid();
             var fullName = "John Doe";
             var email = "jdoe@me.com";
-            var message = new Message<CreateAccount>("MyId", "uri:source".ToUri(), new CreateAccount(uuid, fullName, email));
+            var message = new Message<CreateAccount>("MyId", "uri:source".ToUri(), nameof(CreateAccount), new CreateAccount(uuid, fullName, email));
             var ex = Assert.Throws<ArgumentException>(() => new SignedMessage<CreateAccount>(message, string.Empty));
             
             TestOutput.WriteLine(ex.Message);
@@ -57,7 +57,7 @@ namespace Savvyio.Messaging.Cryptography
             var uuid = Guid.NewGuid();
             var fullName = "John Doe";
             var email = "jdoe@me.com";
-            var message = new Message<CreateAccount>("MyId", "uri:source".ToUri(), new CreateAccount(uuid, fullName, email));
+            var message = new Message<CreateAccount>("MyId", "uri:source".ToUri(), nameof(CreateAccount), new CreateAccount(uuid, fullName, email));
             var ex = Assert.Throws<ArgumentException>(() => new SignedMessage<CreateAccount>(message, " "));
 
             TestOutput.WriteLine(ex.Message);
@@ -71,7 +71,7 @@ namespace Savvyio.Messaging.Cryptography
             var uuid = Guid.NewGuid();
             var fullName = "John Doe";
             var email = "jdoe@me.com";
-            var message = new Message<CreateAccount>("MyId", "uri:source".ToUri(), new CreateAccount(uuid, fullName, email));
+            var message = new Message<CreateAccount>("MyId", "uri:source".ToUri(), nameof(CreateAccount), new CreateAccount(uuid, fullName, email));
             var signature = "signature";
             var signedMessage = new SignedMessage<CreateAccount>(message, signature);
 

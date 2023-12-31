@@ -25,7 +25,7 @@ namespace Savvyio.Extensions.Text.Json.Commands.Messaging.Cryptography
         {
             var utc = DateTime.Parse("2023-11-16T23:24:17.8414532Z", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
             var sut1 = new CreateMemberCommand("Jane Doe", 21, "jd@office.com").SetCorrelationId("3eefdef050c340bfba100bd49c58c181");
-            var sut2 = sut1.ToMessage("https://fancy.api/members".ToUri(), o =>
+            var sut2 = sut1.ToMessage("https://fancy.api/members".ToUri(), nameof(CreateMemberCommand), o =>
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
@@ -74,17 +74,18 @@ namespace Savvyio.Extensions.Text.Json.Commands.Messaging.Cryptography
                              {
                                "id": "2d4030d32a254ee8a27046e5bafe696a",
                                "source": "https://fancy.api/members",
-                               "type": "Savvyio.Assets.Commands.CreateMemberCommand, Savvyio.Assets.Tests",
+                               "type": "CreateMemberCommand",
                                "time": "2023-11-16T23:24:17.8414532Z",
                                "data": {
                                  "name": "Jane Doe",
                                  "age": 21,
                                  "emailAddress": "jd@office.com",
                                  "metadata": {
+                                   "memberType": "Savvyio.Assets.Commands.CreateMemberCommand, Savvyio.Assets.Tests",
                                    "correlationId": "3eefdef050c340bfba100bd49c58c181"
                                  }
                                },
-                               "signature": "c81ef53400b1abe68353e5ca951631cb76a0af6e49bb1240989501fb3294efbd"
+                               "signature": "c5811da11b12d000fa72f60b626d88c7544e95c121df840f9d1bb16ded7d2eea"
                              }
                              """, jsonString);
             }

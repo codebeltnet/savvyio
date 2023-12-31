@@ -27,7 +27,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
         {
             var utc = DateTime.Parse("2023-11-16T23:24:17.8414532Z", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
             var sut1 = new MemberCreated("Jane Doe", "jd@office.com").SetEventId("69bccf3b1117425397c5ed9ed757bb0f").SetTimestamp(utc);
-            var sut2 = sut1.ToMessage("https://fancy.api/members".ToUri(), o =>
+            var sut2 = sut1.ToMessage("https://fancy.api/members".ToUri(), nameof(MemberCreated), o =>
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
@@ -56,12 +56,13 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
                              {
                                "id": "2d4030d32a254ee8a27046e5bafe696a",
                                "source": "https://fancy.api/members",
-                               "type": "Savvyio.Assets.EventDriven.MemberCreated, Savvyio.Assets.Tests",
+                               "type": "MemberCreated",
                                "time": "2023-11-16T23:24:17.8414532Z",
                                "data": {
                                  "name": "Jane Doe",
                                  "emailAddress": "jd@office.com",
                                  "metadata": {
+                                   "memberType": "Savvyio.Assets.EventDriven.MemberCreated, Savvyio.Assets.Tests",
                                    "eventId": "69bccf3b1117425397c5ed9ed757bb0f",
                                    "timestamp": "2023-11-16T23:24:17.8414532Z"
                                  }
@@ -76,17 +77,18 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
                              {
                                "id": "2d4030d32a254ee8a27046e5bafe696a",
                                "source": "https://fancy.api/members",
-                               "type": "Savvyio.Assets.EventDriven.MemberCreated, Savvyio.Assets.Tests",
+                               "type": "MemberCreated",
                                "time": "2023-11-16T23:24:17.8414532Z",
                                "data": {
                                  "name": "Jane Doe",
                                  "emailAddress": "jd@office.com",
                                  "metadata": {
+                                   "memberType": "Savvyio.Assets.EventDriven.MemberCreated, Savvyio.Assets.Tests",
                                    "eventId": "69bccf3b1117425397c5ed9ed757bb0f",
                                    "timestamp": "2023-11-16T23:24:17.8414532Z"
                                  }
                                },
-                               "signature": "ddb014461c70aac8d8fdc346b152481e4c1a117e100b079428e498f2cebcf612"
+                               "signature": "40f2e00e66dd02014ba535e0bbff9fa04954bcbcf2f3fce69f688bd64583ee50"
                              }
                              """.ReplaceLineEndings(), jsonString);
             }

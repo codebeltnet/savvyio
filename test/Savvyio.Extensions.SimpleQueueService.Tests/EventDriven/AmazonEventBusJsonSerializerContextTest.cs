@@ -13,6 +13,7 @@ using Cuemon.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.EventDriven;
 using Savvyio.EventDriven.Messaging;
+using Savvyio.Extensions.DependencyInjection;
 using Savvyio.Extensions.SimpleQueueService.Assets;
 using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging;
@@ -39,7 +40,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         {
             var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
             var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
-            var sut3 = sut1.ToMessage(sut2);
+            var sut3 = sut1.ToMessage(sut2, nameof(MemberCreated));
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
 
@@ -73,7 +74,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var messages = Generate.RangeOf(100, _ =>
             {
                 var email = $"{Generate.RandomString(5)}@outlook.com";
-                return new MemberCreated(Generate.RandomString(10), email).ToMessage((IsLinux ? "member-events-many" : "member-events-many.fifo").ToSnsUri());
+                return new MemberCreated(Generate.RandomString(10), email).ToMessage((IsLinux ? "member-events-many" : "member-events-many.fifo").ToSnsUri(), nameof(MemberCreated));
             });
 
             await ParallelFactory.ForEachAsync(messages, (message, token) =>
@@ -109,16 +110,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         {
             AmazonResourceNameOptions.DefaultAccountId = Configuration["AWS:CallerIdentity"];
             
-            services.AddTransient<ISerializerContext, JsonSerializerContext>(_ =>
-            {
-                var textjsonSerializer = new JsonSerializerContext(o =>
-                {
-                    o.Settings.Converters
-                        .AddMessageConverter()
-                        .AddMetadataDictionaryConverter();
-                });
-                return textjsonSerializer;
-            });
+            services.AddSerializer<JsonSerializerContext>();
 
             services.Configure<AmazonEventBusOptions>(o =>
             {

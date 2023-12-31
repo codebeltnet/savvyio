@@ -31,7 +31,7 @@ namespace Savvyio.Commands.Messaging
         {
             var sut1 = new CreateMemberCommand("John Doe", 44, "jd@outlook.com");
             var sut2 = "https://fancy.io/members".ToUri();
-            var sut3 = sut1.ToMessage(sut2);
+            var sut3 = sut1.ToMessage(sut2, nameof(CreateMemberCommand));
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
 
@@ -61,7 +61,7 @@ namespace Savvyio.Commands.Messaging
             var messages = Generate.RangeOf(1000, i =>
             {
                 var email = $"{Generate.RandomString(5)}@outlook.com";
-                return new CreateMemberCommand(Generate.RandomString(10), (byte)Generate.RandomNumber(byte.MaxValue), email).ToMessage($"urn:{i}:{email}".ToUri());
+                return new CreateMemberCommand(Generate.RandomString(10), (byte)Generate.RandomNumber(byte.MaxValue), email).ToMessage($"urn:{i}:{email}".ToUri(), nameof(CreateMemberCommand));
             });
 
             await ParallelFactory.ForEachAsync(messages, (message, token) =>

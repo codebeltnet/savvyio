@@ -22,9 +22,9 @@ namespace Savvyio.Messaging
         public string Source { get; }
 
         /// <summary>
-        /// Gets the underlying type of the enclosed <see cref="Data"/>.
+        /// Gets the type that describes the type of event related to the originating occurrence.
         /// </summary>
-        /// <value>The underlying type of the enclosed <see cref="Data"/>.</value>
+        /// <value>The type that describes the type of event related to the originating occurrence.</value>
         string Type { get; }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Savvyio.Messaging
         DateTime? Time { get; }
 
         /// <summary>
-        /// Gets the payload of the message. The payload depends on the <see cref="Type"/>.
+        /// Gets the payload of the message.
         /// </summary>
         /// <value>The payload of the message.</value>
         T Data { get; }

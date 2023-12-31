@@ -24,7 +24,7 @@ namespace Savvyio.Messaging
             var dataNumber = Generate.RandomNumber();
             var data = new RootDummyRequest(dataUuid, dataNumber);
             var utcNow = DateTime.UtcNow;
-            var sut = new Message<Request>(id, source, data);
+            var sut = new Message<Request>(id, source, nameof(RootDummyRequest), data);
 
             TestOutput.WriteLine(sut.Data.ToString());
 
@@ -32,7 +32,8 @@ namespace Savvyio.Messaging
             Assert.Equal(id, sut.Id);
             Assert.Equal(source.OriginalString, sut.Source);
             Assert.Equal(data, sut.Data);
-            Assert.Equal(data.GetType().ToFullNameIncludingAssemblyName(), sut.Type);
+            Assert.Equal(data.GetType().ToFullNameIncludingAssemblyName(), sut.Data.GetMemberType());
+            Assert.Equal(nameof(RootDummyRequest), sut.Type);
             Assert.Equal(DateTimeKind.Utc, convertedTime.Value.Kind);
             Assert.InRange(convertedTime.Value, utcNow.Subtract(TimeSpan.FromSeconds(2)), utcNow.Add(TimeSpan.FromSeconds(2)));
         }
@@ -45,9 +46,10 @@ namespace Savvyio.Messaging
             var dataUuid = Guid.NewGuid();
             var dataNumber = Generate.RandomNumber();
             var dataType = typeof(DummyRequest);
-            var data = new RootDummyRequest(dataUuid, dataNumber);
+            var type = "com.example.someevent";
+            var data = new RootDummyRequest(dataUuid, dataNumber).SetMemberType(dataType);
             var utcNow = DateTime.UtcNow;
-            var sut1 = new Message<Request>(id, source, data, dataType, utcNow);
+            var sut1 = new Message<Request>(id, source, type, data, utcNow);
 
             TestOutput.WriteLine(sut1.Data.ToString());
 
@@ -55,7 +57,8 @@ namespace Savvyio.Messaging
             Assert.Equal(id, sut1.Id);
             Assert.Equal(source.OriginalString, sut1.Source);
             Assert.Equal(data, sut1.Data);
-            Assert.Equal(dataType.ToFullNameIncludingAssemblyName(), sut1.Type);
+            Assert.Equal(type, sut1.Type);
+            Assert.Equal(dataType.ToFullNameIncludingAssemblyName(), sut1.Data.GetMemberType());
             Assert.Equal(DateTimeKind.Utc, convertedTime.Value.Kind);
             Assert.Equal(utcNow, convertedTime);
         }

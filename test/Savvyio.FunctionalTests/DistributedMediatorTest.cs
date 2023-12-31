@@ -69,7 +69,7 @@ namespace Savvyio
 
                 var commandQueue = host.ServiceProvider.GetRequiredService<IPointToPointChannel<ICommand>>();
 
-                await commandQueue.SendAsync(createAccount.ToMessage("urn:command:create-account".ToUri())).ConfigureAwait(false);
+                await commandQueue.SendAsync(createAccount.ToMessage("urn:command:create-account".ToUri(), nameof(createAccount))).ConfigureAwait(false);
             }
         }
 

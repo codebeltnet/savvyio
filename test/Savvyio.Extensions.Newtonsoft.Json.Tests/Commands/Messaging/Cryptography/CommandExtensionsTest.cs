@@ -25,7 +25,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Commands.Messaging.Cryptography
         {
             var utc = DateTime.Parse("2023-11-16T23:24:17.8414532Z", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
             var sut1 = new CreateMemberCommand("Jane Doe", 21, "jd@office.com").SetCorrelationId("3eefdef050c340bfba100bd49c58c181");
-            var sut2 = sut1.ToMessage("https://fancy.api/members".ToUri(), o =>
+            var sut2 = sut1.ToMessage("https://fancy.api/members".ToUri(), nameof(CreateMemberCommand), o =>
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
@@ -56,13 +56,14 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Commands.Messaging.Cryptography
                              {
                                "id": "2d4030d32a254ee8a27046e5bafe696a",
                                "source": "https://fancy.api/members",
-                               "type": "Savvyio.Assets.Commands.CreateMemberCommand, Savvyio.Assets.Tests",
+                               "type": "CreateMemberCommand",
                                "time": "2023-11-16T23:24:17.8414532Z",
                                "data": {
                                  "name": "Jane Doe",
                                  "age": 21,
                                  "emailAddress": "jd@office.com",
                                  "metadata": {
+                                   "memberType": "Savvyio.Assets.Commands.CreateMemberCommand, Savvyio.Assets.Tests",
                                    "correlationId": "3eefdef050c340bfba100bd49c58c181"
                                  }
                                },
@@ -76,17 +77,18 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Commands.Messaging.Cryptography
                              {
                                "id": "2d4030d32a254ee8a27046e5bafe696a",
                                "source": "https://fancy.api/members",
-                               "type": "Savvyio.Assets.Commands.CreateMemberCommand, Savvyio.Assets.Tests",
+                               "type": "CreateMemberCommand",
                                "time": "2023-11-16T23:24:17.8414532Z",
                                "data": {
                                  "name": "Jane Doe",
                                  "age": 21,
                                  "emailAddress": "jd@office.com",
                                  "metadata": {
+                                   "memberType": "Savvyio.Assets.Commands.CreateMemberCommand, Savvyio.Assets.Tests",
                                    "correlationId": "3eefdef050c340bfba100bd49c58c181"
                                  }
                                },
-                               "signature": "41b0f82f5ed643c720e3ea177c194b62e37afc43177a2db35acb19a7aded0e7b"
+                               "signature": "8d15d927f35b57f8e89392952e43e5cca32d240902c01bc00baaa819f71c5a5a"
                              }
                              """, jsonString);
             }

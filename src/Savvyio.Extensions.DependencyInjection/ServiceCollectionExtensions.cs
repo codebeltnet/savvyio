@@ -29,7 +29,7 @@ namespace Savvyio.Extensions.DependencyInjection
             return services.Add<TService>(o =>
             {
                 o.Lifetime = options.Lifetime;
-                o.UseNestedTypeForwarding = false;
+                o.NestedTypePredicate = type => type.HasInterfaces(typeof(ISerializerContext));
             });
         }
 

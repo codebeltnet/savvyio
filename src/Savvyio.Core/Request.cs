@@ -12,6 +12,7 @@
         /// </summary>
         protected Request()
         {
+            this.SetMemberType(GetType());
         }
 
         /// <summary>

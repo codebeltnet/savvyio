@@ -1,4 +1,5 @@
 ﻿using System;
+using Cuemon.Extensions.Reflection;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Commands;
 using Savvyio.Assets.Domain;
@@ -21,14 +22,21 @@ namespace Savvyio.Domain
             var idString = id.ToString("N");
             var fullname = "Michael Mortensen";
             var email = "root@gimlichael.dev";
+            var fakeMemberType = typeof(UpdateAccount);
 
             var command = new CreateAccount(id, fullname, email)
                 .SetCausationId(idString)
-                .SetCorrelationId(idString);
+                .SetCorrelationId(idString)
+                .SetMemberType(fakeMemberType);
             
             var sut = new Account(command.PlatformProviderId, command.FullName, command.EmailAddress).MergeMetadata(command);
             
             Assert.Collection(sut.Metadata, 
+                pair =>
+                {
+                    Assert.Equal(pair.Key, MetadataDictionary.MemberType);
+                    Assert.Equal(pair.Value, fakeMemberType.ToFullNameIncludingAssemblyName());
+                },
                 pair =>
                 {
                     Assert.Equal(pair.Key, MetadataDictionary.CorrelationId);
@@ -40,7 +48,7 @@ namespace Savvyio.Domain
                     Assert.Equal(pair.Value, idString);
                 });
 
-            Assert.True(sut.Metadata.Count == 2, "sut.Metadata.Count == 2");
+            Assert.True(sut.Metadata.Count == 3, "sut.Metadata.Count == 3");
         }
 
         [Fact]

@@ -31,7 +31,6 @@ namespace Savvyio.Messaging
 		{
 			MessageId = Guid.NewGuid().ToString("N");
             Time = null;
-            Type = null;
         }
 
 		/// <summary>
@@ -39,12 +38,6 @@ namespace Savvyio.Messaging
 		/// </summary>
 		/// <value>The identifier of the message.</value>
 		public string MessageId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the underlying type of the message payload.
-		/// </summary>
-		/// <value>The underlying type of the message payload.</value>
-		public Type Type { get; set; }
 
 		/// <summary>
 		/// Gets or sets the time, expressed as the Coordinated Universal Time (UTC), of the message.

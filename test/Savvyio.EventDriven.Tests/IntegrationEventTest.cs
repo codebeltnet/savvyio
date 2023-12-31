@@ -1,4 +1,5 @@
 ﻿using System;
+using Cuemon.Extensions.Reflection;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.EventDriven;
 using Xunit;
@@ -29,6 +30,11 @@ namespace Savvyio.EventDriven
             Assert.Collection(sut.Metadata, 
                 kvp =>
                 {
+                    Assert.Equal(kvp.Key, MetadataDictionary.MemberType);
+                    Assert.Equal(kvp.Value, sut.GetType().ToFullNameIncludingAssemblyName());
+                },
+                kvp =>
+                {
                     Assert.Equal(kvp.Key, MetadataDictionary.EventId);
                     Assert.Equal(kvp.Value, eventId);
                 },
@@ -37,7 +43,7 @@ namespace Savvyio.EventDriven
                     Assert.Equal(kvp.Key, MetadataDictionary.Timestamp);
                     Assert.Equal(kvp.Value, sut.GetTimestamp());
                 });
-            Assert.True(sut.Metadata.Count == 2, "sut.Metadata.Count == 2");
+            Assert.True(sut.Metadata.Count == 3, "sut.Metadata.Count == 3");
         }
     }
 }

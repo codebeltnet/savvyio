@@ -56,13 +56,14 @@ namespace Savvyio.Extensions.Text.Json.Converters
             {
                 var id = document.RootElement.GetProperty("id").GetString();
                 var source = document.RootElement.GetProperty("source").GetString().ToUri();
-                var type = typeToConvert.GenericTypeArguments[0];
+                var type = document.RootElement.GetProperty("type").GetString();
+                var memberType = typeToConvert.GenericTypeArguments[0];
                 var time = document.RootElement.GetProperty("time").GetDateTime();
-                var data = (T)document.RootElement.GetProperty("data").Deserialize(type!, options);
+                var data = (T)document.RootElement.GetProperty("data").Deserialize(memberType!, options);
                 if (data is IMetadata) // for unknown reasons, Microsoft does not use the custom converter for IMetadataDictionary here; have to fiddle extra around as seen below .. for the record; this just works with Newtonsoft!
                 { 
                     var md = document.RootElement.GetProperty("data").GetProperty("metadata").Deserialize<IMetadataDictionary>(options);
-                    var property = type.GetAllProperties().SingleOrDefault(pi => pi.Name == nameof(IMetadata.Metadata));
+                    var property = memberType.GetAllProperties().SingleOrDefault(pi => pi.Name == nameof(IMetadata.Metadata));
                     if (property != null)
                     {
                         if (property.CanWrite)
@@ -71,12 +72,12 @@ namespace Savvyio.Extensions.Text.Json.Converters
                         }
                         else
                         {
-                            type.GetAllFields().SingleOrDefault(fi => fi.Name.Contains(nameof(IMetadata.Metadata)))?.SetValue(data, md);
+                            memberType.GetAllFields().SingleOrDefault(fi => fi.Name.Contains(nameof(IMetadata.Metadata)))?.SetValue(data, md);
                         }
                     }
                 }
 
-                var message = new Message<T>(id, source, data, type, time);
+                var message = new Message<T>(id, source, type, data, time);
                 if (typeToConvert == typeof(ISignedMessage<T>))
                 {
                     var signature = document.RootElement.GetProperty("signature").GetString();

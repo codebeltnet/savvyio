@@ -30,7 +30,7 @@ namespace Savvyio.EventDriven.Messaging
         {
             var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
             var sut2 = "urn:member-events:1".ToUri();
-            var sut3 = sut1.ToMessage(sut2);
+            var sut3 = sut1.ToMessage(sut2, nameof(MemberCreated));
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
 
@@ -60,7 +60,7 @@ namespace Savvyio.EventDriven.Messaging
             var messages = Generate.RangeOf(1000, i =>
             {
                 var email = $"{Generate.RandomString(5)}@outlook.com";
-                return new MemberCreated(Generate.RandomString(10), email).ToMessage($"urn:member-events-many:{i}".ToUri());
+                return new MemberCreated(Generate.RandomString(10), email).ToMessage($"urn:member-events-many:{i}".ToUri(), nameof(MemberCreated));
             });
 
             await ParallelFactory.ForEachAsync(messages, (message, token) =>

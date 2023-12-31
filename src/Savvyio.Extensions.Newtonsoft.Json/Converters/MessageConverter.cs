@@ -59,11 +59,12 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
             var document = JObject.Load(reader);
             var id = document.Root["id"].Value<string>();
             var source = document.Root["source"].Value<string>().ToUri();
-            var type = Type.GetType(document.Root["type"].Value<string>());
+            var type = document.Root["type"].Value<string>();
+            var memberType = Type.GetType(document.Root["data"]["metadata"]["memberType"].Value<string>());
             var time = document.Root["time"].Value<DateTime>();
-            var data = (T)serializer.Deserialize(document.Root["data"].CreateReader(), type);
+            var data = (T)serializer.Deserialize(document.Root["data"].CreateReader(), memberType);
             
-            var message = new Message<T>(id, source, data, type, time);
+            var message = new Message<T>(id, source, type, data, time);
             if (objectType == typeof(ISignedMessage<T>))
             {
                 var signature = document.Root["signature"].Value<string>();

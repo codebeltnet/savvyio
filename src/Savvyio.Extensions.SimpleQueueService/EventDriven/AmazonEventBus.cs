@@ -58,7 +58,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                         MessageAttributeTypeKey, new MessageAttributeValue
                         {
                             DataType = "String",
-                            StringValue = @event.Type
+                            StringValue = @event.Data.GetMemberType()
                         }
                     }
                 }

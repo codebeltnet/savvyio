@@ -29,9 +29,10 @@ namespace Savvyio.Domain
             Assert.Equal(account.PlatformProviderId, sut.PlatformProviderId);
             Assert.Empty(account.Metadata);
             Assert.Collection(sut.Metadata.Keys,
+                s => Assert.Equal(s, MetadataDictionary.MemberType),
                 s => Assert.Equal(s, MetadataDictionary.EventId),
                 s => Assert.Equal(s, MetadataDictionary.Timestamp));
-                Assert.True(sut.Metadata.Count == 2, "sut.Metadata.Count == 2");
+                Assert.True(sut.Metadata.Count == 3, "sut.Metadata.Count == 3");
             Assert.InRange(DateTime.UtcNow, sut.GetTimestamp(), ts.AddSeconds(1));
         }
 
@@ -54,12 +55,13 @@ namespace Savvyio.Domain
             Assert.Equal(account.FullName, sut.FullName);
             Assert.Equal(account.PlatformProviderId, sut.PlatformProviderId);
             Assert.Collection(sut.Metadata.Keys, 
+                s => Assert.Equal(s, MetadataDictionary.MemberType),
                 s => Assert.Equal(s, MetadataDictionary.EventId),
                 s => Assert.Equal(s, MetadataDictionary.Timestamp),
                 s => Assert.Equal(s, "Key1"),
                 s => Assert.Equal(s, "Key2"),
                 s => Assert.Equal(s, MetadataDictionary.CorrelationId));;
-            Assert.True(sut.Metadata.Count == 5, "sut.Metadata.Count == 5");
+            Assert.True(sut.Metadata.Count == 6, "sut.Metadata.Count == 6");
             Assert.InRange(DateTime.UtcNow, sut.GetTimestamp(), ts.AddSeconds(1));
         }
     }

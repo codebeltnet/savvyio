@@ -41,7 +41,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         {
             var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
             var sut2 = (IsLinux ? "newtonsoft-member-events-one" : "newtonsoft-member-events-one.fifo").ToSnsUri();
-            var sut3 = sut1.ToMessage(sut2);
+            var sut3 = sut1.ToMessage(sut2, nameof(MemberCreated));
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
 
@@ -75,7 +75,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var messages = Generate.RangeOf(100, _ =>
             {
                 var email = $"{Generate.RandomString(5)}@outlook.com";
-                return new MemberCreated(Generate.RandomString(10), email).ToMessage((IsLinux ? "newtonsoft-member-events-many" : "newtonsoft-member-events-many.fifo").ToSnsUri());
+                return new MemberCreated(Generate.RandomString(10), email).ToMessage((IsLinux ? "newtonsoft-member-events-many" : "newtonsoft-member-events-many.fifo").ToSnsUri(), nameof(MemberCreated));
             });
 
             await ParallelFactory.ForEachAsync(messages, (message, token) =>
@@ -124,9 +124,6 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                             ProcessDictionaryKeys = true
                         }
                     };
-                    o.Settings.Converters
-                        .AddMessageConverter()
-                        .AddMetadataDictionaryConverter();
                 });
                 return newtonsoftjsonSerializer;
             });

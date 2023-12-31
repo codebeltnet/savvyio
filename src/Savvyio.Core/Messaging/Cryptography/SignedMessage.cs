@@ -33,34 +33,20 @@ namespace Savvyio.Messaging.Cryptography
 			Data = message.Data;
 			Signature = signature;
 		}
-        /// <summary>
-        /// Gets the identifier of the message. When combined with <see cref="Source" />, this enables deduplication.
-        /// </summary>
-        /// <value>The identifier of the message.</value>
+
+        /// <inheritdoc />
         public string Id { get; }
 
-        /// <summary>
-        /// Gets the context that describes the origin of the message. When combined with <see cref="Id" />, this enables deduplication.
-        /// </summary>
-        /// <value>The context that describes the origin of the message.</value>
+        /// <inheritdoc />
         public string Source { get; }
 
-        /// <summary>
-        /// Gets the underlying type of the enclosed <see cref="Data" />.
-        /// </summary>
-        /// <value>The underlying type of the enclosed <see cref="Data" />.</value>
+        /// <inheritdoc />
         public string Type { get; }
 
-        /// <summary>
-        /// Gets the time, expressed as the Coordinated Universal Time (UTC), at which this message was generated.
-        /// </summary>
-        /// <value>The time at which this message was generated.</value>
+        /// <inheritdoc />
         public DateTime? Time { get; }
 
-        /// <summary>
-        /// Gets the payload of the message. The payload depends on the <see cref="Type" />.
-        /// </summary>
-        /// <value>The payload of the message.</value>
+        /// <inheritdoc />
         public T Data { get; }
 
         /// <summary>

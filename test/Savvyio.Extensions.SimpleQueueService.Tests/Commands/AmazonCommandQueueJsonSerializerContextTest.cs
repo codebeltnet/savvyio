@@ -18,6 +18,7 @@ using Xunit;
 using Xunit.Abstractions;
 using Xunit.Priority;
 using System.Runtime.InteropServices;
+using Savvyio.Extensions.DependencyInjection;
 using Savvyio.Extensions.Text.Json;
 
 namespace Savvyio.Extensions.SimpleQueueService.Commands
@@ -41,7 +42,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
         {
             var sut1 = new CreateMemberCommand("John Doe", 44, "jd@outlook.com");
             var sut2 = "https://fancy.io/members".ToUri();
-            var sut3 = sut1.ToMessage(sut2);
+            var sut3 = sut1.ToMessage(sut2, nameof(CreateMemberCommand));
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
 
@@ -71,7 +72,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
             var messages = Generate.RangeOf(1000, i =>
             {
                 var email = $"{Generate.RandomString(5)}@outlook.com";
-                return new CreateMemberCommand(Generate.RandomString(10), (byte)Generate.RandomNumber(byte.MaxValue), email).ToMessage($"urn:{i}:{email}".ToUri());
+                return new CreateMemberCommand(Generate.RandomString(10), (byte)Generate.RandomNumber(byte.MaxValue), email).ToMessage($"urn:{i}:{email}".ToUri(), nameof(CreateMemberCommand));
             });
 
             await ParallelFactory.ForEachAsync(messages, async (message, token) =>
@@ -101,16 +102,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<ISerializerContext, JsonSerializerContext>(_ =>
-            {
-                var textjsonSerializer = new JsonSerializerContext(o =>
-                {
-                    o.Settings.Converters
-                        .AddMessageConverter()
-                        .AddMetadataDictionaryConverter();
-                });
-                return textjsonSerializer;
-            });
+            services.AddSerializer<JsonSerializerContext>();
 
             services.Configure<AmazonCommandQueueOptions>(o =>
             {

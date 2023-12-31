@@ -1,6 +1,5 @@
 ﻿using System;
 using Cuemon;
-using Cuemon.Extensions.Reflection;
 
 namespace Savvyio.Messaging
 {
@@ -17,58 +16,46 @@ namespace Savvyio.Messaging
         /// <param name="id">The identifier of the message.</param>
         /// <param name="source">The context that describes the origin of the message.</param>
         /// <param name="data">The payload of the message.</param>
-        /// <param name="type">The underlying type of the enclosed <paramref name="data"/>.</param>
+        /// <param name="type">The type that describes the type of event related to the originating occurrence.</param>
         /// <param name="time">The time at which this message was generated.</param>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="id"/> cannot be null - or -
         /// <paramref name="source"/> cannot be null - or -
+        /// <paramref name="type"/> cannot be null - or -
         /// <paramref name="data"/> cannot be null.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// <paramref name="id"/> cannot be empty or consist only of white-space characters - or -
+        /// <paramref name="type"/> cannot be empty or consist only of white-space characters - or -
         /// <paramref name="time"/> was not expressed as the Coordinated Universal Time (UTC).
         /// </exception>
-        public Message(string id, Uri source, T data, Type type = null, DateTime? time = null)
+        public Message(string id, Uri source, string type, T data, DateTime? time = null)
         {
             Validator.ThrowIfNullOrWhitespace(id);
             Validator.ThrowIfNull(source);
+            Validator.ThrowIfNullOrWhitespace(type);
             Validator.ThrowIfNull(data);
             Validator.ThrowIfTrue(() => time.HasValue && time.Value.Kind != DateTimeKind.Utc, nameof(time), "Time must be expressed as the Coordinated Universal Time (UTC).");
             Id = id;
             Source = source.OriginalString;
+            Type = type;
             Data = data;
-            Type = (type ?? data.GetType()).ToFullNameIncludingAssemblyName();
             Time = (time ?? DateTime.UtcNow);
         }
 
-        /// <summary>
-        /// Gets the identifier of the message. When combined with <see cref="Source" />, this enables deduplication.
-        /// </summary>
-        /// <value>The identifier of the message.</value>
+        /// <inheritdoc />
         public string Id { get; }
 
-        /// <summary>
-        /// Gets the context that describes the origin of the message. When combined with <see cref="Id" />, this enables deduplication.
-        /// </summary>
-        /// <value>The context that describes the origin of the message.</value>
+        /// <inheritdoc />
         public string Source { get; }
 
-        /// <summary>
-        /// Gets the underlying type of the enclosed <see cref="Data" />.
-        /// </summary>
-        /// <value>The underlying type of the enclosed <see cref="Data" />.</value>
+        /// <inheritdoc />
         public string Type { get; }
 
-        /// <summary>
-        /// Gets the time, expressed as the Coordinated Universal Time (UTC), at which the message was generated.
-        /// </summary>
-        /// <value>The time at which the message was generated.</value>
+        /// <inheritdoc />
         public DateTime? Time { get; }
 
-        /// <summary>
-        /// Gets the payload of the message. The payload depends on the <see cref="Type" />.
-        /// </summary>
-        /// <value>The payload of the message.</value>
+        /// <inheritdoc />
         public T Data { get; }
     }
 }

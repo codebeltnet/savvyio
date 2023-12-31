@@ -33,6 +33,18 @@ namespace Savvyio
         }
 
         /// <summary>
+        /// Gets the string representation of the underlying member type of <paramref name="request"/>.
+        /// </summary>
+        /// <typeparam name="T">The model that implements the <see cref="IMetadata"/> interface.</typeparam>
+        /// <param name="request">The <see cref="IMetadata"/> to extend.</param>
+        /// <returns>The string representation of the member type from the <paramref name="request"/>.</returns>
+        /// <remarks>The underlying <see cref="Type"/> of a model expressed as a string representation (fully qualified name of the type, including its namespace, comma delimited with the simple name of the assembly).</remarks>
+        public static string GetMemberType<T>(this T request) where T : IMetadata
+        {
+            return MetadataFactory.Get(request, MetadataDictionary.MemberType).As<string>();
+        }
+
+        /// <summary>
         /// Assigns a new <paramref name="causationId"/> to the <paramref name="request"/>.
         /// </summary>
         /// <typeparam name="T">The model that implements the <see cref="IMetadata"/> interface.</typeparam>
