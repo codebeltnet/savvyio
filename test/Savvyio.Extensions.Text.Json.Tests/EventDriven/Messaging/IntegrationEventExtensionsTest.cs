@@ -26,7 +26,7 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utcNow;
             });
-            var json = JsonFormatter.SerializeObject(sut2);
+            var json = JsonFormatter.SerializeObject(sut2, o => o.Settings.Converters.AddDateTimeConverter());
             var jsonString = json.ToEncodedString();
             TestOutput.WriteLine(jsonString);
 

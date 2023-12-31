@@ -67,7 +67,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Commands.Messaging.Cryptography
                                    "correlationId": "3eefdef050c340bfba100bd49c58c181"
                                  }
                                },
-                               "signature": "869a217f20a7688c24cd11c7e2ffbdfd07be460bb512e4f0963b0defd07b104f"
+                               "signature": "194374d817b2b3f9f8ea1ce6557bbb4a96200de2a759270df96d2a20cb28cdae"
                              }
                              """.ReplaceLineEndings(), jsonString);
             }

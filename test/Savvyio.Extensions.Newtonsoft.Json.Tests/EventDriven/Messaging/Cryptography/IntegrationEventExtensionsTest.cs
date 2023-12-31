@@ -67,7 +67,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
                                    "timestamp": "2023-11-16T23:24:17.8414532Z"
                                  }
                                },
-                               "signature": "29c15ce3ef20a18da73f1ba2a26118fdf90dfa8be81326a36a1817972592ebb8"
+                               "signature": "f1aa38c6af66575aec152472e74e1d70d49da3c4e27a82a20eb94320c9cd22a4"
                              }
                              """.ReplaceLineEndings(), jsonString);
             }

@@ -39,7 +39,9 @@ namespace Savvyio.Extensions.Text.Json.Converters
                         }
                         else
                         {
-                            var field = typeToConvert.GetAllFields().SingleOrDefault(fi => fi.Name.Contains(property.Name));
+                            var field = property.IsAutoProperty()
+                                ? typeToConvert.GetAllFields().SingleOrDefault(fi => fi.Name.StartsWith($"<{property.Name}>"))
+                                : typeToConvert.GetAllFields().SingleOrDefault(fi => fi.Name.Equals($"_{property.Name}>", StringComparison.OrdinalIgnoreCase));
                             if (field != null)
                             {
                                 field.SetValue(instance, value);

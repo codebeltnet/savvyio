@@ -21,14 +21,17 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
         where TEntity : class, IEntity<TKey>, ITracedAggregateRoot<TKey>
     {
         private readonly EfCoreRepository<EfCoreTracedAggregateEntity<TEntity, TKey>, TKey> _repository;
+        private readonly ISerializerContext _serializerContext;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreTracedAggregateRepository{TEntity, TKey}"/> class.
         /// </summary>
         /// <param name="source">The <see cref="IEfCoreDataSource"/> that handles actual I/O communication with a source of data.</param>
-        public EfCoreTracedAggregateRepository(IEfCoreDataSource source)
+        /// <param name="serializerContext">The <see cref="ISerializerContext"/> that is used when converting between <see cref="ITracedDomainEvent"/> and arbitrary data.</param>
+        public EfCoreTracedAggregateRepository(IEfCoreDataSource source, ISerializerContext serializerContext)
         {
             _repository = new EfCoreRepository<EfCoreTracedAggregateEntity<TEntity, TKey>, TKey>(source);
+            _serializerContext = serializerContext;
         }
 
         /// <summary>
@@ -43,7 +46,7 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
         public async Task<TEntity> GetByIdAsync(TKey id, Action<AsyncOptions> setup = null)
         {
             var entities = await _repository.FindAllAsync(entity => entity.Id.Equals(id), setup).ConfigureAwait(false);
-            var events = entities.OrderBy(entity => entity.Version).Select(entity => entity.ToTracedDomainEvent(Type.GetType(entity.Type)));
+            var events = entities.OrderBy(entity => entity.Version).Select(entity => entity.ToTracedDomainEvent(Type.GetType(entity.Type), _serializerContext));
             try
             {
                 return ActivatorFactory.CreateInstance<TKey, IEnumerable<ITracedDomainEvent>, TEntity>(id, events, o => o.Flags = new MemberReflection());
@@ -62,7 +65,7 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
         {
             foreach (var current in entity.Events)
             {
-                _repository.Add(new EfCoreTracedAggregateEntity<TEntity, TKey>(entity, current));
+                _repository.Add(new EfCoreTracedAggregateEntity<TEntity, TKey>(entity, current, _serializerContext));
             }
             entity.RemoveAllEvents();
         }

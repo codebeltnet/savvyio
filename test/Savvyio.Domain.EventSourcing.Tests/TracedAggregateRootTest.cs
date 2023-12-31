@@ -13,10 +13,14 @@ using Savvyio.Assets.Domain.Events;
 using Savvyio.Assets.Domain.EventSourcing;
 using Savvyio.Assets.Domain.Handlers;
 using Savvyio.Extensions.DependencyInjection;
+using Savvyio.Extensions.DependencyInjection.Domain.EventSourcing;
+using Savvyio.Extensions.DependencyInjection.EFCore;
 using Savvyio.Extensions.DependencyInjection.EFCore.Domain;
 using Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing;
 using Savvyio.Extensions.EFCore;
 using Savvyio.Extensions.EFCore.Domain.EventSourcing;
+using Savvyio.Extensions.Newtonsoft.Json;
+using Savvyio.Extensions.Text.Json;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -66,29 +70,57 @@ namespace Savvyio.Domain.EventSourcing
             Assert.Equal(3, sut.Events.Count);
         }
 
-        [Fact]
-        public async Task EfCoreDataStore_ShouldRaiseDomainEventsAndDehydrateEventsToStorage()
+        [Theory]
+        [InlineData(typeof(NewtonsoftJsonSerializerContext))]
+        [InlineData(typeof(JsonSerializerContext))]
+        public async Task EfCoreDataStore_ShouldRaiseDomainEventsAndDehydrateEventsToStorage(Type formatterType)
         {
             string schema = null;
             var sc = new ServiceCollection();
             sc.AddSavvyIO(o => o.AddDomainEventDispatcher().AddDomainEventHandler<AccountDomainEventHandler>());
-            sc.AddEfCoreAggregateDataSource(o =>
+
+            switch (formatterType)
             {
-                o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy").EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
-                o.ModelConstructor = mb =>
-                {
-                    mb.AddEventSourcing<TracedAccount, Guid>(eo => eo.TableName = $"{nameof(TracedAccount)}_DomainEvents");
-                    schema = mb.Model.ToDebugString(MetadataDebugStringOptions.LongDefault);
-                    TestOutput.WriteLine(schema);
-                };
-            });
-            sc.AddEfCoreTracedAggregateRepository<TracedAccount, Guid>();
-            sc.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
+                case Type newton when newton == typeof(NewtonsoftJsonSerializerContext):
+                    sc.AddSerializer<NewtonsoftJsonSerializerContext>();
+                    sc.AddEfCoreAggregateDataSource<NewtonsoftJsonSerializerContext>(o =>
+                    {
+                        o.ContextConfigurator = b => b.UseInMemoryDatabase($"Dummy").EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
+                        o.ModelConstructor = mb =>
+                        {
+                            mb.AddEventSourcing<TracedAccount, Guid>(eo => eo.TableName = $"{nameof(TracedAccount)}_DomainEvents");
+                            schema = mb.Model.ToDebugString(MetadataDebugStringOptions.LongDefault);
+                            TestOutput.WriteLine(schema);
+                        };
+                    });
+                    sc.AddEfCoreTracedAggregateRepository<TracedAccount, Guid, NewtonsoftJsonSerializerContext>();
+                    break;
+                case Type builtin when builtin == typeof(JsonSerializerContext):
+                    sc.AddSerializer<JsonSerializerContext>();
+                    sc.AddEfCoreAggregateDataSource<JsonSerializerContext>(o =>
+                    {
+                        o.ContextConfigurator = b => b.UseInMemoryDatabase($"Dummy").EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
+                        o.ModelConstructor = mb =>
+                        {
+                            mb.AddEventSourcing<TracedAccount, Guid>(eo => eo.TableName = $"{nameof(TracedAccount)}_DomainEvents");
+                            schema = mb.Model.ToDebugString(MetadataDebugStringOptions.LongDefault);
+                            TestOutput.WriteLine(schema);
+                        };
+                    });
+                    sc.AddEfCoreTracedAggregateRepository<TracedAccount, Guid, JsonSerializerContext>();
+                    break;
+            }
             
+            sc.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
+
             var sp = sc.BuildServiceProvider();
 
-            var ds = sp.GetRequiredService<IEfCoreDataSource>();
-            var sut4 = sp.GetRequiredService<ITracedAggregateRepository<TracedAccount, Guid>>();
+            var ds = formatterType == typeof(NewtonsoftJsonSerializerContext) 
+                ? sp.GetRequiredService<IEfCoreDataSource<NewtonsoftJsonSerializerContext>>() as IEfCoreDataSource
+                : sp.GetRequiredService<IEfCoreDataSource<JsonSerializerContext>>() as IEfCoreDataSource;
+            var sut4 = formatterType == typeof(NewtonsoftJsonSerializerContext)
+                ? sp.GetRequiredService<ITracedAggregateRepository<TracedAccount, Guid, NewtonsoftJsonSerializerContext>>() as ITracedAggregateRepository<TracedAccount, Guid>
+                : sp.GetRequiredService<ITracedAggregateRepository<TracedAccount, Guid, JsonSerializerContext>>() as ITracedAggregateRepository<TracedAccount, Guid>;
 
             var id = Guid.NewGuid();
             var providerId = Guid.NewGuid();
@@ -101,7 +133,7 @@ namespace Savvyio.Domain.EventSourcing
             {
                 ta.ChangeEmailAddress($"{Generate.RandomString(8)}@gimlichael.dev");
             }
-            
+
             ta.ChangeEmailAddress("root@gimlichael.dev");
 
             sut4.Add(ta);

@@ -54,17 +54,18 @@ namespace Savvyio.Extensions.Text.Json.Commands.Messaging.Cryptography
                              {
                                "id": "2d4030d32a254ee8a27046e5bafe696a",
                                "source": "https://fancy.api/members",
-                               "type": "Savvyio.Assets.Commands.CreateMemberCommand, Savvyio.Assets.Tests",
+                               "type": "CreateMemberCommand",
                                "time": "2023-11-16T23:24:17.8414532Z",
                                "data": {
                                  "name": "Jane Doe",
                                  "age": 21,
                                  "emailAddress": "jd@office.com",
                                  "metadata": {
+                                   "memberType": "Savvyio.Assets.Commands.CreateMemberCommand, Savvyio.Assets.Tests",
                                    "correlationId": "3eefdef050c340bfba100bd49c58c181"
                                  }
                                },
-                               "signature": "7dd0057afb708575df6446e1ef01b8ba8f28d999180642acff3998716a1d1c4f"
+                               "signature": "ade785c5110355c7ee39147c13dd4e1b8a162d905150aa53aa4b47eeeb663aee"
                              }
                              """.ReplaceLineEndings(), jsonString);
             }

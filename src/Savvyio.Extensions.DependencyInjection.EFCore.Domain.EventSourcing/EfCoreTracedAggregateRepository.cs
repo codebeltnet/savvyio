@@ -21,7 +21,8 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
         /// Initializes a new instance of the <see cref="EfCoreTracedAggregateRepository{TEntity, TKey, TMarker}"/> class.
         /// </summary>
         /// <param name="source">The <see cref="IEfCoreDataSource{TMarker}"/> that handles actual I/O communication with a source of data.</param>
-        public EfCoreTracedAggregateRepository(IEfCoreDataSource<TMarker> source) : base(source)
+        /// <param name="serializerContext">The <see cref="ISerializerContext"/> that is used when converting between <see cref="ITracedDomainEvent"/> and arbitrary data.</param>
+        public EfCoreTracedAggregateRepository(IEfCoreDataSource<TMarker> source, ISerializerContext serializerContext) : base(source, serializerContext)
         {
         }
     }

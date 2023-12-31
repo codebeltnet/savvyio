@@ -1,9 +1,6 @@
 ﻿using System;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Newtonsoft.Json.Formatters;
-using Newtonsoft.Json.Serialization;
 using Savvyio.Domain.EventSourcing;
-using Savvyio.Extensions.Newtonsoft.Json;
 
 namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
 {
@@ -17,24 +14,13 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
         /// </summary>
         /// <typeparam name="TEntity">The type of the entity that implements the <see cref="ITracedAggregateRoot{TKey}"/> interface.</typeparam>
         /// <typeparam name="TKey">The type of the key that uniquely identifies the entity.</typeparam>
-        /// <param name="entity">The entity.</param>
-        /// <param name="tracedDomainEventType">The target.</param>
-        /// <returns>ITracedDomainEvent.</returns>
-        public static ITracedDomainEvent ToTracedDomainEvent<TEntity, TKey>(this EfCoreTracedAggregateEntity<TEntity, TKey> entity, Type tracedDomainEventType) where TEntity : class, ITracedAggregateRoot<TKey>
+        /// <param name="entity">The entity to convert.</param>
+        /// <param name="tracedDomainEventType">The originating type of <see cref="ITracedDomainEvent"/>.</param>
+        /// <param name="serializerContext">The <see cref="ISerializerContext"/> that is used when converting the specified <paramref name="tracedDomainEventType"/> into a deserialized version of <see cref="ITracedDomainEvent"/>.</param>
+        /// <returns>A new instance of an <see cref="ITracedDomainEvent"/> implementation.</returns>
+        public static ITracedDomainEvent ToTracedDomainEvent<TEntity, TKey>(this EfCoreTracedAggregateEntity<TEntity, TKey> entity, Type tracedDomainEventType, ISerializerContext serializerContext) where TEntity : class, ITracedAggregateRoot<TKey>
         {
-            var formatter = new NewtonsoftJsonFormatter(o =>
-            {
-                o.Settings.ContractResolver = new CamelCasePropertyNamesContractResolver
-                {
-                    IgnoreSerializableInterface = true,
-                    NamingStrategy = new CamelCaseNamingStrategy
-                    {
-                        ProcessDictionaryKeys = false
-                    }
-                };
-                o.Settings.Converters.AddMetadataDictionaryConverter();
-            });
-            return (ITracedDomainEvent)formatter.Deserialize(entity.Payload.ToStream(), tracedDomainEventType);
+            return (ITracedDomainEvent)serializerContext.Deserialize(entity.Payload.ToStream(), tracedDomainEventType);
         }
     }
 }

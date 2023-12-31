@@ -1,4 +1,5 @@
-﻿using Cuemon.Extensions.Xunit;
+﻿using Cuemon.Extensions.Reflection;
+using Cuemon.Extensions.Xunit;
 using Savvyio.Queries.Assets;
 using Xunit;
 using Xunit.Abstractions;
@@ -22,7 +23,11 @@ namespace Savvyio.Queries
             Assert.IsAssignableFrom<Request>(sut);
             Assert.IsAssignableFrom<IRequest>(sut);
             Assert.IsAssignableFrom<IMetadata>(sut);
-            Assert.Empty(sut.Metadata);
+            Assert.Collection(sut.Metadata, pair =>
+            {
+                Assert.Equal(MetadataDictionary.MemberType, pair.Key);
+                Assert.Equal(typeof(DefaultQuery<string>).ToFullNameIncludingAssemblyName(), pair.Value);
+            });
         }
     }
 }

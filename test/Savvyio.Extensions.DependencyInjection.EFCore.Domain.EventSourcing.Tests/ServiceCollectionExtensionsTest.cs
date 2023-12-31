@@ -9,6 +9,8 @@ using Savvyio.Domain.EventSourcing;
 using Savvyio.Extensions.DependencyInjection.Domain;
 using Savvyio.Extensions.DependencyInjection.Domain.EventSourcing;
 using Savvyio.Extensions.EFCore.Domain.EventSourcing;
+using Savvyio.Extensions.Newtonsoft.Json;
+using Savvyio.Extensions.Text.Json;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -24,6 +26,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
         public void AddEfCoreTracedAggregateRepository_ShouldHaveTypeForwardedImplementations()
         {
             var sut1 = new ServiceCollection();
+            sut1.AddSerializer<NewtonsoftJsonSerializerContext>();
             sut1.AddEfCoreDataSource(o => o.ContextConfigurator = b => b.UseInMemoryDatabase("fake"));
             sut1.AddEfCoreTracedAggregateRepository<TracedAccount, Guid>();
             var sut2 = sut1.BuildServiceProvider();
@@ -37,6 +40,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
         public void AddEfCoreTracedAggregateRepository_ShouldHaveTypeForwardedImplementationsWithMarker()
         {
             var sut1 = new ServiceCollection();
+            sut1.AddSerializer<JsonSerializerContext>();
             sut1.AddEfCoreDataSource<DbMarker>(o => o.ContextConfigurator = b => b.UseInMemoryDatabase("fake"));
             sut1.AddEfCoreTracedAggregateRepository<TracedAccount, Guid, DbMarker>();
             var sut2 = sut1.BuildServiceProvider();

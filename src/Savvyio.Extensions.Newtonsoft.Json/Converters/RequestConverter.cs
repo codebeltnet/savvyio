@@ -48,7 +48,9 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
                     }
                     else
                     {
-                        var field = objectType.GetAllFields().SingleOrDefault(fi => fi.Name.Contains(property.Name));
+                        var field = property.IsAutoProperty()
+                            ? objectType.GetAllFields().SingleOrDefault(fi => fi.Name.StartsWith($"<{property.Name}>"))
+                            : objectType.GetAllFields().SingleOrDefault(fi => fi.Name.Equals($"_{property.Name}>", StringComparison.OrdinalIgnoreCase));
                         if (field != null)
                         {
                             field.SetValue(instance, value);
