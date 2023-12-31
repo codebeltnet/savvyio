@@ -14,6 +14,7 @@
     <ProjectReference Include="..\Savvyio.Domain.EventSourcing\Savvyio.Domain.EventSourcing.csproj" />
     <ProjectReference Include="..\Savvyio.Domain\Savvyio.Domain.csproj" />
     <ProjectReference Include="..\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.CloudEvents\Savvyio.Extensions.CloudEvents.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.Dapper\Savvyio.Extensions.Dapper.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.Dapper\Savvyio.Extensions.DependencyInjection.Dapper.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.Domain\Savvyio.Extensions.DependencyInjection.Domain.csproj" />
@@ -26,7 +27,9 @@
     <ProjectReference Include="..\Savvyio.Extensions.EFCore.Domain.EventSourcing\Savvyio.Extensions.EFCore.Domain.EventSourcing.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.EFCore.Domain\Savvyio.Extensions.EFCore.Domain.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.EFCore\Savvyio.Extensions.EFCore.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.Newtonsoft.Json\Savvyio.Extensions.Newtonsoft.Json.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.SimpleQueueService\Savvyio.Extensions.SimpleQueueService.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.Text.Json\Savvyio.Extensions.Text.Json.csproj" />
     <ProjectReference Include="..\Savvyio.Queries\Savvyio.Queries.csproj" />
   </ItemGroup>
 
