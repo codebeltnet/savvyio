@@ -4,7 +4,9 @@ using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Text.Json.Formatters;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Commands;
+using Savvyio.Commands;
 using Savvyio.Commands.Messaging;
+using Savvyio.Messaging;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -26,10 +28,21 @@ namespace Savvyio.Extensions.Text.Json.Commands.Messaging
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utcNow;
             });
+
             var json = JsonFormatter.SerializeObject(sut2);
-            var jsonString = json.ToEncodedString();
+            var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
+
+            
+            var sut4 = JsonFormatter.DeserializeObject<IMessage<CreateMemberCommand>>(json, o =>
+            {
+                o.Settings.Converters
+                    .AddMessageConverter()
+                    .AddMetadataDictionaryConverter();
+            });
+
+            Assert.Equivalent(sut2, sut4, true);
 
             Assert.Equal($$"""
                          {

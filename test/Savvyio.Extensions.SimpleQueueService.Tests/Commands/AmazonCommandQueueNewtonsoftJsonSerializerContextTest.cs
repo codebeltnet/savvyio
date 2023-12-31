@@ -107,7 +107,6 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
             {
                 var newtonsoftjsonSerializer = new NewtonsoftJsonSerializerContext(o =>
                 {
-                    o.Settings.DateParseHandling = DateParseHandling.DateTime;
                     o.Settings.ContractResolver = new CamelCasePropertyNamesContractResolver
                     {
                         IgnoreSerializableInterface = true,

@@ -9,8 +9,10 @@ using Savvyio.Extensions.DependencyInjection.Messaging;
 using Savvyio.Extensions.DependencyInjection.SimpleQueueService.Assets;
 using Savvyio.Extensions.DependencyInjection.SimpleQueueService.Commands;
 using Savvyio.Extensions.DependencyInjection.SimpleQueueService.EventDriven;
+using Savvyio.Extensions.Newtonsoft.Json;
 using Savvyio.Extensions.SimpleQueueService.Commands;
 using Savvyio.Extensions.SimpleQueueService.EventDriven;
+using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging;
 using Xunit;
 using Xunit.Abstractions;
@@ -27,6 +29,7 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
         public void AddAmazonCommandQueue_ShouldAddDefaultImplementation()
         {
             var sut1 = new ServiceCollection();
+            sut1.AddSerializer<NewtonsoftJsonSerializerContext>();
             sut1.AddAmazonCommandQueue(o =>
             {
                 o.Credentials = new AnonymousAWSCredentials();
@@ -44,6 +47,7 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
         public void AddAmazonCommandQueue_ShouldAddDefaultImplementationWithMarker()
         {
             var sut1 = new ServiceCollection();
+            sut1.AddSerializer<JsonSerializerContext>();
             sut1.AddAmazonCommandQueue<QueueMarker>(o =>
             {
                 o.Credentials = new AnonymousAWSCredentials();
@@ -61,6 +65,7 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
         public void AddAmazonEventBus_ShouldAddDefaultImplementation()
         {
             var sut1 = new ServiceCollection();
+            sut1.AddSerializer<NewtonsoftJsonSerializerContext>();
             sut1.AddAmazonEventBus(o =>
             {
                 o.Credentials = new AnonymousAWSCredentials();
@@ -78,6 +83,7 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
         public void AddAmazonEventBus_ShouldAddDefaultImplementationWithMarker()
         {
             var sut1 = new ServiceCollection();
+            sut1.AddSerializer<JsonSerializerContext>();
             sut1.AddAmazonEventBus<BusMarker>(o =>
             {
                 o.Credentials = new AnonymousAWSCredentials();

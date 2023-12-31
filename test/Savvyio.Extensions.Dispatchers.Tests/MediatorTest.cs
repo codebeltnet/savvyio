@@ -21,7 +21,7 @@ using Savvyio.Queries;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions
+namespace Savvyio.Extensions.Dispatchers
 {
     public class MediatorTest : Test
     {

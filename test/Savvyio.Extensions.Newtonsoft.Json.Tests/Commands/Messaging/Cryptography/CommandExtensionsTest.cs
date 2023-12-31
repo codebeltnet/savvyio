@@ -31,9 +31,8 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Commands.Messaging.Cryptography
                 o.Time = utc;
             });
 
-            var sut3 = sut2.Sign(o =>
+            var sut3 = sut2.Sign(new NewtonsoftJsonSerializerContext(), o =>
             {
-                o.SerializerFactory = message => NewtonsoftJsonFormatter.SerializeObject(message);
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
 
@@ -42,7 +41,12 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Commands.Messaging.Cryptography
 
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = NewtonsoftJsonFormatter.DeserializeObject<Message<CreateMemberCommand>>(json, o => o.Settings.Converters.AddMetadataDictionaryConverter());
+            var sut4 = NewtonsoftJsonFormatter.DeserializeObject<IMessage<CreateMemberCommand>>(json, o =>
+            {
+                o.Settings.Converters
+                    .AddMessageConverter()
+                    .AddMetadataDictionaryConverter();
+            });
 
             Assert.Equivalent(sut2, sut4, true);
 

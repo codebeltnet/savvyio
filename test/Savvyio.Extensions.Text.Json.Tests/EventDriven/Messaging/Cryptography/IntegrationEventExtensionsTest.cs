@@ -28,9 +28,8 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging.Cryptography
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
-            }).Sign(o =>
+            }).Sign(new JsonSerializerContext(), o =>
             {
-                o.SerializerFactory = message => JsonFormatter.SerializeObject(message);
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
             var json = JsonFormatter.SerializeObject(sut2);

@@ -4,6 +4,7 @@ using Amazon;
 using Amazon.Runtime;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Newtonsoft.Json.Formatters;
+using Cuemon.Extensions.Text.Json.Formatters;
 using Cuemon.Extensions.Xunit;
 using Cuemon.Extensions.Xunit.Hosting.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
@@ -25,8 +26,10 @@ using Savvyio.Extensions.DependencyInjection.Domain;
 using Savvyio.Extensions.DependencyInjection.EFCore;
 using Savvyio.Extensions.DependencyInjection.EFCore.Domain;
 using Savvyio.Extensions.DependencyInjection.SimpleQueueService;
+using Savvyio.Extensions.Newtonsoft.Json;
 using Savvyio.Extensions.Newtonsoft.Json.Converters;
 using Savvyio.Extensions.SimpleQueueService;
+using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging;
 using Xunit;
 using Xunit.Priority;
@@ -46,6 +49,7 @@ namespace Savvyio
         {
             using (var host = WebApplicationTestFactory.CreateWithHostBuilderContext((context, services) =>
                    {
+                       services.AddSerializer<NewtonsoftJsonSerializerContext>();
                        services.AddAmazonCommandQueue(o =>
                        {
                            o.Credentials = new BasicAWSCredentials(context.Configuration["AWS:IAM:AccessKey"], context.Configuration["AWS:IAM:SecretKey"]);
@@ -74,6 +78,15 @@ namespace Savvyio
         {
             using (var host = WebApplicationTestFactory.CreateWithHostBuilderContext((context, services) =>
                    {
+                       services.AddScoped(_ =>
+                       {
+                           return new Action<JsonFormatterOptions>(o =>
+                           {
+                               o.Settings.Converters.AddMessageConverter().AddMetadataDictionaryConverter();
+                           });
+                       });
+                       //services.Configure<JsonFormatterOptions>(o => o.Settings.Converters.AddMessageConverter().AddMetadataDictionaryConverter());
+                       services.AddSerializer<JsonSerializerContext>();
                        services.AddEfCoreAggregateDataSource<Account>(o =>
                        {
                            o.ContextConfigurator = b => b.UseInMemoryDatabase($"AWS{nameof(Account)}").EnableDetailedErrors().LogTo(Console.WriteLine);
@@ -142,6 +155,8 @@ namespace Savvyio
         {
             using (var host = WebApplicationTestFactory.CreateWithHostBuilderContext((context, services) =>
                    {
+                       services.Configure<JsonFormatterOptions>(o => o.Settings.Converters.AddMessageConverter().AddMetadataDictionaryConverter());
+                       services.AddSerializer<JsonSerializerContext>();
                        services.AddAmazonEventBus(o =>
                        {
                            o.Credentials = new BasicAWSCredentials(context.Configuration["AWS:IAM:AccessKey"], context.Configuration["AWS:IAM:SecretKey"]);

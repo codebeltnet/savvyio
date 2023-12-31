@@ -5,9 +5,12 @@ using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Newtonsoft.Json.Formatters;
 using Cuemon.Extensions.Xunit;
+using Savvyio.Assets.Commands;
 using Savvyio.Assets.EventDriven;
 using Savvyio.EventDriven.Messaging;
 using Savvyio.EventDriven.Messaging.Cryptography;
+using Savvyio.Messaging;
+using Savvyio.Messaging.Cryptography;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -28,14 +31,24 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
-            }).Sign(o =>
+            }).Sign(new NewtonsoftJsonSerializerContext(), o =>
             {
-                o.SerializerFactory = message => NewtonsoftJsonFormatter.SerializeObject(message);
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
+
             var json = NewtonsoftJsonFormatter.SerializeObject(sut2);
-            var jsonString = json.ToEncodedString();
+            var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
+            
             TestOutput.WriteLine(jsonString);
+
+            var sut4 = NewtonsoftJsonFormatter.DeserializeObject<ISignedMessage<MemberCreated>>(json, o =>
+            {
+                o.Settings.Converters
+                    .AddMessageConverter()
+                    .AddMetadataDictionaryConverter();
+            });
+
+            Assert.Equivalent(sut2, sut4, true);
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {

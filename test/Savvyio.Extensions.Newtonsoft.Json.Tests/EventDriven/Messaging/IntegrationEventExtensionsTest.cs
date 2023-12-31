@@ -26,7 +26,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utcNow;
             });
-            var json = NewtonsoftJsonFormatter.SerializeObject(sut2);
+            var json = NewtonsoftJsonFormatter.SerializeObject(sut2, o => o.Settings.DateFormatString = "O");
             var jsonString = json.ToEncodedString();
             TestOutput.WriteLine(jsonString);
 

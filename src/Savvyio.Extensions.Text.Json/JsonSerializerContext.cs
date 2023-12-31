@@ -12,11 +12,16 @@ namespace Savvyio.Extensions.Text.Json
     {
         private readonly Action<JsonFormatterOptions> _setup;
 
+        static JsonSerializerContext()
+        {
+            Bootstrapper.Initialize();
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonSerializerContext"/> class.
         /// </summary>
-        /// <param name="setup">The <see cref="JsonFormatterOptions"/> which may be configured.</param>
-        public JsonSerializerContext(Action<JsonFormatterOptions> setup)
+        /// <param name="setup">The <see cref="JsonFormatterOptions"/> which need to be configured.</param>
+        public JsonSerializerContext(Action<JsonFormatterOptions> setup = null)
         {
             _setup = setup;
         }

@@ -88,7 +88,7 @@ namespace Savvyio.Extensions.Text.Json.Converters
 
         public override void Write(Utf8JsonWriter writer, IMessage<T> value, JsonSerializerOptions options)
         {
-            JsonSerializer.Serialize(writer, value, options);
+            JsonSerializer.Serialize(writer, value, options.Clone(jso => jso.Converters.RemoveAllOf<IMessage<T>>())); // prevent stackoverflow in case this method gets called
         }
     }
 }

@@ -27,7 +27,9 @@
     <ProjectReference Include="..\..\src\Savvyio.Extensions.EFCore.Domain.EventSourcing\Savvyio.Extensions.EFCore.Domain.EventSourcing.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.EFCore.Domain\Savvyio.Extensions.EFCore.Domain.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.EFCore\Savvyio.Extensions.EFCore.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.Newtonsoft.Json\Savvyio.Extensions.Newtonsoft.Json.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.SimpleQueueService\Savvyio.Extensions.SimpleQueueService.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.Text.Json\Savvyio.Extensions.Text.Json.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Queries\Savvyio.Queries.csproj" />
     <ProjectReference Include="..\Savvyio.Assets.Dapper.Tests\Savvyio.Assets.Dapper.Tests.csproj" />
     <ProjectReference Include="..\Savvyio.Assets.EfCore.Tests\Savvyio.Assets.EfCore.Tests.csproj" />

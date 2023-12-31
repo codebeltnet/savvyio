@@ -11,12 +11,17 @@ namespace Savvyio.Extensions.Newtonsoft.Json
     public class NewtonsoftJsonSerializerContext : ISerializerContext
     {
         private readonly Action<NewtonsoftJsonFormatterOptions> _setup;
+        
+        static NewtonsoftJsonSerializerContext()
+        {
+            Bootstrapper.Initialize();
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NewtonsoftJsonSerializerContext"/> class.
         /// </summary>
-        /// <param name="setup">The <see cref="NewtonsoftJsonFormatterOptions"/> which may be configured.</param>
-        public NewtonsoftJsonSerializerContext(Action<NewtonsoftJsonFormatterOptions> setup)
+        /// <param name="setup">The <see cref="NewtonsoftJsonFormatterOptions"/> which need to be configured.</param>
+        public NewtonsoftJsonSerializerContext(Action<NewtonsoftJsonFormatterOptions> setup = null)
         {
             _setup = setup;
         }

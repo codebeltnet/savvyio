@@ -8,7 +8,7 @@ using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Commands;
 using Savvyio.Commands.Messaging;
 using Savvyio.Commands.Messaging.Cryptography;
-using Savvyio.Messaging;
+using Savvyio.Messaging.Cryptography;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -29,20 +29,17 @@ namespace Savvyio.Extensions.Text.Json.Commands.Messaging.Cryptography
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
-            });
-
-            var sut3 = sut2.Sign(o =>
+            }).Sign(new JsonSerializerContext(), o =>
             {
-                o.SerializerFactory = message => JsonFormatter.SerializeObject(message);
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
 
-            var json = JsonFormatter.SerializeObject(sut3);
+            var json = JsonFormatter.SerializeObject(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = JsonFormatter.DeserializeObject<IMessage<CreateMemberCommand>>(json, o =>
+            var sut4 = JsonFormatter.DeserializeObject<ISignedMessage<CreateMemberCommand>>(json, o =>
             {
                 o.Settings.Converters
                     .AddMessageConverter()

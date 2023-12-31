@@ -20,7 +20,7 @@ using Savvyio.Extensions.EFCore.Domain.EventSourcing;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Domain.EventSourcing.Tests
+namespace Savvyio.Domain.EventSourcing
 {
     public class TracedAggregateRootTest : Test
     {
