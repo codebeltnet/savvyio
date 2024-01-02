@@ -2,7 +2,7 @@
 
 # Savvy I/O
 
-An open-source project (MIT license) that provides a SOLID and clean .NET class library for writing DDD, CQRS and Event Sourcing applications for .NET 7 (STS) and .NET 6 (LTS).
+An open-source project (MIT license) that provides a SOLID and clean .NET class library for writing DDD, CQRS and Event Sourcing applications for .NET 8 (LTS), .NET 7 (STS) and .NET 6 (LTS).
 
 ![Savvy I/O Flow](https://static.savvyio.net/savvyio.png)
 
@@ -26,31 +26,21 @@ All code quality analysis are done by [SonarCloud](https://sonarcloud.io/) and [
 
 The `development` branch contains the latest (and greatest) version of the code.
 
-To consume a CI build, create a `NuGet.Config` in your root solution directory and add following content:
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-  <packageSources>
-    <clear />
-    <!-- Savvy I/O CI build feed -->
-    <add key="codebelt" value="https://nuget.codebelt.net/v3/index.json" />
-    <!-- Defaul nuget feed -->
-    <add key="nuget" value="https://api.nuget.org/v3/index.json" />
-  </packageSources>
-</configuration>
-```
-Do note, that builds from development are preview builds and not to be considered stable.
+All CI builds are pushed to NuGet.org as `preview` releases.
 
 Once tested thoroughly and feature milestone has been reached, the code will be pushed and merged to a new branch; `release`.
+
+> NOTE: Builds from development are preview builds and not to be considered stable.
 
 ## Release Branch
 
 The `release` branch contains the next version of Savvy I/O. Here it will be tested again while the next semantic version is being determined.
 
-All CI builds are pushed to NuGet.org as either `alpha`, `beta` or `rc` releases (when deemed fit for purpose). For more information, check out [Package versioning - Pre-release Versions](https://docs.microsoft.com/en-us/nuget/concepts/package-versioning#pre-release-versions) at Microsoft.
+All CI builds are pushed to NuGet.org as either `alpha`, `beta` or `rc` releases (when deemed fit for purpose).
 
 Lastly, when things are looking all fine and dandy, the code will be pushed and merged to the `main` branch.
+
+> Curious for more information about suffixes? Check out [Package versioning - Pre-release Versions](https://docs.microsoft.com/en-us/nuget/concepts/package-versioning#pre-release-versions) at Microsoft.
 
 ## Main Branch
 
@@ -78,28 +68,42 @@ For more information see our [code of conduct](.github/CODE_OF_CONDUCT.md).
 
 ## Links to NuGet packages
 
-* [Savvyio.App](https://www.nuget.org/packages/Savvyio.App/) 🏭
-* [Savvyio.Commands](https://www.nuget.org/packages/Savvyio.Commands/) 📦
-* [Savvyio.Core](https://www.nuget.org/packages/Savvyio.Core/) 📦
-* [Savvyio.Domain](https://www.nuget.org/packages/Savvyio.Domain/) 📦
-* [Savvyio.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Domain.EventSourcing/) 📦
-* [Savvyio.EventDriven](https://www.nuget.org/packages/Savvyio.EventDriven/) 📦
-* [Savvyio.Extensions.Dapper](https://www.nuget.org/packages/Savvyio.Extensions.Dapper/) 📦
-* [Savvyio.Extensions.DapperExtensions](https://www.nuget.org/packages/Savvyio.Extensions.DapperExtensions/) 📦
-* [Savvyio.Extensions.DependencyInjection](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection/) 📦
-* [Savvyio.Extensions.DependencyInjection.Dapper](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.Dapper/) 📦
-* [Savvyio.Extensions.DependencyInjection.DapperExtensions](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.DapperExtensions/) 📦
-* [Savvyio.Extensions.DependencyInjection.Domain](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.Domain/) 📦
-* [Savvyio.Extensions.DependencyInjection.EFCore](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore/) 📦
-* [Savvyio.Extensions.DependencyInjection.EFCore.Domain](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore.Domain/) 📦
-* [Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing/) 📦
-* [Savvyio.Extensions.DependencyInjection.SimpleQueueService](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.SimpleQueueService/) 📦
-* [Savvyio.Extensions.Dispatchers](https://www.nuget.org/packages/Savvyio.Extensions.Dispatchers/) 📦
-* [Savvyio.Extensions.EFCore](https://www.nuget.org/packages/Savvyio.Extensions.EFCore/) 📦
-* [Savvyio.Extensions.EFCore.Domain](https://www.nuget.org/packages/Savvyio.Extensions.EFCore.Domain/) 📦
-* [Savvyio.Extensions.EFCore.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Extensions.EFCore.Domain.EventSourcing/) 📦
-* [Savvyio.Extensions.Newtonsoft.Json](https://www.nuget.org/packages/Savvyio.Extensions.Newtonsoft.Json/) 📦
-* [Savvyio.Extensions.SimpleQueueService](https://www.nuget.org/packages/Savvyio.Extensions.SimpleQueueService/) 📦
-* [Savvyio.Queries](https://www.nuget.org/packages/Savvyio.Queries/) 📦
+This is a list of all NuGet packages from Cuemon for .NET that is publicly available on [NuGet.org](https://www.nuget.org/packages?q=savvyio); the packages here are listed alphabetically and are available in preview-, rc- and production-ready versions.
 
-*) Provides a convenient set of default API additions for building DDD, CQRS and Event Sourcing .NET projects using Microsoft Dependency Injection, Microsoft Entity Framework Core, Dapper, Newtonsoft JSON  and AWS SNS/SQS
+### 📦 Standalone Packages
+
+Provides a focused API for building various types of modern .NET applications suitable for DDD, CQRS and Event Sourcing.
+
+|Package|vNext|Stable|Downloads|
+|:--|:-:|:-:|:-:|
+| [Savvyio.Commands](https://www.nuget.org/packages/Savvyio.Commands/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Commands?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Commands?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Commands?color=blueviolet&logo=nuget) |
+| [Savvio.Core](https://www.nuget.org/packages/Savvyio.Core/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Core?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Core?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Core?color=blueviolet&logo=nuget) |
+| [Savvyio.Domain](https://www.nuget.org/packages/Savvyio.Domain/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Domain?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Domain?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Domain?color=blueviolet&logo=nuget) |
+| [Savvyio.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Domain.EventSourcing/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Domain.EventSourcing?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Domain.EventSourcing?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Domain.EventSourcing?color=blueviolet&logo=nuget) |
+| [Savvyio.EventDriven](https://www.nuget.org/packages/Savvyio.EventDriven/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.EventDriven?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.EventDriven?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.EventDriven?color=blueviolet&logo=nuget) |
+| [Savvyio.Extensions.Dapper](https://www.nuget.org/packages/Savvyio.Extensions.Dapper/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Extensions.Dapper?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Extensions.Dapper?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Extensions.Dapper?color=blueviolet&logo=nuget) |
+| [Savvyio.Extensions.DapperExtensions](https://www.nuget.org/packages/Savvyio.Extensions.DapperExtensions/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Extensions.DapperExtensions?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Extensions.DapperExtensions?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Extensions.DapperExtensions?color=blueviolet&logo=nuget) |
+| [Savvyio.Extensions.DependencyInjection](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Extensions.DependencyInjection?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Extensions.DependencyInjection?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Extensions.DependencyInjection?color=blueviolet&logo=nuget) |
+| [Savvyio.Extensions.DependencyInjection.Dapper](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.Dapper/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Extensions.DependencyInjection.Dapper?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Extensions.DependencyInjection.Dapper?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Extensions.DependencyInjection.Dapper?color=blueviolet&logo=nuget) |
+| [Savvyio.Extensions.DependencyInjection.DapperExtensions](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.DapperExtensions/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Extensions.DependencyInjection.DapperExtensions?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Extensions.DependencyInjection.DapperExtensions?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Extensions.DependencyInjection.DapperExtensions?color=blueviolet&logo=nuget) |
+| [Savvyio.Extensions.DependencyInjection.Domain](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.Domain/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Extensions.DependencyInjection.Domain?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Extensions.DependencyInjection.Domain?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Extensions.DependencyInjection.Domain?color=blueviolet&logo=nuget) |
+| [Savvyio.Extensions.DependencyInjection.EFCore](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Extensions.DependencyInjection.EFCore?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Extensions.DependencyInjection.EFCore?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Extensions.DependencyInjection.EFCore?color=blueviolet&logo=nuget) |
+| [Savvyio.Extensions.DependencyInjection.EFCore.Domain](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore.Domain/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Extensions.DependencyInjection.EFCore.Domain?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Extensions.DependencyInjection.EFCore.Domain?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Extensions.DependencyInjection.EFCore.Domain?color=blueviolet&logo=nuget) |
+| [Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing?color=blueviolet&logo=nuget) |
+| [Savvyio.Extensions.DependencyInjection.SimpleQueueService](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.SimpleQueueService/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Extensions.DependencyInjection.SimpleQueueService?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Extensions.DependencyInjection.SimpleQueueService?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Extensions.DependencyInjection.SimpleQueueService?color=blueviolet&logo=nuget) |
+| [Savvyio.Extensions.Dispatchers](https://www.nuget.org/packages/Savvyio.Extensions.Dispatchers/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Extensions.Dispatchers?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Extensions.Dispatchers?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Extensions.Dispatchers?color=blueviolet&logo=nuget) |
+| [Savvyio.Extensions.EFCore](https://www.nuget.org/packages/Savvyio.Extensions.EFCore/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Extensions.EFCore?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Extensions.EFCore?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Extensions.EFCore?color=blueviolet&logo=nuget) |
+| [Savvyio.Extensions.EFCore.Domain](https://www.nuget.org/packages/Savvyio.Extensions.EFCore.Domain/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Extensions.EFCore.Domain?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Extensions.EFCore.Domain?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Extensions.EFCore.Domain?color=blueviolet&logo=nuget) |
+| [Savvyio.Extensions.EFCore.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Extensions.EFCore.Domain.EventSourcing/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Extensions.EFCore.Domain.EventSourcing?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Extensions.EFCore.Domain.EventSourcing?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Extensions.EFCore.Domain.EventSourcing?color=blueviolet&logo=nuget) |
+| [Savvyio.Extensions.Newtonsoft.Json](https://www.nuget.org/packages/Savvyio.Extensions.Newtonsoft.Json/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Extensions.Newtonsoft.Json?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Extensions.Newtonsoft.Json?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Extensions.Newtonsoft.Json?color=blueviolet&logo=nuget) |
+| [Savvyio.Extensions.SimpleQueueService](https://www.nuget.org/packages/Savvyio.Extensions.SimpleQueueService/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Extensions.SimpleQueueService?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Extensions.SimpleQueueService?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Extensions.SimpleQueueService?color=blueviolet&logo=nuget) |
+| [Savvyio.Extensions.Text.Json](https://www.nuget.org/packages/Savvyio.Extensions.Text.Json/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Extensions.Text.Json?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Extensions.Text.Json?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Extensions.Text.Json?color=blueviolet&logo=nuget) |
+| [Savvyio.Queries](https://www.nuget.org/packages/Savvyio.Queries/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.Queries?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.Queries?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.Queries?color=blueviolet&logo=nuget) |
+
+### 🏭 Productivity Packages
+
+Provides a convenient set of default API additions for building complete DDD, CQRS and Event Sourcing enabled .NET applications using Microsoft Dependency Injection, Microsoft Entity Framework Core, Dapper and AWS SNS/SQS.
+
+|Package|vNext|Stable|Downloads|
+|:--|:-:|:-:|:-:|
+| [Savvyio.App](https://www.nuget.org/packages/Savvyio.App/) | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.App?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.App?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.App?color=blueviolet&logo=nuget) |

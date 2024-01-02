@@ -5,7 +5,7 @@ using Cuemon.Extensions.Text.Json.Formatters;
 namespace Savvyio.Extensions.Text.Json
 {
     /// <summary>
-    /// Provides a class for marshalling data using native JSON support from .NET.
+    /// Provides a class for marshalling data using native JSON support in .NET.
     /// </summary>
     /// <seealso cref="IMarshaller" />
     public class JsonMarshaller : IMarshaller

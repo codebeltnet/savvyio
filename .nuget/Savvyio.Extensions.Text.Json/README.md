@@ -1,6 +1,6 @@
-# Savvyio.Extensions.DependencyInjection.Domain
+# Savvyio.Extensions.Text.Json
 
-Extend the Savvy I/O support for Microsoft Dependency Injection - optimized for DDD (Domain Driven Design).
+Extend the Savvy I/O core assemblies with support for official built-in JSON.
 
 ## About
 

@@ -5,7 +5,6 @@ using System.Text.Json.Serialization;
 using Cuemon;
 using Savvyio.Extensions.Text.Json.Converters;
 using Savvyio.Messaging;
-using DateTimeConverter = Cuemon.Extensions.Text.Json.Converters.DateTimeConverter;
 
 namespace Savvyio.Extensions.Text.Json
 {
@@ -106,6 +105,21 @@ namespace Savvyio.Extensions.Text.Json
         {
             Validator.ThrowIfNull(converters);
             converters.Add(new DateTimeConverter());
+            return converters;
+        }
+
+        /// <summary>
+        /// Adds a <see cref="DateTimeOffset"/> converter to the collection.
+        /// </summary>
+        /// <param name="converters">The collection of <see cref="JsonConverter"/> to extend.</param>
+        /// <returns>A reference to <paramref name="converters"/> so that additional calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="converters"/> cannot be null.
+        /// </exception>
+        public static ICollection<JsonConverter> AddDateTimeOffsetConverter(this ICollection<JsonConverter> converters)
+        {
+            Validator.ThrowIfNull(converters);
+            converters.Add(new DateTimeOffsetConverter());
             return converters;
         }
     }
