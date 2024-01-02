@@ -15,7 +15,7 @@ namespace Savvyio.Commands.Messaging
         /// <typeparam name="T">The type of the payload constraint to the <see cref="ICommand"/> interface.</typeparam>
         /// <param name="command">The payload to attach within the message.</param>
         /// <param name="source">The context that describes the origin of the message.</param>
-        /// <param name="type">The type that describes the type of event related to the originating occurrence.</param>
+        /// <param name="type">The type that describes the type of <paramref name="command"/> related to the originating occurrence.</param>
         /// <param name="setup">The <see cref="MessageOptions" /> which may be configured.</param>
         /// <returns>An instance of <see cref="Message{T}"/> constraint to the <see cref="ICommand"/> interface.</returns>
         /// <exception cref="ArgumentNullException">
