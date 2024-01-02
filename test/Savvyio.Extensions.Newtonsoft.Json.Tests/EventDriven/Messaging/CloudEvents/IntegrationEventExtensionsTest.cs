@@ -28,12 +28,12 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.CloudEvents
                 o.Time = utc;
             }).ToCloudEvent();
 
-            var json = new NewtonsoftJsonSerializerContext().Serialize(sut2);
+            var json = new NewtonsoftJsonMarshaller().Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new NewtonsoftJsonSerializerContext().Deserialize<ICloudEvent<MemberCreated>>(json);
+            var sut4 = new NewtonsoftJsonMarshaller().Deserialize<ICloudEvent<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 
@@ -68,12 +68,12 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.CloudEvents
                 o.Time = utcNow;
             }).ToCloudEvent();
 
-            var json = new NewtonsoftJsonSerializerContext(o => o.Settings.DateFormatString = "O").Serialize(sut2);
+            var json = new NewtonsoftJsonMarshaller(o => o.Settings.DateFormatString = "O").Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
             
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new NewtonsoftJsonSerializerContext(o => o.Settings.DateFormatString = "O").Deserialize<CloudEvent<MemberCreated>>(json);
+            var sut4 = new NewtonsoftJsonMarshaller(o => o.Settings.DateFormatString = "O").Deserialize<CloudEvent<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 

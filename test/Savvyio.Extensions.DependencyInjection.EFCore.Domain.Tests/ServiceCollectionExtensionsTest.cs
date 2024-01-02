@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Assets;
 using Savvyio.Assets.Domain;
 using Savvyio.Domain;
-using Savvyio.Domain.EventSourcing;
 using Savvyio.Extensions.DependencyInjection.Domain;
 using Savvyio.Extensions.EFCore.Domain;
 using Xunit;

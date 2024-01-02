@@ -16,20 +16,20 @@ namespace Savvyio.Extensions.DependencyInjection
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds an implementation of <see cref="ISerializerContext" /> to the specified <see cref="IServiceCollection" />.
+        /// Adds an implementation of <see cref="IMarshaller" /> to the specified <see cref="IServiceCollection" />.
         /// </summary>
-        /// <typeparam name="TService">The type of the <see cref="ISerializerContext"/> to add.</typeparam>
+        /// <typeparam name="TService">The type of the <see cref="IMarshaller"/> to add.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <param name="setup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional configuration calls can be chained.</returns>
-        public static IServiceCollection AddSerializer<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, ISerializerContext
+        public static IServiceCollection AddSerializer<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IMarshaller
         {
             Validator.ThrowIfNull(services);
             var options = setup.Configure();
             return services.Add<TService>(o =>
             {
                 o.Lifetime = options.Lifetime;
-                o.NestedTypePredicate = type => type.HasInterfaces(typeof(ISerializerContext));
+                o.NestedTypePredicate = type => type.HasInterfaces(typeof(IMarshaller));
             });
         }
 

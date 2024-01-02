@@ -5,23 +5,23 @@ using Cuemon.Extensions.Text.Json.Formatters;
 namespace Savvyio.Extensions.Text.Json
 {
     /// <summary>
-    /// An interface for serializing and deserializing JSON objects using native JSON support.
+    /// Provides a class for marshalling data using native JSON support from .NET.
     /// </summary>
-    /// <seealso cref="ISerializerContext" />
-    public class JsonSerializerContext : ISerializerContext
+    /// <seealso cref="IMarshaller" />
+    public class JsonMarshaller : IMarshaller
     {
         private readonly Action<JsonFormatterOptions> _setup;
 
-        static JsonSerializerContext()
+        static JsonMarshaller()
         {
             Bootstrapper.Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="JsonSerializerContext"/> class.
+        /// Initializes a new instance of the <see cref="JsonMarshaller"/> class.
         /// </summary>
         /// <param name="setup">The <see cref="JsonFormatterOptions"/> which need to be configured.</param>
-        public JsonSerializerContext(Action<JsonFormatterOptions> setup = null)
+        public JsonMarshaller(Action<JsonFormatterOptions> setup = null)
         {
             _setup = setup;
         }

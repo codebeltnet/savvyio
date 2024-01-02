@@ -34,20 +34,20 @@ namespace Savvyio.Extensions.SimpleQueueService
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonMessage{TRequest}"/> class.
         /// </summary>
-        /// <param name="serializerContext">The <see cref="ISerializerContext"/> that is used when converting models to messages.</param>
+        /// <param name="marshaller">The <see cref="IMarshaller"/> that is used when converting models to messages.</param>
         /// <param name="options">The configured <see cref="AmazonMessageOptions"/>.</param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="serializerContext"/> cannot be null -or-
+        /// <paramref name="marshaller"/> cannot be null -or-
         /// <paramref name="options"/> cannot be null.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// <paramref name="options"/> are not in a valid state.
         /// </exception>
-        protected AmazonMessage(ISerializerContext serializerContext, AmazonMessageOptions options)
+        protected AmazonMessage(IMarshaller marshaller, AmazonMessageOptions options)
         {
-            Validator.ThrowIfNull(serializerContext);
+            Validator.ThrowIfNull(marshaller);
             Validator.ThrowIfInvalidOptions(options, nameof(options));
-            SerializerContext = serializerContext;
+            Marshaller = marshaller;
             Options = options;
             UseFirstInFirstOut = options.SourceQueue.OriginalString.Contains(".fifo", StringComparison.OrdinalIgnoreCase);
         }
@@ -62,7 +62,7 @@ namespace Savvyio.Extensions.SimpleQueueService
         /// Gets the by constructor provided serializer context.
         /// </summary>
         /// <value>The by constructor provided serializer context.</value>
-        protected ISerializerContext SerializerContext { get; }
+        protected IMarshaller Marshaller { get; }
 
         /// <summary>
         /// Gets the configured <see cref="AmazonMessageOptions"/> of this instance.
@@ -134,7 +134,7 @@ namespace Savvyio.Extensions.SimpleQueueService
             {
                 var dataType = Type.GetType(message.MessageAttributes[MessageAttributeTypeKey].StringValue);
                 var messageDataType = typeof(IMessage<>).MakeGenericType(dataType!);
-                var deserialized = SerializerContext.Deserialize(message.Body.ToStream(), messageDataType);
+                var deserialized = Marshaller.Deserialize(message.Body.ToStream(), messageDataType);
                 messages.Add(deserialized as IMessage<TRequest>);
             }
 

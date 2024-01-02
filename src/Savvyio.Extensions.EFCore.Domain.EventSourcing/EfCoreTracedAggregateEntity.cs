@@ -32,14 +32,14 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
         /// </summary>
         /// <param name="aggregate">The traced aggregate to convert into this EF Core compatible instance.</param>
         /// <param name="domainEvent">The traced domain event to convert into this EF Core compatible instance.</param>
-        /// <param name="serializerContext">The <see cref="ISerializerContext"/> that is used when converting <see cref="ITracedDomainEvent"/> into a serialized format.</param>
-        public EfCoreTracedAggregateEntity(TEntity aggregate, ITracedDomainEvent domainEvent, ISerializerContext serializerContext)
+        /// <param name="marshaller">The <see cref="IMarshaller"/> that is used when converting <see cref="ITracedDomainEvent"/> into a serialized format.</param>
+        public EfCoreTracedAggregateEntity(TEntity aggregate, ITracedDomainEvent domainEvent, IMarshaller marshaller)
         {
             _id = aggregate.Id;
             _version = domainEvent.GetAggregateVersion();
             _type = domainEvent.GetMemberType();
             _timestamp = domainEvent.GetTimestamp();
-            _payload = domainEvent.ToByteArray(serializerContext);
+            _payload = domainEvent.ToByteArray(marshaller);
             _metadata = aggregate.Metadata;
             _events = domainEvent.Yield().ToList();
         }

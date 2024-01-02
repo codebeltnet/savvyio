@@ -18,12 +18,12 @@ namespace Savvyio.Extensions.Text.Json.Commands
         {
             var ca = new CreateAccount(Guid.NewGuid(), "Michael Mortensen", "root@gimlichael.dev");
 
-            var json = new JsonSerializerContext().Serialize(ca);
+            var json = new JsonMarshaller().Serialize(ca);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
 
-            var rehydrated = new JsonSerializerContext().Deserialize<CreateAccount>(json);
+            var rehydrated = new JsonMarshaller().Deserialize<CreateAccount>(json);
 
             Assert.Equivalent(ca, rehydrated, true);
         }

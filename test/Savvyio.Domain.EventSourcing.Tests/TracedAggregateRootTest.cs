@@ -71,8 +71,8 @@ namespace Savvyio.Domain.EventSourcing
         }
 
         [Theory]
-        [InlineData(typeof(NewtonsoftJsonSerializerContext))]
-        [InlineData(typeof(JsonSerializerContext))]
+        [InlineData(typeof(NewtonsoftJsonMarshaller))]
+        [InlineData(typeof(JsonMarshaller))]
         public async Task EfCoreDataStore_ShouldRaiseDomainEventsAndDehydrateEventsToStorage(Type formatterType)
         {
             string schema = null;
@@ -81,9 +81,9 @@ namespace Savvyio.Domain.EventSourcing
 
             switch (formatterType)
             {
-                case Type newton when newton == typeof(NewtonsoftJsonSerializerContext):
-                    sc.AddSerializer<NewtonsoftJsonSerializerContext>();
-                    sc.AddEfCoreAggregateDataSource<NewtonsoftJsonSerializerContext>(o =>
+                case Type newton when newton == typeof(NewtonsoftJsonMarshaller):
+                    sc.AddSerializer<NewtonsoftJsonMarshaller>();
+                    sc.AddEfCoreAggregateDataSource<NewtonsoftJsonMarshaller>(o =>
                     {
                         o.ContextConfigurator = b => b.UseInMemoryDatabase($"Dummy").EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
                         o.ModelConstructor = mb =>
@@ -93,11 +93,11 @@ namespace Savvyio.Domain.EventSourcing
                             TestOutput.WriteLine(schema);
                         };
                     });
-                    sc.AddEfCoreTracedAggregateRepository<TracedAccount, Guid, NewtonsoftJsonSerializerContext>();
+                    sc.AddEfCoreTracedAggregateRepository<TracedAccount, Guid, NewtonsoftJsonMarshaller>();
                     break;
-                case Type builtin when builtin == typeof(JsonSerializerContext):
-                    sc.AddSerializer<JsonSerializerContext>();
-                    sc.AddEfCoreAggregateDataSource<JsonSerializerContext>(o =>
+                case Type builtin when builtin == typeof(JsonMarshaller):
+                    sc.AddSerializer<JsonMarshaller>();
+                    sc.AddEfCoreAggregateDataSource<JsonMarshaller>(o =>
                     {
                         o.ContextConfigurator = b => b.UseInMemoryDatabase($"Dummy").EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
                         o.ModelConstructor = mb =>
@@ -107,7 +107,7 @@ namespace Savvyio.Domain.EventSourcing
                             TestOutput.WriteLine(schema);
                         };
                     });
-                    sc.AddEfCoreTracedAggregateRepository<TracedAccount, Guid, JsonSerializerContext>();
+                    sc.AddEfCoreTracedAggregateRepository<TracedAccount, Guid, JsonMarshaller>();
                     break;
             }
             
@@ -115,12 +115,12 @@ namespace Savvyio.Domain.EventSourcing
 
             var sp = sc.BuildServiceProvider();
 
-            var ds = formatterType == typeof(NewtonsoftJsonSerializerContext) 
-                ? sp.GetRequiredService<IEfCoreDataSource<NewtonsoftJsonSerializerContext>>() as IEfCoreDataSource
-                : sp.GetRequiredService<IEfCoreDataSource<JsonSerializerContext>>() as IEfCoreDataSource;
-            var sut4 = formatterType == typeof(NewtonsoftJsonSerializerContext)
-                ? sp.GetRequiredService<ITracedAggregateRepository<TracedAccount, Guid, NewtonsoftJsonSerializerContext>>() as ITracedAggregateRepository<TracedAccount, Guid>
-                : sp.GetRequiredService<ITracedAggregateRepository<TracedAccount, Guid, JsonSerializerContext>>() as ITracedAggregateRepository<TracedAccount, Guid>;
+            var ds = formatterType == typeof(NewtonsoftJsonMarshaller) 
+                ? sp.GetRequiredService<IEfCoreDataSource<NewtonsoftJsonMarshaller>>() as IEfCoreDataSource
+                : sp.GetRequiredService<IEfCoreDataSource<JsonMarshaller>>() as IEfCoreDataSource;
+            var sut4 = formatterType == typeof(NewtonsoftJsonMarshaller)
+                ? sp.GetRequiredService<ITracedAggregateRepository<TracedAccount, Guid, NewtonsoftJsonMarshaller>>() as ITracedAggregateRepository<TracedAccount, Guid>
+                : sp.GetRequiredService<ITracedAggregateRepository<TracedAccount, Guid, JsonMarshaller>>() as ITracedAggregateRepository<TracedAccount, Guid>;
 
             var id = Guid.NewGuid();
             var providerId = Guid.NewGuid();

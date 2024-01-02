@@ -29,7 +29,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
-            }).Sign(new NewtonsoftJsonSerializerContext(), o =>
+            }).Sign(new NewtonsoftJsonMarshaller(), o =>
             {
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
@@ -38,7 +38,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
 
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new NewtonsoftJsonSerializerContext().Deserialize<ISignedMessage<MemberCreated>>(json);
+            var sut4 = new NewtonsoftJsonMarshaller().Deserialize<ISignedMessage<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 
@@ -95,7 +95,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
-            }).Sign(new NewtonsoftJsonSerializerContext(), o =>
+            }).Sign(new NewtonsoftJsonMarshaller(), o =>
             {
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
@@ -104,7 +104,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
 
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new NewtonsoftJsonSerializerContext().Deserialize<SignedMessage<MemberCreated>>(json);
+            var sut4 = new NewtonsoftJsonMarshaller().Deserialize<SignedMessage<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 

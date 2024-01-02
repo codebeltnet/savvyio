@@ -6,7 +6,6 @@ using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.EventDriven;
 using Savvyio.EventDriven.Messaging;
 using Savvyio.EventDriven.Messaging.CloudEvents;
-using Savvyio.Messaging;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -29,12 +28,12 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging.CloudEvents
                 o.Time = utc;
             }).ToCloudEvent();
 
-            var json = new JsonSerializerContext().Serialize(sut2);
+            var json = new JsonMarshaller().Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new JsonSerializerContext().Deserialize<ICloudEvent<MemberCreated>>(json);
+            var sut4 = new JsonMarshaller().Deserialize<ICloudEvent<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 
@@ -69,12 +68,12 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging.CloudEvents
                 o.Time = utcNow;
             }).ToCloudEvent();
 
-            var json = new JsonSerializerContext(o => o.Settings.Converters.AddDateTimeConverter()).Serialize(sut2);
+            var json = new JsonMarshaller(o => o.Settings.Converters.AddDateTimeConverter()).Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
             
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new JsonSerializerContext(o => o.Settings.Converters.AddDateTimeConverter()).Deserialize<CloudEvent<MemberCreated>>(json);
+            var sut4 = new JsonMarshaller(o => o.Settings.Converters.AddDateTimeConverter()).Deserialize<CloudEvent<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 

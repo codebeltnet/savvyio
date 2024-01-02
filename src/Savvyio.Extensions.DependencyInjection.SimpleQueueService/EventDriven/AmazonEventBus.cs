@@ -16,9 +16,9 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService.EventDriven
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonEventBus{TMarker}"/> class.
         /// </summary>
-        /// <param name="serializerContext">The <see cref="ISerializerContext"/> that is used when converting <see cref="IIntegrationEvent"/> implementations to messages.</param>
+        /// <param name="marshaller">The <see cref="IMarshaller"/> that is used when converting <see cref="IIntegrationEvent"/> implementations to messages.</param>
         /// <param name="options">The <see cref="AmazonEventBusOptions" /> which need to be configured.</param>
-        public AmazonEventBus(ISerializerContext serializerContext, IOptions<AmazonEventBusOptions<TMarker>> options) : base(serializerContext, options)
+        public AmazonEventBus(IMarshaller marshaller, IOptions<AmazonEventBusOptions<TMarker>> options) : base(marshaller, options)
         {
         }
     }

@@ -28,12 +28,12 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging
                 o.Time = utc;
             });
 
-            var json = new NewtonsoftJsonSerializerContext().Serialize(sut2);
+            var json = new NewtonsoftJsonMarshaller().Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new NewtonsoftJsonSerializerContext().Deserialize<IMessage<MemberCreated>>(json);
+            var sut4 = new NewtonsoftJsonMarshaller().Deserialize<IMessage<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 
@@ -67,12 +67,12 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging
                 o.Time = utcNow;
             });
 
-            var json = new NewtonsoftJsonSerializerContext(o => o.Settings.DateFormatString = "O").Serialize(sut2);
+            var json = new NewtonsoftJsonMarshaller(o => o.Settings.DateFormatString = "O").Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
             
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new NewtonsoftJsonSerializerContext(o => o.Settings.DateFormatString = "O").Deserialize<Message<MemberCreated>>(json);
+            var sut4 = new NewtonsoftJsonMarshaller(o => o.Settings.DateFormatString = "O").Deserialize<Message<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 

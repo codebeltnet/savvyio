@@ -28,12 +28,12 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging
                 o.Time = utc;
             });
 
-            var json = new JsonSerializerContext().Serialize(sut2);
+            var json = new JsonMarshaller().Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new JsonSerializerContext().Deserialize<IMessage<MemberCreated>>(json);
+            var sut4 = new JsonMarshaller().Deserialize<IMessage<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 
@@ -67,12 +67,12 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging
                 o.Time = utcNow;
             });
 
-            var json = new JsonSerializerContext(o => o.Settings.Converters.AddDateTimeConverter()).Serialize(sut2);
+            var json = new JsonMarshaller(o => o.Settings.Converters.AddDateTimeConverter()).Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
             
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new JsonSerializerContext(o => o.Settings.Converters.AddDateTimeConverter()).Deserialize<Message<MemberCreated>>(json);
+            var sut4 = new JsonMarshaller(o => o.Settings.Converters.AddDateTimeConverter()).Deserialize<Message<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 

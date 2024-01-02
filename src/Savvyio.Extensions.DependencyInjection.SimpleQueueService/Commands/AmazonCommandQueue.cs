@@ -16,9 +16,9 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService.Commands
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonCommandQueue{TMarker}"/> class.
         /// </summary>
-        /// <param name="serializerContext">The <see cref="ISerializerContext"/> that is used when converting <see cref="ICommand"/> implementations to messages.</param>
+        /// <param name="marshaller">The <see cref="IMarshaller"/> that is used when converting <see cref="ICommand"/> implementations to messages.</param>
         /// <param name="options">The <see cref="AmazonCommandQueueOptions" /> which need to be configured.</param>
-        public AmazonCommandQueue(ISerializerContext serializerContext, IOptions<AmazonCommandQueueOptions<TMarker>> options) : base(serializerContext, options)
+        public AmazonCommandQueue(IMarshaller marshaller, IOptions<AmazonCommandQueueOptions<TMarker>> options) : base(marshaller, options)
         {
         }
     }

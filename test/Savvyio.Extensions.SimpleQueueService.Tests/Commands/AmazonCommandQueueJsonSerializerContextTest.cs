@@ -29,12 +29,12 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
         private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
         private readonly AmazonCommandQueue _queue;
         private static readonly InMemoryTestStore<IMessage<ICommand>> Comparer = new();
-        private readonly ISerializerContext _serializer;
+        private readonly IMarshaller _marshaller;
 
         public AmazonCommandQueueJsonSerializerContextTest(HostFixture fixture, ITestOutputHelper output) : base(fixture, output)
         {
             _queue = fixture.ServiceProvider.GetRequiredService<AmazonCommandQueue>();
-            _serializer = fixture.ServiceProvider.GetRequiredService<ISerializerContext>();
+            _marshaller = fixture.ServiceProvider.GetRequiredService<IMarshaller>();
         }
 
         [Fact, Priority(0)]
@@ -46,7 +46,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
 
-            TestOutput.WriteLine(_serializer.Serialize(sut2).ToEncodedString());
+            TestOutput.WriteLine(_marshaller.Serialize(sut2).ToEncodedString());
 
             Comparer.Add(sut3);
 
@@ -102,7 +102,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddSerializer<JsonSerializerContext>();
+            services.AddSerializer<JsonMarshaller>();
 
             services.Configure<AmazonCommandQueueOptions>(o =>
             {

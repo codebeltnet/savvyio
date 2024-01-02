@@ -15,22 +15,22 @@ namespace Savvyio.EventDriven.Messaging.CloudEvents.Cryptography
         /// </summary>
         /// <typeparam name="T">The type of the payload constraint to the <see cref="IIntegrationEvent"/> interface.</typeparam>
         /// <param name="cloudEvent">The payload to attach within the message.</param>
-        /// <param name="serializerContext">The <see cref="ISerializerContext"/> that is used when converting the <paramref name="cloudEvent"/> into an <see cref="ISignedCloudEvent{T}"/>.</param>
+        /// <param name="marshaller">The <see cref="IMarshaller"/> that is used when converting the <paramref name="cloudEvent"/> into an <see cref="ISignedCloudEvent{T}"/>.</param>
         /// <param name="setup">The <see cref="SignedMessageOptions" /> which may be configured.</param>
         /// <returns>An instance of <see cref="SignedCloudEvent{T}"/> constraint to the <see cref="IIntegrationEvent"/> interface.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="cloudEvent"/> cannot be null -or-
-        /// <paramref name="serializerContext"/> cannot be null.
+        /// <paramref name="marshaller"/> cannot be null.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// <paramref name="setup"/> failed to configure an instance of <see cref="SignedMessageOptions"/> in a valid state.
         /// </exception>
-        public static ISignedCloudEvent<T> Sign<T>(this ICloudEvent<T> cloudEvent, ISerializerContext serializerContext, Action<SignedMessageOptions> setup = null) where T : IIntegrationEvent
+        public static ISignedCloudEvent<T> Sign<T>(this ICloudEvent<T> cloudEvent, IMarshaller marshaller, Action<SignedMessageOptions> setup = null) where T : IIntegrationEvent
         {
             Validator.ThrowIfNull(cloudEvent);
-            Validator.ThrowIfNull(serializerContext);
+            Validator.ThrowIfNull(marshaller);
             Validator.ThrowIfInvalidConfigurator(setup, out var options);
-            var data = serializerContext.Serialize(cloudEvent);
+            var data = marshaller.Serialize(cloudEvent);
             var signature = KeyedHashFactory.CreateHmacCrypto(options.SignatureSecret, options.SignatureAlgorithm).ComputeHash(data).ToHexadecimalString();
             return new SignedCloudEvent<T>(cloudEvent, signature);
         }

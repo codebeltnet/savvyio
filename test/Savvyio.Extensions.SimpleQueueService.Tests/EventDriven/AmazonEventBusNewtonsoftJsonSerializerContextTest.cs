@@ -111,9 +111,9 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         {
             AmazonResourceNameOptions.DefaultAccountId = Configuration["AWS:CallerIdentity"];
             
-            services.AddTransient<ISerializerContext, NewtonsoftJsonSerializerContext>(_ =>
+            services.AddTransient<IMarshaller, NewtonsoftJsonMarshaller>(_ =>
             {
-                var newtonsoftjsonSerializer = new NewtonsoftJsonSerializerContext(o =>
+                var newtonsoftjsonSerializer = new NewtonsoftJsonMarshaller(o =>
                 {
                     o.Settings.DateParseHandling = DateParseHandling.DateTime;
                     o.Settings.ContractResolver = new CamelCasePropertyNamesContractResolver

@@ -1,5 +1,4 @@
 ﻿using System;
-using Cuemon;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Domain;
 using Savvyio.Assets.Domain.Events;

@@ -8,7 +8,6 @@ using Savvyio.Assets.EventDriven;
 using Savvyio.EventDriven.Messaging;
 using Savvyio.EventDriven.Messaging.CloudEvents;
 using Savvyio.EventDriven.Messaging.CloudEvents.Cryptography;
-using Savvyio.EventDriven.Messaging.Cryptography;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -30,17 +29,17 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging.CloudEvents.Cryptog
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
             }).ToCloudEvent()
-              .Sign(new JsonSerializerContext(), o =>
+              .Sign(new JsonMarshaller(), o =>
             {
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
 
-            var json = new JsonSerializerContext().Serialize(sut2);
+            var json = new JsonMarshaller().Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new JsonSerializerContext().Deserialize<ISignedCloudEvent<MemberCreated>>(json);
+            var sut4 = new JsonMarshaller().Deserialize<ISignedCloudEvent<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 
@@ -100,17 +99,17 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging.CloudEvents.Cryptog
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
             }).ToCloudEvent()
-              .Sign(new JsonSerializerContext(), o =>
+              .Sign(new JsonMarshaller(), o =>
             {
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
 
-            var json = new JsonSerializerContext().Serialize(sut2);
+            var json = new JsonMarshaller().Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new JsonSerializerContext().Deserialize<SignedCloudEvent<MemberCreated>>(json);
+            var sut4 = new JsonMarshaller().Deserialize<SignedCloudEvent<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 

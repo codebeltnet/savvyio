@@ -2,10 +2,8 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Assets;
-using Savvyio.Assets.Domain;
 using Savvyio.Assets.Queries;
 using Savvyio.Data;
-using Savvyio.Extensions.Dapper;
 using Savvyio.Extensions.DapperExtensions;
 using Savvyio.Extensions.DependencyInjection.Dapper;
 using Savvyio.Extensions.DependencyInjection.Data;

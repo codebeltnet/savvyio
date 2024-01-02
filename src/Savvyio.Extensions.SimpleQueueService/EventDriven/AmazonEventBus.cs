@@ -23,16 +23,16 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonEventBus"/> class.
         /// </summary>
-        /// <param name="serializerContext">The <see cref="ISerializerContext"/> that is used when converting <see cref="IIntegrationEvent"/> implementations to messages.</param>
+        /// <param name="marshaller">The <see cref="IMarshaller"/> that is used when converting <see cref="IIntegrationEvent"/> implementations to messages.</param>
         /// <param name="options">The <see cref="AmazonEventBusOptions" /> which need to be configured.</param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="serializerContext"/> cannot be null -or-
+        /// <paramref name="marshaller"/> cannot be null -or-
         /// <paramref name="options"/> cannot be null.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// <paramref name="options"/> are not in a valid state.
         /// </exception>
-        public AmazonEventBus(ISerializerContext serializerContext, IOptions<AmazonEventBusOptions> options) : base(serializerContext, options.Value)
+        public AmazonEventBus(IMarshaller marshaller, IOptions<AmazonEventBusOptions> options) : base(marshaller, options.Value)
         {
         }
 
@@ -49,7 +49,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var request = new PublishRequest
             {
                 TopicArn = @event.Source,
-                Message = await SerializerContext.Serialize(@event).ToEncodedStringAsync().ConfigureAwait(false),
+                Message = await Marshaller.Serialize(@event).ToEncodedStringAsync().ConfigureAwait(false),
                 MessageGroupId = UseFirstInFirstOut ? @event.Source : null,
                 MessageDeduplicationId = UseFirstInFirstOut ? @event.Id : null,
                 MessageAttributes = new Dictionary<string, MessageAttributeValue>

@@ -30,17 +30,17 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Commands.Messaging.Cryptography
                 o.Time = utc;
             });
 
-            var sut3 = sut2.Sign(new NewtonsoftJsonSerializerContext(), o =>
+            var sut3 = sut2.Sign(new NewtonsoftJsonMarshaller(), o =>
             {
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
 
-            var json = new NewtonsoftJsonSerializerContext().Serialize(sut3);
+            var json = new NewtonsoftJsonMarshaller().Serialize(sut3);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new NewtonsoftJsonSerializerContext().Deserialize<IMessage<CreateMemberCommand>>(json);
+            var sut4 = new NewtonsoftJsonMarshaller().Deserialize<IMessage<CreateMemberCommand>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 

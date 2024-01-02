@@ -4,9 +4,9 @@ using System.IO;
 namespace Savvyio
 {
     /// <summary>
-    /// A generic interface for serializing and deserializing objects to and from a format of your choice.
+    /// Defines methods for serializing and deserializing objects to and from a <see cref="Stream"/>.
     /// </summary>
-    public interface ISerializerContext
+    public interface IMarshaller
     {
         /// <summary>
         /// Serializes the specified <paramref name="value"/> to an object of <see cref="Stream"/>.

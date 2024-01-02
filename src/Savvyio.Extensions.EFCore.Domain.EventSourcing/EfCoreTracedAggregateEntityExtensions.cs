@@ -16,11 +16,11 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
         /// <typeparam name="TKey">The type of the key that uniquely identifies the entity.</typeparam>
         /// <param name="entity">The entity to convert.</param>
         /// <param name="tracedDomainEventType">The originating type of <see cref="ITracedDomainEvent"/>.</param>
-        /// <param name="serializerContext">The <see cref="ISerializerContext"/> that is used when converting the specified <paramref name="tracedDomainEventType"/> into a deserialized version of <see cref="ITracedDomainEvent"/>.</param>
+        /// <param name="marshaller">The <see cref="IMarshaller"/> that is used when converting the specified <paramref name="tracedDomainEventType"/> into a deserialized version of <see cref="ITracedDomainEvent"/>.</param>
         /// <returns>A new instance of an <see cref="ITracedDomainEvent"/> implementation.</returns>
-        public static ITracedDomainEvent ToTracedDomainEvent<TEntity, TKey>(this EfCoreTracedAggregateEntity<TEntity, TKey> entity, Type tracedDomainEventType, ISerializerContext serializerContext) where TEntity : class, ITracedAggregateRoot<TKey>
+        public static ITracedDomainEvent ToTracedDomainEvent<TEntity, TKey>(this EfCoreTracedAggregateEntity<TEntity, TKey> entity, Type tracedDomainEventType, IMarshaller marshaller) where TEntity : class, ITracedAggregateRoot<TKey>
         {
-            return (ITracedDomainEvent)serializerContext.Deserialize(entity.Payload.ToStream(), tracedDomainEventType);
+            return (ITracedDomainEvent)marshaller.Deserialize(entity.Payload.ToStream(), tracedDomainEventType);
         }
     }
 }

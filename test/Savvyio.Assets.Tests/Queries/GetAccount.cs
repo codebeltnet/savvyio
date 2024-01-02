@@ -1,5 +1,4 @@
-﻿using Savvyio.Assets.EventDriven;
-using Savvyio.Queries;
+﻿using Savvyio.Queries;
 
 namespace Savvyio.Assets.Queries
 {

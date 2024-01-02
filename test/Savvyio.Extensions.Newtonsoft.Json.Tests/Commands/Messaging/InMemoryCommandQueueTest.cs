@@ -34,7 +34,7 @@ namespace Savvyio.Commands.Messaging
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
 
-            TestOutput.WriteLine(new NewtonsoftJsonSerializerContext().Serialize(sut2).ToEncodedString());
+            TestOutput.WriteLine(new NewtonsoftJsonMarshaller().Serialize(sut2).ToEncodedString());
 
             Comparer.Add(sut3);
 

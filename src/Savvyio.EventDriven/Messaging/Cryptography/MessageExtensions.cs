@@ -16,22 +16,22 @@ namespace Savvyio.EventDriven.Messaging.Cryptography
         /// </summary>
         /// <typeparam name="T">The type of the payload constraint to the <see cref="IIntegrationEvent"/> interface.</typeparam>
         /// <param name="message">The <see cref="IIntegrationEvent"/> message to cryptographically sign.</param>
-        /// <param name="serializerContext">The <see cref="ISerializerContext"/> that is used when converting the <paramref name="message"/> into an <see cref="ISignedMessage{T}"/>.</param>
+        /// <param name="marshaller">The <see cref="IMarshaller"/> that is used when converting the <paramref name="message"/> into an <see cref="ISignedMessage{T}"/>.</param>
         /// <param name="setup">The <see cref="SignedMessageOptions" /> which may be configured.</param>
         /// <returns>An implementation of the <see cref="ISignedMessage{T}"/> interface having a constraint to the <see cref="IIntegrationEvent"/> interface.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="message"/> cannot be null -or-
-        /// <paramref name="serializerContext"/> cannot be null.
+        /// <paramref name="marshaller"/> cannot be null.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// <paramref name="setup"/> failed to configure an instance of <see cref="SignedMessageOptions"/> in a valid state.
         /// </exception>
-        public static ISignedMessage<T> Sign<T>(this IMessage<T> message, ISerializerContext serializerContext, Action<SignedMessageOptions> setup = null) where T : IIntegrationEvent
+        public static ISignedMessage<T> Sign<T>(this IMessage<T> message, IMarshaller marshaller, Action<SignedMessageOptions> setup = null) where T : IIntegrationEvent
         {
             Validator.ThrowIfNull(message);
-            Validator.ThrowIfNull(serializerContext);
+            Validator.ThrowIfNull(marshaller);
             Validator.ThrowIfInvalidConfigurator(setup, out var options);
-            var data = serializerContext.Serialize(message);
+            var data = marshaller.Serialize(message);
             var signature = KeyedHashFactory.CreateHmacCrypto(options.SignatureSecret, options.SignatureAlgorithm).ComputeHash(data).ToHexadecimalString();
             return new SignedMessage<T>(message, signature);
         }

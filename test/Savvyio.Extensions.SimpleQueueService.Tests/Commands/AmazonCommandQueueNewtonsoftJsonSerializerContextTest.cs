@@ -18,7 +18,6 @@ using Xunit;
 using Xunit.Abstractions;
 using Xunit.Priority;
 using System.Runtime.InteropServices;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Savvyio.Extensions.Newtonsoft.Json;
 
@@ -30,12 +29,12 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
         private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
         private readonly AmazonCommandQueue _queue;
         private static readonly InMemoryTestStore<IMessage<ICommand>> Comparer = new();
-        private readonly ISerializerContext _serializer;
+        private readonly IMarshaller _marshaller;
 
         public AmazonCommandQueueNewtonsoftJsonSerializerContextTest(HostFixture fixture, ITestOutputHelper output) : base(fixture, output)
         {
             _queue = fixture.ServiceProvider.GetRequiredService<AmazonCommandQueue>();
-            _serializer = fixture.ServiceProvider.GetRequiredService<ISerializerContext>();
+            _marshaller = fixture.ServiceProvider.GetRequiredService<IMarshaller>();
         }
 
         [Fact, Priority(0)]
@@ -47,7 +46,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
 
-            TestOutput.WriteLine(_serializer.Serialize(sut2).ToEncodedString());
+            TestOutput.WriteLine(_marshaller.Serialize(sut2).ToEncodedString());
 
             Comparer.Add(sut3);
 
@@ -103,9 +102,9 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<ISerializerContext, NewtonsoftJsonSerializerContext>(_ =>
+            services.AddTransient<IMarshaller, NewtonsoftJsonMarshaller>(_ =>
             {
-                var newtonsoftjsonSerializer = new NewtonsoftJsonSerializerContext(o =>
+                var newtonsoftjsonSerializer = new NewtonsoftJsonMarshaller(o =>
                 {
                     o.Settings.ContractResolver = new CamelCasePropertyNamesContractResolver
                     {

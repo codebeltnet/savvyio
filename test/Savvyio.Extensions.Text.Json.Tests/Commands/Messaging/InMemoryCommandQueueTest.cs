@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Text.Json.Formatters;
 using Cuemon.Extensions.Xunit;
 using Cuemon.Threading;
 using Savvyio.Assets.Commands;
@@ -36,7 +35,7 @@ namespace Savvyio.Extensions.Text.Json.Commands.Messaging
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
 
-            TestOutput.WriteLine(new JsonSerializerContext().Serialize(sut2).ToEncodedString());
+            TestOutput.WriteLine(new JsonMarshaller().Serialize(sut2).ToEncodedString());
 
             Comparer.Add(sut3);
 

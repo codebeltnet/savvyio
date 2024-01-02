@@ -29,16 +29,16 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging.Cryptography
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
-            }).Sign(new JsonSerializerContext(), o =>
+            }).Sign(new JsonMarshaller(), o =>
             {
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
-            var json = new JsonSerializerContext().Serialize(sut2);
+            var json = new JsonMarshaller().Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new JsonSerializerContext().Deserialize<ISignedMessage<MemberCreated>>(json);
+            var sut4 = new JsonMarshaller().Deserialize<ISignedMessage<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 
@@ -95,7 +95,7 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging.Cryptography
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
-            }).Sign(new JsonSerializerContext(), o =>
+            }).Sign(new JsonMarshaller(), o =>
             {
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
@@ -104,7 +104,7 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging.Cryptography
 
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new JsonSerializerContext().Deserialize<SignedMessage<MemberCreated>>(json);
+            var sut4 = new JsonMarshaller().Deserialize<SignedMessage<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 

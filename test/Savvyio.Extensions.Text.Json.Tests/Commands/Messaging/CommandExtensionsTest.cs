@@ -27,12 +27,12 @@ namespace Savvyio.Extensions.Text.Json.Commands.Messaging
                 o.Time = utcNow;
             });
 
-            var json = new JsonSerializerContext().Serialize(sut2);
+            var json = new JsonMarshaller().Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
             
-            var sut4 = new JsonSerializerContext().Deserialize<IMessage<CreateMemberCommand>>(json);
+            var sut4 = new JsonMarshaller().Deserialize<IMessage<CreateMemberCommand>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 

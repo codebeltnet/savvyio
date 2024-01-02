@@ -5,23 +5,23 @@ using Cuemon.Extensions.Newtonsoft.Json.Formatters;
 namespace Savvyio.Extensions.Newtonsoft.Json
 {
     /// <summary>
-    /// An interface for serializing and deserializing JSON objects using Newtonsoft JSON.
+    /// Provides a class for marshalling data using the Newtonsoft JSON library.
     /// </summary>
-    /// <seealso cref="ISerializerContext" />
-    public class NewtonsoftJsonSerializerContext : ISerializerContext
+    /// <seealso cref="IMarshaller" />
+    public class NewtonsoftJsonMarshaller : IMarshaller
     {
         private readonly Action<NewtonsoftJsonFormatterOptions> _setup;
         
-        static NewtonsoftJsonSerializerContext()
+        static NewtonsoftJsonMarshaller()
         {
             Bootstrapper.Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NewtonsoftJsonSerializerContext"/> class.
+        /// Initializes a new instance of the <see cref="NewtonsoftJsonMarshaller"/> class.
         /// </summary>
         /// <param name="setup">The <see cref="NewtonsoftJsonFormatterOptions"/> which need to be configured.</param>
-        public NewtonsoftJsonSerializerContext(Action<NewtonsoftJsonFormatterOptions> setup = null)
+        public NewtonsoftJsonMarshaller(Action<NewtonsoftJsonFormatterOptions> setup = null)
         {
             _setup = setup;
         }
