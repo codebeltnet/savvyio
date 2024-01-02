@@ -39,7 +39,7 @@ namespace Savvyio.Domain.EventSourcing
         }
 
         /// <summary>
-        /// Registers the delegates responsible of handling types that implements the <see cref="ITracedDomainEvent"/> interface.
+        /// Registers the delegates responsible for handling types that implements the <see cref="ITracedDomainEvent"/> interface.
         /// </summary>
         /// <param name="handler">The registry that store the delegates of type <see cref="ITracedDomainEvent"/>.</param>
         protected abstract void RegisterDelegates(IFireForgetRegistry<ITracedDomainEvent> handler);
