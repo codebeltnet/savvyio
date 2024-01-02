@@ -30,7 +30,7 @@ namespace Savvyio
         [Fact]
         public void AddDispatchers_ShouldAddDispatchersFromSpecifiedAssemblies()
         {
-            var sut = new SavvyioOptions().AddDispatchers(typeof(ICommand).Assembly, typeof(IDomainEvent).Assembly, typeof(IIntegrationEvent).Assembly, typeof(IQuery).Assembly);
+            var sut = new SavvyioOptions().AddDispatchers(typeof(Command).Assembly, typeof(DomainEvent).Assembly, typeof(IntegrationEvent).Assembly, typeof(Query<>).Assembly);
 
             Assert.NotEmpty(sut.DispatcherServiceTypes);
             Assert.NotEmpty(sut.DispatcherImplementationTypes);

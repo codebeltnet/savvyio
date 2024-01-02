@@ -3,12 +3,8 @@ using Savvyio.Dispatchers;
 using Savvyio.Domain;
 using Savvyio.EventDriven;
 using Savvyio.Queries;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Cuemon.Extensions.Collections.Generic;
-using System;
-using Cuemon;
+using Savvyio.Reflection;
 
 namespace Savvyio.Extensions
 {
@@ -17,8 +13,6 @@ namespace Savvyio.Extensions
     /// </summary>
     public static class SavvyioOptionsExtensions
     {
-        private static readonly Lazy<IEnumerable<Assembly>> AssemblyLoadFactory = new(() => AppDomain.CurrentDomain.GetAssemblies().SelectMany(GetReferencedAssemblies).Distinct().Except(typeof(SavvyioOptions).Assembly.Yield()).ToList());
-
         /// <summary>
         /// Adds an implementation of the <see cref="IMediator"/> interface.
         /// </summary>
@@ -43,8 +37,7 @@ namespace Savvyio.Extensions
         /// <returns>A reference to <paramref name="options"/> so that additional configuration calls can be chained.</returns>
         public static SavvyioOptions UseAutomaticDispatcherDiscovery(this SavvyioOptions options)
         {
-            var assemblies = AssemblyLoadFactory.Value;
-            options.AddDispatchers(assemblies.ToArray());
+            options.AddDispatchers(AssemblyContext.CurrentDomainAssemblies.ToArray());
             return options;
         }
 
@@ -55,33 +48,9 @@ namespace Savvyio.Extensions
         /// <returns>A reference to <paramref name="options"/> so that additional configuration calls can be chained.</returns>
         public static SavvyioOptions UseAutomaticHandlerDiscovery(this SavvyioOptions options)
         {
-            var assemblies = AssemblyLoadFactory.Value;
-            options.AddHandlers(assemblies.ToArray());
+            options.AddHandlers(AssemblyContext.CurrentDomainAssemblies.ToArray());
             return options;
 
-        }
-
-        private static IEnumerable<Assembly> GetReferencedAssemblies(Assembly assembly)
-        {
-            var stack = new Stack<Assembly>();
-            var guard = new HashSet<string>();
-
-            yield return assembly;
-
-            stack.Push(assembly);
-
-            while (stack.TryPop(out var assemblyToTraverse))
-            {
-                foreach (var assemblyName in assemblyToTraverse.GetReferencedAssemblies())
-                {
-                    if (guard.Contains(assemblyName.FullName)) { continue; }
-                    Patterns.TryInvoke(() => Assembly.Load(assemblyName), out var referencedAssembly);
-                    if (referencedAssembly == null) { continue; }
-                    stack.Push(referencedAssembly);
-                    guard.Add(assemblyName.FullName);
-                    yield return referencedAssembly;
-                }
-            }
         }
     }
 }
