@@ -36,7 +36,7 @@ namespace Savvyio.Extensions.Text.Json.Commands.Messaging
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
 
-            TestOutput.WriteLine(JsonFormatter.SerializeObject(sut2).ToEncodedString());
+            TestOutput.WriteLine(new JsonSerializerContext().Serialize(sut2).ToEncodedString());
 
             Comparer.Add(sut3);
 

@@ -5,11 +5,11 @@ using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.EventDriven;
 using Savvyio.EventDriven.Messaging;
-using Savvyio.Messaging;
+using Savvyio.EventDriven.Messaging.CloudEvents;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging
+namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.CloudEvents
 {
     public class IntegrationEventExtensionsTest : Test
     {
@@ -18,7 +18,7 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging
         }
         
         [Fact]
-        public void ToMessage_ShouldSerializeAndDeserialize_MemberCreated_UsingInterface()
+        public void ToMessage_ToCloudEvent_ShouldSerializeAndDeserialize_MemberCreated_UsingInterface()
         {
             var utc = DateTime.Parse("2023-11-16T23:24:17.8414532Z", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
             var sut1 = new MemberCreated("Jane Doe", "jd@office.com").SetEventId("69bccf3b1117425397c5ed9ed757bb0f").SetTimestamp(utc);
@@ -26,14 +26,14 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
-            });
+            }).ToCloudEvent();
 
-            var json = new JsonSerializerContext().Serialize(sut2);
+            var json = new NewtonsoftJsonSerializerContext().Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new JsonSerializerContext().Deserialize<IMessage<MemberCreated>>(json);
+            var sut4 = new NewtonsoftJsonSerializerContext().Deserialize<ICloudEvent<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 
@@ -51,13 +51,14 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging
                                "eventId": "69bccf3b1117425397c5ed9ed757bb0f",
                                "timestamp": "2023-11-16T23:24:17.8414532Z"
                              }
-                           }
+                           },
+                           "specVersion": "1.0"
                          }
                          """.ReplaceLineEndings(), jsonString);
         }
 
         [Fact]
-        public void ToMessage_ShouldSerializeAndDeserialize_MemberCreated_UsingConcreteType()
+        public void ToMessage_ToCloudEvent_ShouldSerializeAndDeserialize_MemberCreated_UsingConcreteType()
         {
             var utcNow = DateTime.UtcNow;
             var sut1 = new MemberCreated("Jane Doe", "jd@office.com").SetEventId("69bccf3b1117425397c5ed9ed757bb0f").SetTimestamp(utcNow);
@@ -65,14 +66,14 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utcNow;
-            });
+            }).ToCloudEvent();
 
-            var json = new JsonSerializerContext(o => o.Settings.Converters.AddDateTimeConverter()).Serialize(sut2);
+            var json = new NewtonsoftJsonSerializerContext(o => o.Settings.DateFormatString = "O").Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
             
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new JsonSerializerContext(o => o.Settings.Converters.AddDateTimeConverter()).Deserialize<Message<MemberCreated>>(json);
+            var sut4 = new NewtonsoftJsonSerializerContext(o => o.Settings.DateFormatString = "O").Deserialize<CloudEvent<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 
@@ -90,7 +91,8 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging
                                  "eventId": "69bccf3b1117425397c5ed9ed757bb0f",
                                  "timestamp": "{{utcNow:O}}"
                                }
-                             }
+                             },
+                             "specVersion": "1.0"
                            }
                            """.ReplaceLineEndings(), jsonString);
         }

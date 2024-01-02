@@ -1,7 +1,6 @@
 ﻿using System;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Newtonsoft.Json.Formatters;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Commands;
 using Savvyio.Commands.Messaging;
@@ -28,17 +27,12 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Commands.Messaging
                 o.Time = utcNow;
             });
 
-            var json = NewtonsoftJsonFormatter.SerializeObject(sut2, o => o.Settings.DateFormatString = "O");
+            var json = new NewtonsoftJsonSerializerContext(o => o.Settings.DateFormatString = "O").Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = NewtonsoftJsonFormatter.DeserializeObject<IMessage<CreateMemberCommand>>(json, o =>
-            {
-                o.Settings.Converters
-                    .AddMessageConverter()
-                    .AddMetadataDictionaryConverter();
-            });
+            var sut4 = new NewtonsoftJsonSerializerContext(o => o.Settings.DateFormatString = "O").Deserialize<IMessage<CreateMemberCommand>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 

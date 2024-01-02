@@ -1,12 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Reflection;
+using Cuemon.Extensions.Text.Json;
+using Savvyio.EventDriven;
+using Savvyio.EventDriven.Messaging.CloudEvents;
+using Savvyio.EventDriven.Messaging.CloudEvents.Cryptography;
 using Savvyio.Messaging;
 using Savvyio.Messaging.Cryptography;
+using Savvyio.Reflection;
 
 namespace Savvyio.Extensions.Text.Json.Converters
 {
@@ -16,6 +22,9 @@ namespace Savvyio.Extensions.Text.Json.Converters
     /// <seealso cref="JsonConverter" />
     public class MessageConverter : JsonConverterFactory
     {
+        internal static readonly Lazy<IList<TypeInfo>> CloudEventTypes = new(() => AssemblyContext.CurrentDomainAssemblies.SelectMany(a => a.DefinedTypes.Where(ti => ti.HasInterfaces(typeof(ICloudEvent<>)) &&
+                                                                                                                                                                      ti is { IsAbstract: false, IsInterface: false })).ToList());
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MessageConverter"/> class.
         /// </summary>
@@ -27,8 +36,7 @@ namespace Savvyio.Extensions.Text.Json.Converters
         public override bool CanConvert(Type typeToConvert)
         {
             return (typeToConvert.IsGenericType && 
-                    (typeToConvert.GetGenericTypeDefinition() == typeof(IMessage<>) 
-                     || typeToConvert.GetGenericTypeDefinition() == typeof(ISignedMessage<>)));
+                    typeToConvert.GetGenericTypeDefinition().HasInterfaces(typeof(IMessage<>)));
         }
 
         /// <inheritdoc />
@@ -78,18 +86,58 @@ namespace Savvyio.Extensions.Text.Json.Converters
                 }
 
                 var message = new Message<T>(id, source, type, data, time);
-                if (typeToConvert == typeof(ISignedMessage<T>))
+
+                if (typeToConvert.HasInterfaces(typeof(ICloudEvent<>)))
+                {
+                    var requestType = typeToConvert.GetGenericArguments()[0];
+                    var cloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.CloudEvent"));
+                    var specVersion = document.RootElement.GetProperty("specVersion").GetString();
+                    var cloudEvent = Activator.CreateInstance(cloudEventType.MakeGenericType(requestType), [message, specVersion]) as IMessage<T>;
+
+                    if (typeToConvert.HasInterfaces(typeof(ISignedCloudEvent<>)))
+                    {
+                        var signedCloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.Cryptography.SignedCloudEvent"));
+                        var signature = document.RootElement.GetProperty("signature").GetString();
+                        
+                        return Activator.CreateInstance(signedCloudEventType.MakeGenericType(requestType), [cloudEvent, signature]) as IMessage<T>;
+                    }
+
+                    return cloudEvent;
+                }
+
+                if (typeToConvert.HasInterfaces(typeof(ISignedMessage<>)))
                 {
                     var signature = document.RootElement.GetProperty("signature").GetString();
                     return new SignedMessage<T>(message, signature);
                 }
+
                 return message;
             }
         }
 
         public override void Write(Utf8JsonWriter writer, IMessage<T> value, JsonSerializerOptions options)
         {
-            JsonSerializer.Serialize(writer, value, options.Clone(jso => jso.Converters.RemoveAllOf<IMessage<T>>())); // prevent stackoverflow in case this method gets called
+            writer.WriteStartObject();
+            writer.WriteString(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(value.Id)), value.Id);
+            writer.WriteString(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(value.Source)), value.Source);
+            writer.WriteString(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(value.Type)), value.Type);
+            writer.WritePropertyName(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(value.Time)));
+            writer.WriteObject(value.Time, options);
+            writer.WritePropertyName(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(value.Data)));
+            writer.WriteObject(value.Data, options);
+            
+            if (value.GetType().HasInterfaces(typeof(ICloudEvent<>)))
+            {
+                dynamic ce = value;
+                writer.WriteString(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(ICloudEvent<IIntegrationEvent>.SpecVersion)), ce.SpecVersion);
+            }
+
+            if (value is ISignedMessage<T> sm)
+            {
+                writer.WriteString(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(sm.Signature)), sm.Signature);
+            }
+
+            writer.WriteEndObject();
         }
     }
 }

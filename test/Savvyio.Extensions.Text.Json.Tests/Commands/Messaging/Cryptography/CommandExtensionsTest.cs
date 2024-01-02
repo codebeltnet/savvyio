@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Text.Json.Formatters;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Commands;
 using Savvyio.Commands.Messaging;
@@ -34,17 +33,12 @@ namespace Savvyio.Extensions.Text.Json.Commands.Messaging.Cryptography
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
 
-            var json = JsonFormatter.SerializeObject(sut2);
+            var json = new JsonSerializerContext().Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = JsonFormatter.DeserializeObject<ISignedMessage<CreateMemberCommand>>(json, o =>
-            {
-                o.Settings.Converters
-                    .AddMessageConverter()
-                    .AddMetadataDictionaryConverter();
-            });
+            var sut4 = new JsonSerializerContext().Deserialize<ISignedMessage<CreateMemberCommand>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 

@@ -1,10 +1,8 @@
 ﻿using System;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Text.Json.Formatters;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Commands;
-using Savvyio.Commands;
 using Savvyio.Commands.Messaging;
 using Savvyio.Messaging;
 using Xunit;
@@ -19,7 +17,7 @@ namespace Savvyio.Extensions.Text.Json.Commands.Messaging
         }
 
         [Fact]
-        public void EncloseToMessage_ShouldSerialize_WithoutSignature()
+        public void ToMessage_ShouldSerializeAndDeserialize_CreateMemberCommand_UsingInterface()
         {
             var utcNow = DateTime.UtcNow;
             var sut1 = new CreateMemberCommand("Jane Doe", 21, "jd@office.com").SetCorrelationId("3eefdef050c340bfba100bd49c58c181");
@@ -29,18 +27,12 @@ namespace Savvyio.Extensions.Text.Json.Commands.Messaging
                 o.Time = utcNow;
             });
 
-            var json = JsonFormatter.SerializeObject(sut2);
+            var json = new JsonSerializerContext().Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
-
             
-            var sut4 = JsonFormatter.DeserializeObject<IMessage<CreateMemberCommand>>(json, o =>
-            {
-                o.Settings.Converters
-                    .AddMessageConverter()
-                    .AddMetadataDictionaryConverter();
-            });
+            var sut4 = new JsonSerializerContext().Deserialize<IMessage<CreateMemberCommand>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 

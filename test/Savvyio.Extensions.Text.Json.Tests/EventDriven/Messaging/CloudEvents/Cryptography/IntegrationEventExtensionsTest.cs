@@ -3,25 +3,25 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Text.Json.Formatters;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.EventDriven;
 using Savvyio.EventDriven.Messaging;
+using Savvyio.EventDriven.Messaging.CloudEvents;
+using Savvyio.EventDriven.Messaging.CloudEvents.Cryptography;
 using Savvyio.EventDriven.Messaging.Cryptography;
-using Savvyio.Messaging.Cryptography;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
+namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging.CloudEvents.Cryptography
 {
     public class IntegrationEventExtensionsTest : Test
     {
         public IntegrationEventExtensionsTest(ITestOutputHelper output) : base(output)
         {
         }
-
+        
         [Fact]
-        public void ToMessage_Sign_ShouldSerializeAndDeserialize_MemberCreated_UsingInterface()
+        public void ToMessage_ToCloudEvent_Sign_ShouldSerializeAndDeserialize_MemberCreated_UsingInterface()
         {
             var utc = DateTime.Parse("2023-11-16T23:24:17.8414532Z", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
             var sut1 = new MemberCreated("Jane Doe", "jd@office.com").SetEventId("69bccf3b1117425397c5ed9ed757bb0f").SetTimestamp(utc);
@@ -29,16 +29,18 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
-            }).Sign(new NewtonsoftJsonSerializerContext(), o =>
+            }).ToCloudEvent()
+              .Sign(new JsonSerializerContext(), o =>
             {
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
-            var json = JsonFormatter.SerializeObject(sut2);
+
+            var json = new JsonSerializerContext().Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new NewtonsoftJsonSerializerContext().Deserialize<ISignedMessage<MemberCreated>>(json);
+            var sut4 = new JsonSerializerContext().Deserialize<ISignedCloudEvent<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 
@@ -59,7 +61,8 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
                                    "timestamp": "2023-11-16T23:24:17.8414532Z"
                                  }
                                },
-                               "signature": "f1aa38c6af66575aec152472e74e1d70d49da3c4e27a82a20eb94320c9cd22a4"
+                               "specVersion": "1.0",
+                               "signature": "d353adcaff291ef9f902c40614e4ad901981461f86c69b371467edc8878255de"
                              }
                              """.ReplaceLineEndings(), jsonString);
             }
@@ -80,14 +83,15 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
                                    "timestamp": "2023-11-16T23:24:17.8414532Z"
                                  }
                                },
-                               "signature": "40f2e00e66dd02014ba535e0bbff9fa04954bcbcf2f3fce69f688bd64583ee50"
+                               "specVersion": "1.0",
+                               "signature": "1f62f3e69a1062697972acf23d783e576be77bcf64748dbf6d04ac8c0d015617"
                              }
                              """.ReplaceLineEndings(), jsonString);
             }
         }
 
         [Fact]
-        public void ToMessage_Sign_ShouldSerializeAndDeserialize_MemberCreated_UsingConcreteType()
+        public void ToMessage_ToCloudEvent_Sign_ShouldSerializeAndDeserialize_MemberCreated_UsingConcreteType()
         {
             var utc = DateTime.Parse("2023-11-16T23:24:17.8414532Z", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
             var sut1 = new MemberCreated("Jane Doe", "jd@office.com").SetEventId("69bccf3b1117425397c5ed9ed757bb0f").SetTimestamp(utc);
@@ -95,16 +99,18 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
-            }).Sign(new NewtonsoftJsonSerializerContext(), o =>
+            }).ToCloudEvent()
+              .Sign(new JsonSerializerContext(), o =>
             {
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
-            var json = JsonFormatter.SerializeObject(sut2);
+
+            var json = new JsonSerializerContext().Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new NewtonsoftJsonSerializerContext().Deserialize<SignedMessage<MemberCreated>>(json);
+            var sut4 = new JsonSerializerContext().Deserialize<SignedCloudEvent<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 
@@ -125,7 +131,8 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
                                    "timestamp": "2023-11-16T23:24:17.8414532Z"
                                  }
                                },
-                               "signature": "f1aa38c6af66575aec152472e74e1d70d49da3c4e27a82a20eb94320c9cd22a4"
+                               "specVersion": "1.0",
+                               "signature": "d353adcaff291ef9f902c40614e4ad901981461f86c69b371467edc8878255de"
                              }
                              """.ReplaceLineEndings(), jsonString);
             }
@@ -146,7 +153,8 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
                                    "timestamp": "2023-11-16T23:24:17.8414532Z"
                                  }
                                },
-                               "signature": "40f2e00e66dd02014ba535e0bbff9fa04954bcbcf2f3fce69f688bd64583ee50"
+                               "specVersion": "1.0",
+                               "signature": "1f62f3e69a1062697972acf23d783e576be77bcf64748dbf6d04ac8c0d015617"
                              }
                              """.ReplaceLineEndings(), jsonString);
             }

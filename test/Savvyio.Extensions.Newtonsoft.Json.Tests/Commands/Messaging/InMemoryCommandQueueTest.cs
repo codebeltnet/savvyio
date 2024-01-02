@@ -4,11 +4,10 @@ using System.Threading.Tasks;
 using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Newtonsoft.Json.Formatters;
 using Cuemon.Extensions.Xunit;
 using Cuemon.Threading;
 using Savvyio.Assets.Commands;
-using Savvyio.Commands.Assets;
+using Savvyio.Extensions.Newtonsoft.Json;
 using Savvyio.Messaging;
 using Xunit;
 using Xunit.Abstractions;
@@ -35,7 +34,7 @@ namespace Savvyio.Commands.Messaging
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
 
-            TestOutput.WriteLine(NewtonsoftJsonFormatter.SerializeObject(sut2).ToEncodedString());
+            TestOutput.WriteLine(new NewtonsoftJsonSerializerContext().Serialize(sut2).ToEncodedString());
 
             Comparer.Add(sut3);
 
