@@ -38,7 +38,7 @@ namespace Savvyio.Domain
         /// Gets the equality components of this instance.
         /// </summary>
         /// <returns>An <see cref="IEnumerable{T}" /> that contains the equality components of this instance.</returns>
-        protected override IEnumerable<object> GetEqualityComponents()
+        protected sealed override IEnumerable<object> GetEqualityComponents()
         {
             yield return Value;
         }

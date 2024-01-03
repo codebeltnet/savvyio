@@ -21,6 +21,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json
                             list.AddRequestConverter();
                             list.AddMetadataDictionaryConverter();
                             list.AddMessageConverter();
+                            list.AddSingleValueObjectConverter();
                         };
                     }
                 }

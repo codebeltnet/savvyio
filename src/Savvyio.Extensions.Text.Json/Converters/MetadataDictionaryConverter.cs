@@ -12,14 +12,24 @@ namespace Savvyio.Extensions.Text.Json.Converters
     /// <remarks>Inspiration taken from this article: https://josef.codes/custom-dictionary-string-object-jsonconverter-for-system-text-json/</remarks>
     public class MetadataDictionaryConverter : JsonConverter<IMetadataDictionary>
     {
-        /// <inheritdoc />
-        public override bool CanConvert(Type typeToConvert)
+		/// <summary>
+		/// Determines whether the specified type can be converted.
+		/// </summary>
+		/// <param name="typeToConvert">The type to compare against.</param>
+		/// <returns><see langword="true" /> if the type can be converted; otherwise, <see langword="false" />.</returns>
+		public override bool CanConvert(Type typeToConvert)
         {
             return typeof(IMetadataDictionary).IsAssignableFrom(typeToConvert);
         }
 
-        /// <inheritdoc />
-        public override IMetadataDictionary Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+		/// <summary>
+		/// Reads and converts the JSON to  <paramref name="typeToConvert"/>.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		/// <param name="typeToConvert">The type to convert.</param>
+		/// <param name="options">An object that specifies serialization options to use.</param>
+		/// <returns>The converted value.</returns>
+		public override IMetadataDictionary Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var md = new MetadataDictionary();
             while (reader.Read())
@@ -32,8 +42,13 @@ namespace Savvyio.Extensions.Text.Json.Converters
             return md;
         }
 
-        /// <inheritdoc />
-        public override void Write(Utf8JsonWriter writer, IMetadataDictionary value, JsonSerializerOptions options)
+		/// <summary>
+		/// Writes a specified <paramref name="value"/> as JSON.
+		/// </summary>
+		/// <param name="writer">The writer to write to.</param>
+		/// <param name="value">The value to convert to JSON.</param>
+		/// <param name="options">An object that specifies serialization options to use.</param>
+		public override void Write(Utf8JsonWriter writer, IMetadataDictionary value, JsonSerializerOptions options)
         {
             JsonSerializer.Serialize(writer, value, options.Clone(jso => jso.Converters.RemoveAllOf<IMetadataDictionary>())); // prevent stackoverflow in case this method gets called
         }

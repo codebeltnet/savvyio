@@ -9,20 +9,38 @@ namespace Savvyio.Extensions.Text.Json.Converters
     /// </summary>
     public class DateTimeOffsetConverter : JsonConverter<DateTimeOffset>
     {
-        /// <inheritdoc />
-        public override bool CanConvert(Type typeToConvert)
+
+		/// <summary>
+		/// Determines whether the specified type can be converted.
+		/// </summary>
+		/// <param name="typeToConvert">The type to compare against.</param>
+		/// <returns><see langword="true" /> if the type can be converted; otherwise, <see langword="false" />.</returns>
+		public override bool CanConvert(Type typeToConvert)
         {
             return typeToConvert == typeof(DateTime);
         }
 
-        /// <inheritdoc />
-        public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+
+		/// <summary>
+		/// Reads and converts the JSON to <paramref name="typeToConvert"/>.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		/// <param name="typeToConvert">The type to convert.</param>
+		/// <param name="options">An object that specifies serialization options to use.</param>
+		/// <returns>The converted value.</returns>
+		public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             return reader.GetDateTimeOffset();
         }
 
-        /// <inheritdoc />
-        public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
+
+		/// <summary>
+		/// Writes a specified <paramref name="value"/> as JSON.
+		/// </summary>
+		/// <param name="writer">The writer to write to.</param>
+		/// <param name="value">The value to convert to JSON.</param>
+		/// <param name="options">An object that specifies serialization options to use.</param>
+		public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
         {
             writer.WriteStringValue(value.ToString("O"));
         }

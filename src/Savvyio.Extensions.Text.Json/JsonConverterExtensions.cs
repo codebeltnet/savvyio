@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using Cuemon;
+using Savvyio.Domain;
 using Savvyio.Extensions.Text.Json.Converters;
 using Savvyio.Messaging;
 
@@ -121,6 +122,21 @@ namespace Savvyio.Extensions.Text.Json
             Validator.ThrowIfNull(converters);
             converters.Add(new DateTimeOffsetConverter());
             return converters;
+        }
+
+        /// <summary>
+        /// Adds a <see cref="SingleValueObject{T}"/> converter to the collection.
+        /// </summary>
+        /// <param name="converters">The collection to extend.</param>
+        /// <returns>A reference to <paramref name="converters"/> so that additional calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="converters"/> cannot be null.
+        /// </exception>
+        public static ICollection<JsonConverter> AddSingleValueObjectConverter(this ICollection<JsonConverter> converters)
+        {
+	        Validator.ThrowIfNull(converters);
+	        converters.Add(new SingleValueObjectConverter());
+	        return converters;
         }
     }
 }

@@ -101,5 +101,20 @@ namespace Savvyio.Extensions.Newtonsoft.Json
             converters.Add(new MessageConverter());
             return converters;
         }
+
+        /// <summary>
+        /// Adds a <see cref="SingleValueObject{T}"/> converter to the collection.
+        /// </summary>
+        /// <param name="converters">The collection to extend.</param>
+        /// <returns>A reference to <paramref name="converters"/> so that additional calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="converters"/> cannot be null.
+        /// </exception>
+        public static ICollection<JsonConverter> AddSingleValueObjectConverter(this ICollection<JsonConverter> converters)
+        {
+	        Validator.ThrowIfNull(converters);
+	        converters.Add(new SingleValueObjectConverter());
+	        return converters;
+        }
     }
 }

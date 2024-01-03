@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Cuemon.Extensions.Text.Json" Version="8.0.0" />
+    <PackageReference Include="Cuemon.Extensions.Reflection" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

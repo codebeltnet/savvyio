@@ -32,14 +32,23 @@ namespace Savvyio.Extensions.Text.Json.Converters
         {
         }
 
-        /// <inheritdoc />
-        public override bool CanConvert(Type typeToConvert)
+        /// <summary>
+        /// When overridden in a derived class, determines whether the converter instance can convert the specified object type.
+        /// </summary>
+        /// <param name="typeToConvert">The type of the object to check whether it can be converted by this converter instance.</param>
+        /// <returns><see langword="true" /> if the instance can convert the specified object type; otherwise, <see langword="false" />.</returns>
+		public override bool CanConvert(Type typeToConvert)
         {
             return (typeToConvert.IsGenericType && 
                     typeToConvert.GetGenericTypeDefinition().HasInterfaces(typeof(IMessage<>)));
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Creates a converter for a specified type.
+        /// </summary>
+        /// <param name="typeToConvert">The type handled by the converter.</param>
+        /// <param name="options">The serialization options to use.</param>
+        /// <returns>A converter that is compatible with <paramref name="typeToConvert" />.</returns>
         public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
             var requestType = typeToConvert.GetGenericArguments()[0];

@@ -27,5 +27,20 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Commands
 
             Assert.Equivalent(ca, rehydrated, true);
         }
+
+        [Fact]
+        public void CreateAccountWithValueObjects_ShouldUseCustomConverter()
+        {
+	        var ca = new CreateAccountWithValueObjects(Guid.NewGuid(), "Michael Mortensen", "root@gimlichael.dev");
+
+	        var json = new NewtonsoftJsonMarshaller().Serialize(ca);
+	        var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
+
+	        TestOutput.WriteLine(jsonString);
+
+	        var rehydrated = new NewtonsoftJsonMarshaller().Deserialize<CreateAccountWithValueObjects>(json);
+
+	        Assert.Equivalent(ca, rehydrated, true);
+        }
     }
 }
