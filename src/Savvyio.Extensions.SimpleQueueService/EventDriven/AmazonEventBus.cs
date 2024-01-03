@@ -75,12 +75,11 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         public override async Task SubscribeAsync(Func<IMessage<IIntegrationEvent>, CancellationToken, Task> asyncHandler, Action<SubscribeAsyncOptions> setup = null)
         {
             var options = setup.Configure();
-
-            await Condition.FlipFlopAsync(options.ThrowIfCancellationWasRequested, () => InvokeHandlerAsync(asyncHandler, options.CancellationToken), async () =>
+            await Condition.FlipFlopAsync(options.ThrowIfCancellationWasRequested, () => InvokeHandlerAsync(asyncHandler, options.RemoveProcessedMessages, options.CancellationToken), async () =>
             {
                 try
                 {
-                    await InvokeHandlerAsync(asyncHandler, options.CancellationToken).ConfigureAwait(false);
+                    await InvokeHandlerAsync(asyncHandler, options.RemoveProcessedMessages,options.CancellationToken).ConfigureAwait(false);
                 }
                 catch (OperationCanceledException) when (options.CancellationToken.IsCancellationRequested)
                 {
@@ -89,7 +88,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             });
         }
 
-        private async Task InvokeHandlerAsync(Func<IMessage<IIntegrationEvent>, CancellationToken, Task> asyncHandler, CancellationToken ct)
+        private async Task InvokeHandlerAsync(Func<IMessage<IIntegrationEvent>, CancellationToken, Task> asyncHandler, bool removeProcessedMessages, CancellationToken ct)
         {
             var hasMessages = true;
             while (hasMessages)
@@ -98,7 +97,8 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                 var messages = await RetrieveMessagesAsync(o =>
                 {
                     o.MaxNumberOfMessages = int.MaxValue;
-                    o.CancellationToken = ct;
+                    o.RemoveProcessedMessages = removeProcessedMessages;
+					o.CancellationToken = ct;
                 }).ConfigureAwait(false);
 
                 foreach (var message in messages)

@@ -89,7 +89,7 @@ namespace Savvyio.Extensions.SimpleQueueService
             var lastRetreived = -1;
             while (lastRetreived != 0 || total >= maxNumberOfMessages)
             {
-                var messages = await ProcessMessagesAsync(sqs, maxNumberOfMessages, options.CancellationToken).ConfigureAwait(false);
+                var messages = await ProcessMessagesAsync(sqs, maxNumberOfMessages, options.RemoveProcessedMessages, options.CancellationToken).ConfigureAwait(false);
                 if (messages.Any())
                 {
                     receivedMessages.TryAdd(counter, messages);
@@ -115,7 +115,7 @@ namespace Savvyio.Extensions.SimpleQueueService
             return attributes.ApproximateNumberOfMessages;
         }
 
-        private async Task<IList<IMessage<TRequest>>> ProcessMessagesAsync(IAmazonSQS sqs, int maxNumberOfMessages, CancellationToken ct)
+        private async Task<IList<IMessage<TRequest>>> ProcessMessagesAsync(IAmazonSQS sqs, int maxNumberOfMessages, bool removeProcessedMessages, CancellationToken ct)
         {
             var request = new ReceiveMessageRequest
             {
@@ -138,7 +138,7 @@ namespace Savvyio.Extensions.SimpleQueueService
                 messages.Add(deserialized as IMessage<TRequest>);
             }
 
-            if (messages.Any()) { await RemoveProcessedMessagesAsync(response, sqs, ct).ConfigureAwait(false); }
+            if (removeProcessedMessages && messages.Count != 0) { await RemoveProcessedMessagesAsync(response, sqs, ct).ConfigureAwait(false); }
 
             return messages;
         }

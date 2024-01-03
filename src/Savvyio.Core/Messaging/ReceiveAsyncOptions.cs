@@ -25,12 +25,23 @@ namespace Savvyio.Messaging
         ///         <term><see cref="MaxNumberOfMessages"/></term>
         ///         <description>10</description>
         ///     </item>
+        ///     <item>
+        ///         <term><see cref="RemoveProcessedMessages"/></term>
+        ///         <description><c>true</c></description>
+        ///     </item>
         /// </list>
         /// </remarks>
         public ReceiveAsyncOptions()
         {
             MaxNumberOfMessages = 10;
-        }
+			RemoveProcessedMessages = true;
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether processed messages should be removed from the broker. Default is <c>true</c>.
+		/// </summary>
+		/// <value><c>true</c> if processed messages should be removed from the broker; otherwise, <c>false</c>.</value>
+		public bool RemoveProcessedMessages { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum number of messages to return.
