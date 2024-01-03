@@ -22,7 +22,7 @@ namespace Savvyio.Extensions.DependencyInjection
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <param name="setup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional configuration calls can be chained.</returns>
-        public static IServiceCollection AddSerializer<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IMarshaller
+        public static IServiceCollection AddMarshaller<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IMarshaller
         {
             Validator.ThrowIfNull(services);
             var options = setup.Configure();

@@ -110,7 +110,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         {
             AmazonResourceNameOptions.DefaultAccountId = Configuration["AWS:CallerIdentity"];
             
-            services.AddSerializer<JsonMarshaller>();
+            services.AddMarshaller<JsonMarshaller>();
 
             services.Configure<AmazonEventBusOptions>(o =>
             {

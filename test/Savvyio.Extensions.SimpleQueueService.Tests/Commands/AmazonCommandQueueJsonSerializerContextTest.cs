@@ -102,7 +102,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddSerializer<JsonMarshaller>();
+            services.AddMarshaller<JsonMarshaller>();
 
             services.Configure<AmazonCommandQueueOptions>(o =>
             {

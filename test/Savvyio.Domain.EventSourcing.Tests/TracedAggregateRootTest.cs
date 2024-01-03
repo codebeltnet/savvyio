@@ -82,7 +82,7 @@ namespace Savvyio.Domain.EventSourcing
             switch (formatterType)
             {
                 case Type newton when newton == typeof(NewtonsoftJsonMarshaller):
-                    sc.AddSerializer<NewtonsoftJsonMarshaller>();
+                    sc.AddMarshaller<NewtonsoftJsonMarshaller>();
                     sc.AddEfCoreAggregateDataSource<NewtonsoftJsonMarshaller>(o =>
                     {
                         o.ContextConfigurator = b => b.UseInMemoryDatabase($"Dummy").EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
@@ -96,7 +96,7 @@ namespace Savvyio.Domain.EventSourcing
                     sc.AddEfCoreTracedAggregateRepository<TracedAccount, Guid, NewtonsoftJsonMarshaller>();
                     break;
                 case Type builtin when builtin == typeof(JsonMarshaller):
-                    sc.AddSerializer<JsonMarshaller>();
+                    sc.AddMarshaller<JsonMarshaller>();
                     sc.AddEfCoreAggregateDataSource<JsonMarshaller>(o =>
                     {
                         o.ContextConfigurator = b => b.UseInMemoryDatabase($"Dummy").EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
