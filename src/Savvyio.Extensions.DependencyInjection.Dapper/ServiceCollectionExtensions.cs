@@ -21,7 +21,9 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
         public static IServiceCollection AddDapperDataSource(this IServiceCollection services, Action<DapperDataSourceOptions> dataSourceSetup, Action<ServiceOptions> serviceSetup = null)
         {
-            return services.AddDapperDataSource<DapperDataSource>(serviceSetup).Configure(dataSourceSetup);
+            return services
+	            .AddDapperDataSource<DapperDataSource>(serviceSetup)
+	            .ConfigureTriple(dataSourceSetup);
         }
 
         /// <summary>
@@ -34,7 +36,9 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
         public static IServiceCollection AddDapperDataSource<TMarker>(this IServiceCollection services, Action<DapperDataSourceOptions<TMarker>> dataSourceSetup, Action<ServiceOptions> serviceSetup = null)
         {
-            return services.AddDapperDataSource<DapperDataSource<TMarker>>(serviceSetup).Configure(dataSourceSetup);
+            return services
+	            .AddDapperDataSource<DapperDataSource<TMarker>>(serviceSetup)
+	            .ConfigureTriple(dataSourceSetup);
         }
 
         /// <summary>

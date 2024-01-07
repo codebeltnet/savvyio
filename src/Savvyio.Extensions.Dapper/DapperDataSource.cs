@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Data;
 using Cuemon;
-using Cuemon.Extensions;
-using Microsoft.Extensions.Options;
 
 namespace Savvyio.Extensions.Dapper
 {
@@ -18,20 +16,18 @@ namespace Savvyio.Extensions.Dapper
         /// <summary>
         /// Initializes a new instance of the <see cref="DapperDataSource"/> class.
         /// </summary>
-        /// <param name="setup">The <see cref="DapperDataSourceOptions" /> which need to be configured.</param>
-        public DapperDataSource(IOptions<DapperDataSourceOptions> setup)
+        /// <param name="options">The <see cref="DapperDataSourceOptions"/> used to configure this instance.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="options"/> cannot be null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="options"/> are not in a valid state.
+        /// </exception>
+        public DapperDataSource(DapperDataSourceOptions options)
         {
-            Validator.ThrowIfInvalidOptions(setup?.Value, nameof(setup));
-            _dbConnection = setup!.Value.ConnectionFactory.Invoke();
+            Validator.ThrowIfInvalidOptions(options);
+            _dbConnection = options.ConnectionFactory.Invoke();
             _dbConnection.Open();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DapperDataSource"/> class.
-        /// </summary>
-        /// <param name="setup">The <see cref="DapperDataSourceOptions" /> which need to be configured.</param>
-        public DapperDataSource(Action<DapperDataSourceOptions> setup) : this(Options.Create(setup.Configure()))
-        {
         }
 
         /// <summary>
