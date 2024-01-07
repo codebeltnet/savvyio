@@ -4,7 +4,6 @@ using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Threading;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Savvyio.Domain;
 
 namespace Savvyio.Extensions.EFCore
@@ -28,18 +27,10 @@ namespace Savvyio.Extensions.EFCore
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreDataSource"/> class.
         /// </summary>
-        /// <param name="setup">The <see cref="EfCoreDataSourceOptions" /> which need to be configured.</param>
-        public EfCoreDataSource(IOptions<EfCoreDataSourceOptions> setup)
+        /// <param name="options">The <see cref="EfCoreDataSourceOptions"/> used to configure this instance.</param>
+        public EfCoreDataSource(EfCoreDataSourceOptions options)
         {
-            DbContext = new EfCoreDbContext(setup);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EfCoreDataSource"/> class.
-        /// </summary>
-        /// <param name="setup">The <see cref="EfCoreDataSourceOptions" /> which need to be configured.</param>
-        public EfCoreDataSource(Action<EfCoreDataSourceOptions> setup) : this(Options.Create(setup.Configure()))
-        {
+            DbContext = new EfCoreDbContext(options);
         }
 
         /// <summary>

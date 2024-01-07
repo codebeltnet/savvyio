@@ -26,7 +26,7 @@ namespace Savvyio.Extensions.EFCore
         [Fact]
         public async Task EfCoreDataSource_ShouldFailWithInvalidOperationException_NoDatabaseProvider()
         {
-            var sut = new EfCoreDataSource(Options.Create(new EfCoreDataSourceOptions()));
+            var sut = new EfCoreDataSource(new EfCoreDataSourceOptions());
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => sut.SaveChangesAsync());
             Assert.StartsWith("No database provider has been configured for this DbContext.", ex.Message);
         }
@@ -34,7 +34,10 @@ namespace Savvyio.Extensions.EFCore
         [Fact]
         public async Task EfCoreDataSource_ShouldFailWithObjectDisposedException()
         {
-            var sut = new EfCoreDataSource(o => o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy"));
+	        var sut = new EfCoreDataSource(new EfCoreDataSourceOptions()
+	        {
+		        ContextConfigurator = b => b.UseInMemoryDatabase("Dummy")
+	        });
             sut.Dispose();
 
             await Assert.ThrowsAsync<ObjectDisposedException>(() => sut.SaveChangesAsync());
@@ -49,12 +52,13 @@ namespace Savvyio.Extensions.EFCore
             sut1.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
             sut1.AddScoped<IDomainEventHandler, AccountDomainEventHandler>();
             sut1.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
-            var sut2 = sut1.BuildServiceProvider();
-            var sut3 = new EfCoreAggregateDataSource(sut2.GetRequiredService<IDomainEventDispatcher>(), o =>
+            sut1.ConfigureTriple<EfCoreDataSourceOptions>(o =>
             {
-                o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy");
-                o.ModelConstructor = mb => mb.AddAccount();
+	            o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy");
+	            o.ModelConstructor = mb => mb.AddAccount();
             });
+            var sut2 = sut1.BuildServiceProvider();
+            var sut3 = new EfCoreAggregateDataSource(sut2.GetRequiredService<IDomainEventDispatcher>(), sut2.GetRequiredService<EfCoreDataSourceOptions>());
             var sut4 = new EfCoreRepository<Account, long>(sut3);
 
             var id = Guid.NewGuid();

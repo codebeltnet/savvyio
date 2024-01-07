@@ -26,7 +26,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         public static IServiceCollection AddEfCoreDataSource(this IServiceCollection services, Action<EfCoreDataSourceOptions> dataSourceSetup, Action<EfCoreServiceOptions> serviceSetup = null)
         {
             services.AddEfCoreDataSource<EfCoreDataSource>(serviceSetup);
-            return services.Configure(dataSourceSetup);
+            return services.ConfigureTriple(dataSourceSetup);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         public static IServiceCollection AddEfCoreDataSource<TMarker>(this IServiceCollection services, Action<EfCoreDataSourceOptions<TMarker>> dataSourceSetup, Action<EfCoreServiceOptions> serviceSetup = null)
         {
             services.AddEfCoreDataSource<EfCoreDataSource<TMarker>>(serviceSetup);
-            return services.Configure(dataSourceSetup);
+            return services.ConfigureTriple(dataSourceSetup);
         }
 
         /// <summary>

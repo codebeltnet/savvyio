@@ -1,7 +1,4 @@
-﻿using System;
-using Cuemon.Extensions;
-using Microsoft.Extensions.Options;
-using Savvyio.Extensions.EFCore;
+﻿using Savvyio.Extensions.EFCore;
 
 namespace Savvyio.Extensions.DependencyInjection.EFCore
 {
@@ -16,16 +13,8 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreDataSource{TMarker}"/> class.
         /// </summary>
-        /// <param name="setup">The <see cref="EfCoreDataSourceOptions{TMarker}" /> which need to be configured.</param>
-        public EfCoreDataSource(IOptions<EfCoreDataSourceOptions<TMarker>> setup) : base(new EfCoreDbContext<TMarker>(setup))
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EfCoreDataSource{TMarker}"/> class.
-        /// </summary>
-        /// <param name="setup">The <see cref="EfCoreDataSourceOptions{TMarker}" /> which need to be configured.</param>
-        public EfCoreDataSource(Action<EfCoreDataSourceOptions<TMarker>> setup) : this(Options.Create(setup.Configure()))
+        /// <param name="options">The <see cref="EfCoreDataSourceOptions{TMarker}" /> used to configure this instance.</param>
+        public EfCoreDataSource(EfCoreDataSourceOptions<TMarker> options) : base(new EfCoreDbContext<TMarker>(options))
         {
         }
     }

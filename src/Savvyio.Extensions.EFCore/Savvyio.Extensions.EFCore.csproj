@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Savvyio.Core\Savvyio.Core.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection\Savvyio.Extensions.DependencyInjection.csproj" />
   </ItemGroup>
 
 </Project>
