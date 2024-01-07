@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Savvyio.EventDriven;
 using Savvyio.EventDriven.Messaging;
 using Savvyio.Extensions.DependencyInjection;
+using Savvyio.Extensions.DependencyInjection.SimpleQueueService;
 using Savvyio.Extensions.SimpleQueueService.Assets;
 using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging;
@@ -40,7 +41,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         {
             var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
             var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
-            var sut3 = sut1.ToMessage(sut2, nameof(MemberCreated));
+            var sut3 = sut1.ToMessage(sut2, "journal-svc.journals.updated-event");
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
 
@@ -111,16 +112,13 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             AmazonResourceNameOptions.DefaultAccountId = Configuration["AWS:CallerIdentity"];
             
             services.AddMarshaller<JsonMarshaller>();
-
-            services.Configure<AmazonEventBusOptions>(o =>
+            services.AddAmazonEventBus(o =>
             {
-                var queue = IsLinux ? "savvyio-events" : "savvyio-events.fifo";
-                o.Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]);
-                o.Endpoint = RegionEndpoint.EUWest1;
-                o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}");
+	            var queue = IsLinux ? "savvyio-events" : "savvyio-events.fifo";
+	            o.Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]);
+	            o.Endpoint = RegionEndpoint.EUWest1;
+	            o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}");
             });
-
-            services.AddScoped<AmazonEventBus>();
         }
     }
 }

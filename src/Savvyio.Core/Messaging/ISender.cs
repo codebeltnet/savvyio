@@ -1,6 +1,7 @@
 ﻿using Cuemon.Threading;
 using System.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 
 namespace Savvyio.Messaging
 {
@@ -11,11 +12,11 @@ namespace Savvyio.Messaging
     public interface ISender<in TRequest> where TRequest : IRequest
     {
         /// <summary>
-        /// Sends the specified <paramref name="message"/> asynchronous using Point-to-Point Channel/P2P MEP.
+        /// Sends the specified <paramref name="messages"/> asynchronous using Point-to-Point Channel/P2P MEP.
         /// </summary>
-        /// <param name="message">The message to send.</param>
+        /// <param name="messages">The messages to send.</param>
         /// <param name="setup">The <see cref="AsyncOptions" /> which may be configured.</param>
         /// <returns>A <see cref="Task"/> that represents the asynchronous operation.</returns>
-        Task SendAsync(IMessage<TRequest> message, Action<AsyncOptions> setup = null);
+        Task SendAsync(IEnumerable<IMessage<TRequest>> messages, Action<AsyncOptions> setup = null);
     }
 }

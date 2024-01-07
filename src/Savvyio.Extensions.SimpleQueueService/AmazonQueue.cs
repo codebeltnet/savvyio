@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Cuemon.Extensions;
 using Cuemon.Threading;
 using Savvyio.Messaging;
 
@@ -19,15 +18,6 @@ namespace Savvyio.Extensions.SimpleQueueService
         /// Initializes a new instance of the <see cref="AmazonQueue{TRequest}"/> class.
         /// </summary>
         /// <param name="marshaller">The <see cref="IMarshaller"/> that is used when converting models to messages.</param>
-        /// <param name="setup">The <see cref="AmazonMessageOptions" /> which need to be configured.</param>
-        protected AmazonQueue(IMarshaller marshaller, Action<AmazonMessageOptions> setup) : this(marshaller, setup.Configure())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AmazonQueue{TRequest}"/> class.
-        /// </summary>
-        /// <param name="marshaller">The <see cref="IMarshaller"/> that is used when converting models to messages.</param>
         /// <param name="options">The configured <see cref="AmazonMessageOptions"/>.</param>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="marshaller"/> cannot be null -or-
@@ -41,18 +31,18 @@ namespace Savvyio.Extensions.SimpleQueueService
         }
 
         /// <summary>
-        /// Sends the specified <paramref name="message" /> asynchronous using Point-to-Point Channel/P2P MEP.
+        /// Sends the specified <paramref name="messages" /> asynchronous using Point-to-Point Channel/P2P MEP.
         /// </summary>
-        /// <param name="message">The message to send.</param>
+        /// <param name="messages">The messages to send.</param>
         /// <param name="setup">The <see cref="AsyncOptions" /> which may be configured.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public abstract Task SendAsync(IMessage<TRequest> message, Action<AsyncOptions> setup = null);
+        public abstract Task SendAsync(IEnumerable<IMessage<TRequest>> messages, Action<AsyncOptions> setup = null);
 
         /// <summary>
         /// Receive one or more message(s) asynchronous using Point-to-Point Channel/P2P MEP.
         /// </summary>
-        /// <param name="setup">The <see cref="ReceiveAsyncOptions" /> which may be configured.</param>
+        /// <param name="setup">The <see cref="AsyncOptions" /> which may be configured.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a sequence of <see cref="IMessage{T}"/> whose generic type argument is <see cref="IRequest"/>.</returns>
-        public abstract Task<IEnumerable<IMessage<TRequest>>> ReceiveAsync(Action<ReceiveAsyncOptions> setup = null);
+        public abstract IAsyncEnumerable<IMessage<TRequest>> ReceiveAsync(Action<AsyncOptions> setup = null);
     }
 }

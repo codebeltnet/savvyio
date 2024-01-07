@@ -15,6 +15,7 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using Savvyio.EventDriven;
 using Savvyio.EventDriven.Messaging;
+using Savvyio.Extensions.DependencyInjection.SimpleQueueService;
 using Savvyio.Extensions.Newtonsoft.Json;
 using Savvyio.Extensions.SimpleQueueService.Assets;
 using Savvyio.Messaging;
@@ -128,15 +129,13 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                 return newtonsoftjsonSerializer;
             });
 
-            services.Configure<AmazonEventBusOptions>(o =>
+            services.AddAmazonEventBus(o =>
             {
-                var queue = IsLinux ? "newtonsoft-savvyio-events" : "newtonsoft-savvyio-events.fifo";
-                o.Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]);
-                o.Endpoint = RegionEndpoint.EUWest1;
-                o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}");
+	            var queue = IsLinux ? "newtonsoft-savvyio-events" : "newtonsoft-savvyio-events.fifo";
+	            o.Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]);
+	            o.Endpoint = RegionEndpoint.EUWest1;
+	            o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}");
             });
-
-            services.AddScoped<AmazonEventBus>();
         }
     }
 }

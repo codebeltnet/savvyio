@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.Runtime;
 using Cuemon.Extensions;
+using Cuemon.Extensions.Collections.Generic;
 using Cuemon.Extensions.Newtonsoft.Json.Formatters;
 using Cuemon.Extensions.Text.Json.Formatters;
 using Cuemon.Extensions.Xunit;
@@ -69,7 +71,7 @@ namespace Savvyio
 
                 var commandQueue = host.ServiceProvider.GetRequiredService<IPointToPointChannel<ICommand>>();
 
-                await commandQueue.SendAsync(createAccount.ToMessage("urn:command:create-account".ToUri(), nameof(createAccount))).ConfigureAwait(false);
+                await commandQueue.SendAsync(createAccount.ToMessage("urn:command:create-account".ToUri(), nameof(createAccount)).Yield()).ConfigureAwait(false);
             }
         }
 

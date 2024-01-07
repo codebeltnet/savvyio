@@ -8,7 +8,6 @@ using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
 using Cuemon.Threading;
-using Microsoft.Extensions.Options;
 using Savvyio.EventDriven;
 using Savvyio.Messaging;
 
@@ -24,15 +23,15 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         /// Initializes a new instance of the <see cref="AmazonEventBus"/> class.
         /// </summary>
         /// <param name="marshaller">The <see cref="IMarshaller"/> that is used when converting <see cref="IIntegrationEvent"/> implementations to messages.</param>
-        /// <param name="options">The <see cref="AmazonEventBusOptions" /> which need to be configured.</param>
+        /// <param name="options">The <see cref="AmazonEventBusOptions"/> used to configure this instance.</param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="marshaller"/> cannot be null -or-
+        /// <paramref name="marshaller"/> cannot be null - or -
         /// <paramref name="options"/> cannot be null.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// <paramref name="options"/> are not in a valid state.
         /// </exception>
-        public AmazonEventBus(IMarshaller marshaller, IOptions<AmazonEventBusOptions> options) : base(marshaller, options.Value)
+        public AmazonEventBus(IMarshaller marshaller, AmazonEventBusOptions options) : base(marshaller, options)
         {
         }
 
@@ -75,11 +74,11 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         public override async Task SubscribeAsync(Func<IMessage<IIntegrationEvent>, CancellationToken, Task> asyncHandler, Action<SubscribeAsyncOptions> setup = null)
         {
             var options = setup.Configure();
-            await Condition.FlipFlopAsync(options.ThrowIfCancellationWasRequested, () => InvokeHandlerAsync(asyncHandler, options.RemoveProcessedMessages, options.CancellationToken), async () =>
+            await Condition.FlipFlopAsync(options.ThrowIfCancellationWasRequested, () => InvokeHandlerAsync(asyncHandler, options.CancellationToken), async () =>
             {
                 try
                 {
-                    await InvokeHandlerAsync(asyncHandler, options.RemoveProcessedMessages,options.CancellationToken).ConfigureAwait(false);
+                    await InvokeHandlerAsync(asyncHandler, options.CancellationToken).ConfigureAwait(false);
                 }
                 catch (OperationCanceledException) when (options.CancellationToken.IsCancellationRequested)
                 {
@@ -88,23 +87,16 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             });
         }
 
-        private async Task InvokeHandlerAsync(Func<IMessage<IIntegrationEvent>, CancellationToken, Task> asyncHandler, bool removeProcessedMessages, CancellationToken ct)
+        private async Task InvokeHandlerAsync(Func<IMessage<IIntegrationEvent>, CancellationToken, Task> asyncHandler, CancellationToken cancellationToken)
         {
             var hasMessages = true;
             while (hasMessages)
             {
                 hasMessages = false;
-                var messages = await RetrieveMessagesAsync(o =>
+                await foreach (var message in RetrieveMessagesAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    o.MaxNumberOfMessages = int.MaxValue;
-                    o.RemoveProcessedMessages = removeProcessedMessages;
-					o.CancellationToken = ct;
-                }).ConfigureAwait(false);
-
-                foreach (var message in messages)
-                {
-                    hasMessages = true;
-                    await asyncHandler.Invoke(message, ct).ConfigureAwait(false);
+	                hasMessages = true;
+	                await asyncHandler.Invoke(message, cancellationToken).ConfigureAwait(false);
                 }
             }
         }

@@ -8,7 +8,6 @@ using Cuemon;
 using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Xunit;
 using Cuemon.Extensions.Xunit.Hosting;
-using Cuemon.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Commands;
 using Savvyio.Commands.Messaging;
@@ -18,7 +17,11 @@ using Xunit;
 using Xunit.Abstractions;
 using Xunit.Priority;
 using System.Runtime.InteropServices;
+using Cuemon.Diagnostics;
+using Cuemon.Extensions.Collections.Generic;
 using Newtonsoft.Json.Serialization;
+using Savvyio.Extensions.DependencyInjection;
+using Savvyio.Extensions.DependencyInjection.SimpleQueueService;
 using Savvyio.Extensions.Newtonsoft.Json;
 
 namespace Savvyio.Extensions.SimpleQueueService.Commands
@@ -50,7 +53,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 
             Comparer.Add(sut3);
 
-            await _queue.SendAsync(sut3);
+            await _queue.SendAsync(sut3.Yield());
         }
 
         [Fact, Priority(1)]
@@ -72,24 +75,23 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
             var messages = Generate.RangeOf(1000, i =>
             {
                 var email = $"{Generate.RandomString(5)}@outlook.com";
-                return new CreateMemberCommand(Generate.RandomString(10), (byte)Generate.RandomNumber(byte.MaxValue), email).ToMessage($"urn:{i}:{email}".ToUri(), nameof(CreateMemberCommand));
-            });
-
-            await ParallelFactory.ForEachAsync(messages, async (message, token) =>
-            {
+                var message = new CreateMemberCommand(Generate.RandomString(10), (byte)Generate.RandomNumber(byte.MaxValue), email).ToMessage($"urn:{i}:{email}".ToUri(), nameof(CreateMemberCommand));
                 Comparer.Add(message);
-                await _queue.SendAsync(message, o => o.CancellationToken = token).ConfigureAwait(false);
-            }).ConfigureAwait(false);
+                return message;
+            }).ToList();
+
+            var profiler = await TimeMeasure.WithActionAsync(_ => _queue.SendAsync(messages)).ConfigureAwait(false);
+
+            TestOutput.WriteLine(profiler.ToString());
+
+            await Task.Delay(TimeSpan.FromSeconds(5)).ConfigureAwait(false); // allow for messages to be populated in SQS
         }
 
         [Fact, Priority(3)]
         public async Task ReceiveAsync_CreateMemberCommand_All()
         {
             var sut1 = Comparer.Query(message => message.Source.StartsWith("urn")).ToList();
-            var sut2 = (await _queue.ReceiveAsync(o =>
-            {
-                o.MaxNumberOfMessages = int.MaxValue;
-            })).ToList();
+            var sut2 = await _queue.ReceiveAsync().ToListAsync();
             
             TestOutput.WriteLine(sut2.Count.ToString());
             TestOutput.WriteLines(sut2.Take(10));
@@ -102,31 +104,15 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IMarshaller, NewtonsoftJsonMarshaller>(_ =>
+	        services.AddMarshaller<NewtonsoftJsonMarshaller>();
+            services.AddAmazonCommandQueue(o =>
             {
-                var newtonsoftjsonSerializer = new NewtonsoftJsonMarshaller(o =>
-                {
-                    o.Settings.ContractResolver = new CamelCasePropertyNamesContractResolver
-                    {
-                        IgnoreSerializableInterface = true,
-                        NamingStrategy = new CamelCaseNamingStrategy
-                        {
-                            ProcessDictionaryKeys = true
-                        }
-                    };
-                });
-                return newtonsoftjsonSerializer;
+	            var queue = IsLinux ? "newtonsoft-savvyio-commands" : "newtonsoft-savvyio-commands.fifo";
+	            o.Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]);
+	            o.Endpoint = RegionEndpoint.EUWest1;
+	            o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}");
+	            o.ReceiveContext.UseApproximateNumberOfMessages = true;
             });
-
-            services.Configure<AmazonCommandQueueOptions>(o =>
-            {
-                var queue = IsLinux ? "newtonsoft-savvyio-commands" : "newtonsoft-savvyio-commands.fifo";
-                o.Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]);
-                o.Endpoint = RegionEndpoint.EUWest1;
-                o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}");
-            });
-
-            services.AddScoped<AmazonCommandQueue>();
         }
     }
 }

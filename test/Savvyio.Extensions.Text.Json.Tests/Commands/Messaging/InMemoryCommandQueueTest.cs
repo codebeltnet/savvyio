@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cuemon;
 using Cuemon.Extensions;
+using Cuemon.Extensions.Collections.Generic;
 using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Xunit;
 using Cuemon.Threading;
@@ -39,7 +40,7 @@ namespace Savvyio.Extensions.Text.Json.Commands.Messaging
 
             Comparer.Add(sut3);
 
-            await Queue.SendAsync(sut3);
+            await Queue.SendAsync(sut3.Yield());
         }
 
         [Fact, Priority(1)]
@@ -67,7 +68,7 @@ namespace Savvyio.Extensions.Text.Json.Commands.Messaging
             await ParallelFactory.ForEachAsync(messages, (message, token) =>
             {
                 Comparer.Add(message);
-                return Queue.SendAsync(message, o => o.CancellationToken = token);
+                return Queue.SendAsync(message.Yield(), o => o.CancellationToken = token);
             });
         }
 
@@ -75,10 +76,7 @@ namespace Savvyio.Extensions.Text.Json.Commands.Messaging
         public async Task ReceiveAsync_CreateMemberCommand_All()
         {
             var sut1 = Comparer.Query(message => message.Source.StartsWith("urn")).ToList();
-            var sut2 = (await Queue.ReceiveAsync(o =>
-            {
-                o.MaxNumberOfMessages = int.MaxValue;
-            })).ToList();
+            var sut2 = await Queue.ReceiveAsync().ToListAsync();
             
             TestOutput.WriteLines(sut2.Take(10));
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Cuemon.Extensions;
 using Cuemon.Threading;
 using Savvyio.Messaging;
 
@@ -19,17 +18,9 @@ namespace Savvyio.Extensions.SimpleQueueService
         /// Initializes a new instance of the <see cref="AmazonBus{TRequest}"/> class.
         /// </summary>
         /// <param name="marshaller">The <see cref="IMarshaller"/> that is used when converting models to messages.</param>
-        /// <param name="setup">The <see cref="AmazonMessageOptions" /> which need to be configured.</param>
-        protected AmazonBus(IMarshaller marshaller, Action<AmazonMessageOptions> setup) : this(marshaller, setup.Configure())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AmazonBus{TRequest}"/> class.
-        /// </summary>
-        /// <param name="marshaller">The <see cref="IMarshaller"/> that is used when converting models to messages.</param>
-        /// <param name="options">The configured <see cref="AmazonMessageOptions"/>.</param>
+        /// <param name="options">The <see cref="AmazonMessageOptions"/> used to configure this instance.</param>
         /// <exception cref="ArgumentNullException">
+        /// <paramref name="marshaller"/> cannot be null - or -
         /// <paramref name="options"/> cannot be null.
         /// </exception>
         /// <exception cref="ArgumentException">

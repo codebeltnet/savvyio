@@ -24,22 +24,11 @@ namespace Savvyio.Messaging
         ///         <term><see cref="ThrowIfCancellationWasRequested"/></term>
         ///         <description><c>false</c></description>
         ///     </item>
-        ///     <item>
-        ///         <term><see cref="RemoveProcessedMessages"/></term>
-        ///         <description><c>true</c></description>
-        ///     </item>
         /// </list>
         /// </remarks>
         public SubscribeAsyncOptions()
         {
-	        RemoveProcessedMessages = true;
         }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether processed messages should be removed from the broker. Default is <c>true</c>.
-        /// </summary>
-        /// <value><c>true</c> if processed messages should be removed from the broker; otherwise, <c>false</c>.</value>
-        public bool RemoveProcessedMessages { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to throw an <see cref="OperationCanceledException"/> (or derived thereof) if a <see cref="CancellationToken"/> was requested cancelled.
