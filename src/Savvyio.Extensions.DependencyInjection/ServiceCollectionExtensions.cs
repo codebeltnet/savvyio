@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Cuemon;
+using Cuemon.Configuration;
 using Cuemon.Extensions;
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,13 +16,28 @@ namespace Savvyio.Extensions.DependencyInjection
     /// </summary>
     public static class ServiceCollectionExtensions
     {
+		/// <summary>
+		/// Registers the specified <paramref name="setup"/> as a triple-configuration for both compatibility with (and outside the wonderful world of) Microsoft Dependency Injection e.g., IOptions&lt;TOptions&gt;, Action&lt;TOptions&gt; and TOptions.
+		/// </summary>
+		/// <typeparam name="TOptions">The options type to be configured.</typeparam>
+		/// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
+		/// <param name="setup">The <see cref="Action{T}"/> used to configure the options.</param>
+		/// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
+		public static IServiceCollection ConfigureTriple<TOptions>(this IServiceCollection services, Action<TOptions> setup) where TOptions : class, IParameterObject, new()
+	    {
+		    return services
+			    .Configure(setup) // support for IOptions<TOptions>
+			    .AddSingleton(setup) // support for Action<TOptions>
+				.AddSingleton(Patterns.Configure(setup)); // support for TOptions
+		}
+
         /// <summary>
         /// Adds an implementation of <see cref="IMarshaller" /> to the specified <see cref="IServiceCollection" />.
         /// </summary>
         /// <typeparam name="TService">The type of the <see cref="IMarshaller"/> to add.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <param name="setup">The <see cref="ServiceOptions" /> which may be configured.</param>
-        /// <returns>A reference to <paramref name="services" /> so that additional configuration calls can be chained.</returns>
+        /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         public static IServiceCollection AddMarshaller<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IMarshaller
         {
             Validator.ThrowIfNull(services);
@@ -39,7 +55,7 @@ namespace Savvyio.Extensions.DependencyInjection
         /// <typeparam name="TService">The type of the <see cref="IDataSource"/> to add.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <param name="setup">The <see cref="ServiceOptions" /> which may be configured.</param>
-        /// <returns>A reference to <paramref name="services" /> so that additional configuration calls can be chained.</returns>
+        /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>If the underlying type of <typeparamref name="TService"/> implements <see cref="IDependencyInjectionMarker{TMarker}"/> interface then this is automatically handled. Also, the implementation will be type forwarded accordingly.</remarks>
         /// <seealso cref="IDependencyInjectionMarker{TMarker}"/>
         /// <seealso cref="IDataSource"/>
@@ -60,7 +76,7 @@ namespace Savvyio.Extensions.DependencyInjection
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
         /// <param name="setup">The <see cref="ServiceLocatorOptions" /> which may be configured.</param>
-        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
+        /// <returns>A reference to <paramref name="services"/> so that additional calls can be chained.</returns>
         public static IServiceCollection AddServiceLocator(this IServiceCollection services, Action<ServiceLocatorOptions> setup = null)
         {
             var options = setup.Configure();
@@ -73,7 +89,7 @@ namespace Savvyio.Extensions.DependencyInjection
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
         /// <param name="setup">The <see cref="SavvyioDependencyInjectionOptions" /> which may be configured.</param>
-        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
+        /// <returns>A reference to <paramref name="services"/> so that additional calls can be chained.</returns>
         public static IServiceCollection AddSavvyIO(this IServiceCollection services, Action<SavvyioDependencyInjectionOptions> setup = null)
         {
             var options = setup.Configure();
