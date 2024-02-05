@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Cuemon.Threading;
+using Cuemon;
 
 namespace Savvyio.Handlers
 {
@@ -26,7 +26,7 @@ namespace Savvyio.Handlers
         /// <typeparam name="TResponse">The type of the response.</typeparam>
         /// <param name="request">The model that is handled by a function delegate.</param>
         /// <param name="ct">The cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>A task that represents the asynchronous operation. The task result contains a <see cref="ConditionalValue{TResult}"/> that indicates if a function delegate matching the specified <paramref name="request"/> was invoked and with the potential result hereof.</returns>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a <see cref="ConditionalValue"/> that indicates if a function delegate matching the specified <paramref name="request"/> was invoked and with the potential result hereof.</returns>
         Task<ConditionalValue<TResponse>> TryInvokeAsync<TResponse>(TRequest request, CancellationToken ct = default);
     }
 }

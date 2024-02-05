@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Extensions.IO" Version="8.0.1" />
-    <PackageReference Include="Cuemon.Extensions.Newtonsoft.Json" Version="8.0.1" />
+    <PackageReference Include="Cuemon.Extensions.IO" Version="8.1.0-preview.52" />
+    <PackageReference Include="Cuemon.Extensions.Newtonsoft.Json" Version="8.1.0-preview.52" />
     <PackageReference Include="System.Linq.Async" Version="6.0.1" />
   </ItemGroup>
 
