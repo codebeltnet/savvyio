@@ -187,7 +187,7 @@ namespace Savvyio.Domain.EventSourcing
 Annotations: 
   BaseTypeDiscoveryConvention:DerivedTypes: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.List`1[Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType]]
   NonNullableConventionState: System.Reflection.NullabilityInfoContext
-  ProductVersion: 8.0.0
+  ProductVersion: 8.0.1
   RelationshipDiscoveryConvention:InverseNavigationCandidates: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.SortedSet`1[System.Type]]", schema, ignoreLineEndingDifferences: true);
         }
 
