@@ -13,9 +13,9 @@ using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.Newtonsoft.Json.Commands.Messaging.Cryptography
 {
-    public class CommandExtensionsTest : Test
+    public class MessageExtensionsTest : Test
     {
-        public CommandExtensionsTest(ITestOutputHelper output) : base(output)
+        public MessageExtensionsTest(ITestOutputHelper output) : base(output)
         {
         }
 
