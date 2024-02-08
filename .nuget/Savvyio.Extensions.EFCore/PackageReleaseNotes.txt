@@ -1,3 +1,16 @@
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- CHANGED EfCoreDataSource class in the Savvyio.Extensions.EFCore namespace to use EfCoreDataSourceOptions instead of IOptions{EfCoreDataSourceOptions} on the constructor
+- CHANGED EfCoreDbContext class in the Savvyio.Extensions.EFCore namespace to use EfCoreDataSourceOptions instead of IOptions{EfCoreDataSourceOptions} on the constructor
+ 
+# Improvements
+- CHANGED EfCoreRepository{TEntity, TKey} class in the Savvyio.Extensions.EFCore namespace to allow access to a new protected property, Set, that returns DbSet{TEntity} and also marked remaining members as virtual
+ 
 Version: 1.1.0
 Availability: .NET 7.0, .NET 6.0
  

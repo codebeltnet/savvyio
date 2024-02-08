@@ -1,3 +1,47 @@
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# New Features
+- ADDED ISignedMessage{T} interface in the Savvyio.Messaging.Cryptography namespace that defines a generic way to wrap an IRequest inside a cryptographically signed message
+- ADDED SignedMessage{T} record in the Savvyio.Messaging.Cryptography namespace that provides a default implementation of the ISignedMessage{T} interface
+- ADDED SignedMessageOptions class in the Savvyio.Messaging.Cryptography namespace that specifies options that is related to wrapping an IRequest implementation inside a cryptographically signed message
+- ADDED IMarshaller interface in the Savvyio namespace that defines methods for serializing and deserializing objects to and from a Stream
+- EXTENDED MetadataExtensions class in the Savvyio namespace with new extension methods for the IMetadata interface: GetMemberType{T}
+- ADDED ICommand interface in the Savvyio.Commands namespace that defines a marker interface that specifies an intention to do something (e.g. change the state)
+- ADDED ICommandDispatcher interface in the Savvyio.Commands namespace that defines a Command dispatcher that uses Fire-and-Forget/In-Only MEP
+- ADDED ICommandHandler interface in the Savvyio.Commands namespace that defines a handler responsible for objects that implements the ICommand interface
+- ADDED ITracedAggregateRepository interface in the Savvyio.Domain.EventSourcing namespace that defines a generic way of abstracting traced read- and writable repositories (CRud) that is optimized for Domain Driven Design
+- ADDED ITracedAggregateRoot interface in the Savvyio.Domain.EventSourcing namespace that defines an Event Sourcing capable contract of an Aggregate as specified in Domain Driven Design
+- ADDED ITracedDomainEvent interface in the Savvyio.Domain.EventSourcing namespace that specifies something that happened in the domain that you want other parts of the same domain (in-process/inner-application) to be aware of
+- ADDED IAggregateRepository interface in the Savvyio.Domain namespace that defines a generic way of abstracting persistent repositories (CRUD) that is optimized for Domain Driven Design
+- ADDED IAggregateRoot interface in the Savvyio.Domain namespace that defines a marker interface of an Aggregate as specified in Domain Driven Design
+- ADDED IDomainEvent interface in the Savvyio.Domain namespace that defines a marker interface that specifies something that happened in the domain that you want other parts of the same domain (in-process/inner-application) to be made aware of
+- ADDED IDomainEventDispatcher interface in the Savvyio.Domain namespace that defines a Domain Event dispatcher that uses Fire-and-Forget/In-Only MEP
+- ADDED IDomainEventHandler interface in the Savvyio.Domain namespace that specifies a handler responsible for objects that implements the IDomainEvent interface
+- ADDED IEntity interface in the Savvyio.Domain namespace that defines an Entity as specified in Domain Driven Design
+- ADDED IIntegrationEvent interface in the Savvyio.EventDriven namespace that defines a marker interface that specifies something that happened when an Aggregate was successfully persisted and you want other subsystems (out-process/inter-application) to be made aware of
+- ADDED IIntegrationEventDispatcher interface in the Savvyio.EventDriven namespace that defines an Integration Event dispatcher that uses Fire-and-Forget/In-Only MEP
+- ADDED IIntegrationEventHandler interface in the Savvyio.EventDriven namespace that specifies a handler responsible for objects that implements the IIntegrationEvent interface
+- ADDED IQuery interface in the Savvyio.Queries namespace that defines a marker interface that specifies something that returns data
+- ADDED IQueryDispatcher interface in the Savvyio.Queries namespace that defines a Query dispatcher that uses Request-Reply/In-Out MEP
+- ADDED IQueryHandler interface in the Savvyio.Queries namespace that defines a handler responsible for objects that implements the IQuery interface
+- ADDED ISignedCloudEvent{T} interface in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace that defines a generic way to wrap an IRequest inside a CloudEvents compliant message format
+- ADDED ICloudEvent{T} interface in the Savvyio.EventDriven.Messaging.CloudEvents namespace that defines a generic way to wrap an IRequest inside a CloudEvents compliant message format
+- ADDED AssemblyContext class in the Savvyio.Reflection namespace that provides a set of static methods and properties to manage and filter assemblies in the current application domain
+ 
+# Improvements
+- CHANGED SetTimestamp{T} extension method on the MetadataExtensions class in the Savvyio namespace to include an optional nullable DateTime parameter
+- CHANGED Request record in the Savvyio namespace to automatically set the member type of the current implementation in the default constructor
+ 
+# Breaking Changes
+- CHANGED Time property on the IMessage{T} interface in the Savvyio.Messaging namespace from a string signature to a nullable DateTime signature
+- CHANGED Time property on the Message{T} class in the Savvyio.Messaging namespace from a string signature to a nullable DateTime signature
+- CHANGED ReceiveAsync method on the IReceiver{TRequest} interface in the Savvyio.Messaging namespace from Task{IEnumerable{IMessage{TRequest}}} to IAsyncEnumerable{IMessage{TRequest}}
+- REMOVED ReceiveAsyncOptions class from the Savvyio.Messaging namespace
+ 
 Version: 1.1.0
 Availability: .NET 7.0, .NET 6.0
  

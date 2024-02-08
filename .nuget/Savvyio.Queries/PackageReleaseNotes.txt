@@ -1,3 +1,14 @@
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- MOVED IQuery interface in the Savvyio.Queries namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED IQueryDispatcher interface in the Savvyio.Queries namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED IQueryHandler interface in the Savvyio.Queries namespace to the namespace equivalent in the Savvyio.Core assembly
+ 
 Version: 1.1.0
 Availability: .NET 7.0, .NET 6.0
  

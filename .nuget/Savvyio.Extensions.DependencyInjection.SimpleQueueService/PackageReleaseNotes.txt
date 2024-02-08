@@ -1,3 +1,17 @@
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- CHANGED AmazonCommandQueue{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.Commands namespace to use AmazonCommandQueueOptions{TMarker} instead of IOptions{AmazonCommandQueueOptions{TMarker}} on the constructor
+- CHANGED AmazonEventBus{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.Commands namespace to use AmazonEventBusOptions{TMarker} instead of IOptions{AmazonEventBusOptions{TMarker}} on the constructor
+ 
+# Improvements
+- CHANGED AmazonCommandQueue{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.Commands namespace to include an IMarshaller interface in the constructor that is used when converting ICommand implementations to messages
+- CHANGED AmazonEventBus{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.EventDriven namespace to include an IMarshaller interface in the constructor that is used when converting IIntegrationEvent implementations to messages
+ 
 Version: 1.1.0
 Availability: .NET 7.0, .NET 6.0
  

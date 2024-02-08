@@ -1,3 +1,12 @@
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# New Features
+- EXTENDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace with new extension methods for the IServiceCollection interface: AddMarshaller{TService} and ConfigureTriple{TOptions}
+ 
 Version: 1.1.0
 Availability: .NET 7.0, .NET 6.0
  

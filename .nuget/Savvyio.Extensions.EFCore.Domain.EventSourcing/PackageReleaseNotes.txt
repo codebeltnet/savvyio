@@ -1,3 +1,17 @@
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- CHANGED ToTracedDomainEvent{TEntity, TKey} extension method on the EfCoreTracedAggregateEntityExtensions class in the Savvyio.Extensions.EFCore.Domain.EventSourcing namespace to include an IMarshaller interface that is used when converting a traced domain event type into a deserialized version of ITracedDomainEvent
+- CHANGED ToByteArray extension method on the TracedDomainEventExtensions class in the Savvyio.Extensions.EFCore.Domain.EventSourcing namespace to include an IMarshaller interface that is used when converting an ITracedDomainEvent into an array of bytes
+ 
+# Improvements
+- CHANGED EfCoreTracedAggregateEntity{TEntity, TKey} class in the Savvyio.Extensions.EFCore.Domain.EventSourcing namespace to include an IMarshaller interface in the constructor that is used when converting between ITracedDomainEvent into a serialized format
+- CHANGED EfCoreTracedAggregateRepository{TEntity, TKey} class in the Savvyio.Extensions.EFCore.Domain.EventSourcing namespace to include an IMarshaller interface in the constructor that is used when converting between ITracedDomainEvent and arbitrary data
+ 
 Version: 1.1.0
 Availability: .NET 7.0, .NET 6.0
  
