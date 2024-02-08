@@ -4,7 +4,7 @@ using Cuemon;
 namespace Savvyio.EventDriven.Messaging.CloudEvents.Cryptography
 {
     /// <summary>
-    /// Provides a default implementation of the <see cref="ICloudEvent{T}"/> interface.
+    /// Provides a default implementation of the <see cref="ISignedCloudEvent{T}"/> interface.
     /// </summary>
     /// <typeparam name="T">The type of the payload constraint to the <see cref="IIntegrationEvent"/> interface.</typeparam>
     /// <seealso cref="ICloudEvent{T}" />
