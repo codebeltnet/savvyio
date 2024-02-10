@@ -76,7 +76,7 @@ namespace Savvyio.Extensions.Dispatchers
                     o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(PlatformProvider)).EnableDetailedErrors().LogTo(Console.WriteLine);
                     o.ModelConstructor = mb => mb.AddPlatformProvider();
                 });
-                services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery().UseAutomaticHandlerDiscovery().AddMediator<Mediator>());
+                services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true).AddMediator<Mediator>());
                 services.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
                 services.AddScoped<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
             }))
@@ -116,7 +116,7 @@ namespace Savvyio.Extensions.Dispatchers
                 });
                 services.AddSavvyIO(o =>
                 {
-                    o.AddMediator<Mediator>().EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery().UseAutomaticHandlerDiscovery();
+                    o.AddMediator<Mediator>().EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true);
                 });
                 services.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
                 services.AddScoped<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
@@ -151,7 +151,7 @@ namespace Savvyio.Extensions.Dispatchers
                        services.AddScoped<IPersistentRepository<PlatformProvider, Guid>, EfCoreRepository<PlatformProvider, Guid, PlatformProvider>>();
                        services.AddEfCoreDataSource<Account>(o => o.ModelConstructor = builder => builder.AddAccount());
                        services.AddEfCoreDataSource<PlatformProvider>(o => o.ModelConstructor = builder => builder.AddPlatformProvider());
-                       services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery().UseAutomaticHandlerDiscovery());
+                       services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true));
                        services.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
                        services.AddScoped<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
                    }))

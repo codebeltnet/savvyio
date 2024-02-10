@@ -4,7 +4,9 @@ using Savvyio.Domain;
 using Savvyio.EventDriven;
 using Savvyio.Queries;
 using System.Linq;
+using System.Reflection;
 using Savvyio.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Savvyio.Extensions
 {
@@ -31,24 +33,42 @@ namespace Savvyio.Extensions
         }
 
         /// <summary>
-        /// Enforce automatic discovery of handlers implementing the <see cref="IHandler"/> interface using brute assembly scanning.
+        /// Enforce automatic discovery of handlers implementing the <see cref="IDispatcher"/> interface using either <paramref name="bruteAssemblyScanning"/> or lightweight <see cref="Assembly.GetCallingAssembly"/>.
         /// </summary>
         /// <param name="options">The <see cref="SavvyioOptions"/> to extend.</param>
+        /// <param name="bruteAssemblyScanning"><c>true</c> to use brute assembly scanning for all <see cref="IDispatcher"/> interface implementations throughout the application domain; otherwise, <c>false</c>.</param>
         /// <returns>A reference to <paramref name="options"/> so that additional configuration calls can be chained.</returns>
-        public static SavvyioOptions UseAutomaticDispatcherDiscovery(this SavvyioOptions options)
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static SavvyioOptions UseAutomaticDispatcherDiscovery(this SavvyioOptions options, bool bruteAssemblyScanning = false)
         {
-            options.AddDispatchers(AssemblyContext.CurrentDomainAssemblies.ToArray());
+            if (bruteAssemblyScanning)
+            {
+                options.AddDispatchers(AssemblyContext.CurrentDomainAssemblies.ToArray());
+            }
+            else
+            {
+                options.AddDispatchers(Assembly.GetCallingAssembly());
+            }
             return options;
         }
 
         /// <summary>
-        /// Enforce automatic discovery of dispatchers implementing the <see cref="IDispatcher"/> interface using brute assembly scanning.
+        /// Enforce automatic discovery of dispatchers implementing the <see cref="IHandler"/> interface using either <paramref name="bruteAssemblyScanning"/> or lightweight <see cref="Assembly.GetCallingAssembly"/>.
         /// </summary>
         /// <param name="options">The <see cref="SavvyioOptions"/> to extend.</param>
+        /// <param name="bruteAssemblyScanning"><c>true</c> to use brute assembly scanning for all <see cref="IHandler"/> interface implementations throughout the application domain; otherwise, <c>false</c>.</param>
         /// <returns>A reference to <paramref name="options"/> so that additional configuration calls can be chained.</returns>
-        public static SavvyioOptions UseAutomaticHandlerDiscovery(this SavvyioOptions options)
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static SavvyioOptions UseAutomaticHandlerDiscovery(this SavvyioOptions options, bool bruteAssemblyScanning = false)
         {
-            options.AddHandlers(AssemblyContext.CurrentDomainAssemblies.ToArray());
+            if (bruteAssemblyScanning)
+            {
+                options.AddHandlers(AssemblyContext.CurrentDomainAssemblies.ToArray());
+            }
+            else
+            {
+                options.AddHandlers(Assembly.GetCallingAssembly());
+            }
             return options;
 
         }
