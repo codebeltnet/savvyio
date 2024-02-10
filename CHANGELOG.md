@@ -154,6 +154,11 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 - AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.Commands namespace to use AmazonEventBusOptions instead of IOptions{AmazonEventBusOptions} on the constructor
 - AmazonBus{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to use AmazonMessageOptions instead of Action{AmazonMessageOptions} on the constructor
 
+#### Savvyio.Extensions.Dispatchers
+
+- UseAutomaticDispatcherDiscovery extension method on the SavvyioOptionsExtensions class in the Savvyio.Extensions namespace to include an optional boolean parameter; bruteAssemblyScanning that defaults to false (former implementation would be equivalent to true)
+- UseAutomaticHandlerDiscovery extension method on the SavvyioOptionsExtensions class in the Savvyio.Extensions namespace to include an optional boolean parameter; bruteAssemblyScanning that defaults to false (former implementation would be equivalent to true)
+
 ### Removed
 
 #### Savvyio.Commands
