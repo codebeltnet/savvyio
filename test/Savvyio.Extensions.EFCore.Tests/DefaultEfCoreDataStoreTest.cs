@@ -4,11 +4,10 @@ using Cuemon.Extensions.Xunit;
 using Microsoft.EntityFrameworkCore;
 using Savvyio.Assets;
 using Savvyio.Assets.Domain;
-using Savvyio.Extensions.EFCore;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions.Storage
+namespace Savvyio.Extensions.EFCore
 {
     public class DefaultEfCoreDataStoreTest : Test
     {
@@ -23,10 +22,10 @@ namespace Savvyio.Extensions.Storage
             var name = "Test";
             var email = "test@unit.test";
 
-            var sut1 = new EfCoreDataSource(o =>
+            var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
             {
-                o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy");
-                o.ModelConstructor = mb => mb.AddAccount();
+                ContextConfigurator = b => b.UseInMemoryDatabase("Dummy"),
+                ModelConstructor = mb => mb.AddAccount()
             });
 
             var sut2 = new DefaultEfCoreDataStore<Account>(sut1);
@@ -47,10 +46,10 @@ namespace Savvyio.Extensions.Storage
             var email = "test@unit.test";
             var dto = new Account(id, name, email);
 
-            var sut1 = new EfCoreDataSource(o =>
+            var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
             {
-                o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy");
-                o.ModelConstructor = mb => mb.AddAccount();
+                ContextConfigurator = b => b.UseInMemoryDatabase("Dummy"),
+                ModelConstructor = mb => mb.AddAccount()
             });
 
             var sut2 = new DefaultEfCoreDataStore<Account>(sut1);
@@ -75,10 +74,10 @@ namespace Savvyio.Extensions.Storage
             var email = "test@unit.test";
             var dto = new Account(id, name, email);
 
-            var sut1 = new EfCoreDataSource(o =>
+            var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
             {
-                o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy");
-                o.ModelConstructor = mb => mb.AddAccount();
+                ContextConfigurator = b => b.UseInMemoryDatabase("Dummy"),
+                ModelConstructor = mb => mb.AddAccount()
             });
 
             var sut2 = new DefaultEfCoreDataStore<Account>(sut1);

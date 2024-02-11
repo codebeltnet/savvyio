@@ -1,10 +1,202 @@
 # Changelog
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
-## 1.1.0
+## [2.0.0] - 2024-02-11
+
+### Added
+
+#### Savvyio.Commands
+
+- MessageExtensions class in the Savvyio.Commands.Messaging.Cryptography namespace that consist of extension methods for the IMessage{T} interface: Sign{T}
+
+#### Savvyio.Core
+
+- ISignedMessage{T} interface in the Savvyio.Messaging.Cryptography namespace that defines a generic way to wrap an IRequest inside a cryptographically signed message
+- SignedMessage{T} record in the Savvyio.Messaging.Cryptography namespace that provides a default implementation of the ISignedMessage{T} interface
+- SignedMessageOptions class in the Savvyio.Messaging.Cryptography namespace that specifies options that is related to wrapping an IRequest implementation inside a cryptographically signed message
+- IMarshaller interface in the Savvyio namespace that defines methods for serializing and deserializing objects to and from a Stream
+- MetadataExtensions class in the Savvyio namespace was extended with new extension methods for the IMetadata interface: GetMemberType{T}
+- ICommand interface in the Savvyio.Commands namespace that defines a marker interface that specifies an intention to do something (e.g. change the state)
+- ICommandDispatcher interface in the Savvyio.Commands namespace that defines a Command dispatcher that uses Fire-and-Forget/In-Only MEP
+- ICommandHandler interface in the Savvyio.Commands namespace that defines a handler responsible for objects that implements the ICommand interface
+- ITracedAggregateRepository interface in the Savvyio.Domain.EventSourcing namespace that defines a generic way of abstracting traced read- and writable repositories (CRud) that is optimized for Domain Driven Design
+- ITracedAggregateRoot interface in the Savvyio.Domain.EventSourcing namespace that defines an Event Sourcing capable contract of an Aggregate as specified in Domain Driven Design
+- ITracedDomainEvent interface in the Savvyio.Domain.EventSourcing namespace that specifies something that happened in the domain that you want other parts of the same domain (in-process/inner-application) to be aware of
+- IAggregateRepository interface in the Savvyio.Domain namespace that defines a generic way of abstracting persistent repositories (CRUD) that is optimized for Domain Driven Design
+- IAggregateRoot interface in the Savvyio.Domain namespace that defines a marker interface of an Aggregate as specified in Domain Driven Design
+- IDomainEvent interface in the Savvyio.Domain namespace that defines a marker interface that specifies something that happened in the domain that you want other parts of the same domain (in-process/inner-application) to be made aware of
+- IDomainEventDispatcher interface in the Savvyio.Domain namespace that defines a Domain Event dispatcher that uses Fire-and-Forget/In-Only MEP
+- IDomainEventHandler interface in the Savvyio.Domain namespace that specifies a handler responsible for objects that implements the IDomainEvent interface
+- IEntity interface in the Savvyio.Domain namespace that defines an Entity as specified in Domain Driven Design
+- IIntegrationEvent interface in the Savvyio.EventDriven namespace that defines a marker interface that specifies something that happened when an Aggregate was successfully persisted and you want other subsystems (out-process/inter-application) to be made aware of
+- IIntegrationEventDispatcher interface in the Savvyio.EventDriven namespace that defines an Integration Event dispatcher that uses Fire-and-Forget/In-Only MEP
+- IIntegrationEventHandler interface in the Savvyio.EventDriven namespace that specifies a handler responsible for objects that implements the IIntegrationEvent interface
+- IQuery interface in the Savvyio.Queries namespace that defines a marker interface that specifies something that returns data
+- IQueryDispatcher interface in the Savvyio.Queries namespace that defines a Query dispatcher that uses Request-Reply/In-Out MEP
+- IQueryHandler interface in the Savvyio.Queries namespace that defines a handler responsible for objects that implements the IQuery interface
+- ISignedCloudEvent{T} interface in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace that defines a generic way to wrap an IRequest inside a CloudEvents compliant message format
+- ICloudEvent{T} interface in the Savvyio.EventDriven.Messaging.CloudEvents namespace that defines a generic way to wrap an IRequest inside a CloudEvents compliant message format
+- AssemblyContext class in the Savvyio.Reflection namespace that provides a set of static methods and properties to manage and filter assemblies in the current application domain
+
+#### Savvio.EventDriven
+
+- MessageExtensions class in the Savvyio.EventDriven.Messaging.Cryptography namespace that consist of extension methods for the IMessage{T} interface: Sign{T}
+- CloudEventExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace that consist of extension methods for the ICloudEvent{T} interface: Sign{T}
+- SignedCloudEvent{T} class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace that provides a default implementation of the ISignedCloudEvent{T} interface
+- CloudEvent{T} class in the Savvyio.EventDriven.Messaging.CloudEvents namespace that provides a default implementation of the ICloudEvent{T} interface
+- MessageExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents namespace that consist of extension methods for the IMessage{T} interface: ToCloudEvent{T}
+
+#### Savvyio.Extensions.DependencyInjection
+
+- ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace was extended with new extension methods for the IServiceCollection interface: AddMarshaller{TService}
+
+#### Savvyio.Extensions.Newtonsoft.Json
+
+- MessageConverter class in the Savvyio.Extensions.Newtonsoft.Json.Converters namespace that converts an IMessage{T} (or derived) to or from JSON
+- RequestConverter class in the Savvyio.Extensions.Newtonsoft.Json.Converters namespace that converts an IRequest to or from JSON
+- JsonConverterExtensions class in the Savvyio.Extensions.Newtonsoft.Json namespace was extended with new extension methods for the JsonConverter class: AddMessageConverter, AddRequestConverter
+- NewtonsoftJsonMarshaller class in the Savvyio.Extensions.Newtonsoft.Json namespace that provides a class for marshalling data using the Newtonsoft JSON library
+
+#### Savvyio.Extensions.SimpleQueueService
+
+- AmazonMessageReceiveOptions class in the Savvyio.Extensions.SimpleQueueService namespace that provides options that is related to receive operations on AWS SQS
+
+#### Savvyio.Extensions.Text.Json
+
+- DateTimeConverter class in the Savvyio.Extensions.Text.Json.Converters namespace that converts a DateTime value to or from JSON using ISO8601
+- DateTimeOffsetConverter class in the Savvyio.Extensions.Text.Json.Converters namespace that converts a DateTimeOffset value to or from JSON using ISO8601
+- MessageConverter class in the Savvyio.Extensions.Text.Json.Converters namespace that converts IMessage{T} (or derived) implementations to or from JSON
+- MetadataDictionaryConverter class in the Savvyio.Extensions.Text.Json.Converters namespace that converts IMetadataDictionary implementations to or from JSON
+- RequestConverter class in the Savvyio.Extensions.Text.Json.Converters namespace that converts IRequest implementations to or from JSON
+- JsonConverterExtensions class in the Savvyio.Extensions.Text.Json namespace that consist of extension methods for the JsonConverter class: RemoveAllOf, RemoveAllOf{T}, AddMetadataDictionaryConverter, AddMessageConverter, AddRequestConverter, AddDateTimeConverter and AddDateTimeOffsetConverter
+- JsonMarshaller class in the Savvyio.Extensions.Text.Json namespace that provides a class for marshalling data using native JSON support in .NET
+- JsonSerializerOptionsExtensions class in the Savvyio.Extensions.Text.Json namespace that consist of extension methods for the JsonSerializerOptions class: Clone
+
+### Changed
+
+#### Savvyio.Commands
+
+- EncloseToMessage{T} extension method on the CommandExtensions class in the Savvyio.Commands.Messaging namespace to ToMessage{T}
+- ToMessage{T} extension method on the CommandExtensions class in the Savvyio.Commands.Messaging namespace to include a string that describes the type of command
+- MemoryCommandQueue class in the Savvyio.Commands.Messaging namespace to InMemoryCommandQueue (consistency with Microsoft naming convention)
+
+#### Savvyio.Core
+
+- Time property on the IMessage{T} interface in the Savvyio.Messaging namespace from a string signature to a nullable DateTime signature
+- Time property on the Message{T} class in the Savvyio.Messaging namespace from a string signature to a nullable DateTime signature
+- SetTimestamp{T} extension method on the MetadataExtensions class in the Savvyio namespace to include an optional nullable DateTime parameter
+- Request record in the Savvyio namespace to automatically set the member type of the current implementation in the default constructor
+- ReceiveAsync method on the IReceiver{TRequest} interface in the Savvyio.Messaging namespace from Task{IEnumerable{IMessage{TRequest}}} to IAsyncEnumerable{IMessage{TRequest}}
+
+#### Savvyio.Domain
+
+- SerializableAttribute and ISerializable implementations was removed from all custom exceptions due to Microsoft decision on deprecating most of the legacy serialization infrastructure https://github.com/dotnet/docs/issues/34893
+
+#### Savvyio.Domain.EventSourcing
+
+- TracedDomainEvent record in the Savvyio.Domain.EventSourcing namespace to exclude optional Type parameter from the constructor
+
+#### Savvyio.EventDriven
+
+- EncloseToMessage{T} extension method on the IntegrationEventExtensions class in the Savvyio.EventDriven.Messaging namespace to ToMessage{T}
+- ToMessage{T} extension method on the IntegrationEventExtensions class in the Savvyio.EventDriven.Messaging namespace to include a string that describes the type of event
+- MemoryEventBus class in the Savvyio.EventDriven.Messaging namespace to InMemoryEventBus (consistency with Microsoft naming convention)
+
+#### Savvyio.Extensions.EFCore
+
+- EfCoreRepository{TEntity, TKey} class in the Savvyio.Extensions.EFCore namespace to allow access to a new protected property, Set, that returns DbSet{TEntity} and also marked remaining members as virtual
+- EfCoreDataSource class in the Savvyio.Extensions.EFCore namespace to use EfCoreDataSourceOptions instead of IOptions{EfCoreDataSourceOptions} on the constructor
+- EfCoreDbContext class in the Savvyio.Extensions.EFCore namespace to use EfCoreDataSourceOptions instead of IOptions{EfCoreDataSourceOptions} on the constructor
+
+#### Savvyio.Extensions.EFCore.Domain
+
+- EfCoreAggregateDataSource class in the Savvyio.Extensions.EFCore.Domain namespace to use EfCoreDataSourceOptions instead of IOptions{EfCoreDataSourceOptions} on the constructor
+
+#### Savvyio.Extensions.DependencyInjection.EFCore
+
+- EfCoreDataSource class in the Savvyio.Extensions.EFCore namespace to use EfCoreDataSourceOptions instead of IOptions{EfCoreDataSourceOptions} on the constructor
+- EfCoreDbContext class in the Savvyio.Extensions.EFCore namespace to use EfCoreDataSourceOptions instead of IOptions{EfCoreDataSourceOptions} on the constructor
+
+#### Savvyio.Extensions.DependencyInjection.EFCore.Domain
+
+- EfCoreAggregateDataSource{TMarker} class in the Savvyio.Extensions.DependencyInjection.EFCore.Domain namespace to use EfCoreDataSourceOptions instead of IOptions{EfCoreDataSourceOptions} on the constructor
+
+#### Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
+
+- EfCoreTracedAggregateRepository{TEntity, TKey, TMarker} class in the Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing namespace to include an IMarshaller interface in the constructor that is used when converting between ITracedDomainEvent and arbitrary data
+- ToTracedDomainEvent{TEntity, TKey} extension method on the EfCoreTracedAggregateEntityExtensions class in the Savvyio.Extensions.EFCore.Domain.EventSourcing namespace to include an IMarshaller interface that is used when converting a traced domain event type into a deserialized version of ITracedDomainEvent
+- EfCoreTracedAggregateRepository{TEntity, TKey} class in the Savvyio.Extensions.EFCore.Domain.EventSourcing namespace to include an IMarshaller interface in the constructor that is used when converting between ITracedDomainEvent and arbitrary data
+- ToByteArray extension method on the TracedDomainEventExtensions class in the Savvyio.Extensions.EFCore.Domain.EventSourcing namespace to include an IMarshaller interface that is used when converting an ITracedDomainEvent into an array of bytes
+
+#### Savvyio.Extensions.DependencyInjection.SimpleQueueService
+
+- AmazonCommandQueue{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.Commands namespace was extended to include an IMarshaller interface in the constructor that is used when converting ICommand implementations to messages
+- AmazonEventBus{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.EventDriven namespace was extended to include an IMarshaller interface in the constructor that is used when converting IIntegrationEvent implementations to messages
+- AmazonCommandQueue{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.Commands namespace to use AmazonCommandQueueOptions{TMarker} instead of IOptions{AmazonCommandQueueOptions{TMarker}} on the constructor
+- AmazonEventBus{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.Commands namespace to use AmazonEventBusOptions{TMarker} instead of IOptions{AmazonEventBusOptions{TMarker}} on the constructor
+
+#### Savvyio.Extensions.EFCore.Domain.EventSourcing
+
+- EfCoreTracedAggregateEntity{TEntity, TKey} class in the Savvyio.Extensions.EFCore.Domain.EventSourcing namespace to include an IMarshaller interface in the constructor that is used when converting between ITracedDomainEvent into a serialized format
+
+#### Savvyio.Extensions.SimpleQueueService
+
+- AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace was extended to include an IMarshaller interface in the constructor that is used when converting ICommand implementations to messages
+- AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace was extended to include an IMarshaller interface in the constructor that is used when converting IIntegrationEvent implementations to messages
+- AmazonBus{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to include an IMarshaller interface in the constructor that is used when converting models to messages
+- AmazonMessage{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to include an IMarshaller interface in the constructor that is used when converting models to messages
+- AmazonQueue{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to include an IMarshaller interface in the constructor that is used when converting models to messages
+- AmazonMessageOptions class in the Savvyio.Extensions.SimpleQueueService namespace to include a ReceiveContext property as well as two constants (both of type Int32); MaxNumberOfMessages and MaxPollingWaitTimeInSeconds
+- AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace to use AmazonCommandQueueOptions instead of IOptions{AmazonCommandQueueOptions} on the constructor
+- AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.Commands namespace to use AmazonEventBusOptions instead of IOptions{AmazonEventBusOptions} on the constructor
+- AmazonBus{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to use AmazonMessageOptions instead of Action{AmazonMessageOptions} on the constructor
+
+#### Savvyio.Extensions.Dispatchers
+
+- UseAutomaticDispatcherDiscovery extension method on the SavvyioOptionsExtensions class in the Savvyio.Extensions namespace to include an optional boolean parameter; bruteAssemblyScanning that defaults to false (former implementation would be equivalent to true)
+- UseAutomaticHandlerDiscovery extension method on the SavvyioOptionsExtensions class in the Savvyio.Extensions namespace to include an optional boolean parameter; bruteAssemblyScanning that defaults to false (former implementation would be equivalent to true)
+
+### Removed
+
+#### Savvyio.Commands
+
+- ICommand interface in the Savvyio.Commands namespace was moved to the namespace equivalent in the Savvyio.Core assembly
+- ICommandDispatcher interface in the Savvyio.Commands namespace was moved to the namespace equivalent in the Savvyio.Core assembly
+- ICommandHandler interface in the Savvyio.Commands namespace was moved to the namespace equivalent in the Savvyio.Core assembly
+
+### Savvyio.Core
+
+- ReceiveAsyncOptions class from the Savvyio.Messaging namespace
+
+#### Savvyio.Domain
+
+- SerializableAttribute and ISerializable implementations was removed from all custom exceptions due to Microsoft decision on deprecating most of the legacy serialization infrastructure https://github.com/dotnet/docs/issues/34893
+- ITracedAggregateRepository interface in the Savvyio.Domain.EventSourcing was moved to the namespace to the namespace equivalent in the Savvyio.Core assembly
+- ITracedAggregateRoot interface in the Savvyio.Domain.EventSourcing was moved to the namespace to the namespace equivalent in the Savvyio.Core assembly
+- ITracedDomainEvent interface in the Savvyio.Domain.EventSourcing was moved to the namespace to the namespace equivalent in the Savvyio.Core assembly
+- IAggregateRepository interface in the Savvyio.Domain namespace was moved to the to the namespace equivalent in the Savvyio.Core assembly
+- IAggregateRoot interface in the Savvyio.Domain namespace was moved to the to the namespace equivalent in the Savvyio.Core assembly
+- IDomainEvent interface in the Savvyio.Domain namespace was moved to the to the namespace equivalent in the Savvyio.Core assembly
+- IDomainEventDispatcher interface in the Savvyio.Domain namespace was moved to the to the namespace equivalent in the Savvyio.Core assembly
+- IDomainEventHandler interface in the Savvyio.Domain namespace was moved to the to the namespace equivalent in the Savvyio.Core assembly
+- IEntity interface in the Savvyio.Domain namespace was moved to the to the namespace equivalent in the Savvyio.Core assembly
+
+#### Savvyio.EventDriven
+
+- IIntegrationEvent interface in the Savvyio.EventDriven namespace to the was moved to the namespace equivalent in the Savvyio.Core assembly
+- IIntegrationEventDispatcher interface in the Savvyio.EventDriven was moved to the namespace to the namespace equivalent in the Savvyio.Core assembly
+- IIntegrationEventHandler interface in the Savvyio.EventDriven was moved to the namespace to the namespace equivalent in the Savvyio.Core assembly
+
+#### Savvyio.Queries
+
+- IQuery interface in the Savvyio.Queries was moved to the namespace to the namespace equivalent in the Savvyio.Core assembly
+- IQueryDispatcher interface in the Savvyio.Queries was moved to the namespace to the namespace equivalent in the Savvyio.Core assembly
+- IQueryHandler interface in the Savvyio.Queries was moved to the namespace to the namespace equivalent in the Savvyio.Core assembly
+
+## [1.1.0] - 2022-12-06
 
 ### Added
 
@@ -37,6 +229,7 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 #### Savvyio.Extensions.SimpleQueueService
 
 - AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace that specifies options that provides a default implementation of the AmazonQueue{TRequest} class tailored for messages holding an ICommand implementation
+- AmazonCommandQueueOptions class in the Savvyio.Extensions.SimpleQueueService.Commands namespace that specifies options that is related to AWS SQS
 - AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace that specifies options that provides a default implementation of the AmazonBus{TRequest} class tailored for messages holding an IIntegrationEvent implementation
 - StringExtensions class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace that consist of extension methods for the string class: ToSnsUri
 - AmazonBus{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace that represents the base class from which all implementations in need of bus capabilities should derive
@@ -73,7 +266,7 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 
 - ToTracedDomainEvent extension method on the EfCoreTracedAggregateEntityExtensions class in the Savvyio.Extensions.EFCore.Domain.EventSourcing to not interfere with the casing of dictionary keys
 
-## 1.0.0
+## [1.0.0] - 2022-11-09
 
 ### Added
 

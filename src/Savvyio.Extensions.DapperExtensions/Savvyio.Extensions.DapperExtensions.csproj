@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DapperExtensions.StrongNameReference" Version="1.7.1" />
+    <PackageReference Include="DapperExtensions.StrongNameReference" Version="1.8.0" />
   </ItemGroup>
 
   <ItemGroup>

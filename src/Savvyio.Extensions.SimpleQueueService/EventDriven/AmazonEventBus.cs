@@ -7,9 +7,7 @@ using Amazon.SimpleNotificationService.Model;
 using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Newtonsoft.Json.Formatters;
 using Cuemon.Threading;
-using Microsoft.Extensions.Options;
 using Savvyio.EventDriven;
 using Savvyio.Messaging;
 
@@ -24,8 +22,16 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonEventBus"/> class.
         /// </summary>
-        /// <param name="options">The <see cref="AmazonEventBusOptions" /> which need to be configured.</param>
-        public AmazonEventBus(IOptions<AmazonEventBusOptions> options) : base(options.Value)
+        /// <param name="marshaller">The <see cref="IMarshaller"/> that is used when converting <see cref="IIntegrationEvent"/> implementations to messages.</param>
+        /// <param name="options">The <see cref="AmazonEventBusOptions"/> used to configure this instance.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="marshaller"/> cannot be null - or -
+        /// <paramref name="options"/> cannot be null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="options"/> are not in a valid state.
+        /// </exception>
+        public AmazonEventBus(IMarshaller marshaller, AmazonEventBusOptions options) : base(marshaller, options)
         {
         }
 
@@ -42,7 +48,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var request = new PublishRequest
             {
                 TopicArn = @event.Source,
-                Message = await JsonFormatter.SerializeObject(@event).ToEncodedStringAsync().ConfigureAwait(false),
+                Message = await Marshaller.Serialize(@event).ToEncodedStringAsync().ConfigureAwait(false),
                 MessageGroupId = UseFirstInFirstOut ? @event.Source : null,
                 MessageDeduplicationId = UseFirstInFirstOut ? @event.Id : null,
                 MessageAttributes = new Dictionary<string, MessageAttributeValue>
@@ -51,7 +57,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                         MessageAttributeTypeKey, new MessageAttributeValue
                         {
                             DataType = "String",
-                            StringValue = @event.Type
+                            StringValue = @event.Data.GetMemberType()
                         }
                     }
                 }
@@ -68,7 +74,6 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         public override async Task SubscribeAsync(Func<IMessage<IIntegrationEvent>, CancellationToken, Task> asyncHandler, Action<SubscribeAsyncOptions> setup = null)
         {
             var options = setup.Configure();
-
             await Condition.FlipFlopAsync(options.ThrowIfCancellationWasRequested, () => InvokeHandlerAsync(asyncHandler, options.CancellationToken), async () =>
             {
                 try
@@ -82,22 +87,16 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             });
         }
 
-        private async Task InvokeHandlerAsync(Func<IMessage<IIntegrationEvent>, CancellationToken, Task> asyncHandler, CancellationToken ct)
+        private async Task InvokeHandlerAsync(Func<IMessage<IIntegrationEvent>, CancellationToken, Task> asyncHandler, CancellationToken cancellationToken)
         {
             var hasMessages = true;
             while (hasMessages)
             {
                 hasMessages = false;
-                var messages = await RetrieveMessagesAsync(o =>
+                await foreach (var message in RetrieveMessagesAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    o.MaxNumberOfMessages = int.MaxValue;
-                    o.CancellationToken = ct;
-                }).ConfigureAwait(false);
-
-                foreach (var message in messages)
-                {
-                    hasMessages = true;
-                    await asyncHandler.Invoke(message, ct).ConfigureAwait(false);
+	                hasMessages = true;
+	                await asyncHandler.Invoke(message, cancellationToken).ConfigureAwait(false);
                 }
             }
         }

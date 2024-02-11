@@ -15,6 +15,7 @@ namespace Savvyio.EventDriven.Messaging
         /// <typeparam name="T">The type of the payload constraint to the <see cref="IIntegrationEvent"/> interface.</typeparam>
         /// <param name="event">The payload to attach within the message.</param>
         /// <param name="source">The context that describes the origin of the message.</param>
+        /// <param name="type">The type that describes the type of <paramref name="event"/> related to the originating occurrence.</param>
         /// <param name="setup">The <see cref="MessageOptions" /> which may be configured.</param>
         /// <returns>An instance of <see cref="Message{T}"/> constraint to the <see cref="IIntegrationEvent"/> interface.</returns>
         /// <exception cref="ArgumentNullException">
@@ -24,12 +25,13 @@ namespace Savvyio.EventDriven.Messaging
         /// <exception cref="ArgumentException">
         /// <paramref name="setup"/> failed to configure an instance of <see cref="MessageOptions"/> in a valid state.
         /// </exception>
-        public static IMessage<T> EncloseToMessage<T>(this T @event, Uri source, Action<MessageOptions> setup = null) where T : IIntegrationEvent
+        public static IMessage<T> ToMessage<T>(this T @event, Uri source, string type, Action<MessageOptions> setup = null) where T : IIntegrationEvent
         {
             Validator.ThrowIfNull(@event);
             Validator.ThrowIfNull(source);
-            Validator.ThrowIfInvalidConfigurator(setup, nameof(setup), out var options);
-            return new Message<T>(options.MessageId, source, @event, options.Type, options.Time);
+            Validator.ThrowIfNullOrWhitespace(type);
+            Validator.ThrowIfInvalidConfigurator(setup, out var options);
+            return new Message<T>(options.MessageId, source, type, @event, options.Time);
         }
     }
 }

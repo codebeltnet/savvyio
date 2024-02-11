@@ -6,6 +6,8 @@ using Cuemon.Reflection;
 using Newtonsoft.Json;
 using Savvyio.Domain;
 using Savvyio.Extensions.Newtonsoft.Json.Converters;
+using Savvyio.Messaging;
+using Savvyio.Messaging.Cryptography;
 
 namespace Savvyio.Extensions.Newtonsoft.Json
 {
@@ -19,7 +21,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json
         /// </summary>
         /// <param name="converters">The collection to extend.</param>
         /// <param name="setup">The <see cref="ActivatorOptions" /> which may be configured.</param>
-        /// <returns>A reference to <paramref name="converters"/> after the operation has completed.</returns>
+        /// <returns>A reference to <paramref name="converters"/> so that additional calls can be chained.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="converters"/> cannot be null.
         /// </exception>
@@ -35,7 +37,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json
         /// </summary>
         /// <param name="converters">The collection to extend.</param>
         /// <param name="setup">The <see cref="ActivatorOptions" /> which may be configured.</param>
-        /// <returns>A reference to <paramref name="converters"/> after the operation has completed.</returns>
+        /// <returns>A reference to <paramref name="converters"/> so that additional calls can be chained.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="converters"/> cannot be null.
         /// </exception>
@@ -50,7 +52,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json
         /// Adds a <see cref="IMetadataDictionary"/> converter to the collection.
         /// </summary>
         /// <param name="converters">The collection to extend.</param>
-        /// <returns>A reference to <paramref name="converters"/> after the operation has completed.</returns>
+        /// <returns>A reference to <paramref name="converters"/> so that additional calls can be chained.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="converters"/> cannot be null.
         /// </exception>
@@ -68,6 +70,51 @@ namespace Savvyio.Extensions.Newtonsoft.Json
                 return md;
             }));
             return converters;
+        }
+
+        /// <summary>
+        /// Adds an <see cref="IRequest"/> converter to the collection.
+        /// </summary>
+        /// <param name="converters">The collection to extend.</param>
+        /// <returns>A reference to <paramref name="converters"/> so that additional calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="converters"/> cannot be null.
+        /// </exception>
+        public static ICollection<JsonConverter> AddRequestConverter(this ICollection<JsonConverter> converters)
+        {
+            Validator.ThrowIfNull(converters);
+            converters.Add(new RequestConverter());
+            return converters;
+        }
+
+        /// <summary>
+        /// Adds an <see cref="IMessage{T}"/>/<see cref="ISignedMessage{T}"/> converter to the collection.
+        /// </summary>
+        /// <param name="converters">The collection to extend.</param>
+        /// <returns>A reference to <paramref name="converters"/> so that additional calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="converters"/> cannot be null.
+        /// </exception>
+        public static ICollection<JsonConverter> AddMessageConverter(this ICollection<JsonConverter> converters)
+        {
+            Validator.ThrowIfNull(converters);
+            converters.Add(new MessageConverter());
+            return converters;
+        }
+
+        /// <summary>
+        /// Adds a <see cref="SingleValueObject{T}"/> converter to the collection.
+        /// </summary>
+        /// <param name="converters">The collection to extend.</param>
+        /// <returns>A reference to <paramref name="converters"/> so that additional calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="converters"/> cannot be null.
+        /// </exception>
+        public static ICollection<JsonConverter> AddSingleValueObjectConverter(this ICollection<JsonConverter> converters)
+        {
+	        Validator.ThrowIfNull(converters);
+	        converters.Add(new SingleValueObjectConverter());
+	        return converters;
         }
     }
 }

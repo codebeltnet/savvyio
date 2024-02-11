@@ -1,8 +1,31 @@
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- CHANGED AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace to use AmazonCommandQueueOptions instead of IOptions{AmazonCommandQueueOptions} on the constructor
+- CHANGED AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.Commands namespace to use AmazonEventBusOptions instead of IOptions{AmazonEventBusOptions} on the constructor
+- CHANGED AmazonBus{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to use AmazonMessageOptions instead of Action{AmazonMessageOptions} on the constructor
+ 
+# New Features
+- ADDED AmazonMessageReceiveOptions class in the Savvyio.Extensions.SimpleQueueService namespace that provides options that is related to receive operations on AWS SQS
+ 
+# Improvements
+- CHANGED AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace to include an IMarshaller interface in the constructor that is used when converting ICommand implementations to messages
+- CHANGED AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace to include an IMarshaller interface in the constructor that is used when converting IIntegrationEvent implementations to messages
+- CHANGED AmazonBus{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to include an IMarshaller interface in the constructor that is used when converting models to messages
+- CHANGED AmazonMessage{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to include an IMarshaller interface in the constructor that is used when converting models to messages
+- CHANGED AmazonQueue{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to include an IMarshaller interface in the constructor that is used when converting models to messages
+- CHANGED AmazonMessageOptions class in the Savvyio.Extensions.SimpleQueueService namespace to include a ReceiveContext property as well as two constants (both of type Int32); MaxNumberOfMessages and MaxPollingWaitTimeInSeconds
+ 
 Version: 1.1.0
 Availability: .NET 7.0, .NET 6.0
  
 # New Features
 - ADDED AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace that specifies options that provides a default implementation of the AmazonQueue{TRequest} class tailored for messages holding an ICommand implementation
+- ADDED AmazonCommandQueueOptions class in the Savvyio.Extensions.SimpleQueueService.Commands namespace that specifies options that is related to AWS SQS
 - ADDED AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace that specifies options that provides a default implementation of the AmazonBus{TRequest} class tailored for messages holding an IIntegrationEvent implementation
 - ADDED StringExtensions class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace that consist of extension methods for the string class: ToSnsUri
 - ADDED AmazonBus{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace that represents the base class from which all implementations in need of bus capabilities should derive

@@ -24,10 +24,12 @@ namespace Savvyio.Extensions.DapperExtensions
             var name = "Test";
             var email = "test@unit.test";
 
-            var sut1 = new DapperDataSource(o =>
+            var options = new DapperDataSourceOptions()
             {
-                o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable();
-            });
+				ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable()
+			};
+		
+            var sut1 = new DapperDataSource(options);
 
             var sut2 = new DapperExtensionsDataStore<AccountProjection>(sut1);
             await sut2.CreateAsync(new AccountProjection(name, email));
@@ -49,9 +51,9 @@ namespace Savvyio.Extensions.DapperExtensions
             var email = "test@unit.test";
             var dto = new AccountProjection(name, email);
 
-            var sut1 = new DapperDataSource(o =>
+            var sut1 = new DapperDataSource(new DapperDataSourceOptions()
             {
-                o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable();
+                ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable()
             });
 
             var sut2 = new DapperExtensionsDataStore<AccountProjection>(sut1);
@@ -82,9 +84,9 @@ namespace Savvyio.Extensions.DapperExtensions
             var email = "test@unit.test";
             var dto = new AccountProjection(name, email);
 
-            var sut1 = new DapperDataSource(o =>
+            var sut1 = new DapperDataSource(new DapperDataSourceOptions()
             {
-                o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable();
+                ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable()
             });
 
             var sut2 = new DapperExtensionsDataStore<AccountProjection>(sut1);

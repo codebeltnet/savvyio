@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Savvyio.Handlers
 {
@@ -7,7 +6,6 @@ namespace Savvyio.Handlers
     /// The exception that is thrown when an <see cref="IHandler{TRequest}"/> implementation cannot be resolved.
     /// </summary>
     /// <seealso cref="ArgumentException" />
-    [Serializable]
     public class OrphanedHandlerException : ArgumentException
 
     {
@@ -33,15 +31,6 @@ namespace Savvyio.Handlers
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="paramName">The name of the parameter that caused the current exception.</param>
         public OrphanedHandlerException(string message, string paramName) : base(message, paramName)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OrphanedHandlerException"/> class.
-        /// </summary>
-        /// <param name="info">The object that holds the serialized object data.</param>
-        /// <param name="context">The contextual information about the source or destination.</param>
-        protected OrphanedHandlerException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }

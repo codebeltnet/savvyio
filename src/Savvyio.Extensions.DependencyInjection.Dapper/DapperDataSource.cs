@@ -1,6 +1,4 @@
 ﻿using System;
-using Cuemon.Extensions;
-using Microsoft.Extensions.Options;
 using Savvyio.Extensions.Dapper;
 
 namespace Savvyio.Extensions.DependencyInjection.Dapper
@@ -16,16 +14,14 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         /// <summary>
         /// Initializes a new instance of the <see cref="DapperDataSource{TMarker}"/> class.
         /// </summary>
-        /// <param name="setup">The <see cref="DapperDataSourceOptions" /> which need to be configured.</param>
-        public DapperDataSource(IOptions<DapperDataSourceOptions<TMarker>> setup) : base(setup)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DapperDataSource{TMarker}"/> class.
-        /// </summary>
-        /// <param name="setup">The <see cref="DapperDataSourceOptions" /> which need to be configured.</param>
-        public DapperDataSource(Action<DapperDataSourceOptions<TMarker>> setup) : this(Options.Create(setup.Configure()))
+        /// <param name="options">The <see cref="DapperDataSourceOptions{TMarker}"/> used to configure this instance.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="options"/> cannot be null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="options"/> are not in a valid state.
+        /// </exception>
+        public DapperDataSource(DapperDataSourceOptions<TMarker> options) : base(options)
         {
         }
     }

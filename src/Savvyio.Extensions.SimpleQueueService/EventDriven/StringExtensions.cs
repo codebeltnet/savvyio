@@ -18,7 +18,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         /// <remarks></remarks>
         public static Uri ToSnsUri(this string source, Action<AmazonResourceNameOptions> setup = null)
         {
-            Validator.ThrowIfInvalidConfigurator(setup, nameof(setup), out var options);
+            Validator.ThrowIfInvalidConfigurator(setup, out var options);
             var arn = $"arn:{options.Partition}:sns:{options.Region}:{options.AccountId}:{source}";
             return arn.ToUri();
         }

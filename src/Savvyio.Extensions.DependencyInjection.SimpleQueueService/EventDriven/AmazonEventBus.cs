@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System;
 using Savvyio.EventDriven;
 using Savvyio.Extensions.DependencyInjection.Messaging;
 using Savvyio.Extensions.SimpleQueueService;
@@ -16,8 +16,16 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService.EventDriven
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonEventBus{TMarker}"/> class.
         /// </summary>
-        /// <param name="options">The <see cref="AmazonEventBusOptions" /> which need to be configured.</param>
-        public AmazonEventBus(IOptions<AmazonEventBusOptions<TMarker>> options) : base(options)
+        /// <param name="marshaller">The <see cref="IMarshaller"/> that is used when converting <see cref="IIntegrationEvent"/> implementations to messages.</param>
+        /// <param name="options">The <see cref="AmazonEventBusOptions{TMarker}"/> used to configure this instance.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="marshaller"/> cannot be null - or -
+        /// <paramref name="options"/> cannot be null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="options"/> are not in a valid state.
+        /// </exception>
+        public AmazonEventBus(IMarshaller marshaller, AmazonEventBusOptions<TMarker> options) : base(marshaller, options)
         {
         }
     }

@@ -1,6 +1,5 @@
 ﻿using Cuemon.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Savvyio.Extensions.EFCore;
 
 namespace Savvyio.Extensions.DependencyInjection.EFCore
@@ -16,8 +15,8 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreDbContext{TMarker}" /> class.
         /// </summary>
-        /// <param name="setup">The <see cref="EfCoreDataSourceOptions" /> which need to be configured.</param>
-        public EfCoreDbContext(IOptions<EfCoreDataSourceOptions<TMarker>> setup) : base(setup)
+        /// <param name="options">The <see cref="EfCoreDataSourceOptions{TMarker}"/> used to configure this instance.</param>
+        public EfCoreDbContext(EfCoreDataSourceOptions<TMarker> options) : base(options)
         {
         }
     }

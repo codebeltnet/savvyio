@@ -95,7 +95,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Dependen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.DependencyInjection.SimpleQueueService.Tests", "test\Savvyio.Extensions.DependencyInjection.SimpleQueueService.Tests\Savvyio.Extensions.DependencyInjection.SimpleQueueService.Tests.csproj", "{D0A0D57D-EA95-4588-A8D0-1941894F3AD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savvyio.Extensions.Newtonsoft.Json", "src\Savvyio.Extensions.Newtonsoft.Json\Savvyio.Extensions.Newtonsoft.Json.csproj", "{8203BCB1-BA8F-46EC-B3C4-CB2F0C1E00FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Newtonsoft.Json", "src\Savvyio.Extensions.Newtonsoft.Json\Savvyio.Extensions.Newtonsoft.Json.csproj", "{8203BCB1-BA8F-46EC-B3C4-CB2F0C1E00FA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Text.Json", "src\Savvyio.Extensions.Text.Json\Savvyio.Extensions.Text.Json.csproj", "{FC196D04-5D92-439C-A6A7-73F76B7DD22E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Text.Json.Tests", "test\Savvyio.Extensions.Text.Json.Tests\Savvyio.Extensions.Text.Json.Tests.csproj", "{C99697C7-626C-4852-B186-B01EF1BB5738}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Newtonsoft.Json.Tests", "test\Savvyio.Extensions.Newtonsoft.Json.Tests\Savvyio.Extensions.Newtonsoft.Json.Tests.csproj", "{870B8D00-FD08-4DD9-99DE-0DE55B0C7018}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -283,6 +289,18 @@ Global
 		{8203BCB1-BA8F-46EC-B3C4-CB2F0C1E00FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8203BCB1-BA8F-46EC-B3C4-CB2F0C1E00FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8203BCB1-BA8F-46EC-B3C4-CB2F0C1E00FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC196D04-5D92-439C-A6A7-73F76B7DD22E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC196D04-5D92-439C-A6A7-73F76B7DD22E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC196D04-5D92-439C-A6A7-73F76B7DD22E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC196D04-5D92-439C-A6A7-73F76B7DD22E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C99697C7-626C-4852-B186-B01EF1BB5738}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C99697C7-626C-4852-B186-B01EF1BB5738}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C99697C7-626C-4852-B186-B01EF1BB5738}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C99697C7-626C-4852-B186-B01EF1BB5738}.Release|Any CPU.Build.0 = Release|Any CPU
+		{870B8D00-FD08-4DD9-99DE-0DE55B0C7018}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{870B8D00-FD08-4DD9-99DE-0DE55B0C7018}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{870B8D00-FD08-4DD9-99DE-0DE55B0C7018}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{870B8D00-FD08-4DD9-99DE-0DE55B0C7018}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -333,6 +351,9 @@ Global
 		{0AAD0FA2-89A7-44A1-9F63-A29439F4168E} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
 		{D0A0D57D-EA95-4588-A8D0-1941894F3AD2} = {407762FB-26D8-435F-AE16-C76791EC9FEC}
 		{8203BCB1-BA8F-46EC-B3C4-CB2F0C1E00FA} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
+		{FC196D04-5D92-439C-A6A7-73F76B7DD22E} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
+		{C99697C7-626C-4852-B186-B01EF1BB5738} = {407762FB-26D8-435F-AE16-C76791EC9FEC}
+		{870B8D00-FD08-4DD9-99DE-0DE55B0C7018} = {407762FB-26D8-435F-AE16-C76791EC9FEC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8DDAD51-08E6-42B5-970B-2DC88D44297B}

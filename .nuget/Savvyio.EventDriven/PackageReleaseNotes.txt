@@ -1,3 +1,24 @@
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# New Features
+- ADDED MessageExtensions class in the Savvyio.EventDriven.Messaging.Cryptography namespace that consist of extension methods for the IMessage{T} interface: Sign{T}
+- ADDED CloudEventExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace that consist of extension methods for the ICloudEvent{T} interface: Sign{T}
+- ADDED SignedCloudEvent{T} class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace that provides a default implementation of the ISignedCloudEvent{T} interface
+- ADDED CloudEvent{T} class in the Savvyio.EventDriven.Messaging.CloudEvents namespace that provides a default implementation of the ICloudEvent{T} interface
+- ADDED MessageExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents namespace that consist of extension methods for the IMessage{T} interface: ToCloudEvent{T}
+ 
+# Breaking Changes
+- RENAMED EncloseToMessage{T} extension method on the IntegrationEventExtensions class in the Savvyio.EventDriven.Messaging namespace to ToMessage{T}
+- RENAMED MemoryEventBus class in the Savvyio.EventDriven.Messaging namespace to InMemoryEventBus (consistency with Microsoft naming convention)
+- CHANGED ToMessage{T} extension method on the CommandExtensions class in the Savvyio.Commands.Messaging namespace to include a string that describes the type of event
+- MOVED IIntegrationEvent interface in the Savvyio.EventDriven namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED IIntegrationEventDispatcher interface in the Savvyio.EventDriven namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED IIntegrationEventHandler interface in the Savvyio.EventDriven namespace to the namespace equivalent in the Savvyio.Core assembly
+ 
 Version: 1.1.0
 Availability: .NET 7.0, .NET 6.0
  

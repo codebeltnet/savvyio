@@ -1,5 +1,5 @@
-﻿using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+﻿using Cuemon.Extensions.IO;
+using Cuemon.Extensions.Text.Json.Formatters;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets;
 using Savvyio.Commands;
@@ -20,18 +20,12 @@ namespace Savvyio
         {
             var sut = OrphanedHandlerException.Create<ICommand, ICommandHandler>(new FakeCommand(), "fake");
 
-            TestOutput.WriteLine(sut.ToString());
-
-            var bf = new BinaryFormatter();
-            using (var ms = new MemoryStream())
+            using (var stream = JsonFormatter.SerializeObject(sut))
             {
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-                bf.Serialize(ms, sut);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
-                ms.Position = 0;
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-                var desEx = bf.Deserialize(ms) as OrphanedHandlerException;
-#pragma warning restore SYSLIB0011 // Type or member is obsolete 
+                TestOutput.WriteLine(stream.ToEncodedString(o => o.LeaveOpen = true));
+
+                var desEx = JsonFormatter.DeserializeObject<OrphanedHandlerException>(stream);
+
                 Assert.Equal(sut.Message, desEx.Message);
                 Assert.Equal(sut.ToString(), desEx.ToString());
             }

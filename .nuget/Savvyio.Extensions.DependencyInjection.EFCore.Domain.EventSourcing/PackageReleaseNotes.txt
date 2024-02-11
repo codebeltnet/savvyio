@@ -1,3 +1,12 @@
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Improvements
+- CHANGED EfCoreTracedAggregateRepository{TEntity, TKey, TMarker} class in the Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing namespace to include an IMarshaller interface in the constructor that is used when converting between ITracedDomainEvent and arbitrary data
+ 
 Version: 1.1.0
 Availability: .NET 7.0, .NET 6.0
  

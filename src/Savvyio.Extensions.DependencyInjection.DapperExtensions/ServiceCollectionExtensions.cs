@@ -14,7 +14,7 @@ namespace Savvyio.Extensions.DependencyInjection.DapperExtensions
         /// </summary>
         /// <typeparam name="T">The type of the DTO to use.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
-        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
+        /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         public static IServiceCollection AddDapperExtensionsDataStore<T>(this IServiceCollection services) where T : class
         {
             return services.AddDataStore<DapperExtensionsDataStore<T>, T, DapperExtensionsQueryOptions<T>>();
@@ -26,7 +26,7 @@ namespace Savvyio.Extensions.DependencyInjection.DapperExtensions
         /// <typeparam name="T">The type of the DTO to use.</typeparam>
         /// <typeparam name="TMarker">The type used to mark the implementation that this data access object represents. Optimized for DapperExtensions.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
-        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
+        /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         public static IServiceCollection AddDapperExtensionsDataStore<T, TMarker>(this IServiceCollection services) where T : class
         {
             return services.AddDataStore<DapperExtensionsDataStore<T, TMarker>,  T, DapperExtensionsQueryOptions<T>>();

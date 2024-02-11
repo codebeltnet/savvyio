@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cuemon.Threading;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Savvyio.Domain;
 
 namespace Savvyio.Extensions.EFCore.Domain
@@ -30,18 +29,8 @@ namespace Savvyio.Extensions.EFCore.Domain
         /// Initializes a new instance of the <see cref="EfCoreAggregateDataSource"/> class.
         /// </summary>
         /// <param name="dispatcher">The <see cref="IDomainEventDispatcher" /> that are responsible for raising domain events.</param>
-        /// <param name="setup">The <see cref="EfCoreDataSourceOptions" /> which need to be configured.</param>
-        public EfCoreAggregateDataSource(IDomainEventDispatcher dispatcher, IOptions<EfCoreDataSourceOptions> setup) : base(setup)
-        {
-            _dispatcher = dispatcher;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EfCoreAggregateDataSource"/> class.
-        /// </summary>
-        /// <param name="dispatcher">The <see cref="IDomainEventDispatcher" /> that are responsible for raising domain events.</param>
-        /// <param name="setup">The <see cref="EfCoreDataSourceOptions" /> which need to be configured.</param>
-        public EfCoreAggregateDataSource(IDomainEventDispatcher dispatcher, Action<EfCoreDataSourceOptions> setup) : base(setup)
+        /// <param name="options">The <see cref="EfCoreDataSourceOptions"/> used to configure this instance.</param>
+        public EfCoreAggregateDataSource(IDomainEventDispatcher dispatcher, EfCoreDataSourceOptions options) : base(options)
         {
             _dispatcher = dispatcher;
         }

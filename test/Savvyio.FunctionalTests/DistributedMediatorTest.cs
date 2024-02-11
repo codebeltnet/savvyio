@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.Runtime;
 using Cuemon.Extensions;
+using Cuemon.Extensions.Collections.Generic;
 using Cuemon.Extensions.Newtonsoft.Json.Formatters;
+using Cuemon.Extensions.Text.Json.Formatters;
 using Cuemon.Extensions.Xunit;
 using Cuemon.Extensions.Xunit.Hosting.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
@@ -12,7 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Assets;
 using Savvyio.Assets.Commands;
 using Savvyio.Assets.Domain;
-using Savvyio.Assets.Events;
+using Savvyio.Assets.EventDriven;
 using Savvyio.Assets.Queries;
 using Savvyio.Commands;
 using Savvyio.Commands.Messaging;
@@ -25,8 +28,10 @@ using Savvyio.Extensions.DependencyInjection.Domain;
 using Savvyio.Extensions.DependencyInjection.EFCore;
 using Savvyio.Extensions.DependencyInjection.EFCore.Domain;
 using Savvyio.Extensions.DependencyInjection.SimpleQueueService;
+using Savvyio.Extensions.Newtonsoft.Json;
 using Savvyio.Extensions.Newtonsoft.Json.Converters;
 using Savvyio.Extensions.SimpleQueueService;
+using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging;
 using Xunit;
 using Xunit.Priority;
@@ -38,14 +43,15 @@ namespace Savvyio
     {
         public DistributedMediatorTest()
         {
-            JsonFormatterOptions.DefaultConverters += list => list.Add(new ValueObjectConverter());
+            NewtonsoftJsonFormatterOptions.DefaultConverters += list => list.Add(new ValueObjectConverter());
         }
 
         [Fact, Priority(0)]
         public async Task EmulateWebApi_Controller_SendCommand()
         {
-            using (var host = WebApplicationTestFactory.CreateWithHostBuilderContext((context, app) => { }, (context, services) =>
+            using (var host = WebApplicationTestFactory.CreateWithHostBuilderContext((context, services) =>
                    {
+                       services.AddMarshaller<NewtonsoftJsonMarshaller>();
                        services.AddAmazonCommandQueue(o =>
                        {
                            o.Credentials = new BasicAWSCredentials(context.Configuration["AWS:IAM:AccessKey"], context.Configuration["AWS:IAM:SecretKey"]);
@@ -65,15 +71,24 @@ namespace Savvyio
 
                 var commandQueue = host.ServiceProvider.GetRequiredService<IPointToPointChannel<ICommand>>();
 
-                await commandQueue.SendAsync(createAccount.EncloseToMessage("urn:command:create-account".ToUri())).ConfigureAwait(false);
+                await commandQueue.SendAsync(createAccount.ToMessage("urn:command:create-account".ToUri(), nameof(createAccount)).Yield()).ConfigureAwait(false);
             }
         }
 
         [Fact, Priority(1)]
         public async Task EmulateWorker_ReceiveCommand()
         {
-            using (var host = WebApplicationTestFactory.CreateWithHostBuilderContext((context, app) => { }, (context, services) =>
+            using (var host = WebApplicationTestFactory.CreateWithHostBuilderContext((context, services) =>
                    {
+                       services.AddScoped(_ =>
+                       {
+                           return new Action<JsonFormatterOptions>(o =>
+                           {
+                               o.Settings.Converters.AddMessageConverter().AddMetadataDictionaryConverter();
+                           });
+                       });
+                       //services.Configure<JsonFormatterOptions>(o => o.Settings.Converters.AddMessageConverter().AddMetadataDictionaryConverter());
+                       services.AddMarshaller<JsonMarshaller>();
                        services.AddEfCoreAggregateDataSource<Account>(o =>
                        {
                            o.ContextConfigurator = b => b.UseInMemoryDatabase($"AWS{nameof(Account)}").EnableDetailedErrors().LogTo(Console.WriteLine);
@@ -106,12 +121,15 @@ namespace Savvyio
 
                        services.AddSavvyIO(o =>
                        {
-                           o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery().UseAutomaticHandlerDiscovery().AddMediator<Mediator>();
+                           o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true).AddMediator<Mediator>();
                        });
 
                        AmazonResourceNameOptions.DefaultAccountId = context.Configuration["AWS:CallerIdentity"];
                    }))
             {
+
+                await Task.Delay(TimeSpan.FromSeconds(5));
+
                 var commandQueue = host.ServiceProvider.GetRequiredService<IPointToPointChannel<ICommand>>();
                 var mediator = host.ServiceProvider.GetRequiredService<IMediator>();
                 var createAccountMessage = await commandQueue.ReceiveAsync().SingleOrDefaultAsync().ConfigureAwait(false);
@@ -129,14 +147,18 @@ namespace Savvyio
                 Assert.Equal(entity.Id, dao.Id);
                 Assert.Equal(entity.EmailAddress, dao.EmailAddress);
                 Assert.Equal(entity.FullName, dao.FullName);
+
+                await Task.Delay(TimeSpan.FromSeconds(5));
             }
         }
 
         [Fact, Priority(2)]
         public async Task EmulateAnotherWorker_SubscribingToAccountCreated()
         {
-            using (var host = WebApplicationTestFactory.CreateWithHostBuilderContext((context, app) => { }, (context, services) =>
+            using (var host = WebApplicationTestFactory.CreateWithHostBuilderContext((context, services) =>
                    {
+                       services.Configure<JsonFormatterOptions>(o => o.Settings.Converters.AddMessageConverter().AddMetadataDictionaryConverter());
+                       services.AddMarshaller<JsonMarshaller>();
                        services.AddAmazonEventBus(o =>
                        {
                            o.Credentials = new BasicAWSCredentials(context.Configuration["AWS:IAM:AccessKey"], context.Configuration["AWS:IAM:SecretKey"]);
@@ -155,7 +177,7 @@ namespace Savvyio
                     invocationCount++;
                     Assert.IsType<AccountCreated>(message.Data);
                     return Task.CompletedTask;
-                });
+                }).ConfigureAwait(false);
                 Assert.Equal(1, invocationCount);
             }
         }

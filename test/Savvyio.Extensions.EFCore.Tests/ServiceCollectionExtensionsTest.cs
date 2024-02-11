@@ -7,14 +7,14 @@ using Savvyio.Assets;
 using Savvyio.Assets.Domain;
 using Savvyio.Data;
 using Savvyio.Domain;
+using Savvyio.Extensions.DependencyInjection;
 using Savvyio.Extensions.DependencyInjection.Data;
 using Savvyio.Extensions.DependencyInjection.Domain;
 using Savvyio.Extensions.DependencyInjection.EFCore;
-using Savvyio.Extensions.EFCore;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions.Storage
+namespace Savvyio.Extensions.EFCore
 {
     public class ServiceCollectionExtensionsTest : Test
     {
@@ -27,7 +27,7 @@ namespace Savvyio.Extensions.Storage
         {
             var sut1 = new ServiceCollection();
             sut1.AddEfCoreDataSource<EfCoreDataSource>();
-            sut1.Configure<EfCoreDataSourceOptions>(_ => {});
+            sut1.ConfigureTriple<EfCoreDataSourceOptions>(_ => {});
             var sut2 = sut1.BuildServiceProvider();
 
             Assert.IsType<EfCoreDataSource>(sut2.GetRequiredService<IEfCoreDataSource>());

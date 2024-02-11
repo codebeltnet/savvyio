@@ -3,7 +3,6 @@ using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
-using Savvyio.Extensions.DependencyInjection.Messaging;
 using Savvyio.Messaging;
 
 namespace Savvyio.Extensions.DependencyInjection.Messaging

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Reflection;
@@ -31,6 +30,18 @@ namespace Savvyio
         public static string GetCorrelationId<T>(this T request) where T : IMetadata
         {
             return MetadataFactory.Get(request, MetadataDictionary.CorrelationId).As<string>();
+        }
+
+        /// <summary>
+        /// Gets the string representation of the underlying member type of <paramref name="request"/>.
+        /// </summary>
+        /// <typeparam name="T">The model that implements the <see cref="IMetadata"/> interface.</typeparam>
+        /// <param name="request">The <see cref="IMetadata"/> to extend.</param>
+        /// <returns>The string representation of the member type from the <paramref name="request"/>.</returns>
+        /// <remarks>The underlying <see cref="Type"/> of a model expressed as a string representation (fully qualified name of the type, including its namespace, comma delimited with the simple name of the assembly).</remarks>
+        public static string GetMemberType<T>(this T request) where T : IMetadata
+        {
+            return MetadataFactory.Get(request, MetadataDictionary.MemberType).As<string>();
         }
 
         /// <summary>
@@ -77,10 +88,15 @@ namespace Savvyio
         /// </summary>
         /// <typeparam name="T">The model that implements the <see cref="IMetadata"/> interface.</typeparam>
         /// <param name="request">The <see cref="IMetadata"/> to extend.</param>
+        /// <param name="utcTimestamp">The optional <see cref="DateTime"/> value expressed as the Coordinated Universal Time (UTC).</param>
         /// <returns>A reference to <paramref name="request"/> after the operation has completed.</returns>
-        public static T SetTimestamp<T>(this T request) where T : IMetadata
+        /// <exception cref="ArgumentException">
+        /// <paramref name="utcTimestamp"/> (when set) was not expressed as the Coordinated Universal Time (UTC).
+        /// </exception>
+        public static T SetTimestamp<T>(this T request, DateTime? utcTimestamp = null) where T : IMetadata
         {
-            MetadataFactory.Set(request, MetadataDictionary.Timestamp, DateTime.UtcNow);
+            Validator.ThrowIfTrue(utcTimestamp.HasValue && utcTimestamp.Value.Kind != DateTimeKind.Utc, nameof(utcTimestamp), "Value must be expressed as the Coordinated Universal Time (UTC).");
+            MetadataFactory.Set(request, MetadataDictionary.Timestamp, utcTimestamp ?? DateTime.UtcNow);
             return request;
         }
 

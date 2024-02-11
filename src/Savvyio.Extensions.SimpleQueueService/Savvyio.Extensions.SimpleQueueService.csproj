@@ -6,17 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.100.29" />
-    <PackageReference Include="AWSSDK.SQS" Version="3.7.100.28" />
-    <PackageReference Include="Cuemon.Extensions.IO" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
+    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.300.48" />
+    <PackageReference Include="AWSSDK.SQS" Version="3.7.300.48" />
+    <PackageReference Include="Cuemon.Extensions.IO" Version="8.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Savvyio.Core\Savvyio.Core.csproj" />
     <ProjectReference Include="..\Savvyio.Commands\Savvyio.Commands.csproj" />
     <ProjectReference Include="..\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
-    <ProjectReference Include="..\Savvyio.Extensions.Newtonsoft.Json\Savvyio.Extensions.Newtonsoft.Json.csproj" />
   </ItemGroup>
 
 </Project>

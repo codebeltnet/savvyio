@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using Cuemon;
-using Cuemon.Collections.Generic;
 using Cuemon.Extensions;
-using Cuemon.Extensions.Collections.Generic;
 using Savvyio.Dispatchers;
 
 namespace Savvyio
@@ -48,13 +45,15 @@ namespace Savvyio
         {
             Validator.ThrowIfNull(assemblies);
 
+            var self = typeof(SavvyioOptions).Assembly;
             var definedTypes = new List<TypeInfo>();
+            var filteredTypes = self.DefinedTypes.Where(type => type.HasInterfaces(typeof(T)) && !type.Namespace!.ContainsAny(nameof(Commands), nameof(Domain), nameof(EventDriven), nameof(Queries))).ToList();
 
-            foreach (var assembly in assemblies)
+            foreach (var assembly in assemblies.Append(self))
             {
                 try
                 {
-                    definedTypes.AddRange(assembly.DefinedTypes.Where(type => type.HasInterfaces(typeof(T))));
+                    definedTypes.AddRange(assembly.DefinedTypes.Where(type => type.HasInterfaces(typeof(T))).Except(filteredTypes));
                 }
                 catch (ReflectionTypeLoadException)
                 {
@@ -62,7 +61,7 @@ namespace Savvyio
                 }
             }
 
-            foreach (var contract in definedTypes.Where(type => type.IsInterface))
+            foreach (var contract in definedTypes.Where(type => type.IsInterface).OrderBy(ti => ti.FullName))
             {
                 var filtered = definedTypes.Where(type => SavvyioOptions.IsValid<T>(type, contract)).ToList();
                 if (filtered.Count == 0) { continue; }
