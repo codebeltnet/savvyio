@@ -84,7 +84,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 
 			TestOutput.WriteLine(profiler.ToString());
 
-			await Task.Delay(TimeSpan.FromSeconds(5)).ConfigureAwait(false); // allow for messages to be populated in SQS
+			await Task.Delay(TimeSpan.FromSeconds(10)).ConfigureAwait(false); // allow for messages to be populated in SQS
 		}
 
 		[Fact, Priority(3)]
