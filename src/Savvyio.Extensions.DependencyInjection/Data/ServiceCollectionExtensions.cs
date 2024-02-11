@@ -20,7 +20,7 @@ namespace Savvyio.Extensions.DependencyInjection.Data
         /// <typeparam name="T">The type of the DTO to use.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <param name="setup">The <see cref="ServiceOptions" /> which may be configured.</param>
-        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
+        /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>If the underlying type of <typeparamref name="TService"/> implements <see cref="IDependencyInjectionMarker{TMarker}"/> interface then this is automatically handled. Also, the implementation will be type forwarded accordingly.</remarks>
         /// <seealso cref="IDependencyInjectionMarker{TMarker}"/>
         /// <seealso cref="IPersistentDataStore{T,TOptions}"/>
@@ -46,7 +46,7 @@ namespace Savvyio.Extensions.DependencyInjection.Data
         /// <typeparam name="TOptions">The type of the options associated with <typeparamref name="T"/>.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <param name="setup">The <see cref="ServiceOptions" /> which may be configured.</param>
-        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
+        /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>If the underlying type of <typeparamref name="TService"/> implements <see cref="IDependencyInjectionMarker{TMarker}"/> interface then this is automatically handled. Also, the implementation will be type forwarded accordingly.</remarks>
         /// <seealso cref="IDependencyInjectionMarker{TMarker}"/>
         /// <seealso cref="IPersistentDataStore{T,TOptions}"/>

@@ -3,12 +3,10 @@ using Savvyio.Dispatchers;
 using Savvyio.Domain;
 using Savvyio.EventDriven;
 using Savvyio.Queries;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Cuemon.Extensions.Collections.Generic;
-using System;
-using Cuemon;
+using Savvyio.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Savvyio.Extensions
 {
@@ -17,8 +15,6 @@ namespace Savvyio.Extensions
     /// </summary>
     public static class SavvyioOptionsExtensions
     {
-        private static readonly Lazy<IEnumerable<Assembly>> AssemblyLoadFactory = new(() => AppDomain.CurrentDomain.GetAssemblies().SelectMany(GetReferencedAssemblies).Distinct().Except(typeof(SavvyioOptions).Assembly.Yield()).ToList());
-
         /// <summary>
         /// Adds an implementation of the <see cref="IMediator"/> interface.
         /// </summary>
@@ -37,51 +33,44 @@ namespace Savvyio.Extensions
         }
 
         /// <summary>
-        /// Enforce automatic discovery of handlers implementing the <see cref="IHandler"/> interface using brute assembly scanning.
+        /// Enforce automatic discovery of handlers implementing the <see cref="IDispatcher"/> interface using either <paramref name="bruteAssemblyScanning"/> or lightweight <see cref="Assembly.GetCallingAssembly"/>.
         /// </summary>
         /// <param name="options">The <see cref="SavvyioOptions"/> to extend.</param>
+        /// <param name="bruteAssemblyScanning"><c>true</c> to use brute assembly scanning for all <see cref="IDispatcher"/> interface implementations throughout the application domain; otherwise, <c>false</c>.</param>
         /// <returns>A reference to <paramref name="options"/> so that additional configuration calls can be chained.</returns>
-        public static SavvyioOptions UseAutomaticDispatcherDiscovery(this SavvyioOptions options)
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static SavvyioOptions UseAutomaticDispatcherDiscovery(this SavvyioOptions options, bool bruteAssemblyScanning = false)
         {
-            var assemblies = AssemblyLoadFactory.Value;
-            options.AddDispatchers(assemblies.ToArray());
+            if (bruteAssemblyScanning)
+            {
+                options.AddDispatchers(AssemblyContext.CurrentDomainAssemblies.ToArray());
+            }
+            else
+            {
+                options.AddDispatchers(Assembly.GetCallingAssembly());
+            }
             return options;
         }
 
         /// <summary>
-        /// Enforce automatic discovery of dispatchers implementing the <see cref="IDispatcher"/> interface using brute assembly scanning.
+        /// Enforce automatic discovery of dispatchers implementing the <see cref="IHandler"/> interface using either <paramref name="bruteAssemblyScanning"/> or lightweight <see cref="Assembly.GetCallingAssembly"/>.
         /// </summary>
         /// <param name="options">The <see cref="SavvyioOptions"/> to extend.</param>
+        /// <param name="bruteAssemblyScanning"><c>true</c> to use brute assembly scanning for all <see cref="IHandler"/> interface implementations throughout the application domain; otherwise, <c>false</c>.</param>
         /// <returns>A reference to <paramref name="options"/> so that additional configuration calls can be chained.</returns>
-        public static SavvyioOptions UseAutomaticHandlerDiscovery(this SavvyioOptions options)
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static SavvyioOptions UseAutomaticHandlerDiscovery(this SavvyioOptions options, bool bruteAssemblyScanning = false)
         {
-            var assemblies = AssemblyLoadFactory.Value;
-            options.AddHandlers(assemblies.ToArray());
+            if (bruteAssemblyScanning)
+            {
+                options.AddHandlers(AssemblyContext.CurrentDomainAssemblies.ToArray());
+            }
+            else
+            {
+                options.AddHandlers(Assembly.GetCallingAssembly());
+            }
             return options;
 
-        }
-
-        private static IEnumerable<Assembly> GetReferencedAssemblies(Assembly assembly)
-        {
-            var stack = new Stack<Assembly>();
-            var guard = new HashSet<string>();
-
-            yield return assembly;
-
-            stack.Push(assembly);
-
-            while (stack.TryPop(out var assemblyToTraverse))
-            {
-                foreach (var assemblyName in assemblyToTraverse.GetReferencedAssemblies())
-                {
-                    if (guard.Contains(assemblyName.FullName)) { continue; }
-                    Patterns.TryInvoke(() => Assembly.Load(assemblyName), out var referencedAssembly);
-                    if (referencedAssembly == null) { continue; }
-                    stack.Push(referencedAssembly);
-                    guard.Add(assemblyName.FullName);
-                    yield return referencedAssembly;
-                }
-            }
         }
     }
 }

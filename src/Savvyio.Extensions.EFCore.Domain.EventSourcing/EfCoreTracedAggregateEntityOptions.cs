@@ -4,7 +4,7 @@ using Cuemon.Configuration;
 namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
 {
     /// <summary>
-    /// Configuration options for <see cref="EfCoreTracedAggregateEntity"/>.
+    /// Configuration options for <see cref="EfCoreTracedAggregateEntity{TEntity,TKey}"/>.
     /// </summary>
     public class EfCoreTracedAggregateEntityOptions : IParameterObject
     {

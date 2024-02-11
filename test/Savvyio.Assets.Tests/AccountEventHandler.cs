@@ -1,8 +1,7 @@
 ﻿using System.Text.Json;
 using System.Threading.Tasks;
-using Cuemon.Extensions;
 using Cuemon.Extensions.Xunit;
-using Savvyio.Assets.Events;
+using Savvyio.Assets.EventDriven;
 using Savvyio.Assets.Queries;
 using Savvyio.Data;
 using Savvyio.EventDriven;
@@ -41,7 +40,7 @@ namespace Savvyio.Assets
         private Task OnOutProcAccountUpdated(AccountUpdated e)
         {
             _testStore?.Add(e);
-            _eventBus?.PublishAsync(e.EncloseToMessage("urn:event:account-updated".ToSnsUri()));
+            _eventBus?.PublishAsync(e.ToMessage("urn:event:account-updated".ToSnsUri(), nameof(AccountUpdated)));
             _output?.WriteLines($"IE {nameof(OnOutProcAccountUpdated)}", JsonSerializer.Serialize(e));
             return Task.CompletedTask;
         }
@@ -51,12 +50,12 @@ namespace Savvyio.Assets
             _testStore?.Add(e);
             if (_eventBus != null)
             {
-                await _eventBus.PublishAsync(e.EncloseToMessage("account-created-flow-test.fifo".ToSnsUri()));
+                await _eventBus.PublishAsync(e.ToMessage("account-created-flow-test.fifo".ToSnsUri(), nameof(AccountCreated))).ConfigureAwait(false);
             }
             _output?.WriteLines($"IE {nameof(OnOutProcAccountCreated)}", JsonSerializer.Serialize(e));
             if (_accountDao != null)
             {
-                await _accountDao.CreateAsync(new AccountProjection(e.Id, e.FullName, e.EmailAddress));
+                await _accountDao.CreateAsync(new AccountProjection(e.Id, e.FullName, e.EmailAddress)).ConfigureAwait(false);
             }
         }
     }

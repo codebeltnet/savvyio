@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Cuemon.Extensions.DependencyInjection;
-using Cuemon.Threading;
+﻿using Cuemon.Extensions.DependencyInjection;
 using Savvyio.Messaging;
 
 namespace Savvyio.Extensions.DependencyInjection.Messaging

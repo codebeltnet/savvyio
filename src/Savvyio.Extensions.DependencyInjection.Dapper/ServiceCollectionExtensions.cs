@@ -17,11 +17,13 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
         /// <param name="dataSourceSetup">The <see cref="DapperDataSourceOptions" /> that needs to be configured.</param>
         /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
-        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
+        /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
         public static IServiceCollection AddDapperDataSource(this IServiceCollection services, Action<DapperDataSourceOptions> dataSourceSetup, Action<ServiceOptions> serviceSetup = null)
         {
-            return services.AddDapperDataSource<DapperDataSource>(serviceSetup).Configure(dataSourceSetup);
+            return services
+	            .AddDapperDataSource<DapperDataSource>(serviceSetup)
+	            .ConfigureTriple(dataSourceSetup);
         }
 
         /// <summary>
@@ -30,11 +32,13 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
         /// <param name="dataSourceSetup">The <see cref="DapperDataSourceOptions{TMarker}" /> that needs to be configured.</param>
         /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
-        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
+        /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
         public static IServiceCollection AddDapperDataSource<TMarker>(this IServiceCollection services, Action<DapperDataSourceOptions<TMarker>> dataSourceSetup, Action<ServiceOptions> serviceSetup = null)
         {
-            return services.AddDapperDataSource<DapperDataSource<TMarker>>(serviceSetup).Configure(dataSourceSetup);
+            return services
+	            .AddDapperDataSource<DapperDataSource<TMarker>>(serviceSetup)
+	            .ConfigureTriple(dataSourceSetup);
         }
 
         /// <summary>
@@ -59,7 +63,7 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         /// <typeparam name="TService">The type of the <see cref="DapperDataStore{T,TOptions}"/> abstraction to add.</typeparam>
         /// <typeparam name="T">The type of the DTO to use.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
-        /// <returns>A reference to <paramref name="services"/> so that additional configuration calls can be chained.</returns>
+        /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         public static IServiceCollection AddDapperDataStore<TService, T>(this IServiceCollection services) 
             where TService : DapperDataStore<T, DapperQueryOptions>
             where T : class

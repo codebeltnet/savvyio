@@ -5,6 +5,12 @@
             "name": "WSL-Ubuntu",
             "type": "wsl",
             "wslDistribution": "Ubuntu-22.04"
+        },
+        {
+            "name": "Docker-Ubuntu",
+            "type": "docker",
+            "dockerImage": "gimlichael/ubuntu-testrunner:net6.0.418-net7.0.405-net8.0.101",
+            "dockerArgs": "-e AWS__CallerIdentity -e AWS__IAM__AccessKey -e AWS__IAM__SecretKey"
         }
     ]
 }

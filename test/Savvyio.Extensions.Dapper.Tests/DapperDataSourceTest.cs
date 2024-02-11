@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Cuemon.Extensions.Xunit;
 using Microsoft.Data.Sqlite;
-using Microsoft.Extensions.Options;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -16,7 +15,7 @@ namespace Savvyio.Extensions.Dapper
 
         [Theory]
         [MemberData(nameof(GetDapperDataSourceOptions))]
-        public void DapperDataSource_ShouldFailWithArgumentNullException(IOptions<DapperDataSourceOptions> options)
+        public void DapperDataSource_ShouldFailWithArgumentNullException(DapperDataSourceOptions options)
         {
             var sut = options == null 
                 ? Assert.Throws<ArgumentNullException>(() => new DapperDataSource(options))
@@ -29,19 +28,23 @@ namespace Savvyio.Extensions.Dapper
             return new List<object[]>
             {
                 new object[] { null },
-                new object[] { Options.Create(new DapperDataSourceOptions()) }
+                new object[] { new DapperDataSourceOptions() }
             };
         }
 
         [Fact]
         public void DapperDataSource_ShouldFailWithInvalidOperationException()
         {
-            var sut = new DapperDataSource(o => o.ConnectionFactory = () =>
-            {
-                var cnn = new SqliteConnection("Data Source=:memory:");
-                cnn.Open();
-                return cnn;
-            });
+	        var options = new DapperDataSourceOptions()
+	        {
+		        ConnectionFactory = () =>
+		        {
+			        var cnn = new SqliteConnection("Data Source=:memory:");
+			        cnn.Open();
+			        return cnn;
+		        }
+	        };
+			var sut = new DapperDataSource(options);
             sut.Dispose();
 
             Assert.Throws<InvalidOperationException>(() => sut.BeginTransaction());

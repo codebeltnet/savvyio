@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Savvyio.Assets.Commands;
 using Savvyio.Assets.Domain;
-using Savvyio.Assets.Events;
+using Savvyio.Assets.EventDriven;
 using Savvyio.Commands;
 using Savvyio.Extensions;
 using Savvyio.Extensions.DependencyInjection.Domain;

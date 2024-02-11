@@ -30,7 +30,7 @@ namespace Savvyio
         [Fact]
         public void AddDispatchers_ShouldAddDispatchersFromSpecifiedAssemblies()
         {
-            var sut = new SavvyioOptions().AddDispatchers(typeof(ICommand).Assembly, typeof(IDomainEvent).Assembly, typeof(IIntegrationEvent).Assembly, typeof(IQuery).Assembly);
+            var sut = new SavvyioOptions().AddDispatchers(typeof(Command).Assembly, typeof(DomainEvent).Assembly, typeof(IntegrationEvent).Assembly, typeof(Query<>).Assembly);
 
             Assert.NotEmpty(sut.DispatcherServiceTypes);
             Assert.NotEmpty(sut.DispatcherImplementationTypes);
@@ -49,7 +49,7 @@ namespace Savvyio
         [Fact]
         public void AddDispatchers_ShouldAutomaticallyAddDispatchersFromReferencedAssemblies()
         {
-            var sut = new SavvyioOptions().UseAutomaticDispatcherDiscovery();
+            var sut = new SavvyioOptions().UseAutomaticDispatcherDiscovery(true);
 
             Assert.NotEmpty(sut.DispatcherServiceTypes);
             Assert.NotEmpty(sut.DispatcherImplementationTypes);
@@ -99,7 +99,7 @@ namespace Savvyio
         [Fact]
         public void AddHandlers_ShouldAddHandlersAutomaticallyFromReferencedAssemblies()
         {
-            var sut = new SavvyioOptions().UseAutomaticHandlerDiscovery();
+            var sut = new SavvyioOptions().UseAutomaticHandlerDiscovery(true);
 
             Assert.NotEmpty(sut.HandlerServiceTypes);
             Assert.NotEmpty(sut.HandlerImplementationTypes);

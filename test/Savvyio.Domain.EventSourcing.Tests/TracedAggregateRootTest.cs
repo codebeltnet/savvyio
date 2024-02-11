@@ -13,14 +13,18 @@ using Savvyio.Assets.Domain.Events;
 using Savvyio.Assets.Domain.EventSourcing;
 using Savvyio.Assets.Domain.Handlers;
 using Savvyio.Extensions.DependencyInjection;
+using Savvyio.Extensions.DependencyInjection.Domain.EventSourcing;
+using Savvyio.Extensions.DependencyInjection.EFCore;
 using Savvyio.Extensions.DependencyInjection.EFCore.Domain;
 using Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing;
 using Savvyio.Extensions.EFCore;
 using Savvyio.Extensions.EFCore.Domain.EventSourcing;
+using Savvyio.Extensions.Newtonsoft.Json;
+using Savvyio.Extensions.Text.Json;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Domain.EventSourcing.Tests
+namespace Savvyio.Domain.EventSourcing
 {
     public class TracedAggregateRootTest : Test
     {
@@ -66,29 +70,57 @@ namespace Savvyio.Domain.EventSourcing.Tests
             Assert.Equal(3, sut.Events.Count);
         }
 
-        [Fact]
-        public async Task EfCoreDataStore_ShouldRaiseDomainEventsAndDehydrateEventsToStorage()
+        [Theory]
+        [InlineData(typeof(NewtonsoftJsonMarshaller))]
+        [InlineData(typeof(JsonMarshaller))]
+        public async Task EfCoreDataStore_ShouldRaiseDomainEventsAndDehydrateEventsToStorage(Type formatterType)
         {
             string schema = null;
             var sc = new ServiceCollection();
             sc.AddSavvyIO(o => o.AddDomainEventDispatcher().AddDomainEventHandler<AccountDomainEventHandler>());
-            sc.AddEfCoreAggregateDataSource(o =>
+
+            switch (formatterType)
             {
-                o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy").EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
-                o.ModelConstructor = mb =>
-                {
-                    mb.AddEventSourcing<TracedAccount, Guid>(eo => eo.TableName = $"{nameof(TracedAccount)}_DomainEvents");
-                    schema = mb.Model.ToDebugString(MetadataDebugStringOptions.LongDefault);
-                    TestOutput.WriteLine(schema);
-                };
-            });
-            sc.AddEfCoreTracedAggregateRepository<TracedAccount, Guid>();
-            sc.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
+                case Type newton when newton == typeof(NewtonsoftJsonMarshaller):
+                    sc.AddMarshaller<NewtonsoftJsonMarshaller>();
+                    sc.AddEfCoreAggregateDataSource<NewtonsoftJsonMarshaller>(o =>
+                    {
+                        o.ContextConfigurator = b => b.UseInMemoryDatabase($"Dummy").EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
+                        o.ModelConstructor = mb =>
+                        {
+                            mb.AddEventSourcing<TracedAccount, Guid>(eo => eo.TableName = $"{nameof(TracedAccount)}_DomainEvents");
+                            schema = mb.Model.ToDebugString(MetadataDebugStringOptions.LongDefault);
+                            TestOutput.WriteLine(schema);
+                        };
+                    });
+                    sc.AddEfCoreTracedAggregateRepository<TracedAccount, Guid, NewtonsoftJsonMarshaller>();
+                    break;
+                case Type builtin when builtin == typeof(JsonMarshaller):
+                    sc.AddMarshaller<JsonMarshaller>();
+                    sc.AddEfCoreAggregateDataSource<JsonMarshaller>(o =>
+                    {
+                        o.ContextConfigurator = b => b.UseInMemoryDatabase($"Dummy").EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
+                        o.ModelConstructor = mb =>
+                        {
+                            mb.AddEventSourcing<TracedAccount, Guid>(eo => eo.TableName = $"{nameof(TracedAccount)}_DomainEvents");
+                            schema = mb.Model.ToDebugString(MetadataDebugStringOptions.LongDefault);
+                            TestOutput.WriteLine(schema);
+                        };
+                    });
+                    sc.AddEfCoreTracedAggregateRepository<TracedAccount, Guid, JsonMarshaller>();
+                    break;
+            }
             
+            sc.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
+
             var sp = sc.BuildServiceProvider();
 
-            var ds = sp.GetRequiredService<IEfCoreDataSource>();
-            var sut4 = sp.GetRequiredService<ITracedAggregateRepository<TracedAccount, Guid>>();
+            var ds = formatterType == typeof(NewtonsoftJsonMarshaller) 
+                ? sp.GetRequiredService<IEfCoreDataSource<NewtonsoftJsonMarshaller>>() as IEfCoreDataSource
+                : sp.GetRequiredService<IEfCoreDataSource<JsonMarshaller>>() as IEfCoreDataSource;
+            var sut4 = formatterType == typeof(NewtonsoftJsonMarshaller)
+                ? sp.GetRequiredService<ITracedAggregateRepository<TracedAccount, Guid, NewtonsoftJsonMarshaller>>() as ITracedAggregateRepository<TracedAccount, Guid>
+                : sp.GetRequiredService<ITracedAggregateRepository<TracedAccount, Guid, JsonMarshaller>>() as ITracedAggregateRepository<TracedAccount, Guid>;
 
             var id = Guid.NewGuid();
             var providerId = Guid.NewGuid();
@@ -101,7 +133,7 @@ namespace Savvyio.Domain.EventSourcing.Tests
             {
                 ta.ChangeEmailAddress($"{Generate.RandomString(8)}@gimlichael.dev");
             }
-            
+
             ta.ChangeEmailAddress("root@gimlichael.dev");
 
             sut4.Add(ta);
@@ -155,7 +187,7 @@ namespace Savvyio.Domain.EventSourcing.Tests
 Annotations: 
   BaseTypeDiscoveryConvention:DerivedTypes: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.List`1[Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType]]
   NonNullableConventionState: System.Reflection.NullabilityInfoContext
-  ProductVersion: 7.0.0
+  ProductVersion: 8.0.1
   RelationshipDiscoveryConvention:InverseNavigationCandidates: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.SortedSet`1[System.Type]]", schema, ignoreLineEndingDifferences: true);
         }
 

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>Savvyio.Extensions</RootNamespace>
+    <RootNamespace>Savvyio.Extensions.Dispatchers</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

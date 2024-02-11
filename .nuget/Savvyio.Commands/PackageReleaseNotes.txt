@@ -1,3 +1,24 @@
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# New Features
+- ADDED MessageExtensions class in the Savvyio.Commands.Messaging.Cryptography namespace that consist of extension methods for the IMessage{T} interface: Sign{T}
+- ADDED MemoryCommandQueue class in the Savvyio.Commands.Messaging namespace that provides an in-memory implementation of the IPointToPointChannel{TRequest} interface useful for unit testing and the likes thereof  <----
+ 
+# Improvements
+
+ 
+# Breaking Changes
+- RENAMED EncloseToMessage{T} extension method on the CommandExtensions class in the Savvyio.Commands.Messaging namespace to ToMessage{T}
+- CHANGED ToMessage{T} extension method on the CommandExtensions class in the Savvyio.Commands.Messaging namespace to include a string that describes the type of command
+- RENAMED MemoryCommandQueue class in the Savvyio.Commands.Messaging namespace to InMemoryCommandQueue (consistency with Microsoft naming convention)
+- MOVED ICommand interface in the Savvyio.Commands namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED ICommandDispatcher interface in the Savvyio.Commands namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED ICommandHandler interface in the Savvyio.Commands namespace to the namespace equivalent in the Savvyio.Core assembly
+ 
 Version: 1.1.0
 Availability: .NET 7.0, .NET 6.0
  

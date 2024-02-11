@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Cuemon.Extensions.IO" Version="8.1.0" />
     <PackageReference Include="Xunit.Priority" Version="1.1.6" />
   </ItemGroup>
 

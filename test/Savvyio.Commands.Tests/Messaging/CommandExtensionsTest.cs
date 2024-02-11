@@ -1,7 +1,7 @@
 ﻿using Cuemon.Extensions;
 using Cuemon.Extensions.Reflection;
 using Cuemon.Extensions.Xunit;
-using Savvyio.Commands.Assets;
+using Savvyio.Assets.Commands;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -14,19 +14,21 @@ namespace Savvyio.Commands.Messaging
         }
 
         [Fact]
-        public void Enclose_CreateMemberCommand_ShouldBeWrappedInMessage()
+        public void EncloseToMessage_CreateMemberCommand_ShouldBeWrappedInMessage()
         {
             var sut1 = new CreateMemberCommand("Jane Doe", 21, "jd@office.com");
             var sut2 = "https://fancy.api/members".ToUri();
-            var sut3 = sut1.EncloseToMessage(sut2);
+            var sut3 = "com.example.someevent";
+            var sut4 = sut1.ToMessage(sut2, sut3);
 
-            Assert.Equal(sut1.EmailAddress, sut3.Data.EmailAddress);
-            Assert.Equal(sut1.Age, sut3.Data.Age);
-            Assert.Equal(sut1.Name, sut3.Data.Name);
-            Assert.NotNull(sut3.Id);
-            Assert.NotNull(sut3.Time);
-            Assert.Equal(sut1.GetType().ToFullNameIncludingAssemblyName(), sut3.Type);
-            Assert.Equal(sut2.OriginalString, sut3.Source);
+            Assert.Equal(sut1.EmailAddress, sut4.Data.EmailAddress);
+            Assert.Equal(sut1.Age, sut4.Data.Age);
+            Assert.Equal(sut1.Name, sut4.Data.Name);
+            Assert.NotNull(sut4.Id);
+            Assert.NotNull(sut4.Time);
+            Assert.Equal(sut1.GetType().ToFullNameIncludingAssemblyName(), sut4.Data.GetMemberType());
+            Assert.Equal(sut2.OriginalString, sut4.Source);
+            Assert.Equal(sut3, sut4.Type);
         }
     }
 }

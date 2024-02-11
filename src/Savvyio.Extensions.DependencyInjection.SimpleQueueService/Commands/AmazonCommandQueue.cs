@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System;
 using Savvyio.Commands;
 using Savvyio.Extensions.DependencyInjection.Messaging;
 using Savvyio.Extensions.SimpleQueueService;
@@ -16,8 +16,16 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService.Commands
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonCommandQueue{TMarker}"/> class.
         /// </summary>
-        /// <param name="options">The <see cref="AmazonCommandQueueOptions" /> which need to be configured.</param>
-        public AmazonCommandQueue(IOptions<AmazonCommandQueueOptions<TMarker>> options) : base(options)
+        /// <param name="marshaller">The <see cref="IMarshaller"/> that is used when converting <see cref="ICommand"/> implementations to messages.</param>
+        /// <param name="options">The <see cref="AmazonCommandQueueOptions{TMarker}"/> used to configure this instance.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="marshaller"/> cannot be null - or -
+        /// <paramref name="options"/> cannot be null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="options"/> are not in a valid state.
+        /// </exception>
+        public AmazonCommandQueue(IMarshaller marshaller, AmazonCommandQueueOptions<TMarker> options) : base(marshaller, options)
         {
         }
     }

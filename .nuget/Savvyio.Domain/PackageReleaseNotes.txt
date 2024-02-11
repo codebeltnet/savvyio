@@ -1,3 +1,21 @@
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- REMOVED SerializableAttribute and ISerializable implementations on all custom exceptions due to Microsoft decision on deprecating most of the legacy serialization infrastructure https://github.com/dotnet/docs/issues/34893
+- MOVED ITracedAggregateRepository interface in the Savvyio.Domain.EventSourcing namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED ITracedAggregateRoot interface in the Savvyio.Domain.EventSourcing namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED ITracedDomainEvent interface in the Savvyio.Domain.EventSourcing namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED IAggregateRepository interface in the Savvyio.Domain namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED IAggregateRoot interface in the Savvyio.Domain namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED IDomainEvent interface in the Savvyio.Domain namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED IDomainEventDispatcher interface in the Savvyio.Domain namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED IDomainEventHandler interface in the Savvyio.Domain namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED IEntity interface in the Savvyio.Domain namespace to the namespace equivalent in the Savvyio.Core assembly
+ 
 Version: 1.1.0
 Availability: .NET 7.0, .NET 6.0
  

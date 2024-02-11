@@ -1,6 +1,5 @@
 ﻿using Cuemon.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Savvyio.Extensions.EFCore
 {
@@ -14,10 +13,10 @@ namespace Savvyio.Extensions.EFCore
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreDbContext"/> class.
         /// </summary>
-        /// <param name="setup">The <see cref="EfCoreDataSourceOptions" /> which need to be configured.</param>
-        public EfCoreDbContext(IOptions<EfCoreDataSourceOptions> setup)
+        /// <param name="options">The <see cref="EfCoreDataSourceOptions"/> used to configure this instance.</param>
+        public EfCoreDbContext(EfCoreDataSourceOptions options)
         {
-            Options = setup.Value;
+            Options = options ?? new EfCoreDataSourceOptions();
         }
 
         /// <summary>

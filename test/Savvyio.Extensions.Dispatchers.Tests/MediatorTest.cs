@@ -10,7 +10,7 @@ using Savvyio.Assets;
 using Savvyio.Assets.Commands;
 using Savvyio.Assets.Domain;
 using Savvyio.Assets.Domain.Events;
-using Savvyio.Assets.Events;
+using Savvyio.Assets.EventDriven;
 using Savvyio.Assets.Queries;
 using Savvyio.Domain;
 using Savvyio.EventDriven;
@@ -21,7 +21,7 @@ using Savvyio.Queries;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions
+namespace Savvyio.Extensions.Dispatchers
 {
     public class MediatorTest : Test
     {
@@ -32,7 +32,7 @@ namespace Savvyio.Extensions
         [Fact]
         public void Host_MediatorShouldBeRegistered_UsingDefaultOptions()
         {
-            using (var host = GenericHostTestFactory.CreateGenericHostTest(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>())))
+            using (var host = GenericHostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>())))
             {
                 var mediator = host.ServiceProvider.GetRequiredService<IMediator>();
 
@@ -43,7 +43,7 @@ namespace Savvyio.Extensions
         [Fact]
         public void Host_MediatorDescriptorShouldNotBeRegistered_UsingDefaultOptions()
         {
-            using (var host = GenericHostTestFactory.CreateGenericHostTest(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>())))
+            using (var host = GenericHostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>())))
             {
                 Assert.Throws<InvalidOperationException>(() => host.ServiceProvider.GetRequiredService<HandlerServicesDescriptor>());
             }
@@ -52,7 +52,7 @@ namespace Savvyio.Extensions
         [Fact]
         public void Host_MediatorDescriptorShouldBeRegistered()
         {
-            using (var host = GenericHostTestFactory.CreateGenericHostTest(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>().EnableHandlerServicesDescriptor())))
+            using (var host = GenericHostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>().EnableHandlerServicesDescriptor())))
             {
                 var descriptor = host.ServiceProvider.GetRequiredService<HandlerServicesDescriptor>();
 
@@ -65,7 +65,7 @@ namespace Savvyio.Extensions
         [Fact]
         public async Task Mediator_ShouldInvoke_CreateAccountAsync_OnInProcAccountCreated_OnOutProcAccountCreated()
         {
-            using (var host = GenericHostTestFactory.CreateGenericHostTest(services =>
+            using (var host = GenericHostTestFactory.Create(services =>
             {
                 services.AddSingleton(TestOutput);
                 services.AddEfCoreRepository<Account, long, Account>();
@@ -76,7 +76,7 @@ namespace Savvyio.Extensions
                     o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(PlatformProvider)).EnableDetailedErrors().LogTo(Console.WriteLine);
                     o.ModelConstructor = mb => mb.AddPlatformProvider();
                 });
-                services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery().UseAutomaticHandlerDiscovery().AddMediator<Mediator>());
+                services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true).AddMediator<Mediator>());
                 services.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
                 services.AddScoped<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
             }))
@@ -103,7 +103,7 @@ namespace Savvyio.Extensions
         [Fact]
         public async Task Mediator_ShouldInvoke_CreatePlatformProviderAsyncLambda_OnInProcPlatformProviderInitiated_OnOutProcPlatformProviderCreated()
         {
-            using (var host = GenericHostTestFactory.CreateGenericHostTest(services =>
+            using (var host = GenericHostTestFactory.Create(services =>
             {
                 services.AddSingleton(TestOutput);
                 services.AddEfCoreRepository<Account, long>();
@@ -116,7 +116,7 @@ namespace Savvyio.Extensions
                 });
                 services.AddSavvyIO(o =>
                 {
-                    o.AddMediator<Mediator>().EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery().UseAutomaticHandlerDiscovery();
+                    o.AddMediator<Mediator>().EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true);
                 });
                 services.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
                 services.AddScoped<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
@@ -144,14 +144,14 @@ namespace Savvyio.Extensions
         [Fact]
         public async Task QueryTest()
         {
-            using (var host = GenericHostTestFactory.CreateGenericHostTest(services =>
+            using (var host = GenericHostTestFactory.Create(services =>
                    {
                        services.AddSingleton(TestOutput);
                        services.AddScoped<IPersistentRepository<Account, long>, EfCoreRepository<Account, long, Account>>();
                        services.AddScoped<IPersistentRepository<PlatformProvider, Guid>, EfCoreRepository<PlatformProvider, Guid, PlatformProvider>>();
                        services.AddEfCoreDataSource<Account>(o => o.ModelConstructor = builder => builder.AddAccount());
                        services.AddEfCoreDataSource<PlatformProvider>(o => o.ModelConstructor = builder => builder.AddPlatformProvider());
-                       services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery().UseAutomaticHandlerDiscovery());
+                       services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true));
                        services.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
                        services.AddScoped<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
                    }))

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Cuemon.Extensions.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
@@ -95,7 +96,7 @@ namespace Savvyio.Extensions.DependencyInjection
         /// Gets the assemblies to scan for dispatcher- and handler- types.
         /// </summary>
         /// <value>The assemblies to scan for dispatcher- and handler- types.</value>
-        public IEnumerable<Assembly> AssembliesToScan => _assemblies.Count == 0 ? null : _assemblies;
+        public IEnumerable<Assembly> AssembliesToScan => _assemblies.Count == 0 ? Enumerable.Empty<Assembly>() : _assemblies;
 
         /// <summary>
         /// Adds the specified range of <paramref name="assemblies"/> to be included when scanning for dispatcher- and handler- types.

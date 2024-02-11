@@ -2,8 +2,6 @@
 #   href: api
 #   topicHref: api/index.md
 - name: Savvy I/O API
-  href: api/dotnet
-  topicHref: api/dotnet/index.md
+  href: api/dotnet/Savvyio.html
 - name: Ext. Savvy I/O API
-  href: api/extensions/dotnet
-  topicHref: api/extensions/dotnet/index.md
+  href: api/extensions/dotnet/Savvyio.Extensions.html

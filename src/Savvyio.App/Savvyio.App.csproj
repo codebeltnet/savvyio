@@ -3,7 +3,7 @@
   <PropertyGroup>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IncludeSymbols>false</IncludeSymbols>
-    <Description>Provides a complete and convenient set of API additions for building a DDD, CQRS and Event Sourcing enabled .NET application using Microsoft Dependency Injection, Microsoft Entity Framework Core and Dapper, Newtonsoft JSON  and AWS SNS/SQS.</Description>
+    <Description>Provides a complete and convenient set of API additions for building a DDD, CQRS and Event Sourcing enabled .NET application using Microsoft Dependency Injection, Microsoft Entity Framework Core, Dapper and AWS SNS/SQS.</Description>
     <PackageTags>ddd domain-driven-design cqrs command-query-responsibility-segregation es event-sourcing datastore data-store datasource data-source dataaccessobject data-access-object repository de domain-event ie integration-event valueobject value-object entity aggregate aggregate-root eventdriven event-driven ef-core ef entity-framework entity-framework-core di dependency-injection aws amazon awssqs awssns simplequeueservice sqs simplenotificationservice sns queue bus json converters converter</PackageTags>
     <Title>Savvyio.App</Title>
   </PropertyGroup>
@@ -27,6 +27,7 @@
     <ProjectReference Include="..\Savvyio.Extensions.EFCore.Domain\Savvyio.Extensions.EFCore.Domain.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.EFCore\Savvyio.Extensions.EFCore.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.SimpleQueueService\Savvyio.Extensions.SimpleQueueService.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.Text.Json\Savvyio.Extensions.Text.Json.csproj" />
     <ProjectReference Include="..\Savvyio.Queries\Savvyio.Queries.csproj" />
   </ItemGroup>
 

@@ -7,16 +7,6 @@ using Savvyio.Domain.EventSourcing;
 
 namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
 {
-    internal static class EfCoreTracedAggregateEntity
-    {
-        internal static IMetadataDictionary RemoveRedundantEntries(IMetadataDictionary metadata)
-        {
-            metadata.Remove(MetadataDictionary.Timestamp);
-            metadata.Remove(MetadataDictionary.MemberType);
-            return metadata;
-        }
-    }
-
     /// <summary>
     /// Provides a generic way for EF Core to surrogate and support an implementation of <see cref="ITracedAggregateRoot{TKey}"/>.
     /// </summary>
@@ -42,13 +32,14 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
         /// </summary>
         /// <param name="aggregate">The traced aggregate to convert into this EF Core compatible instance.</param>
         /// <param name="domainEvent">The traced domain event to convert into this EF Core compatible instance.</param>
-        public EfCoreTracedAggregateEntity(TEntity aggregate, ITracedDomainEvent domainEvent)
+        /// <param name="marshaller">The <see cref="IMarshaller"/> that is used when converting <see cref="ITracedDomainEvent"/> into a serialized format.</param>
+        public EfCoreTracedAggregateEntity(TEntity aggregate, ITracedDomainEvent domainEvent, IMarshaller marshaller)
         {
             _id = aggregate.Id;
             _version = domainEvent.GetAggregateVersion();
             _type = domainEvent.GetMemberType();
             _timestamp = domainEvent.GetTimestamp();
-            _payload = domainEvent.ToByteArray();
+            _payload = domainEvent.ToByteArray(marshaller);
             _metadata = aggregate.Metadata;
             _events = domainEvent.Yield().ToList();
         }

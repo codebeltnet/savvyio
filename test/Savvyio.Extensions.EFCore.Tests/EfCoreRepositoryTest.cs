@@ -6,11 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Savvyio.Assets;
 using Savvyio.Assets.Domain;
 using Savvyio.Extensions.DependencyInjection.EFCore;
-using Savvyio.Extensions.EFCore;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions.Storage
+namespace Savvyio.Extensions.EFCore
 {
     public class EfCoreRepositoryTest : Test
     {
@@ -21,7 +20,10 @@ namespace Savvyio.Extensions.Storage
         [Fact]
         public void EfCoreRepository_ShouldFailWithInvalidModel()
         {
-            var sut1 = new EfCoreDataSource<Account>(o => o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy"));
+            var sut1 = new EfCoreDataSource<Account>(new EfCoreDataSourceOptions<Account>()
+            {
+	            ContextConfigurator = b => b.UseInMemoryDatabase("Dummy")
+            });
             var sut2 = new EfCoreRepository<Account, long, Account>(sut1);
             var ex = Assert.Throws<InvalidOperationException>(() => sut2.Add(new Account(1)));
             Assert.StartsWith("Cannot create a DbSet for 'Account' because this type is not included in the model for the context.", ex.Message);
@@ -34,10 +36,10 @@ namespace Savvyio.Extensions.Storage
             var name = "Test";
             var email = "test@unit.test";
 
-            var sut1 = new EfCoreDataSource(o =>
+            var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
             {
-                o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy");
-                o.ModelConstructor = mb => mb.AddAccount();
+                ContextConfigurator = b => b.UseInMemoryDatabase("Dummy"),
+                ModelConstructor = mb => mb.AddAccount()
             });
 
             var sut2 = new EfCoreRepository<Account, long>(sut1);
@@ -59,10 +61,10 @@ namespace Savvyio.Extensions.Storage
             var email = "test@unit.test";
             var entity = new Account(id, name, email);
 
-            var sut1 = new EfCoreDataSource(o =>
+            var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
             {
-                o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy");
-                o.ModelConstructor = mb => mb.AddAccount();
+                ContextConfigurator = b => b.UseInMemoryDatabase("Dummy"),
+                ModelConstructor = mb => mb.AddAccount()
             });
 
             var sut2 = new EfCoreRepository<Account, long>(sut1);
@@ -89,10 +91,10 @@ namespace Savvyio.Extensions.Storage
             var email = "test@unit.test";
             var entity = new Account(id, name, email);
 
-            var sut1 = new EfCoreDataSource(o =>
+            var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
             {
-                o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy");
-                o.ModelConstructor = mb => mb.AddAccount();
+                ContextConfigurator = b => b.UseInMemoryDatabase("Dummy"),
+                ModelConstructor = mb => mb.AddAccount()
             });
 
             var events = new List<string>();

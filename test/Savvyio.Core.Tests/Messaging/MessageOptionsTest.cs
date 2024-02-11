@@ -19,7 +19,6 @@ namespace Savvyio.Messaging
 
             Assert.NotNull(sut.MessageId);
             Assert.Null(sut.Time);
-            Assert.Null(sut.Type);
         }
 
         [Theory]

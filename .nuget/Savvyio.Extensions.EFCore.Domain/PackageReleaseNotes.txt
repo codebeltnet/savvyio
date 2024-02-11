@@ -1,3 +1,12 @@
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- CHANGED EfCoreAggregateDataSource class in the Savvyio.Extensions.EFCore.Domain namespace to use EfCoreDataSourceOptions instead of IOptions{EfCoreDataSourceOptions} on the constructor
+ 
 Version: 1.1.0
 Availability: .NET 7.0, .NET 6.0
  

@@ -71,9 +71,9 @@ namespace Savvyio.Extensions.SimpleQueueService
         /// </exception>
         public void ValidateOptions()
         {
-            Validator.ThrowIfObjectInDistress(Partition.IsNullOrWhiteSpace());
-            Validator.ThrowIfObjectInDistress(Region.IsNullOrWhiteSpace());
-            Validator.ThrowIfObjectInDistress(AccountId.IsNullOrWhiteSpace() || AccountId.Length != 12 || !AccountId.IsNumeric(NumberStyles.Integer));
+            Validator.ThrowIfInvalidState(Partition.IsNullOrWhiteSpace());
+            Validator.ThrowIfInvalidState(Region.IsNullOrWhiteSpace());
+            Validator.ThrowIfInvalidState(AccountId.IsNullOrWhiteSpace() || AccountId.Length != 12 || !AccountId.IsNumeric(NumberStyles.Integer));
         }
     }
 }
