@@ -44,7 +44,9 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         public override async Task PublishAsync(IMessage<IIntegrationEvent> @event, Action<AsyncOptions> setup = null)
         {
             var options = setup.Configure();
-            var sns = new AmazonSimpleNotificationServiceClient(Options.Credentials, Options.Endpoint);
+            var sns = Options.SnsConfig != null 
+                ? new AmazonSimpleNotificationServiceClient(Options.Credentials, Options.SnsConfig)
+                : new AmazonSimpleNotificationServiceClient(Options.Credentials, Options.Endpoint);
             var request = new PublishRequest
             {
                 TopicArn = @event.Source,
