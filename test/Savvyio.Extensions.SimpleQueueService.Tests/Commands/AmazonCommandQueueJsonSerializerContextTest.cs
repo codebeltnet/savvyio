@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Amazon;
@@ -17,6 +18,7 @@ using Xunit;
 using Xunit.Abstractions;
 using Xunit.Priority;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Cuemon.Diagnostics;
 using Cuemon.Extensions.Collections.Generic;
 using Savvyio.Extensions.DependencyInjection;
@@ -82,23 +84,27 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 			var profiler = await TimeMeasure.WithActionAsync(_ => _queue.SendAsync(messages)).ConfigureAwait(false);
 
 			TestOutput.WriteLine(profiler.ToString());
-
-			await Task.Delay(TimeSpan.FromSeconds(10)).ConfigureAwait(false); // allow for messages to be populated in SQS
 		}
 
 		[Fact, Priority(3)]
 		public async Task ReceiveAsync_CreateMemberCommand_All()
-		{
+        {
+            var ct = new CancellationTokenSource(TimeSpan.FromSeconds(90)).Token;
+            var realizedCommands = new List<IMessage<ICommand>>();
 			var sut1 = Comparer.Query(message => message.Source.StartsWith("urn")).ToList();
-			var sut2 = await _queue.ReceiveAsync().ToListAsync();
 
-			TestOutput.WriteLine(sut2.Count.ToString());
-			TestOutput.WriteLines(sut2.Take(10));
+            while (realizedCommands.Count < sut1.Count)
+            {
+                realizedCommands.AddRange(await _queue.ReceiveAsync(o => o.CancellationToken = ct).ToListAsync(ct).ConfigureAwait(false));
+            }
+            
+			TestOutput.WriteLine(realizedCommands.Count.ToString());
+			TestOutput.WriteLines(realizedCommands.Take(10));
 
-			Assert.Equivalent(sut1.Count, sut2.Count);
-			Assert.Equivalent(sut1, sut2);
-			Assert.Equivalent(sut1.Select(message => message.Data), sut2.Select(message => message.Data));
-			Assert.Equivalent(sut1.Select(message => message.Data.Metadata), sut2.Select(message => message.Data.Metadata));
+			Assert.Equivalent(sut1.Count, realizedCommands.Count);
+			Assert.Equivalent(sut1, realizedCommands);
+			Assert.Equivalent(sut1.Select(message => message.Data), realizedCommands.Select(message => message.Data));
+			Assert.Equivalent(sut1.Select(message => message.Data.Metadata), realizedCommands.Select(message => message.Data.Metadata));
 		}
 
 		public override void ConfigureServices(IServiceCollection services)
