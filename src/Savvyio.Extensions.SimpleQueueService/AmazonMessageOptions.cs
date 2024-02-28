@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Amazon;
 using Amazon.Runtime;
 using Amazon.SimpleNotificationService;
@@ -46,11 +47,16 @@ namespace Savvyio.Extensions.SimpleQueueService
 		///         <term><see cref="SourceQueue"/></term>
 		///         <description><c>null</c></description>
 		///     </item>
+        ///     <item>
+        ///         <term><see cref="ClientConfigurations"/></term>
+        ///         <description><c>Enumerable.Empty&lt;ClientConfig&gt;().ToArray();</c></description>
+        ///     </item>
 		/// </list>
 		/// </remarks>
 		public AmazonMessageOptions()
 		{
 			ReceiveContext = new AmazonMessageReceiveOptions();
+            ClientConfigurations = Enumerable.Empty<ClientConfig>().ToArray();
 		}
 
         /// <summary>
@@ -66,18 +72,30 @@ namespace Savvyio.Extensions.SimpleQueueService
         public RegionEndpoint Endpoint { get; set; }
 
         /// <summary>
-        /// Gets or sets the configuration of the AWS SQS.
+        /// Gets the client configuration for AWS SQS/SNS provided by <see cref="ConfigureClient"/>.
         /// </summary>
-        /// <value>The configuration of the AWS SQS.</value>
-        /// <remarks>When this property is set, it will take precedence over the <see cref="Endpoint"/> property. Useful for testing with a local SQS instance such as LocalStack or require full configuration flexibility.</remarks>
-        public AmazonSQSConfig SqsConfig { get; set; }
+        /// <value>The configuration of the AWS SQS/SNS.</value>
+        /// <remarks>When this property is set, it will take precedence over the <see cref="Endpoint"/> property. Useful for testing with a local SQS/SNS instance such as LocalStack or require full configuration flexibility.</remarks>
+        public ClientConfig[] ClientConfigurations { get; private set; }
 
         /// <summary>
-        /// Gets or sets the configuration of the AWS SNS.
+        /// Provides a flexible way to configure client configurations for both AWS SQS/SNS in a single call.
         /// </summary>
-        /// <value>The configuration of the AWS SNS.</value>
-        /// <remarks>When this property is set, it will take precedence over the <see cref="Endpoint"/> property. Useful for testing with a local SNS instance such as LocalStack or require full configuration flexibility.</remarks>
-        public AmazonSimpleNotificationServiceConfig SnsConfig { get; set; }
+        /// <param name="setup">The setup.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="setup"/> cannot be null.
+        /// </exception>
+        /// <remarks>When this method is invoked, it will set the <see cref="ClientConfigurations"/> property that take precedence over the <see cref="Endpoint"/> property. Useful for testing with a local SQS/SNS instance such as LocalStack or require full configuration flexibility.</remarks>
+        public AmazonMessageOptions ConfigureClient(Action<ClientConfig> setup)
+        {
+            Validator.ThrowIfNull(setup);
+            var sqsConfig = new AmazonSQSConfig();
+            var snsConfig = new AmazonSimpleNotificationServiceConfig();
+            setup(sqsConfig);
+            setup(snsConfig);
+            ClientConfigurations = new ClientConfig[] { sqsConfig, snsConfig };
+            return this;
+        }
 
         /// <summary>
         /// Gets or sets the URI that represents an AWS SQS/SNS endpoint.
@@ -99,7 +117,8 @@ namespace Savvyio.Extensions.SimpleQueueService
         /// <see cref="Credentials"/> cannot be null - or -
         /// <see cref="Endpoint"/> cannot be null - or -
         /// <see cref="SourceQueue"/> cannot be null - or -
-        /// <see cref="ReceiveContext"/> cannot be null.
+        /// <see cref="ReceiveContext"/> cannot be null -or-
+        /// <see cref="ClientConfigurations"/> is initialized but does not have a length of 2 or the expected elements of type <see cref="AmazonSQSConfig"/> or <see cref="AmazonSimpleNotificationServiceConfig"/>.
         /// </exception>
         public void ValidateOptions()
         {
@@ -107,6 +126,7 @@ namespace Savvyio.Extensions.SimpleQueueService
             Validator.ThrowIfInvalidState(Endpoint == null);
             Validator.ThrowIfInvalidState(SourceQueue == null);
             Validator.ThrowIfInvalidState(ReceiveContext == null);
+            Validator.ThrowIfInvalidState(ClientConfigurations.Length > 0 && (ClientConfigurations.Length != 2 || !(ClientConfigurations[0] is AmazonSQSConfig && ClientConfigurations[1] is AmazonSimpleNotificationServiceConfig)));
         }
     }
 }

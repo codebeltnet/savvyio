@@ -71,8 +71,8 @@ namespace Savvyio.Extensions.SimpleQueueService
 		/// <returns>A task that represents the asynchronous operation. The task result contains a sequence of <see cref="IMessage{T}"/> whose generic type argument is <see cref="IRequest"/>.</returns>
 		protected virtual async IAsyncEnumerable<IMessage<TRequest>> RetrieveMessagesAsync([EnumeratorCancellation] CancellationToken cancellationToken)
 		{
-			var sqs = Options.SqsConfig != null 
-                ? new AmazonSQSClient(Options.Credentials, Options.SqsConfig)
+			var sqs = Options.ClientConfigurations.IsValid()
+                ? new AmazonSQSClient(Options.Credentials, Options.ClientConfigurations.SimpleQueueService())
                 : new AmazonSQSClient(Options.Credentials, Options.Endpoint);
 
 			if (Options.ReceiveContext.UseApproximateNumberOfMessages)

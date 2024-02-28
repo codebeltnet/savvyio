@@ -53,8 +53,8 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 			var tasks = new List<Task>();
 			while (batches.HasPartitions)
 			{
-				var sqs = Options.SqsConfig != null 
-                    ? new AmazonSQSClient(Options.Credentials, Options.SqsConfig)
+				var sqs = Options.ClientConfigurations.IsValid()
+                    ? new AmazonSQSClient(Options.Credentials, Options.ClientConfigurations.SimpleQueueService())
                     : new AmazonSQSClient(Options.Credentials, Options.Endpoint);
 				
                 var batchRequest = new SendMessageBatchRequest
