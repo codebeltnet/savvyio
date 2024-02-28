@@ -4,6 +4,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [2.1.0] - TBD
+
+### Added
+
+#### Savvyio.Extensions.SimpleQueueService
+
+- AmazonMessageOptions class in the Savvyio.Extensions.SimpleQueueService namespace was extended with a new read-only property, ClientConfigurations, that can be set using the ConfigureClient method
+- ClientConfigExtensions class in the Savvyio.Extensions.SimpleQueueService namespace that consist of extension methods for the ClientConfig class: IsValid, SimpleQueueService and SimpleNotificationService
+
+### Changed
+
+#### Savvyio.Extensions.SimpleQueueService
+
+- AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace to use the ClientConfigurations property when configured; otherwise the Endpoint property is used as it has previously (both properties are part of AmazonMessageOptions)
+- AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace to use the ClientConfigurations property when configured; otherwise the Endpoint property is used as it has previously (both properties are part of AmazonMessageOptions)
+- AmazonMessage{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to use the ClientConfigurations property when configured; otherwise the Endpoint property is used as it has previously (both properties are part of AmazonMessageOptions)
+
 ## [2.0.0] - 2024-02-11
 
 ### Added
