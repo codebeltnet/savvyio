@@ -26,14 +26,14 @@ using Savvyio.Extensions.Text.Json;
 namespace Savvyio.Extensions.SimpleQueueService.Commands
 {
 	[TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-	public class AmazonCommandQueueJsonSerializerContextTest : HostTest<HostFixture>
+	public class AmazonCommandQueueJsonSerializerContextTestLocalStack : HostTest<HostFixture>
 	{
 		private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 		private readonly AmazonCommandQueue _queue;
 		private static readonly InMemoryTestStore<IMessage<ICommand>> Comparer = new();
 		private readonly IMarshaller _marshaller;
 
-		public AmazonCommandQueueJsonSerializerContextTest(HostFixture fixture, ITestOutputHelper output) : base(fixture, output)
+		public AmazonCommandQueueJsonSerializerContextTestLocalStack(HostFixture fixture, ITestOutputHelper output) : base(fixture, output)
 		{
 			_queue = fixture.ServiceProvider.GetRequiredService<AmazonCommandQueue>();
 			_marshaller = fixture.ServiceProvider.GetRequiredService<IMarshaller>();
@@ -69,9 +69,9 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 		}
 
 		[Fact, Priority(2)]
-		public async Task SendAsync_CreateMemberCommand_HundredTimes()
+		public async Task SendAsync_CreateMemberCommand_ThousandTimes()
 		{
-			var messages = Generate.RangeOf(100, i =>
+			var messages = Generate.RangeOf(1000, i =>
 			{
 				var email = $"{Generate.RandomString(5)}@outlook.com";
 				var message = new CreateMemberCommand(Generate.RandomString(10), (byte)Generate.RandomNumber(byte.MaxValue), email).ToMessage($"urn:{i}:{email}".ToUri(), nameof(CreateMemberCommand));
@@ -82,8 +82,6 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 			var profiler = await TimeMeasure.WithActionAsync(_ => _queue.SendAsync(messages)).ConfigureAwait(false);
 
 			TestOutput.WriteLine(profiler.ToString());
-
-			await Task.Delay(TimeSpan.FromSeconds(10)).ConfigureAwait(false); // allow for messages to be populated in SQS
 		}
 
 		[Fact, Priority(3)]
@@ -103,15 +101,23 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 
 		public override void ConfigureServices(IServiceCollection services)
 		{
+            AmazonResourceNameOptions.DefaultAccountId = "000000000000";
+
 			services.AddMarshaller<JsonMarshaller>();
 			services.AddAmazonCommandQueue(o =>
 			{
 				var queue = IsLinux ? "savvyio-commands" : "savvyio-commands.fifo";
-				o.Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]);
+				o.Credentials = new BasicAWSCredentials("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
 				o.Endpoint = RegionEndpoint.EUWest1;
-				o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}");
+				o.SourceQueue = new Uri($"http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/{queue}");
 				o.ReceiveContext.UseApproximateNumberOfMessages = true;
-			});
+				o.ReceiveContext.PollingTimeout = TimeSpan.FromSeconds(10);
+                o.ConfigureClient(client =>
+                {
+                    client.ServiceURL = "http://localhost:4566";
+                    client.AuthenticationRegion = RegionEndpoint.EUWest1.SystemName;
+                });
+            });
 		}
 	}
 }
