@@ -61,7 +61,13 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 		public async Task ReceiveAsync_CreateMemberCommand_OneTime()
 		{
 			var sut1 = Comparer.Query(message => message.Source == "https://fancy.io/members").Single();
-			var sut2 = await _queue.ReceiveAsync().SingleOrDefaultAsync();
+            
+            var ct = new CancellationTokenSource(TimeSpan.FromSeconds(30)).Token;
+            IMessage<ICommand> sut2 = null;
+            while (sut2 == null)
+            {
+                sut2 = await _queue.ReceiveAsync().SingleOrDefaultAsync(ct).ConfigureAwait(false);
+            }
 
 			Assert.Equivalent(sut1.Data, sut2.Data);
 			Assert.Equivalent(sut1.Time, sut2.Time);
