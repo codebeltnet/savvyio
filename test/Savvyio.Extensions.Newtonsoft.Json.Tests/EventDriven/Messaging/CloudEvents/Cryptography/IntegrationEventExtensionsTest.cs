@@ -8,6 +8,7 @@ using Savvyio.Assets.EventDriven;
 using Savvyio.EventDriven.Messaging;
 using Savvyio.EventDriven.Messaging.CloudEvents;
 using Savvyio.EventDriven.Messaging.CloudEvents.Cryptography;
+using Savvyio.Messaging.Cryptography;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -38,6 +39,14 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.CloudEvents.C
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
+
+            sut2.CheckSignature(new NewtonsoftJsonMarshaller(), o => o.SignatureSecret = new byte[] { 1, 2, 3 });
+
+            var signatureException = Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+                sut2.CheckSignature(new NewtonsoftJsonMarshaller(), o => o.SignatureSecret = new byte[] { 3, 2, 1 });
+            });
+            Assert.StartsWith("The signature of the cloud event does not match the cryptographically calculated value. Either you are using an incorrect secret and/or algorithm or the message has been tampered with.", signatureException.Message);
 
             var sut4 = new NewtonsoftJsonMarshaller().Deserialize<ISignedCloudEvent<MemberCreated>>(json);
 
@@ -108,6 +117,14 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.CloudEvents.C
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
+
+            sut2.CheckSignature(new NewtonsoftJsonMarshaller(), o => o.SignatureSecret = new byte[] { 1, 2, 3 });
+
+            var signatureException = Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+                sut2.CheckSignature(new NewtonsoftJsonMarshaller(), o => o.SignatureSecret = new byte[] { 3, 2, 1 });
+            });
+            Assert.StartsWith("The signature of the cloud event does not match the cryptographically calculated value. Either you are using an incorrect secret and/or algorithm or the message has been tampered with.", signatureException.Message);
 
             var sut4 = new NewtonsoftJsonMarshaller().Deserialize<SignedCloudEvent<MemberCreated>>(json);
 

@@ -6,8 +6,8 @@ using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.Commands;
 using Savvyio.Commands.Messaging;
-using Savvyio.Commands.Messaging.Cryptography;
 using Savvyio.Messaging;
+using Savvyio.Messaging.Cryptography;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -39,6 +39,14 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Commands.Messaging.Cryptography
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
+
+            sut3.CheckSignature(new NewtonsoftJsonMarshaller(), o => o.SignatureSecret = new byte[] { 1, 2, 3 });
+
+            var signatureException = Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+                sut3.CheckSignature(new NewtonsoftJsonMarshaller(), o => o.SignatureSecret = new byte[] { 3, 2, 1 });
+            });
+            Assert.StartsWith("The signature of the message does not match the cryptographically calculated value. Either you are using an incorrect secret and/or algorithm or the message has been tampered with.", signatureException.Message);
 
             var sut4 = new NewtonsoftJsonMarshaller().Deserialize<IMessage<CreateMemberCommand>>(json);
 
