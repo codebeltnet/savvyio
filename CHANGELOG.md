@@ -8,12 +8,26 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 
 ### Added
 
+#### Savvyio.Core
+
+- MessageExtensions class in the Savvyio.Messaging.Cryptography namespace that consist of extension methods for the IMessage{T} interface: Sign{T} and CheckSignature{T}
+- MessageExtensions class in the Savvyio.Messaging namespace that consist of extension methods for the IMessage{T} interface: Clone{T}
+
 #### Savvyio.Extensions.SimpleQueueService
 
 - AmazonMessageOptions class in the Savvyio.Extensions.SimpleQueueService namespace was extended with a new read-only property, ClientConfigurations, that can be set using the ConfigureClient method
 - ClientConfigExtensions class in the Savvyio.Extensions.SimpleQueueService namespace that consist of extension methods for the ClientConfig class: IsValid, SimpleQueueService and SimpleNotificationService
 
 ### Changed
+
+#### Savvyio.Commands
+
+- MessageExtensions class in the Savvyio.Commands.Messaging.Cryptography namespace was removed to favor the new generic equivalent in the Savvyio.Messaging.Cryptography namespace
+
+#### Savvyio.EventDriven
+
+- MessageExtensions class in the Savvyio.EventDriven.Messaging.Cryptography namespace was removed to favor the new generic equivalent in the Savvyio.Messaging.Cryptography namespace
+- CloudEventExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace was extended with new extension methods for the ICloudEvent{T} interface: CheckSignature{T}
 
 #### Savvyio.Extensions.SimpleQueueService
 

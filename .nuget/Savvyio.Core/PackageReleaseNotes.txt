@@ -1,3 +1,13 @@
+Version: 2.1.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# New Features
+- ADDED MessageExtensions class in the Savvyio.Messaging.Cryptography namespace that consist of extension methods for the IMessage{T} interface: Sign{T} and CheckSignature{T}
+- ADDED MessageExtensions class in the Savvyio.Messaging namespace that consist of extension methods for the IMessage{T} interface: Clone{T}
+ 
 Version: 2.0.0
 Availability: .NET 8, .NET 7 and .NET 6
  
