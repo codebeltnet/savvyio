@@ -13,10 +13,18 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 - MessageExtensions class in the Savvyio.Messaging.Cryptography namespace that consist of extension methods for the IMessage{T} interface: Sign{T} and CheckSignature{T}
 - MessageExtensions class in the Savvyio.Messaging namespace that consist of extension methods for the IMessage{T} interface: Clone{T}
 
+#### Savvyio.Extensions.Newtonsoft.Json
+
+- NewtonsoftJsonMarshaller class in the Savvyio.Extensions.Newtonsoft.Json namespace was extended to include a new static method: Default (that provides a default instance of the NewtonsoftJsonMarshaller class optimized for messaging)
+
 #### Savvyio.Extensions.SimpleQueueService
 
 - AmazonMessageOptions class in the Savvyio.Extensions.SimpleQueueService namespace was extended with a new read-only property, ClientConfigurations, that can be set using the ConfigureClient method
 - ClientConfigExtensions class in the Savvyio.Extensions.SimpleQueueService namespace that consist of extension methods for the ClientConfig class: IsValid, SimpleQueueService and SimpleNotificationService
+
+#### Savvyio.Extensions.Text.Json
+
+- JsonMarshaller class in the Savvyio.Extensions.Text.Json namespace was extended to include a new static method: Default (that provides a default instance of the JsonMarshaller class optimized for messaging)
 
 ### Changed
 

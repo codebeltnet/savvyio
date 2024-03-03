@@ -4,6 +4,9 @@ Availability: .NET 8, .NET 7 and .NET 6
 # ALM
 - CHANGED Dependencies to latest and greatest with respect to TFMs
  
+# New Features
+- EXTENDED JsonMarshaller class in the Savvyio.Extensions.Text.Json namespace to include a new static method: Default (that provides a default instance of the JsonMarshaller class optimized for messaging)
+ 
 Version: 2.0.0
 Availability: .NET 8, .NET 7 and .NET 6
  
