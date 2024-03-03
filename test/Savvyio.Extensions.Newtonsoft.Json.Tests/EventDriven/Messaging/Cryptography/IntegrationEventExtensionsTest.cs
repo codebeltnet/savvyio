@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Text.Json.Formatters;
 using Cuemon.Extensions.Xunit;
 using Savvyio.Assets.EventDriven;
 using Savvyio.EventDriven.Messaging;
@@ -28,69 +26,27 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
-            }).Sign(new NewtonsoftJsonMarshaller(), o =>
+            }).Sign(NewtonsoftJsonMarshaller.Default, o =>
             {
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
-            var json = JsonFormatter.SerializeObject(sut2);
+            var json = NewtonsoftJsonMarshaller.Default.Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
 
-            sut2.CheckSignature(new NewtonsoftJsonMarshaller(), o => o.SignatureSecret = new byte[] { 1, 2, 3 });
+            sut2.CheckSignature(NewtonsoftJsonMarshaller.Default, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
 
             var signatureException = Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
-                sut2.CheckSignature(new NewtonsoftJsonMarshaller(), o => o.SignatureSecret = new byte[] { 3, 2, 1 });
+                sut2.CheckSignature(NewtonsoftJsonMarshaller.Default, o => o.SignatureSecret = new byte[] { 3, 2, 1 });
             });
             Assert.StartsWith("The signature of the message does not match the cryptographically calculated value. Either you are using an incorrect secret and/or algorithm or the message has been tampered with.", signatureException.Message);
 
-            var sut4 = new NewtonsoftJsonMarshaller().Deserialize<ISignedMessage<MemberCreated>>(json);
+            var sut4 = NewtonsoftJsonMarshaller.Default.Deserialize<ISignedMessage<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                Assert.Equal("""
-                             {
-                               "id": "2d4030d32a254ee8a27046e5bafe696a",
-                               "source": "https://fancy.api/members",
-                               "type": "MemberCreated",
-                               "time": "2023-11-16T23:24:17.8414532Z",
-                               "data": {
-                                 "name": "Jane Doe",
-                                 "emailAddress": "jd@office.com",
-                                 "metadata": {
-                                   "memberType": "Savvyio.Assets.EventDriven.MemberCreated, Savvyio.Assets.Tests",
-                                   "eventId": "69bccf3b1117425397c5ed9ed757bb0f",
-                                   "timestamp": "2023-11-16T23:24:17.8414532Z"
-                                 }
-                               },
-                               "signature": "f1aa38c6af66575aec152472e74e1d70d49da3c4e27a82a20eb94320c9cd22a4"
-                             }
-                             """.ReplaceLineEndings(), jsonString);
-            }
-            else
-            {
-                Assert.Equal("""
-                             {
-                               "id": "2d4030d32a254ee8a27046e5bafe696a",
-                               "source": "https://fancy.api/members",
-                               "type": "MemberCreated",
-                               "time": "2023-11-16T23:24:17.8414532Z",
-                               "data": {
-                                 "name": "Jane Doe",
-                                 "emailAddress": "jd@office.com",
-                                 "metadata": {
-                                   "memberType": "Savvyio.Assets.EventDriven.MemberCreated, Savvyio.Assets.Tests",
-                                   "eventId": "69bccf3b1117425397c5ed9ed757bb0f",
-                                   "timestamp": "2023-11-16T23:24:17.8414532Z"
-                                 }
-                               },
-                               "signature": "40f2e00e66dd02014ba535e0bbff9fa04954bcbcf2f3fce69f688bd64583ee50"
-                             }
-                             """.ReplaceLineEndings(), jsonString);
-            }
+            Assert.Equal("""{"id":"2d4030d32a254ee8a27046e5bafe696a","source":"https://fancy.api/members","type":"MemberCreated","time":"2023-11-16T23:24:17.8414532Z","data":{"name":"Jane Doe","emailAddress":"jd@office.com","metadata":{"memberType":"Savvyio.Assets.EventDriven.MemberCreated, Savvyio.Assets.Tests","eventId":"69bccf3b1117425397c5ed9ed757bb0f","timestamp":"2023-11-16T23:24:17.8414532Z"}},"signature":"cf6710e4fc2877c87630fe94956a899240bfc7fdb1d6a0bb12446bd77890c448"}""", jsonString);
         }
 
         [Fact]
@@ -102,69 +58,27 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.Cryptography
             {
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
-            }).Sign(new NewtonsoftJsonMarshaller(), o =>
+            }).Sign(NewtonsoftJsonMarshaller.Default, o =>
             {
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
-            var json = JsonFormatter.SerializeObject(sut2);
+            var json = NewtonsoftJsonMarshaller.Default.Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
 
-            sut2.CheckSignature(new NewtonsoftJsonMarshaller(), o => o.SignatureSecret = new byte[] { 1, 2, 3 });
+            sut2.CheckSignature(NewtonsoftJsonMarshaller.Default, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
 
             var signatureException = Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
-                sut2.CheckSignature(new NewtonsoftJsonMarshaller(), o => o.SignatureSecret = new byte[] { 3, 2, 1 });
+                sut2.CheckSignature(NewtonsoftJsonMarshaller.Default, o => o.SignatureSecret = new byte[] { 3, 2, 1 });
             });
             Assert.StartsWith("The signature of the message does not match the cryptographically calculated value. Either you are using an incorrect secret and/or algorithm or the message has been tampered with.", signatureException.Message);
 
-            var sut4 = new NewtonsoftJsonMarshaller().Deserialize<SignedMessage<MemberCreated>>(json);
+            var sut4 = NewtonsoftJsonMarshaller.Default.Deserialize<SignedMessage<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                Assert.Equal("""
-                             {
-                               "id": "2d4030d32a254ee8a27046e5bafe696a",
-                               "source": "https://fancy.api/members",
-                               "type": "MemberCreated",
-                               "time": "2023-11-16T23:24:17.8414532Z",
-                               "data": {
-                                 "name": "Jane Doe",
-                                 "emailAddress": "jd@office.com",
-                                 "metadata": {
-                                   "memberType": "Savvyio.Assets.EventDriven.MemberCreated, Savvyio.Assets.Tests",
-                                   "eventId": "69bccf3b1117425397c5ed9ed757bb0f",
-                                   "timestamp": "2023-11-16T23:24:17.8414532Z"
-                                 }
-                               },
-                               "signature": "f1aa38c6af66575aec152472e74e1d70d49da3c4e27a82a20eb94320c9cd22a4"
-                             }
-                             """.ReplaceLineEndings(), jsonString);
-            }
-            else
-            {
-                Assert.Equal("""
-                             {
-                               "id": "2d4030d32a254ee8a27046e5bafe696a",
-                               "source": "https://fancy.api/members",
-                               "type": "MemberCreated",
-                               "time": "2023-11-16T23:24:17.8414532Z",
-                               "data": {
-                                 "name": "Jane Doe",
-                                 "emailAddress": "jd@office.com",
-                                 "metadata": {
-                                   "memberType": "Savvyio.Assets.EventDriven.MemberCreated, Savvyio.Assets.Tests",
-                                   "eventId": "69bccf3b1117425397c5ed9ed757bb0f",
-                                   "timestamp": "2023-11-16T23:24:17.8414532Z"
-                                 }
-                               },
-                               "signature": "40f2e00e66dd02014ba535e0bbff9fa04954bcbcf2f3fce69f688bd64583ee50"
-                             }
-                             """.ReplaceLineEndings(), jsonString);
-            }
+            Assert.Equal("""{"id":"2d4030d32a254ee8a27046e5bafe696a","source":"https://fancy.api/members","type":"MemberCreated","time":"2023-11-16T23:24:17.8414532Z","data":{"name":"Jane Doe","emailAddress":"jd@office.com","metadata":{"memberType":"Savvyio.Assets.EventDriven.MemberCreated, Savvyio.Assets.Tests","eventId":"69bccf3b1117425397c5ed9ed757bb0f","timestamp":"2023-11-16T23:24:17.8414532Z"}},"signature":"cf6710e4fc2877c87630fe94956a899240bfc7fdb1d6a0bb12446bd77890c448"}""", jsonString);
         }
     }
 }

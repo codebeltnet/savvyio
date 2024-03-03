@@ -133,8 +133,8 @@ namespace Savvyio.Extensions.SimpleQueueService
 				cancellationToken.ThrowIfCancellationRequested();
 				var dataType = Type.GetType(message.MessageAttributes[MessageAttributeTypeKey].StringValue);
 				var messageDataType = typeof(IMessage<>).MakeGenericType(dataType!);
-				var deserialized = Marshaller.Deserialize(message.Body.ToStream(), messageDataType);
-				deserializedMessages.Add(deserialized as IMessage<TRequest>);
+				var deserialized = Marshaller.Deserialize(message.Body.ToStream(), messageDataType) as IMessage<TRequest>;
+				deserializedMessages.Add(deserialized);
 			}
 
 			if (Options.ReceiveContext.RemoveProcessedMessages && deserializedMessages.Count > 0)
