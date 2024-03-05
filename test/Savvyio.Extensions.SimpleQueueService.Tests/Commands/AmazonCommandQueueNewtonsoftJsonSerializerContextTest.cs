@@ -103,7 +103,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
             while (sut2 == null)
             {
                 sut2 = await _queue.ReceiveAsync().SingleOrDefaultAsync(ct).ConfigureAwait(false) as ISignedMessage<ICommand>;
-                sut2.CheckSignature(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
+                sut2?.CheckSignature(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
             }
 
             Assert.Equivalent(sut1.Data, sut2.Data);
