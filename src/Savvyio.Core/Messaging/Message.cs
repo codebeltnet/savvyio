@@ -43,19 +43,23 @@ namespace Savvyio.Messaging
             Time = (time ?? DateTime.UtcNow);
         }
 
-        /// <inheritdoc />
-        public string Id { get; }
+        internal Message()
+        {
+        }
 
         /// <inheritdoc />
-        public string Source { get; }
+        public string Id { get; internal set; }
 
         /// <inheritdoc />
-        public string Type { get; }
+        public string Source { get; internal set; }
 
         /// <inheritdoc />
-        public DateTime? Time { get; }
+        public string Type { get; internal set; }
 
         /// <inheritdoc />
-        public T Data { get; }
+        public DateTime? Time { get; internal set; }
+
+        /// <inheritdoc />
+        public T Data { get; internal set; }
     }
 }

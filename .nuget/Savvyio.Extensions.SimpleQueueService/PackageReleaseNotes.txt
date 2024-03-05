@@ -1,3 +1,21 @@
+Version: 2.1.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# New Features
+- EXTENDED AmazonMessageOptions class in the Savvyio.Extensions.SimpleQueueService namespace with a new read-only property, ClientConfigurations, that can be set using the ConfigureClient method
+- ADDED ClientConfigExtensions class in the Savvyio.Extensions.SimpleQueueService namespace that consist of extension methods for the ClientConfig class: IsValid, SimpleQueueService and SimpleNotificationService
+ 
+# Improvements
+- CHANGED AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace to use the ClientConfigurations property when configured; otherwise the Endpoint property is used as it has previously (both properties are part of AmazonMessageOptions)
+- CHANGED AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace to use the ClientConfigurations property when configured; otherwise the Endpoint property is used as it has previously (both properties are part of AmazonMessageOptions)
+- CHANGED AmazonMessage{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to use the ClientConfigurations property when configured; otherwise the Endpoint property is used as it has previously (both properties are part of AmazonMessageOptions)
+- CHANGED AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace to store the full type name of the actual IMessage{T} implementation instead of the enclosing type of the payload data
+- CHANGED AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace to store the full type name of the actual IMessage{T} implementation instead of the enclosing type of the payload data
+- CHANGED AmazonMessage{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to use the full type name of the actual IMessage{T} implementation instead of the enclosing type of the payload data glued together with MakeGenericType on IMessage{T}
+ 
 Version: 2.0.0
 Availability: .NET 8, .NET 7 and .NET 6
  

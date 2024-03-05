@@ -21,9 +21,9 @@ namespace Savvyio.Extensions.SimpleQueueService
 	public abstract class AmazonMessage<TRequest> : IConfigurable<AmazonMessageOptions> where TRequest : IRequest
 	{
 		/// <summary>
-		/// The key for the message attribute type.
+		/// The key for the message type attribute.
 		/// </summary>
-		protected const string MessageAttributeTypeKey = "type";
+		protected const string MessageTypeAttributeKey = "type";
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AmazonMessage{TRequest}"/> class.
@@ -71,7 +71,9 @@ namespace Savvyio.Extensions.SimpleQueueService
 		/// <returns>A task that represents the asynchronous operation. The task result contains a sequence of <see cref="IMessage{T}"/> whose generic type argument is <see cref="IRequest"/>.</returns>
 		protected virtual async IAsyncEnumerable<IMessage<TRequest>> RetrieveMessagesAsync([EnumeratorCancellation] CancellationToken cancellationToken)
 		{
-			var sqs = new AmazonSQSClient(Options.Credentials, Options.Endpoint);
+			var sqs = Options.ClientConfigurations.IsValid()
+                ? new AmazonSQSClient(Options.Credentials, Options.ClientConfigurations.SimpleQueueService())
+                : new AmazonSQSClient(Options.Credentials, Options.Endpoint);
 
 			if (Options.ReceiveContext.UseApproximateNumberOfMessages)
 			{
@@ -120,7 +122,7 @@ namespace Savvyio.Extensions.SimpleQueueService
 				QueueUrl = Options.SourceQueue.OriginalString,
 				MessageAttributeNames = new List<string>()
 				{
-					MessageAttributeTypeKey
+					MessageTypeAttributeKey
 				}
 			};
 
@@ -129,10 +131,9 @@ namespace Savvyio.Extensions.SimpleQueueService
 			foreach (var message in response.Messages)
 			{
 				cancellationToken.ThrowIfCancellationRequested();
-				var dataType = Type.GetType(message.MessageAttributes[MessageAttributeTypeKey].StringValue);
-				var messageDataType = typeof(IMessage<>).MakeGenericType(dataType!);
-				var deserialized = Marshaller.Deserialize(message.Body.ToStream(), messageDataType);
-				deserializedMessages.Add(deserialized as IMessage<TRequest>);
+				var messageType = Type.GetType(message.MessageAttributes[MessageTypeAttributeKey].StringValue);
+				var deserialized = Marshaller.Deserialize(message.Body.ToStream(), messageType) as IMessage<TRequest>;
+				deserializedMessages.Add(deserialized);
 			}
 
 			if (Options.ReceiveContext.RemoveProcessedMessages && deserializedMessages.Count > 0)

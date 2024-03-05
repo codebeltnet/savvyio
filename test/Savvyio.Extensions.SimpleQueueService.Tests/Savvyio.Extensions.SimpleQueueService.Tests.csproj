@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Commands\AmazonCommandQueueJsonSerializerContextTestLocalStack.cs" />
+    <Compile Remove="Commands\AmazonCommandQueueNewtonsoftJsonSerializerContextTestLocalStack.cs" />
+    <Compile Remove="EventDriven\AmazonEventBusJsonSerializerContextTestLocalStack.cs" />
+    <Compile Remove="EventDriven\AmazonEventBusNewtonsoftJsonSerializerContextTestLocalStack.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Xunit.Priority" Version="1.1.6" />
     <PackageReference Include="System.Linq.Async" Version="6.0.1" />
   </ItemGroup>
