@@ -24,6 +24,7 @@ using Cuemon.Extensions.Collections.Generic;
 using Savvyio.Extensions.DependencyInjection;
 using Savvyio.Extensions.DependencyInjection.SimpleQueueService;
 using Savvyio.Extensions.Text.Json;
+using Savvyio.Messaging.Cryptography;
 
 namespace Savvyio.Extensions.SimpleQueueService.Commands
 {
@@ -76,7 +77,43 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 			Assert.Equivalent(sut1.Type, sut2.Type);
 		}
 
-		[Fact, Priority(2)]
+        [Fact, Priority(2)]
+        public async Task SendAsync_CreateMemberCommand_OneTime_Signed()
+        {
+            var sut1 = new CreateMemberCommand("John Doe", 44, "jd@outlook.com");
+            var sut2 = "https://fancy.io/members/signed".ToUri();
+            var sut3 = sut1.ToMessage(sut2, nameof(CreateMemberCommand)).Sign(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
+
+            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
+
+            TestOutput.WriteLine(_marshaller.Serialize(sut2).ToEncodedString());
+
+            Comparer.Add(sut3);
+
+            await _queue.SendAsync(sut3.Yield()).ConfigureAwait(false);
+        }
+
+        [Fact, Priority(3)]
+        public async Task ReceiveAsync_CreateMemberCommand_OneTime_Signed()
+        {
+            var sut1 = Comparer.Query(message => message.Source == "https://fancy.io/members/signed").Single();
+            
+            var ct = new CancellationTokenSource(TimeSpan.FromSeconds(30)).Token;
+            ISignedMessage<ICommand> sut2 = null;
+            while (sut2 == null)
+            {
+                sut2 = await _queue.ReceiveAsync().SingleOrDefaultAsync(ct).ConfigureAwait(false) as ISignedMessage<ICommand>;
+				sut2.CheckSignature(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
+            }
+
+            Assert.Equivalent(sut1.Data, sut2.Data);
+            Assert.Equivalent(sut1.Time, sut2.Time);
+            Assert.Equivalent(sut1.Source, sut2.Source);
+            Assert.Equivalent(sut1.Id, sut2.Id);
+            Assert.Equivalent(sut1.Type, sut2.Type);
+        }
+
+		[Fact, Priority(4)]
 		public async Task SendAsync_CreateMemberCommand_HundredTimes()
 		{
 			var messages = Generate.RangeOf(100, i =>
@@ -92,7 +129,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 			TestOutput.WriteLine(profiler.ToString());
 		}
 
-		[Fact, Priority(3)]
+		[Fact, Priority(5)]
 		public async Task ReceiveAsync_CreateMemberCommand_All()
         {
             var ct = new CancellationTokenSource(TimeSpan.FromSeconds(90)).Token;

@@ -7,6 +7,7 @@ using Amazon.SimpleNotificationService.Model;
 using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
+using Cuemon.Extensions.Reflection;
 using Cuemon.Threading;
 using Savvyio.EventDriven;
 using Savvyio.Messaging;
@@ -56,10 +57,10 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                 MessageAttributes = new Dictionary<string, MessageAttributeValue>
                 {
                     {
-                        MessageAttributeTypeKey, new MessageAttributeValue
+                        MessageTypeAttributeKey, new MessageAttributeValue
                         {
                             DataType = "String",
-                            StringValue = @event.Data.GetMemberType()
+                            StringValue = @event.GetType().ToFullNameIncludingAssemblyName()
                         }
                     }
                 }

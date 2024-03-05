@@ -35,7 +35,7 @@ namespace Savvyio.Messaging.Cryptography
         }
 
         /// <summary>
-        /// Verifies the digital signature of the message.
+        /// Verifies the digital signature of the <see cref="ISignedMessage{T}"/> message.
         /// </summary>
         /// <typeparam name="T">The type of the payload constraint to the <see cref="IRequest"/> interface.</typeparam>
         /// <param name="message">The <see cref="IRequest"/> message to cryptographically verify.</param>

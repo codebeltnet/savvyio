@@ -28,7 +28,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.CloudEvents.C
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
             }).ToCloudEvent()
-              .Sign(NewtonsoftJsonMarshaller.Default, o =>
+              .SignCloudEvent(NewtonsoftJsonMarshaller.Default, o =>
             {
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
@@ -38,11 +38,11 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.CloudEvents.C
 
             TestOutput.WriteLine(jsonString);
 
-            sut2.CheckSignature(NewtonsoftJsonMarshaller.Default, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
+            sut2.CheckCloudEventSignature(NewtonsoftJsonMarshaller.Default, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
 
             var signatureException = Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
-                sut2.CheckSignature(NewtonsoftJsonMarshaller.Default, o => o.SignatureSecret = new byte[] { 3, 2, 1 });
+                sut2.CheckCloudEventSignature(NewtonsoftJsonMarshaller.Default, o => o.SignatureSecret = new byte[] { 3, 2, 1 });
             });
             Assert.StartsWith("The signature of the cloud event does not match the cryptographically calculated value. Either you are using an incorrect secret and/or algorithm or the message has been tampered with.", signatureException.Message);
 
@@ -62,7 +62,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.CloudEvents.C
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
             }).ToCloudEvent()
-              .Sign(NewtonsoftJsonMarshaller.Default, o =>
+              .SignCloudEvent(NewtonsoftJsonMarshaller.Default, o =>
             {
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
@@ -72,11 +72,11 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.CloudEvents.C
 
             TestOutput.WriteLine(jsonString);
 
-            sut2.CheckSignature(NewtonsoftJsonMarshaller.Default, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
+            sut2.CheckCloudEventSignature(NewtonsoftJsonMarshaller.Default, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
 
             var signatureException = Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
-                sut2.CheckSignature(NewtonsoftJsonMarshaller.Default, o => o.SignatureSecret = new byte[] { 3, 2, 1 });
+                sut2.CheckCloudEventSignature(NewtonsoftJsonMarshaller.Default, o => o.SignatureSecret = new byte[] { 3, 2, 1 });
             });
             Assert.StartsWith("The signature of the cloud event does not match the cryptographically calculated value. Either you are using an incorrect secret and/or algorithm or the message has been tampered with.", signatureException.Message);
 

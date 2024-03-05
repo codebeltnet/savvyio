@@ -21,9 +21,9 @@ namespace Savvyio.Extensions.SimpleQueueService
 	public abstract class AmazonMessage<TRequest> : IConfigurable<AmazonMessageOptions> where TRequest : IRequest
 	{
 		/// <summary>
-		/// The key for the message attribute type.
+		/// The key for the message type attribute.
 		/// </summary>
-		protected const string MessageAttributeTypeKey = "type";
+		protected const string MessageTypeAttributeKey = "type";
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AmazonMessage{TRequest}"/> class.
@@ -122,7 +122,7 @@ namespace Savvyio.Extensions.SimpleQueueService
 				QueueUrl = Options.SourceQueue.OriginalString,
 				MessageAttributeNames = new List<string>()
 				{
-					MessageAttributeTypeKey
+					MessageTypeAttributeKey
 				}
 			};
 
@@ -131,9 +131,8 @@ namespace Savvyio.Extensions.SimpleQueueService
 			foreach (var message in response.Messages)
 			{
 				cancellationToken.ThrowIfCancellationRequested();
-				var dataType = Type.GetType(message.MessageAttributes[MessageAttributeTypeKey].StringValue);
-				var messageDataType = typeof(IMessage<>).MakeGenericType(dataType!);
-				var deserialized = Marshaller.Deserialize(message.Body.ToStream(), messageDataType) as IMessage<TRequest>;
+				var messageType = Type.GetType(message.MessageAttributes[MessageTypeAttributeKey].StringValue);
+				var deserialized = Marshaller.Deserialize(message.Body.ToStream(), messageType) as IMessage<TRequest>;
 				deserializedMessages.Add(deserialized);
 			}
 

@@ -8,6 +8,7 @@ using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Collections.Generic;
 using Cuemon.Extensions.IO;
+using Cuemon.Extensions.Reflection;
 using Cuemon.Threading;
 using Savvyio.Commands;
 using Savvyio.Messaging;
@@ -69,10 +70,10 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 						MessageAttributes = new Dictionary<string, MessageAttributeValue>
 							{
 								{
-									MessageAttributeTypeKey, new MessageAttributeValue
+									MessageTypeAttributeKey, new MessageAttributeValue
 									{
 										DataType = "String",
-										StringValue = message.Data.GetMemberType()
+										StringValue = message.GetType().ToFullNameIncludingAssemblyName()
 									}
 								}
 							}

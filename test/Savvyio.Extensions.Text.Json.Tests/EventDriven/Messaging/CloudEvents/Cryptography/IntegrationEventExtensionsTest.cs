@@ -28,7 +28,7 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging.CloudEvents.Cryptog
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
             }).ToCloudEvent()
-              .Sign(JsonMarshaller.Default, o =>
+              .SignCloudEvent(JsonMarshaller.Default, o =>
             {
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
@@ -54,7 +54,7 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging.CloudEvents.Cryptog
                 o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
                 o.Time = utc;
             }).ToCloudEvent()
-              .Sign(JsonMarshaller.Default, o =>
+              .SignCloudEvent(JsonMarshaller.Default, o =>
             {
                 o.SignatureSecret = new byte[] { 1, 2, 3 };
             });
