@@ -8,6 +8,7 @@ using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Collections.Generic;
 using Cuemon.Extensions.IO;
+using Cuemon.Extensions.Reflection;
 using Cuemon.Threading;
 using Savvyio.Commands;
 using Savvyio.Messaging;
@@ -53,8 +54,11 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 			var tasks = new List<Task>();
 			while (batches.HasPartitions)
 			{
-				var sqs = new AmazonSQSClient(Options.Credentials, Options.Endpoint);
-				var batchRequest = new SendMessageBatchRequest
+				var sqs = Options.ClientConfigurations.IsValid()
+                    ? new AmazonSQSClient(Options.Credentials, Options.ClientConfigurations.SimpleQueueService())
+                    : new AmazonSQSClient(Options.Credentials, Options.Endpoint);
+				
+                var batchRequest = new SendMessageBatchRequest
 				{
 					QueueUrl = Options.SourceQueue.OriginalString,
 					Entries = new List<SendMessageBatchRequestEntry>(batches.Select(message => new SendMessageBatchRequestEntry
@@ -66,10 +70,10 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 						MessageAttributes = new Dictionary<string, MessageAttributeValue>
 							{
 								{
-									MessageAttributeTypeKey, new MessageAttributeValue
+									MessageTypeAttributeKey, new MessageAttributeValue
 									{
 										DataType = "String",
-										StringValue = message.Data.GetMemberType()
+										StringValue = message.GetType().ToFullNameIncludingAssemblyName()
 									}
 								}
 							}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Cuemon.Extensions.Newtonsoft.Json.Formatters;
+using Newtonsoft.Json;
 
 namespace Savvyio.Extensions.Newtonsoft.Json
 {
@@ -11,6 +12,12 @@ namespace Savvyio.Extensions.Newtonsoft.Json
     public class NewtonsoftJsonMarshaller : IMarshaller
     {
         private readonly Action<NewtonsoftJsonFormatterOptions> _setup;
+
+        /// <summary>
+        /// Provides a default instance of the <see cref="NewtonsoftJsonMarshaller"/> class optimized for messaging.
+        /// </summary>
+        /// <value>The default instance of the <see cref="NewtonsoftJsonMarshaller"/> class optimized for messaging.</value>
+        public static NewtonsoftJsonMarshaller Default { get; } = new(o => o.Settings.Formatting = Formatting.None);
         
         static NewtonsoftJsonMarshaller()
         {

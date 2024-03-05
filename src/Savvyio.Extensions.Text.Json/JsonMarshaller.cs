@@ -11,7 +11,13 @@ namespace Savvyio.Extensions.Text.Json
     public class JsonMarshaller : IMarshaller
     {
         private readonly Action<JsonFormatterOptions> _setup;
-
+        
+        /// <summary>
+        /// Provides a default instance of the <see cref="JsonMarshaller"/> class optimized for messaging.
+        /// </summary>
+        /// <value>The default instance of the <see cref="JsonMarshaller"/> class optimized for messaging.</value>
+        public static JsonMarshaller Default { get; } = new(o => o.Settings.WriteIndented = false);
+        
         static JsonMarshaller()
         {
             Bootstrapper.Initialize();

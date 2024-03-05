@@ -22,6 +22,8 @@ namespace Savvyio.Extensions.Text.Json
                             list.AddMetadataDictionaryConverter();
                             list.AddMessageConverter();
                             list.AddSingleValueObjectConverter();
+                            list.AddDateTimeConverter();
+                            list.AddDateTimeOffsetConverter();
                         };
                     }
                 }

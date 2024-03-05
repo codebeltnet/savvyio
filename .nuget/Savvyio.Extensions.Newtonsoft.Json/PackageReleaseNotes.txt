@@ -1,3 +1,12 @@
+Version: 2.1.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# New Features
+- EXTENDED NewtonsoftJsonMarshaller class in the Savvyio.Extensions.Newtonsoft.Json namespace to include a new static method: Default (that provides a default instance of the NewtonsoftJsonMarshaller class optimized for messaging)
+ 
 Version: 2.0.0
 Availability: .NET 8, .NET 7 and .NET 6
  

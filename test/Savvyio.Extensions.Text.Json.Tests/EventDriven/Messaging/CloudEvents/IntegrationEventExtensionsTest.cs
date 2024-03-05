@@ -68,12 +68,12 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging.CloudEvents
                 o.Time = utcNow;
             }).ToCloudEvent();
 
-            var json = new JsonMarshaller(o => o.Settings.Converters.AddDateTimeConverter()).Serialize(sut2);
+            var json = new JsonMarshaller().Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
             
             TestOutput.WriteLine(jsonString);
 
-            var sut4 = new JsonMarshaller(o => o.Settings.Converters.AddDateTimeConverter()).Deserialize<CloudEvent<MemberCreated>>(json);
+            var sut4 = new JsonMarshaller().Deserialize<CloudEvent<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
 
