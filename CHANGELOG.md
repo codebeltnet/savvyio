@@ -4,7 +4,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
-## [2.1.0] - TBD
+## [2.1.0] - 2024-03-05
 
 ### Added
 
@@ -36,12 +36,16 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 
 - MessageExtensions class in the Savvyio.EventDriven.Messaging.Cryptography namespace was removed to favor the new generic equivalent in the Savvyio.Messaging.Cryptography namespace
 - CloudEventExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace was extended with new extension methods for the ICloudEvent{T} interface: CheckSignature{T}
+- Sign{T} extension method on the CloudEventExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace was renamed to SignCloudEvent{T}
 
 #### Savvyio.Extensions.SimpleQueueService
 
 - AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace to use the ClientConfigurations property when configured; otherwise the Endpoint property is used as it has previously (both properties are part of AmazonMessageOptions)
 - AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace to use the ClientConfigurations property when configured; otherwise the Endpoint property is used as it has previously (both properties are part of AmazonMessageOptions)
 - AmazonMessage{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to use the ClientConfigurations property when configured; otherwise the Endpoint property is used as it has previously (both properties are part of AmazonMessageOptions)
+- AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace to store the full type name of the actual IMessage{T} implementation instead of the enclosing type of the payload data
+- AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace to store the full type name of the actual IMessage{T} implementation instead of the enclosing type of the payload data
+- AmazonMessage{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to use the full type name of the actual IMessage{T} implementation instead of the enclosing type of the payload data glued together with MakeGenericType on IMessage{T}
 
 ## [2.0.0] - 2024-02-11
 

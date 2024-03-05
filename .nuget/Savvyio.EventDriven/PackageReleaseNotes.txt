@@ -4,8 +4,11 @@ Availability: .NET 8, .NET 7 and .NET 6
 # ALM
 - CHANGED Dependencies to latest and greatest with respect to TFMs
  
+# Breaking Changes
+- RENAMED Sign{T} extension method on the CloudEventExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace to SignCloudEvent{T}
+ 
 # New Features
-- EXTENDED CloudEventExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace with new extension methods for the ICloudEvent{T} interface: CheckSignature{T}
+- EXTENDED CloudEventExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace with new extension methods for the ISignedCloudEvent{T} interface: CheckCloudEventSignature{T}
  
 # Improvements
 - REMOVED MessageExtensions class in the Savvyio.EventDriven.Messaging.Cryptography namespace to favor the new generic equivalent in the Savvyio.Messaging.Cryptography namespace
@@ -26,7 +29,7 @@ Availability: .NET 8, .NET 7 and .NET 6
 # Breaking Changes
 - RENAMED EncloseToMessage{T} extension method on the IntegrationEventExtensions class in the Savvyio.EventDriven.Messaging namespace to ToMessage{T}
 - RENAMED MemoryEventBus class in the Savvyio.EventDriven.Messaging namespace to InMemoryEventBus (consistency with Microsoft naming convention)
-- CHANGED ToMessage{T} extension method on the CommandExtensions class in the Savvyio.Commands.Messaging namespace to include a string that describes the type of event
+- CHANGED ToMessage{T} extension method on the IntegrationEventExtensions class in the Savvyio.EventDriven.Messaging namespace to include a string that describes the type of event
 - MOVED IIntegrationEvent interface in the Savvyio.EventDriven namespace to the namespace equivalent in the Savvyio.Core assembly
 - MOVED IIntegrationEventDispatcher interface in the Savvyio.EventDriven namespace to the namespace equivalent in the Savvyio.Core assembly
 - MOVED IIntegrationEventHandler interface in the Savvyio.EventDriven namespace to the namespace equivalent in the Savvyio.Core assembly
