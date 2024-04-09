@@ -4,6 +4,51 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [2.2.0] - 2024-04-10
+
+### Changed
+
+#### Savvyio.Core
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.Dapper
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.DapperExtensions
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.DependencyInjection
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.EFCore
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.EFCore.Domain
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.EFCore.Domain.EventSourcing
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.Newtonsoft.Json
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.SimpleQueueService
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.Text.Json
+
+- Dependencies to latest and greatest with respect to TFMs
+
+
 ## [2.1.0] - 2024-03-05
 
 ### Added
