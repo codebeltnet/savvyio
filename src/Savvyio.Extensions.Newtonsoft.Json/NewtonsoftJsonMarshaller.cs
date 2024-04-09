@@ -18,6 +18,13 @@ namespace Savvyio.Extensions.Newtonsoft.Json
         /// </summary>
         /// <value>The default instance of the <see cref="NewtonsoftJsonMarshaller"/> class optimized for messaging.</value>
         public static NewtonsoftJsonMarshaller Default { get; } = new(o => o.Settings.Formatting = Formatting.None);
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="NewtonsoftJsonMarshaller"/> class.
+        /// </summary>
+        /// <param name="setup">The <see cref="NewtonsoftJsonFormatterOptions"/> which may be configured.</param>
+        /// <returns>JsonMarshaller.</returns>
+        public static NewtonsoftJsonMarshaller Create(Action<NewtonsoftJsonFormatterOptions> setup = null) => new(setup);
         
         static NewtonsoftJsonMarshaller()
         {

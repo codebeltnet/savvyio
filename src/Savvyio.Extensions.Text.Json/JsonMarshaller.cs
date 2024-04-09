@@ -17,6 +17,13 @@ namespace Savvyio.Extensions.Text.Json
         /// </summary>
         /// <value>The default instance of the <see cref="JsonMarshaller"/> class optimized for messaging.</value>
         public static JsonMarshaller Default { get; } = new(o => o.Settings.WriteIndented = false);
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="JsonMarshaller"/> class.
+        /// </summary>
+        /// <param name="setup">The <see cref="JsonFormatterOptions"/> which may be configured.</param>
+        /// <returns>JsonMarshaller.</returns>
+        public static JsonMarshaller Create(Action<JsonFormatterOptions> setup = null) => new(setup);
         
         static JsonMarshaller()
         {
@@ -26,7 +33,7 @@ namespace Savvyio.Extensions.Text.Json
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonMarshaller"/> class.
         /// </summary>
-        /// <param name="setup">The <see cref="JsonFormatterOptions"/> which need to be configured.</param>
+        /// <param name="setup">The <see cref="JsonFormatterOptions"/> which may be configured.</param>
         public JsonMarshaller(Action<JsonFormatterOptions> setup = null)
         {
             _setup = setup;
