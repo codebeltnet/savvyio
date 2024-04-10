@@ -155,7 +155,7 @@ namespace Savvyio.Domain.EventSourcing
             Assert.Equal(name, sut5.FullName);
             Assert.Equal("root@gimlichael.dev", sut5.EmailAddress);
 
-            Assert.Equal(@"Model: 
+            Assert.True(Match(@"Model: 
   EntityType: EfCoreTracedAggregateEntity<TracedAccount, Guid>
     Properties: 
       Id (_id, Guid) Required PK AfterSave:Throw
@@ -187,8 +187,8 @@ namespace Savvyio.Domain.EventSourcing
 Annotations: 
   BaseTypeDiscoveryConvention:DerivedTypes: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.List`1[Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType]]
   NonNullableConventionState: System.Reflection.NullabilityInfoContext
-  ProductVersion: 8.0.2
-  RelationshipDiscoveryConvention:InverseNavigationCandidates: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.SortedSet`1[System.Type]]", schema, ignoreLineEndingDifferences: true);
+  ProductVersion: 8.0.?
+  RelationshipDiscoveryConvention:InverseNavigationCandidates: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.SortedSet`1[System.Type]]".ReplaceLineEndings(), schema.ReplaceLineEndings(), o => o.ThrowOnNoMatch = true));
         }
 
         [Fact]
