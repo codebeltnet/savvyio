@@ -54,7 +54,7 @@
   ],
   "build": {
     "xref": [
-      "xrefmaps/cuemon-xrefmap.yml"
+      "https://docs.cuemon.net/xrefmap.yml"
     ],
     "xrefService": [
       "https://xref.docs.microsoft.com/query?uid={uid}" ],
