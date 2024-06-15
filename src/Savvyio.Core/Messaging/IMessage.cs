@@ -7,7 +7,8 @@ namespace Savvyio.Messaging
     /// </summary>
     /// <typeparam name="T">The type of the payload constraint to the <see cref="IRequest"/> interface.</typeparam>
     /// <remarks>Inspired by cloudevents.io (https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md) default attributes.</remarks>
-    public interface IMessage<out T> where T : IRequest
+    /// <seealso cref="IAcknowledgeable"/>
+    public interface IMessage<out T> : IAcknowledgeable where T : IRequest
     {
         /// <summary>
         /// Gets the identifier of the message. When combined with <see cref="Source"/>, this enables deduplication.
