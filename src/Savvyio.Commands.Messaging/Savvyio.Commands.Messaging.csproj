@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Provides options to scale out Commands using distributed subsystems.</Description>
+    <PackageTags>command messaging microservice microservices bus commandqueue sender receiver</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Savvyio.Commands\Savvyio.Commands.csproj" />
+    <ProjectReference Include="..\Savvyio.Messaging\Savvyio.Messaging.csproj" />
+  </ItemGroup>
+
+</Project>

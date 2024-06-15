@@ -9,7 +9,7 @@ namespace Savvyio.EventDriven.Messaging.CloudEvents
     /// </summary>
     /// <typeparam name="T">The type of the payload constraint to the <see cref="IIntegrationEvent"/> interface.</typeparam>
     /// <seealso cref="ICloudEvent{T}" />
-    public class CloudEvent<T> : ICloudEvent<T> where T : IIntegrationEvent
+    public record CloudEvent<T> : Acknowledgeable, ICloudEvent<T> where T : IIntegrationEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudEvent{T}"/> class.

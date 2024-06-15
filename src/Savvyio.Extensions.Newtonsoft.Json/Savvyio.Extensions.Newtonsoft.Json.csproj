@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Savvyio.Domain\Savvyio.Domain.csproj" />
+    <ProjectReference Include="..\Savvyio.Messaging\Savvyio.Messaging.csproj" />
   </ItemGroup>
 
 </Project>

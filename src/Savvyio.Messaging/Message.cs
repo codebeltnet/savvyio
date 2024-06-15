@@ -8,7 +8,7 @@ namespace Savvyio.Messaging
     /// </summary>
     /// <typeparam name="T">The type of the payload constraint to the <see cref="IRequest"/> interface.</typeparam>
     /// <seealso cref="IMessage{T}" />
-    public record Message<T> : IMessage<T> where T : IRequest
+    public record Message<T> : Acknowledgeable, IMessage<T> where T : IRequest
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Message{T}"/> class.

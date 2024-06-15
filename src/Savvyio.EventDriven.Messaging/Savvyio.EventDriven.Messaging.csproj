@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Provides options to scale out Integration Events for a distributed architecture.</Description>
+    <PackageTags>integrationevent event messaging microservice microservices bus eventbus publisher subscriber pub sub producer consumer</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
+    <ProjectReference Include="..\Savvyio.Messaging\Savvyio.Messaging.csproj" />
+  </ItemGroup>
+
+</Project>

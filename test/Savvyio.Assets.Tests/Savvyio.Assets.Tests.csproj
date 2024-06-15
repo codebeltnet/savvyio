@@ -9,9 +9,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Savvyio.Commands.Messaging\Savvyio.Commands.Messaging.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Commands\Savvyio.Commands.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Domain.EventSourcing\Savvyio.Domain.EventSourcing.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Domain\Savvyio.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.EventDriven.Messaging\Savvyio.EventDriven.Messaging.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.Dapper\Savvyio.Extensions.Dapper.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.EFCore.Domain\Savvyio.Extensions.DependencyInjection.EFCore.Domain.csproj" />

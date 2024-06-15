@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cuemon;
 
 namespace Savvyio.Messaging.Cryptography
@@ -8,7 +9,7 @@ namespace Savvyio.Messaging.Cryptography
     /// </summary>
     /// <typeparam name="T">The type of the payload constraint to the <see cref="IRequest"/> interface.</typeparam>
     /// <seealso cref="ISignedMessage{T}" />
-	public record SignedMessage<T> : ISignedMessage<T> where T : IRequest
+	public record SignedMessage<T> : Acknowledgeable, ISignedMessage<T> where T : IRequest
 	{
         /// <summary>
         /// Initializes a new instance of the <see cref="SignedMessage{T}"/> class.
