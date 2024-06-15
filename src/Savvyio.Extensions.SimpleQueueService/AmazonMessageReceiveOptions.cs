@@ -28,6 +28,10 @@ namespace Savvyio.Extensions.SimpleQueueService
 		///         <term><see cref="PollingTimeout"/></term>
 		///         <description>20 seconds</description>
 		///     </item>
+        ///     <item>
+        ///         <term><see cref="AssumeMessageProcessed"/></term>
+        ///         <description><c>true</c></description>
+        ///     </item>
 		///     <item>
 		///         <term><see cref="RemoveProcessedMessages"/></term>
 		///         <description><c>true</c></description>
@@ -42,7 +46,8 @@ namespace Savvyio.Extensions.SimpleQueueService
 		{
 			NumberOfMessagesToTakePerRequest = AmazonMessageOptions.MaxNumberOfMessages;
 			PollingTimeout = TimeSpan.FromSeconds(AmazonMessageOptions.MaxPollingWaitTimeInSeconds);
-			RemoveProcessedMessages = true;
+            AssumeMessageProcessed = true;
+            RemoveProcessedMessages = true;
 			UseApproximateNumberOfMessages = false;
 		}
 
@@ -67,6 +72,12 @@ namespace Savvyio.Extensions.SimpleQueueService
 			get => _pollingTimeout;
 			set => _pollingTimeout = TimeSpan.FromSeconds(Math.Clamp(value.TotalSeconds, 0, AmazonMessageOptions.MaxPollingWaitTimeInSeconds));
 		}
+
+        /// <summary>
+        /// Gets or sets a value indicating whether each message should be automatically assumed processed. Default is <c>false</c>.
+        /// </summary>
+        /// <value><c>true</c> if each message should be assumed automatically processed; otherwise, <c>false</c>.</value>
+        public bool AssumeMessageProcessed { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether processed messages should be removed after processing. Default is <c>true</c>.
