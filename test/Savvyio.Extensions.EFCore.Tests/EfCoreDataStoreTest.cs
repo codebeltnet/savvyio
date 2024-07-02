@@ -9,14 +9,14 @@ using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.EFCore
 {
-    public class DefaultEfCoreDataStoreTest : Test
+    public class EfCoreDataStoreTest : Test
     {
-        public DefaultEfCoreDataStoreTest(ITestOutputHelper output) : base(output)
+        public EfCoreDataStoreTest(ITestOutputHelper output) : base(output)
         {
         }
 
         [Fact]
-        public async Task DefaultEfCoreDataStore_ShouldCreateObject()
+        public async Task EfCoreDataStore_ShouldCreateObject()
         {
             var id = Guid.NewGuid();
             var name = "Test";
@@ -28,7 +28,7 @@ namespace Savvyio.Extensions.EFCore
                 ModelConstructor = mb => mb.AddAccount()
             });
 
-            var sut2 = new DefaultEfCoreDataStore<Account>(sut1);
+            var sut2 = new EfCoreDataStore<Account>(sut1);
             await sut2.CreateAsync(new Account(id, name, email));
 
             var sut3 = await sut2.FindAllAsync(o => o.Predicate = a => a.PlatformProviderId == id).SingleOrDefaultAsync();
@@ -39,7 +39,7 @@ namespace Savvyio.Extensions.EFCore
         }
 
         [Fact]
-        public async Task DefaultEfCoreDataStore_ShouldRemoveObject()
+        public async Task EfCoreDataStore_ShouldRemoveObject()
         {
             var id = Guid.NewGuid();
             var name = "Test";
@@ -52,7 +52,7 @@ namespace Savvyio.Extensions.EFCore
                 ModelConstructor = mb => mb.AddAccount()
             });
 
-            var sut2 = new DefaultEfCoreDataStore<Account>(sut1);
+            var sut2 = new EfCoreDataStore<Account>(sut1);
             await sut2.CreateAsync(dto);
 
             var sut3 = await sut2.FindAllAsync(o => o.Predicate = a => a.PlatformProviderId == id).SingleOrDefaultAsync();
@@ -66,7 +66,7 @@ namespace Savvyio.Extensions.EFCore
         }
 
         [Fact]
-        public async Task DefaultEfCoreDataStore_ShouldUpdateObject()
+        public async Task EfCoreDataStore_ShouldUpdateObject()
         {
             var id = Guid.NewGuid();
             var name = "Test";
@@ -80,7 +80,7 @@ namespace Savvyio.Extensions.EFCore
                 ModelConstructor = mb => mb.AddAccount()
             });
 
-            var sut2 = new DefaultEfCoreDataStore<Account>(sut1);
+            var sut2 = new EfCoreDataStore<Account>(sut1);
             await sut2.CreateAsync(dto);
 
             var sut3 = await sut2.FindAllAsync(o => o.Predicate = a => a.PlatformProviderId == id).SingleOrDefaultAsync();

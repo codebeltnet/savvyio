@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Threading;
 using Microsoft.EntityFrameworkCore;
@@ -19,19 +20,20 @@ namespace Savvyio.Extensions.EFCore
     public class EfCoreRepository<TEntity, TKey> : IPersistentRepository<TEntity, TKey> where TEntity : class, IIdentity<TKey>
     {
         /// <summary>
-        /// Gets the associated <see cref="DbSet{TEntity}"/> for this repository.
-        /// </summary>
-        /// <value>The associated <see cref="DbSet{TEntity}"/> for this repository.</value>
-        protected DbSet<TEntity> Set { get; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreRepository{TEntity, TKey}"/> class.
         /// </summary>
         /// <param name="source">The <see cref="IEfCoreDataSource"/> that handles actual I/O communication with a source of data.</param>
         public EfCoreRepository(IEfCoreDataSource source)
         {
+            Validator.ThrowIfNull(source);
             Set = source.Set<TEntity>();
         }
+
+        /// <summary>
+        /// Gets the associated <see cref="DbSet{TEntity}"/> for this repository.
+        /// </summary>
+        /// <value>The associated <see cref="DbSet{TEntity}"/> for this repository.</value>
+        protected DbSet<TEntity> Set { get; }
 
         /// <summary>
         /// Marks the specified <paramref name="entity"/> to be added in the data store when <see cref="IUnitOfWork.SaveChangesAsync"/> is called.
@@ -60,7 +62,7 @@ namespace Savvyio.Extensions.EFCore
         public virtual Task<TEntity> GetByIdAsync(TKey id, Action<AsyncOptions> setup = null)
         {
             var options = setup.Configure();
-            return Set.FindAsync(new object[] { id }, options.CancellationToken).AsTask();
+            return Set.FindAsync(new[] { id }, options.CancellationToken).AsTask();
         }
 
         /// <summary>

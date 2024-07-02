@@ -26,7 +26,7 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
         public static IServiceCollection AddAmazonCommandQueue(this IServiceCollection services, Action<AmazonCommandQueueOptions> awsSetup, Action<ServiceOptions> serviceSetup = null)
         {
-            services.AddMessageQueue<AmazonCommandQueue, ICommand>(serviceSetup);
+            services.AddMessageQueue<AmazonCommandQueue, ICommand>(serviceSetup ?? (o => o.Lifetime = ServiceLifetime.Singleton));
             return services.ConfigureTriple(awsSetup);
         }
 
@@ -40,7 +40,7 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
         public static IServiceCollection AddAmazonCommandQueue<TMarker>(this IServiceCollection services, Action<AmazonCommandQueueOptions<TMarker>> awsSetup, Action<ServiceOptions> serviceSetup = null)
         {
-            services.AddMessageQueue<AmazonCommandQueue<TMarker>, ICommand>(serviceSetup);
+            services.AddMessageQueue<AmazonCommandQueue<TMarker>, ICommand>(serviceSetup ?? (o => o.Lifetime = ServiceLifetime.Singleton));
             return services.ConfigureTriple(awsSetup);
         }
 
@@ -54,7 +54,7 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
         public static IServiceCollection AddAmazonEventBus(this IServiceCollection services, Action<AmazonEventBusOptions> awsSetup, Action<ServiceOptions> serviceSetup = null)
         {
-            services.AddMessageBus<AmazonEventBus, IIntegrationEvent>(serviceSetup);
+            services.AddMessageBus<AmazonEventBus, IIntegrationEvent>(serviceSetup ?? (o => o.Lifetime = ServiceLifetime.Singleton));
             return services.ConfigureTriple(awsSetup);
         }
 
@@ -68,7 +68,7 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
         public static IServiceCollection AddAmazonEventBus<TMarker>(this IServiceCollection services, Action<AmazonEventBusOptions<TMarker>> awsSetup, Action<ServiceOptions> serviceSetup = null)
         {
-            services.AddMessageBus<AmazonEventBus<TMarker>, IIntegrationEvent>(serviceSetup);
+            services.AddMessageBus<AmazonEventBus<TMarker>, IIntegrationEvent>(serviceSetup ?? (o => o.Lifetime = ServiceLifetime.Singleton));
             return services.ConfigureTriple(awsSetup);
         }
     }

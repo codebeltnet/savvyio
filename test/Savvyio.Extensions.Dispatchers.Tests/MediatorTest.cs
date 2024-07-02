@@ -15,6 +15,7 @@ using Savvyio.Assets.Queries;
 using Savvyio.Domain;
 using Savvyio.EventDriven;
 using Savvyio.Extensions.DependencyInjection;
+using Savvyio.Extensions.DependencyInjection.Domain;
 using Savvyio.Extensions.DependencyInjection.EFCore;
 using Savvyio.Extensions.DependencyInjection.EFCore.Domain;
 using Savvyio.Queries;
@@ -69,8 +70,9 @@ namespace Savvyio.Extensions.Dispatchers
             {
                 services.AddSingleton(TestOutput);
                 services.AddEfCoreRepository<Account, long, Account>();
-                services.AddDefaultEfCoreDataStore<PlatformProvider, PlatformProvider>();
-                services.AddEfCoreDataSource<CustomEfCoreDataSource>();
+                services.AddEfCoreDataStore<PlatformProvider, PlatformProvider>();
+                services.AddDataSource<CustomEfCoreDataSource>()
+                    .AddUnitOfWork<CustomEfCoreDataSource>();
                 services.AddEfCoreDataSource<PlatformProvider>(o =>
                 {
                     o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(PlatformProvider)).EnableDetailedErrors().LogTo(Console.WriteLine);
@@ -107,8 +109,9 @@ namespace Savvyio.Extensions.Dispatchers
             {
                 services.AddSingleton(TestOutput);
                 services.AddEfCoreRepository<Account, long>();
-                services.AddDefaultEfCoreDataStore<PlatformProvider, PlatformProvider>();
-                services.AddEfCoreDataSource<CustomEfCoreDataSource>();
+                services.AddEfCoreDataStore<PlatformProvider, PlatformProvider>();
+                services.AddDataSource<CustomEfCoreDataSource>()
+                    .AddUnitOfWork<CustomEfCoreDataSource>();
                 services.AddEfCoreAggregateDataSource<PlatformProvider>(o =>
                 {
                     o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(PlatformProvider)).EnableDetailedErrors().LogTo(Console.WriteLine);

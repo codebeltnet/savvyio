@@ -38,12 +38,35 @@ namespace Savvyio.Extensions.DependencyInjection.Domain
             where TEntity : class, IIdentity<TKey>
         {
             Validator.ThrowIfNull(services);
-            var options = Patterns.Configure(setup);
+            var options = Patterns.Configure(setup ?? (o => o.Lifetime = ServiceLifetime.Scoped));
             return services.Add<TService>(o =>
             {
                 o.Lifetime = options.Lifetime;
                 o.NestedTypePredicate = type => type.HasInterfaces(typeof(IRepository<,>));
             });
+        }
+
+        /// <summary>
+        /// Adds an implementation of <see cref="IUnitOfWork" /> to the specified <see cref="IServiceCollection" />.
+        /// </summary>
+        /// <typeparam name="TService">The type of the <see cref="IUnitOfWork"/> to add.</typeparam>
+        /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
+        /// <param name="setup">The <see cref="ServiceOptions" /> which may be configured.</param>
+        /// <returns>A reference to <paramref name="services" /> so that additional configuration calls can be chained.</returns>
+        /// <remarks>If the underlying type of <typeparamref name="TService"/> implements <see cref="IDependencyInjectionMarker{TMarker}"/> interface then this is automatically handled. Also, the implementation will be type forwarded accordingly.</remarks>
+        /// <seealso cref="IDependencyInjectionMarker{TMarker}"/>
+        /// <seealso cref="IUnitOfWork"/>
+        /// <seealso cref="IUnitOfWork{TMarker}"/>
+        public static IServiceCollection AddUnitOfWork<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IUnitOfWork
+        {
+            Validator.ThrowIfNull(services);
+            var options = (setup ?? (o => o.Lifetime = ServiceLifetime.Scoped)).Configure();
+            var unitOfWorkType = typeof(IUnitOfWork);
+            if (typeof(TService).TryGetDependencyInjectionMarker(out var markerType))
+            {
+                unitOfWorkType = typeof(IUnitOfWork<>).MakeGenericType(markerType);
+            }
+            return services.Add(unitOfWorkType, p => p.GetRequiredService<TService>(), options.Lifetime);
         }
     }
 }

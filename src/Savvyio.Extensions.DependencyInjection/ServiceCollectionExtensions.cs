@@ -41,7 +41,7 @@ namespace Savvyio.Extensions.DependencyInjection
         public static IServiceCollection AddMarshaller<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IMarshaller
         {
             Validator.ThrowIfNull(services);
-            var options = setup.Configure();
+            var options = (setup ?? (o => o.Lifetime = ServiceLifetime.Singleton)).Configure();
             return services.Add<TService>(o =>
             {
                 o.Lifetime = options.Lifetime;
@@ -63,7 +63,7 @@ namespace Savvyio.Extensions.DependencyInjection
         public static IServiceCollection AddDataSource<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IDataSource
         {
             Validator.ThrowIfNull(services);
-            var options = setup.Configure();
+            var options = (setup ?? (o => o.Lifetime = ServiceLifetime.Scoped)).Configure();
             return services.Add<TService>(o =>
             {
                 o.Lifetime = options.Lifetime;
