@@ -25,7 +25,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain
         {
             return services.AddDataSource<EfCoreAggregateDataSource>(serviceSetup)
                 .AddUnitOfWork<EfCoreAggregateDataSource>(serviceSetup)
-                .ConfigureTriple(dataSourceSetup);
+                .AddConfiguredOptions(dataSourceSetup);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain
         {
             return services.AddDataSource<EfCoreAggregateDataSource<TMarker>>(serviceSetup)
                 .AddUnitOfWork<EfCoreAggregateDataSource<TMarker>>(serviceSetup)
-                .ConfigureTriple(dataSourceSetup);
+                .AddConfiguredOptions(dataSourceSetup);
         }
 
         /// <summary>

@@ -28,7 +28,7 @@ namespace Savvyio.Extensions.EFCore
             var sut1 = new ServiceCollection();
             sut1.AddDataSource<EfCoreDataSource>()
                 .AddUnitOfWork<EfCoreDataSource>();
-            sut1.ConfigureTriple<EfCoreDataSourceOptions>(_ => {});
+            sut1.AddConfiguredOptions<EfCoreDataSourceOptions>(_ => {});
             var sut2 = sut1.BuildServiceProvider();
 
             Assert.IsType<EfCoreDataSource>(sut2.GetRequiredService<IEfCoreDataSource>());

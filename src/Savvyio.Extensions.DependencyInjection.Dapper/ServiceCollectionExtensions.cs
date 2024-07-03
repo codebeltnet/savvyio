@@ -23,7 +23,7 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         {
             return services
 	            .AddDapperDataSource<DapperDataSource>(serviceSetup)
-	            .ConfigureTriple(dataSourceSetup);
+	            .AddConfiguredOptions(dataSourceSetup);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         {
             return services
 	            .AddDapperDataSource<DapperDataSource<TMarker>>(serviceSetup)
-	            .ConfigureTriple(dataSourceSetup);
+	            .AddConfiguredOptions(dataSourceSetup);
         }
 
         /// <summary>

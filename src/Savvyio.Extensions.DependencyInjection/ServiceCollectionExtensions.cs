@@ -17,18 +17,21 @@ namespace Savvyio.Extensions.DependencyInjection
     public static class ServiceCollectionExtensions
     {
 		/// <summary>
-		/// Registers the specified <paramref name="setup"/> as a triple-configuration for both compatibility with (and outside the wonderful world of) Microsoft Dependency Injection e.g., IOptions&lt;TOptions&gt;, Action&lt;TOptions&gt; and TOptions.
+		/// Registers the specified <paramref name="setup"/> as a triple-configuration for both compatibility with (and outside the confines of) Microsoft Dependency Injection e.g., IOptions&lt;TOptions&gt;, Action&lt;TOptions&gt; and TOptions.
 		/// </summary>
 		/// <typeparam name="TOptions">The options type to be configured.</typeparam>
 		/// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
-		/// <param name="setup">The <see cref="Action{T}"/> used to configure the options.</param>
+		/// <param name="setup">The <typeparamref name="TOptions"/> which need to be configured by the <paramref name="setup"/> delegate.</param>
 		/// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
-		public static IServiceCollection ConfigureTriple<TOptions>(this IServiceCollection services, Action<TOptions> setup) where TOptions : class, IParameterObject, new()
+		public static IServiceCollection AddConfiguredOptions<TOptions>(this IServiceCollection services, Action<TOptions> setup) where TOptions : class, IParameterObject, new()
 	    {
+            Validator.ThrowIfNull(services);
+            Validator.ThrowIfNull(setup);
+            Validator.ThrowIfInvalidConfigurator(setup, out var options);
 		    return services
 			    .Configure(setup) // support for IOptions<TOptions>
 			    .AddSingleton(setup) // support for Action<TOptions>
-				.AddSingleton(Patterns.Configure(setup)); // support for TOptions
+				.AddSingleton(options); // support for TOptions
 		}
 
         /// <summary>

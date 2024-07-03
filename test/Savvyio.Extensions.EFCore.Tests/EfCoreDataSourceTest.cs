@@ -52,7 +52,7 @@ namespace Savvyio.Extensions.EFCore
             sut1.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
             sut1.AddScoped<IDomainEventHandler, AccountDomainEventHandler>();
             sut1.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
-            sut1.ConfigureTriple<EfCoreDataSourceOptions>(o =>
+            sut1.AddConfiguredOptions<EfCoreDataSourceOptions>(o =>
             {
 	            o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy");
 	            o.ModelConstructor = mb => mb.AddAccount();
