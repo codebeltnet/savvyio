@@ -17,10 +17,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.6" />
   </ItemGroup>
 
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net7'))">
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.20" />
-  </ItemGroup>
-
   <ItemGroup Condition="$(TargetFramework.StartsWith('net6'))">
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.31" />
   </ItemGroup>
