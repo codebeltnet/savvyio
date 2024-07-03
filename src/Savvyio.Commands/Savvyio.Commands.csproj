@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Provides the fundamental classes and interfaces to work with the Command part of the CQRS pattern (Command and Query Responsibility Segregation).</Description>
+    <Description>Provides the fundamental classes to work with the Command part of the CQRS pattern (Command and Query Responsibility Segregation).</Description>
     <PackageTags>cqrs command commit commit-async command-handler</PackageTags>
   </PropertyGroup>
 

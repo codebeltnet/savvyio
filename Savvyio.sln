@@ -105,9 +105,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Extensions.Newtonso
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Messaging", "src\Savvyio.Messaging\Savvyio.Messaging.csproj", "{9B1F27F1-D3F7-466F-99EC-FFCB2A08636C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savvyio.Commands.Messaging", "src\Savvyio.Commands.Messaging\Savvyio.Commands.Messaging.csproj", "{41658989-6AC0-4006-8023-55754A7D84A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Commands.Messaging", "src\Savvyio.Commands.Messaging\Savvyio.Commands.Messaging.csproj", "{41658989-6AC0-4006-8023-55754A7D84A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savvyio.EventDriven.Messaging", "src\Savvyio.EventDriven.Messaging\Savvyio.EventDriven.Messaging.csproj", "{809D779F-2F62-4BFF-A6E2-82A5FA2E4142}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.EventDriven.Messaging", "src\Savvyio.EventDriven.Messaging\Savvyio.EventDriven.Messaging.csproj", "{809D779F-2F62-4BFF-A6E2-82A5FA2E4142}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
