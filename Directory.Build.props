@@ -2,16 +2,17 @@
   <PropertyGroup>
     <IsTestProject>$(MSBuildProjectName.EndsWith('Tests'))</IsTestProject>
     <IsMainAuthor Condition="'$(EMAIL)' == 'michael@geekle.io'">true</IsMainAuthor>
+    <SkipSignAssembly>false</SkipSignAssembly>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
+  <PropertyGroup Condition="'$(CI)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsTestProject)' == 'false'">
-    <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net6.0</TargetFrameworks>
     <Copyright>Copyright © Geekle 2021-2024. All rights reserved.</Copyright>
     <Authors>gimlichael</Authors>
     <Company>Geekle</Company>
@@ -20,7 +21,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://www.savvyio.net/</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/codebeltnet/classlib-savvyio</RepositoryUrl>
+    <RepositoryUrl>https://github.com/codebeltnet/savvyio</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <NeutralLanguage>en-US</NeutralLanguage>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -28,13 +29,14 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <SignAssembly Condition="'$(TF_BUILD)' == 'true' OR '$(IsMainAuthor)' == 'true'">true</SignAssembly>
+    <SignAssembly Condition="('$(CI)' == 'true' OR '$(IsMainAuthor)' == 'true') AND '$(SkipSignAssembly)' == 'false'">true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)savvyio.snk</AssemblyOriginatorKeyFile>
     <NoWarn>7035</NoWarn>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(NuGetPackageRoot)' != ''">
-    <SourceRoot Include="$(NuGetPackageRoot)" RepositoryUrl="https://github.com/codebeltnet/classlib-savvyio" />
+    <SourceRoot Include="$(NuGetPackageRoot)" RepositoryUrl="https://github.com/codebeltnet/savvyio" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(IsTestProject)' == 'false'">
