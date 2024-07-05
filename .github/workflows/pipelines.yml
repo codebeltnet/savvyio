@@ -91,9 +91,6 @@ jobs:
         configuration: [Debug, Release]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout
-        uses: codebeltnet/git-checkout@v1
-
       - name: Install .NET
         uses: codebeltnet/install-dotnet@v1
 
@@ -101,7 +98,7 @@ jobs:
         uses: codebeltnet/dotnet-tool-install-reportgenerator@v1
 
       - name: Test with ${{ matrix.configuration }} build
-        uses: codebeltnet/dotnet-test@v2
+        uses: codebeltnet/dotnet-test@v3
         with:
           configuration: ${{ matrix.configuration }}
           buildSwitches: -p:SkipSignAssembly=true
