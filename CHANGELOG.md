@@ -4,6 +4,180 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [3.0.0] - TBD
+
+### Added
+
+#### Savvyio.Commands.Messaging
+
+- CommandExtensions class in the Savvyio.Commands.Messaging namespace that consist of extension methods for the ICommand interface: ToMessage{T}
+- InMemoryCommandQueue class in the Savvyio.Commands.Messaging namespace that provides an in-memory implementation of the IPointToPointChannel{TRequest} interface useful for unit testing and the likes thereof
+
+#### Savvyio.Core
+
+- AcknowledgedEventArgs class in the Savvyio.Messaging namespace that provides data for message related operations
+- IAcknowledgeable interface in the Savvyio.Messaging namespace that defines a generic way to make a message acknowledgeable
+
+#### Savvyio.EventDriven.Messaging
+
+- CloudEventExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace that consist of extension methods for the ICloudEvent{T} interface: SignCloudEvent{T}
+- SignedCloudEventExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace that consist of extension methods for the ISignedCloudEvent{T} interface: CheckCloudEventSignature{T}
+- SignedCloudEvent{T} class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace that provides a default implementation of the ISignedCloudEvent{T} interface
+- CloudEvent{T} class in the Savvyio.EventDriven.Messaging.CloudEvents namespace that provides a default implementation of the ICloudEvent{T} interface
+- MessageExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents namespace that consist of extension methods for the IMessage{T} interface: ToCloudEvent{T}
+- IntegrationEventExtensions class in the Savvyio.EventDriven.Messaging namespace that consist of extension methods for the IIntegrationEvent interface: ToMessage{T}
+- InMemoryEventBus class in the Savvyio.EventDriven.Messaging namespace that provides an in-memory implementation of the IPublishSubscribeChannel{TRequest} interface useful for unit testing and the likes thereof
+
+#### Savvyio.Extensions.DependencyInjection
+
+- ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Domain namespace was extended with a new extension method for the IServiceCollection interface: AddUnitOfWork{TService}
+
+### Changed
+
+#### Savvyio.Commands
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Core
+
+- Dependencies to latest and greatest with respect to TFMs
+- IMessage interface to inherit from IAcknowledgeable
+
+#### Savvyio.Domain
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Domain.EventSourcing
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.EventDriven
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.Dapper
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.DapperExtensions
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.DependencyInjection
+
+- Dependencies to latest and greatest with respect to TFMs
+- AddDataStore{TService, T} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Data namespace to use a default lifetime of Scoped
+- AddDataStore{TService, T, TOptions} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Data namespace to use a default lifetime of Scoped
+- AddRepository{TService, TEntity, TKey} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Domain namespace to use a default lifetime of Scoped
+- AddMarshaller{TService} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace to use a default lifetime of Singleton
+- AddDataSource{TService} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace to use a default lifetime of Scoped
+- ConfigureTriple{TOptions} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace was renamed to: AddConfiguredOptions{TOptions}
+
+#### Savvyio.Extensions.DependencyInjection.Dapper
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.DependencyInjection.DapperExtensions
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.DependencyInjection.Domain
+
+- Dependencies to latest and greatest with respect to TFMs
+- AddAggregateRepository{TService, TEntity, TKey} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Domain namespace to use a default lifetime of Scoped
+
+#### Savvyio.Extensions.DependencyInjection.EFCore
+
+- Dependencies to latest and greatest with respect to TFMs
+- DefaultEfCoreDataStore{T, TMarker} class in the Savvyio.Extensions.DependencyInjection.EFCore namespace was renamed to EfCoreDataStore{T, TMarker}
+
+#### Savvyio.Extensions.DependencyInjection.EFCore.Domain
+
+- Dependencies to latest and greatest with respect to TFMs
+- AddEfCoreAggregateDataSource extension methods on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.EFCore.Domain namespace uses Action{ServiceOptions} instead of Action{EfCoreServiceOptions}
+- AddEfCoreAggregateRepository extension methods on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.EFCore.Domain namespace uses Action{ServiceOptions} instead of Action{EfCoreServiceOptions}
+
+#### Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
+
+- Dependencies to latest and greatest with respect to TFMs
+- AddEfCoreTracedAggregateRepository extension methods on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing namespace uses Action{ServiceOptions} instead of Action{EfCoreServiceOptions}
+
+#### Savvyio.Extensions.DependencyInjection.SimpleQueueService
+
+- Dependencies to latest and greatest with respect to TFMs
+- AddAmazonCommandQueue extension methods on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService namespace to use a default lifetime of Singleton
+- AddAmazonEventBus extension methods on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService namespace to use a default lifetime of Singleton
+
+#### Savvyio.Extensions.Dispatchers
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.EFCore
+
+- Dependencies to latest and greatest with respect to TFMs
+- EfCoreDataStore{T, TOptions} abstract class in the Savvyio.Extensions.EFCore namespace was refactored to EfCoreDataStore{T} class using fixed EfCoreQueryOptions{T} while making it consistent with other default implementations
+
+#### Savvyio.Extensions.EFCore.Domain
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.EFCore.Domain.EventSourcing
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.Newtonsoft.Json
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.SimpleQueueService
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Extensions.Text.Json
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Messaging
+
+- Dependencies to latest and greatest with respect to TFMs
+
+#### Savvyio.Queries
+
+- Dependencies to latest and greatest with respect to TFMs
+
+### Removed
+
+#### Savvyio.Commands
+
+- CommandExtensions class from the Savvyio.Commands.Messaging namespace and moved it to its own assembly (Savvyio.Commands.Messaging)
+- InMemoryCommandQueue record from the Savvyio.Commands.Messaging namespace and moved it to its own assembly (Savvyio.Commands.Messaging)
+
+#### Savvyio.Core
+
+- MessageExtensions class from the Savvyio.Messaging.Cryptography namespace and moved it to its own assembly (Savvyio.Messaging)
+- SignedMessage record from the Savvyio.Messaging.Cryptography namespace and moved it to its own assembly (Savvyio.Messaging)
+- SignedMessageOptions class from the Savvyio.Messaging.Cryptography namespace and moved it to its own assembly (Savvyio.Messaging)
+- Message record from the Savvyio.Messaging namespace and moved it to its own assembly (Savvyio.Messaging)
+- MessageExtensions class from the Savvyio.Messaging namespace and moved it to its own assembly (Savvyio.Messaging)
+- MessageOptions class from the Savvyio.Messaging namespace and moved it to its own assembly (Savvyio.Messaging)
+
+#### Savvyio.EventDriven
+
+- CloudEvent record from the Savvyio.EventDriven.Messaging.CloudEvents namespace and moved it to its own assembly (Savvyio.EventDriven.Messaging)
+- CloudEventExtensions class from the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace and moved it to its own assembly (Savvyio.EventDriven.Messaging)
+- SignedCloudEvent class from the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace and moved it to its own assembly (Savvyio.EventDriven.Messaging)
+- MessageExtensions class from the Savvyio.EventDriven.Messaging.CloudEvents namespace and moved it to its own assembly (Savvyio.EventDriven.Messaging)
+- InMemoryEventBus class from the Savvyio.EventDriven.Messaging namespace and moved it to its own assembly (Savvyio.EventDriven.Messaging)
+- IntegrationEventExtensions class from the Savvyio.EventDriven.Messaging namespace and moved it to its own assembly (Savvyio.EventDriven.Messaging)
+
+#### Savvyio.Extensions.DependencyInjection.EFCore
+
+- EfCoreServiceOptions class from the Savvyio.Extensions.DependencyInjection.EFCore namespace
+
+#### Savvyio.Extensions.EFCore
+
+- DefaultEfCoreDataStore{T} class in the Savvyio.Extensions.EFCore namespace
+
 ## [2.2.0] - 2024-04-10
 
 ### Changed
@@ -47,7 +221,6 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 #### Savvyio.Extensions.Text.Json
 
 - Dependencies to latest and greatest with respect to TFMs
-
 
 ## [2.1.0] - 2024-03-05
 

@@ -1,0 +1,7 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# New Features
+- ADDED CommandExtensions class in the Savvyio.Commands.Messaging namespace that consist of extension methods for the ICommand interface: ToMessage{T}
+- ADDED InMemoryCommandQueue class in the Savvyio.Commands.Messaging namespace that provides an in-memory implementation of the IPointToPointChannel{TRequest} interface useful for unit testing and the likes thereof
+ 

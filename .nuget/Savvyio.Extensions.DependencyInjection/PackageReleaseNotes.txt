@@ -1,3 +1,22 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- RENAMED ConfigureTriple{TOptions} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace to: AddConfiguredOptions{TOptions}
+ 
+# New Features
+- EXTENDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Domain namespace with a new extension method for the IServiceCollection interface: AddUnitOfWork{TService}
+ 
+# Improvements
+- CHANGED AddDataStore{TService, T} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Data namespace to use a default lifetime of Scoped
+- CHANGED AddDataStore{TService, T, TOptions} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Data namespace to use a default lifetime of Scoped
+- CHANGED AddRepository{TService, TEntity, TKey} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Domain namespace to use a default lifetime of Scoped
+- CHANGED AddMarshaller{TService} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace to use a default lifetime of Singleton
+- CHANGED AddDataSource{TService} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace to use a default lifetime of Scoped
+ 
 Version: 2.2.0
 Availability: .NET 8, .NET 7 and .NET 6
  

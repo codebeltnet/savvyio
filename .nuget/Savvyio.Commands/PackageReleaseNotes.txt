@@ -1,3 +1,13 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# Breaking Changes
+- MOVED CommandExtensions class from the Savvyio.Commands.Messaging namespace to its own assembly (Savvyio.Commands.Messaging)
+- MOVED InMemoryCommandQueue record from the Savvyio.Commands.Messaging namespace to its own assembly (Savvyio.Commands.Messaging)
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
 Version: 2.1.0
 Availability: .NET 8, .NET 7 and .NET 6
  

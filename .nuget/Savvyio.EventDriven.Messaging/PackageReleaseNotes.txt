@@ -1,16 +1,14 @@
 Version: 3.0.0
 Availability: .NET 8 and .NET 6
  
-# Breaking Changes
-- MOVED CloudEvent record from the Savvyio.EventDriven.Messaging.CloudEvents namespace to its own assembly (Savvyio.EventDriven.Messaging)
-- MOVED CloudEventExtensions class from the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace to its own assembly (Savvyio.EventDriven.Messaging)
-- MOVED SignedCloudEvent class from the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace to its own assembly (Savvyio.EventDriven.Messaging)
-- MOVED MessageExtensions class from the Savvyio.EventDriven.Messaging.CloudEvents namespace to its own assembly (Savvyio.EventDriven.Messaging)
-- MOVED InMemoryEventBus class from the Savvyio.EventDriven.Messaging namespace to its own assembly (Savvyio.EventDriven.Messaging)
-- MOVED IntegrationEventExtensions class from the Savvyio.EventDriven.Messaging namespace to its own assembly (Savvyio.EventDriven.Messaging)
- 
-# ALM
-- CHANGED Dependencies to latest and greatest with respect to TFMs
+# New Features
+- ADDED CloudEventExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace that consist of extension methods for the ICloudEvent{T} interface: SignCloudEvent{T}
+- ADDED SignedCloudEventExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace that consist of extension methods for the ISignedCloudEvent{T} interface: CheckCloudEventSignature{T}
+- ADDED SignedCloudEvent{T} class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace that provides a default implementation of the ISignedCloudEvent{T} interface
+- ADDED CloudEvent{T} class in the Savvyio.EventDriven.Messaging.CloudEvents namespace that provides a default implementation of the ICloudEvent{T} interface
+- ADDED MessageExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents namespace that consist of extension methods for the IMessage{T} interface: ToCloudEvent{T}
+- ADDED IntegrationEventExtensions class in the Savvyio.EventDriven.Messaging namespace that consist of extension methods for the IIntegrationEvent interface: ToMessage{T}
+- ADDED InMemoryEventBus class in the Savvyio.EventDriven.Messaging namespace that provides an in-memory implementation of the IPublishSubscribeChannel{TRequest} interface useful for unit testing and the likes thereof
  
 Version: 2.1.0
 Availability: .NET 8, .NET 7 and .NET 6

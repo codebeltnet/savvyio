@@ -1,6 +1,6 @@
-# Savvyio.Extensions.Dispatchers
+# Savvyio.Messaging
 
-Extend the Savvy I/O core assemblies with Mediator support to provide a uniform way of working with DDD, CQRS and Event driven architecture.
+Provides the fundamental classes to work with Messaging in a distributed architecture.
 
 ## About
 

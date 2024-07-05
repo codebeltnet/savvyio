@@ -1,3 +1,24 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# Breaking Changes
+- MOVED MessageExtensions class from the Savvyio.Messaging.Cryptography namespace to its own assembly (Savvyio.Messaging)
+- MOVED SignedMessage record from the Savvyio.Messaging.Cryptography namespace to its own assembly (Savvyio.Messaging)
+- MOVED SignedMessageOptions class from the Savvyio.Messaging.Cryptography namespace to its own assembly (Savvyio.Messaging)
+- MOVED Message record from the Savvyio.Messaging namespace to its own assembly (Savvyio.Messaging)
+- MOVED MessageExtensions class from the Savvyio.Messaging namespace to its own assembly (Savvyio.Messaging)
+- MOVED MessageOptions class from the Savvyio.Messaging namespace to its own assembly (Savvyio.Messaging)
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# New Features
+- ADDED AcknowledgedEventArgs class in the Savvyio.Messaging namespace that provides data for message related operations
+- ADDED IAcknowledgeable interface in the Savvyio.Messaging namespace that defines a generic way to make a message acknowledgeable
+ 
+# Improvements
+- CHANGED IMessage interface to inherit from IAcknowledgeable
+ 
 Version: 2.2.0
 Availability: .NET 8, .NET 7 and .NET 6
  
