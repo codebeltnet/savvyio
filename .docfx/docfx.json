@@ -5,10 +5,13 @@
         {
           "files": [
             "Savvyio.Commands/**.csproj",
+            "Savvyio.Commands.Messaging/**.csproj",
             "Savvyio.Core/**.csproj",
             "Savvyio.Domain/**.csproj",
             "Savvyio.Domain.EventSourcing/**.csproj",
             "Savvyio.EventDriven/**.csproj",
+            "Savvyio.EventDriven.Messaging/**.csproj",
+            "Savvyio.Messaging/**.csproj",
             "Savvyio.Queries/**.csproj"
           ],
           "src": "../src"
@@ -17,7 +20,7 @@
       "dest": "api/dotnet",
       "filter": "filterConfig.yml",
       "properties": {
-        "TargetFramework": "net6.0"
+        "TargetFramework": "net8.0"
       }
     },
     {
@@ -48,7 +51,7 @@
       "dest": "api/extensions/dotnet",
       "filter": "filterConfig.yml",
       "properties": {
-        "TargetFramework": "net6.0"
+        "TargetFramework": "net8.0"
       }
     }
   ],
@@ -88,8 +91,8 @@
       "_enableSearch": false,
       "_disableContribution": false,
       "_gitContribute": {
-        "repo": "https://github.com/codebeltnet/classlib-savvyio",
-        "branch": "development"
+        "repo": "https://github.com/codebeltnet/savvyio",
+        "branch": "main"
       },
       "_gitUrlPattern": "github"
     },
