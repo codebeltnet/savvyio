@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Amazon;
 using Amazon.Runtime;
 using Cuemon;
+using Cuemon.Extensions.Reflection;
 using Cuemon.Extensions.Xunit;
 using Cuemon.Extensions.Xunit.Hosting;
 using Cuemon.Threading;
@@ -34,6 +35,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         private readonly AmazonEventBus _bus;
         private static readonly InMemoryTestStore<IMessage<IIntegrationEvent>> Comparer = new();
         private readonly IMarshaller _marshaller;
+        private static readonly string BuildType = typeof(AmazonMessageOptions).Assembly.IsDebugBuild() ? "Debug" : "Release";
 
         public AmazonEventBusJsonSerializerContextTest(HostFixture fixture, ITestOutputHelper output) : base(fixture, output)
         {
@@ -46,10 +48,10 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         {
             var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
             var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
-            var sut3 = sut1.ToMessage(sut2, "journal-svc.journals.updated-event");
+            var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{BuildType}.updated-event");
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
-
+            TestOutput.WriteLine(Generate.ObjectPortrayal(sut3, o => o.Delimiter = Environment.NewLine));
             Comparer.Add(sut3);
 
             await _bus.PublishAsync(sut3);
@@ -59,7 +61,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         public async Task SubscribeAsync_MemberCreated_OneTime()
         {
             var handlerInvocations = 0;
-            var sut1 = Comparer.Query(message => message.Source.Contains("member-events-one")).Single();
+            var sut1 = Comparer.Query(message => message.Type.Contains($"{BuildType}.updated-event")).Single();
             
             await _bus.SubscribeAsync((sut2, _) =>
             {
@@ -79,7 +81,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         {
             var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
             var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
-            var sut3 = sut1.ToMessage(sut2, "journal-svc.journals.updated-event.signed").Sign(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
+            var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{BuildType}.updated-event.signed").Sign(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
 
@@ -92,7 +94,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         public async Task SubscribeAsync_MemberCreated_OneTime_Signed()
         {
             var handlerInvocations = 0;
-            var sut1 = Comparer.Query(message => message.Type.Contains("updated-event.signed")).Single();
+            var sut1 = Comparer.Query(message => message.Type.Contains($"{BuildType}.updated-event.signed")).Single();
             
             await _bus.SubscribeAsync((sut2, _) =>
             {
@@ -113,7 +115,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         {
             var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
             var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
-            var sut3 = sut1.ToMessage(sut2, "journal-svc.journals.updated-event.cloud-event").ToCloudEvent();
+            var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{BuildType}.updated-event.cloud-event").ToCloudEvent();
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
 
@@ -126,7 +128,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         public async Task SubscribeAsync_MemberCreated_OneTime_CloudEvent()
         {
             var handlerInvocations = 0;
-            var sut1 = Comparer.Query(message => message.Type.Contains("updated-event.cloud-event")).Single() as ICloudEvent<IIntegrationEvent>;
+            var sut1 = Comparer.Query(message => message.Type.Contains($"{BuildType}.updated-event.cloud-event")).Single() as ICloudEvent<IIntegrationEvent>;
             
             await _bus.SubscribeAsync((sut2, _) =>
             {
@@ -147,7 +149,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         {
             var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
             var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
-            var sut3 = sut1.ToMessage(sut2, "journal-svc.journals.updated-event.signed-cloud-event").ToCloudEvent().SignCloudEvent(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
+            var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{BuildType}.updated-event.signed-cloud-event").ToCloudEvent().SignCloudEvent(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
 
@@ -160,7 +162,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         public async Task SubscribeAsync_MemberCreated_OneTime_CloudEvent_Signed()
         {
             var handlerInvocations = 0;
-            var sut1 = Comparer.Query(message => message.Type.Contains("updated-event.signed-cloud-event")).Single();
+            var sut1 = Comparer.Query(message => message.Type.Contains($"{BuildType}.updated-event.signed-cloud-event")).Single();
             
             await _bus.SubscribeAsync((sut2, _) =>
             {
@@ -216,15 +218,26 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            AmazonResourceNameOptions.DefaultAccountId = Configuration["AWS:CallerIdentity"];
-            
             services.AddMarshaller<JsonMarshaller>();
             services.AddAmazonEventBus(o =>
             {
 	            var queue = IsLinux ? "savvyio-events" : "savvyio-events.fifo";
-	            o.Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]);
 	            o.Endpoint = RegionEndpoint.EUWest1;
-	            o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}");
+                if (Configuration["AWS:LocalStack"] != null)
+                {
+                    o.Credentials = new BasicAWSCredentials("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
+                    o.SourceQueue = new Uri($"http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/{queue}");
+                    o.ConfigureClient(client =>
+                    {
+                        client.ServiceURL = "http://localhost:4566";
+                        client.AuthenticationRegion = RegionEndpoint.EUWest1.SystemName;
+                    });
+                }
+                else
+                {
+                    o.Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]);
+                    o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}");
+                }
             });
         }
     }

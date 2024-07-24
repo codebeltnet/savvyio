@@ -152,13 +152,26 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 
 		public override void ConfigureServices(IServiceCollection services)
 		{
-			services.AddMarshaller<JsonMarshaller>();
+            services.AddMarshaller<JsonMarshaller>();
 			services.AddAmazonCommandQueue(o =>
 			{
 				var queue = IsLinux ? "savvyio-commands" : "savvyio-commands.fifo";
-				o.Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]);
-				o.Endpoint = RegionEndpoint.EUWest1;
-				o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}");
+                o.Endpoint = RegionEndpoint.EUWest1;
+                if (Configuration["AWS:LocalStack"] != null)
+                {
+                    o.Credentials = new BasicAWSCredentials("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
+                    o.SourceQueue = new Uri($"http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/{queue}");
+                    o.ConfigureClient(client =>
+                    {
+                        client.ServiceURL = "http://localhost:4566";
+                        client.AuthenticationRegion = RegionEndpoint.EUWest1.SystemName;
+                    });
+                }
+                else
+                {
+                    o.Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]);
+                    o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}");
+                }
 				o.ReceiveContext.UseApproximateNumberOfMessages = true;
 			});
 		}
