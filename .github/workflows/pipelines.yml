@@ -28,6 +28,21 @@ on:
           - Release
 
 jobs:
+  prepare:
+    name: 🧰 Prepare
+    runs-on: ubuntu-22.04
+    outputs:
+      testProjects: ${{ steps.test-projects.outputs.result }}
+    steps:
+      - name: Checkout
+        uses: codebeltnet/git-checkout@v1
+
+      - id: test-projects
+        name: Generate matrix for test projects
+        uses: codebeltnet/shell-globbing@v1
+        with:
+          pattern: test/**/*.csproj
+  
   build:
     name: 🛠️ Build
     runs-on: ubuntu-22.04
@@ -84,11 +99,13 @@ jobs:
 
   test:
     name: 🧪 Test
-    needs: [build]
+    needs: [prepare, build]
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-22.04, windows-2022]
         configuration: [Debug, Release]
+        project: ${{ fromJson(needs.prepare.outputs.testProjects) }}
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -103,6 +120,7 @@ jobs:
       - name: Test with ${{ matrix.configuration }} build
         uses: codebeltnet/dotnet-test@v3
         with:
+          projects: ${{ matrix.project }}
           configuration: ${{ matrix.configuration }}
           buildSwitches: -p:SkipSignAssembly=true
         env:
