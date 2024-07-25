@@ -252,6 +252,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                 }
                 else
                 {
+                    AmazonResourceNameOptions.DefaultAccountId = Configuration["AWS:CallerIdentity"];
                     o.Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]);
                     o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}");
                 }
