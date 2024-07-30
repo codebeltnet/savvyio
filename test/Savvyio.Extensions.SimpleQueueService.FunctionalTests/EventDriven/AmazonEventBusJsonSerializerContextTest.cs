@@ -65,6 +65,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             
             await _bus.SubscribeAsync((sut2, _) =>
             {
+                if (!sut2.Type.Contains($"{BuildType}.updated-event")) { return Task.CompletedTask; }
                 handlerInvocations++;
                 Assert.Equivalent(sut1.Data, sut2.Data);
                 Assert.Equivalent(sut1.Time, sut2.Time);
@@ -98,6 +99,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             
             await _bus.SubscribeAsync((sut2, _) =>
             {
+                if (!sut2.Type.Contains($"{BuildType}.updated-event.signed")) { return Task.CompletedTask; }
                 ((ISignedMessage<IIntegrationEvent>)sut2).CheckSignature(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
                 handlerInvocations++;
                 Assert.Equivalent(sut1.Data, sut2.Data);
@@ -132,6 +134,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             
             await _bus.SubscribeAsync((sut2, _) =>
             {
+                if (!sut2.Type.Contains($"{BuildType}.updated-event.cloud-event")) { return Task.CompletedTask; }
                 handlerInvocations++;
                 Assert.Equivalent(sut1.Data, sut2.Data);
                 Assert.Equivalent(sut1.Time, sut2.Time);
@@ -166,6 +169,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             
             await _bus.SubscribeAsync((sut2, _) =>
             {
+                if (!sut2.Type.Contains($"{BuildType}.updated-event.signed-cloud-event")) { return Task.CompletedTask; }
                 ((ISignedCloudEvent<IIntegrationEvent>)sut2).CheckCloudEventSignature(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
                 handlerInvocations++;
                 Assert.Equivalent(sut1.Data, sut2.Data);
@@ -184,7 +188,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var messages = Generate.RangeOf(100, _ =>
             {
                 var email = $"{Generate.RandomString(5)}@outlook.com";
-                return new MemberCreated(Generate.RandomString(10), email).ToMessage((IsLinux ? "member-events-many" : "member-events-many.fifo").ToSnsUri(), nameof(MemberCreated));
+                return new MemberCreated(Generate.RandomString(10), email).ToMessage((IsLinux ? "member-events-many" : "member-events-many.fifo").ToSnsUri(), $"{nameof(MemberCreated)}.{BuildType}");
             });
 
             await ParallelFactory.ForEachAsync(messages, (message, token) =>
@@ -197,12 +201,13 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         [Fact, Priority(9)]
         public async Task SubscribeAsync_MemberCreated_All()
         {
-            var sut1 = Comparer.Query(message => message.Source.Contains("member-events-many")).ToList();
+            var sut1 = Comparer.Query(message => message.Source.Contains("member-events-many") && message.Type.Contains($"{BuildType}")).ToList();
             var sut2 = new List<IMessage<IIntegrationEvent>>();
             var sut3 = new CancellationTokenSource(TimeSpan.FromSeconds(30));
 
             await _bus.SubscribeAsync((message, _) =>
             {
+                if (!message.Type.Contains($"{BuildType}")) { return Task.CompletedTask; }  
                 sut2.Add(message);
                 return Task.CompletedTask;
             }, o => o.CancellationToken = sut3.Token).ConfigureAwait(false);
