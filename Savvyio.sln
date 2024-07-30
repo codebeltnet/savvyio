@@ -109,6 +109,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.Commands.Messaging"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Savvyio.EventDriven.Messaging", "src\Savvyio.EventDriven.Messaging\Savvyio.EventDriven.Messaging.csproj", "{809D779F-2F62-4BFF-A6E2-82A5FA2E4142}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Savvyio.Extensions.SimpleQueueService.FunctionalTests", "test\Savvyio.Extensions.SimpleQueueService.FunctionalTests\Savvyio.Extensions.SimpleQueueService.FunctionalTests.csproj", "{3112CB5C-627B-4A4B-83E4-53AB0769E989}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -319,6 +321,10 @@ Global
 		{809D779F-2F62-4BFF-A6E2-82A5FA2E4142}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{809D779F-2F62-4BFF-A6E2-82A5FA2E4142}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{809D779F-2F62-4BFF-A6E2-82A5FA2E4142}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3112CB5C-627B-4A4B-83E4-53AB0769E989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3112CB5C-627B-4A4B-83E4-53AB0769E989}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3112CB5C-627B-4A4B-83E4-53AB0769E989}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3112CB5C-627B-4A4B-83E4-53AB0769E989}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -375,6 +381,7 @@ Global
 		{9B1F27F1-D3F7-466F-99EC-FFCB2A08636C} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
 		{41658989-6AC0-4006-8023-55754A7D84A1} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
 		{809D779F-2F62-4BFF-A6E2-82A5FA2E4142} = {0E75F0C5-DBEB-4B6D-AC52-98656CA79A7D}
+		{3112CB5C-627B-4A4B-83E4-53AB0769E989} = {407762FB-26D8-435F-AE16-C76791EC9FEC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8DDAD51-08E6-42B5-970B-2DC88D44297B}

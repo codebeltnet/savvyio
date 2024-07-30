@@ -246,7 +246,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                     o.SourceQueue = new Uri($"http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/{queue}");
                     o.ConfigureClient(client =>
                     {
-                        client.ServiceURL = "http://localhost:4566";
+                        client.ServiceURL = Configuration["AWS:LocalStack"];
                         client.AuthenticationRegion = RegionEndpoint.EUWest1.SystemName;
                     });
                 }

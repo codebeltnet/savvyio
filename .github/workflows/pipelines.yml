@@ -127,6 +127,7 @@ jobs:
           AWS__CALLERIDENTITY: ${{ secrets.AWS_CALLER_IDENTITY }}
           AWS__IAM__ACCESSKEY: ${{ secrets.AWS_IAM_ACCESSKEY }}
           AWS__IAM__SECRETKEY: ${{ secrets.AWS_IAM_SECRETKEY }}
+          AWS__LOCALSTACK: ${{ secrets.AWS_LOCALSTACK }}
 
   sonarcloud:
     name: 🔬 Code Quality Analysis

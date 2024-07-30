@@ -1,0 +1,20 @@
+# Use the LocalStack base image
+FROM localstack/localstack:3.5.0
+
+# Expose the port for LocalStack
+EXPOSE 4566
+
+# Set environment variables for LocalStack
+ENV SERVICES=sns,sqs
+ENV DEBUG=0
+ENV DISABLE_CORS_CHECKS=1
+ENV PARITY_AWS_ACCESS_KEY_ID=1
+ENV AWS_DEFAULT_REGION=eu-west-1
+ENV AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
+ENV AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+ENV AWS_ENDPOINT_URL=http://localhost.localstack.cloud:4566
+ENV AWS_DEFAULT_OUTPUT=table
+
+# Copy entrypoint script into the container
+COPY --chown=localstack init-aws.sh /etc/localstack/init/ready.d/init-aws.sh
+RUN chmod +x /etc/localstack/init/ready.d/init-aws.sh
