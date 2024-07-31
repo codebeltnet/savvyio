@@ -26,6 +26,7 @@ using Xunit;
 using Xunit.Abstractions;
 using Xunit.Priority;
 using Cuemon.Extensions.Reflection;
+using Savvyio.Extensions.DependencyInjection;
 
 namespace Savvyio.Extensions.SimpleQueueService.EventDriven
 {
@@ -224,23 +225,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IMarshaller, NewtonsoftJsonMarshaller>(_ =>
-            {
-                var newtonsoftjsonSerializer = new NewtonsoftJsonMarshaller(o =>
-                {
-                    o.Settings.DateParseHandling = DateParseHandling.DateTime;
-                    o.Settings.ContractResolver = new CamelCasePropertyNamesContractResolver
-                    {
-                        IgnoreSerializableInterface = true,
-                        NamingStrategy = new CamelCaseNamingStrategy
-                        {
-                            ProcessDictionaryKeys = true
-                        }
-                    };
-                });
-                return newtonsoftjsonSerializer;
-            });
-
+            services.AddMarshaller<NewtonsoftJsonMarshaller>();
             services.AddAmazonEventBus(o =>
             {
 	            var queue = IsLinux ? "newtonsoft-savvyio-events" : "newtonsoft-savvyio-events.fifo";
