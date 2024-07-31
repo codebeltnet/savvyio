@@ -27,7 +27,7 @@ All CI and CD integrations have been migrated away from [Microsoft Azure DevOps]
 
 All code quality analysis are done by [SonarCloud](https://sonarcloud.io/) and [CodeCov.io](https://codecov.io/).
 
-![License](https://img.shields.io/github/license/codebeltnet/classlib-savvyio) ![Build Status](https://github.com/codebeltnet/savvyio/actions/workflows/pipelines.yml/badge.svg?branch=main) [![codecov](https://codecov.io/gh/codebeltnet/classlib-savvyio/branch/development/graph/badge.svg)](https://codecov.io/gh/codebeltnet/classlib-savvyio) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=savvyio&metric=coverage)](https://sonarcloud.io/dashboard?id=savvyio) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](.github/CODE_OF_CONDUCT.md)
+![License](https://img.shields.io/github/license/codebeltnet/savvyio) ![Build Status](https://github.com/codebeltnet/savvyio/actions/workflows/pipelines.yml/badge.svg?branch=main) [![codecov](https://codecov.io/gh/codebeltnet/savvyio/branch/development/graph/badge.svg)](https://codecov.io/gh/codebeltnet/classlib-savvyio) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=savvyio&metric=coverage)](https://sonarcloud.io/dashboard?id=savvyio) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](.github/CODE_OF_CONDUCT.md)
 
 ## Branching Strategy
 
