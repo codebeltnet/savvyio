@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Extend the Savvy I/O support for Microsoft Dependency Injection with Microsoft Entity Framework Core implementation - optimized for DDD (Domain Driven Design).</Description>
+    <PackageTags>ddd domain-driven-design aggregate-repository efcore entity-framework-core di depedency-injection marker data-store dao data-access-object repository</PackageTags>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Savvyio.Domain\Savvyio.Domain.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.Domain\Savvyio.Extensions.DependencyInjection.Domain.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.EFCore\Savvyio.Extensions.DependencyInjection.EFCore.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.EFCore.Domain\Savvyio.Extensions.EFCore.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

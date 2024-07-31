@@ -1,0 +1,31 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.1.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- CHANGED UseAutomaticDispatcherDiscovery extension method on the SavvyioOptionsExtensions class in the Savvyio.Extensions namespace to include an optional boolean parameter; bruteAssemblyScanning that defaults to false (former implementation would be equivalent to true)
+- CHANGED UseAutomaticHandlerDiscovery extension method on the SavvyioOptionsExtensions class in the Savvyio.Extensions namespace to include an optional boolean parameter; bruteAssemblyScanning that defaults to false (former implementation would be equivalent to true)
+ 
+Version: 1.0.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+ 
+- ADDED IMediator interface in the Savvyio.Extensions namespace that defines a mediator to encapsulate requests (Fire-and-Forget/In-Only) and request/response (Request-Reply/In-Out) message exchange patterns
+- ADDED Mediator class in the Savvyio.Extensions namespace that provides a default implementation of the IMediator interface
+- ADDED SavvyioOptionsExtensions class in the Savvyio.Extensions namespace that consist of extension methods for the SavvyioOptions class: AddMediator, UseAutomaticDispatcherDiscovery, UseAutomaticHandlerDiscovery
+ 

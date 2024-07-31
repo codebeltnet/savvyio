@@ -1,0 +1,18 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# New Features
+- ADDED MessageExtensions class in the Savvyio.Messaging.Cryptography namespace that consist of extension methods for the IMessage{T} interface: Sign{T}
+- ADDED SignedMessage{T} record in the Savvyio.Messaging.Cryptography namespace that provides a default implementation of the ISignedMessage{T} interface
+- ADDED SignedMessageExtensions class in the Savvyio.Messaging.Cryptography namespace that consist of extension methods for the ISignedMessage{T} interface: CheckSignature{T}
+- ADDED SignedMessageOptions class in the Savvyio.Messaging.Cryptography namespace that specifies options that is related to wrapping an IRequest implementation inside a cryptographically signed message
+- ADDED Acknowledgeable class in the Savvyio.Messaging namespace that provides a default implementation of the IAcknowledgeable interface
+- ADDED Message record in the Savvyio.Messaging namespace that provides a default implementation of the IMessage{T} interface
+- ADDED MessageAsyncEnumerable class in the Savvyio.Messaging namespace that exposes an enumerator that provides asynchronous iteration over values of a specified type
+- ADDED MessageAsyncEnumerableOptions class in the Savvyio.Messaging namespace that specifies options that is related to IAcknowledgeable messages
+- ADDED MessageExtensions class in the Savvyio.Messaging namespace that consist of extension methods for the IMessage{T} interface: Clone{T}
+- ADDED MessageOptions class in the Savvyio.Messaging namespace that is related to wrapping an IRequest implementation inside a message
+ 

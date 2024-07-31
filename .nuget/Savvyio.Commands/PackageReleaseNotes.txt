@@ -1,0 +1,59 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# Breaking Changes
+- MOVED CommandExtensions class from the Savvyio.Commands.Messaging namespace to its own assembly (Savvyio.Commands.Messaging)
+- MOVED InMemoryCommandQueue record from the Savvyio.Commands.Messaging namespace to its own assembly (Savvyio.Commands.Messaging)
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.1.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Improvements
+- REMOVED MessageExtensions class in the Savvyio.Commands.Messaging.Cryptography namespace to favor the new generic equivalent in the Savvyio.Messaging.Cryptography namespace
+ 
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# New Features
+- ADDED MessageExtensions class in the Savvyio.Commands.Messaging.Cryptography namespace that consist of extension methods for the IMessage{T} interface: Sign{T}
+- ADDED MemoryCommandQueue class in the Savvyio.Commands.Messaging namespace that provides an in-memory implementation of the IPointToPointChannel{TRequest} interface useful for unit testing and the likes thereof  <----
+ 
+# Breaking Changes
+- RENAMED EncloseToMessage{T} extension method on the CommandExtensions class in the Savvyio.Commands.Messaging namespace to ToMessage{T}
+- CHANGED ToMessage{T} extension method on the CommandExtensions class in the Savvyio.Commands.Messaging namespace to include a string that describes the type of command
+- RENAMED MemoryCommandQueue class in the Savvyio.Commands.Messaging namespace to InMemoryCommandQueue (consistency with Microsoft naming convention)
+- MOVED ICommand interface in the Savvyio.Commands namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED ICommandDispatcher interface in the Savvyio.Commands namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED ICommandHandler interface in the Savvyio.Commands namespace to the namespace equivalent in the Savvyio.Core assembly
+ 
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED CommandExtensions class in the Savvyio.Commands.Messaging namespace that consist of extension methods for the ICommand interface: EncloseToMessage{T}
+- ADDED MemoryCommandQueue class in the Savvyio.Commands.Messaging namespace that provides an in-memory implementation of the IPointToPointChannel{TRequest} interface useful for unit testing and the likes thereof
+ 
+# Improvements
+- CHANGED Command record in the Savvyio.Commands namespace to include a default/fallback correlation identifier
+ 
+Version: 1.0.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED Command record in the Savvyio.Commands namespace that provides a default implementation of the ICommand interface
+- ADDED CommandDispatcher class in the Savvyio.Commands namespace that provides a default implementation of the ICommandDispatcher interface
+- ADDED CommandHandler class in the Savvyio.Commands namespace that defines a generic and consistent way of handling Command objects that implements the ICommand interface
+- ADDED ICommand interface in the Savvyio.Commands namespace that defines a marker interface that specifies an intention to do something (e.g. change the state)
+- ADDED ICommandDispatcher interface in the Savvyio.Commands namespace that defines a Command dispatcher that uses Fire-and-Forget/In-Only MEP
+- ADDED ICommandHandler interface in the Savvyio.Commands namespace that defines a handler responsible for objects that implements the ICommand interface
+- ADDED SavvyioOptionsExtensions class in the Savvyio.Commands namespace that consist of extension methods for the SavvyioOptions class: AddCommandHandler, AddCommandDispatcher
+ 

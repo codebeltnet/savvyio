@@ -1,0 +1,76 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- RENAMED ConfigureTriple{TOptions} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace to: AddConfiguredOptions{TOptions}
+ 
+# New Features
+- EXTENDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Domain namespace with a new extension method for the IServiceCollection interface: AddUnitOfWork{TService}
+ 
+# Improvements
+- CHANGED AddDataStore{TService, T} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Data namespace to use a default lifetime of Scoped
+- CHANGED AddDataStore{TService, T, TOptions} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Data namespace to use a default lifetime of Scoped
+- CHANGED AddRepository{TService, TEntity, TKey} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Domain namespace to use a default lifetime of Scoped
+- CHANGED AddMarshaller{TService} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace to use a default lifetime of Singleton
+- CHANGED AddDataSource{TService} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace to use a default lifetime of Scoped
+ 
+Version: 2.2.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.1.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# New Features
+- EXTENDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace with new extension methods for the IServiceCollection interface: AddMarshaller{TService} and ConfigureTriple{TOptions}
+ 
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED IPointToPointChannel{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a bus that is used for interacting with other subsystems (out-process/inter-application) to do something (e.g., change the state)
+- ADDED IPublisher{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a publisher/sender channel for interacting with other subsystems (out-process/inter-application) to be notified (e.g., made aware of something that has happened)
+- ADDED IPublishSubscribeChannel{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a bus that is used for interacting with other subsystems (out-process/inter-application) to be notified (e.g., made aware of something that has happened)
+- ADDED IReceiver{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a consumer/receiver channel used by subsystems to receive a command and perform one or more actions (e.g., change the state)
+- ADDED ISender{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a producer/sender channel used for interacting with other subsystems (out-process/inter-application) to do something (e.g., change the state)
+- ADDED ISubscriber{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a subscriber/receiver channel used by subsystems to subscribe to messages (typically events) to be made aware of something that has happened
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Messaging namespace that consist of extension methods for the IServiceCollection interface: AddMessageQueue, AddMessageBus
+ 
+Version: 1.0.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED IDataSource interface in the Savvyio.Extensions.DependencyInjection namespace that defines a generic way to support multiple implementations that does the actual I/O communication with a source of data
+- ADDED SavvyioDependencyInjectionOptions class in the Savvyio.Extensions.DependencyInjection namespace that specifies options that is related to setting up Savvy I/O services
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace that consist of extension methods for the IServiceCollection interface: AddDataSource, AddServiceLocator, AddSavvyIO
+- ADDED ServiceLocatorOptions class in the in the Savvyio.Extensions.DependencyInjection that provides configuration options for IServiceLocator
+- ADDED IDataStore interface in the Savvyio.Extensions.DependencyInjection.Data namespace that defines a generic way to support multiple implementations of persistent data access based on the Data Access Object pattern
+- ADDED IDeletableDataStore interface in the Savvyio.Extensions.DependencyInjection.Data namespace that defines a generic way to support multiple implementations of deletable data access objects (cruD)
+- ADDED IPersistentDataStore interface in the Savvyio.Extensions.DependencyInjection.Data namespace that defines a generic way to support multiple implementations of the actual I/O communication with a data store that is responsible of persisting data (CRUD)
+- ADDED IReadableDataStore interface in the Savvyio.Extensions.DependencyInjection.Data namespace that defines a generic way to support multiple implementations of readable data access objects (cRud)
+- ADDED ISearchableDataStore interface in the Savvyio.Extensions.DependencyInjection.Data namespace that defines a generic way to support multiple implementations of searchable data access objects (cRud)
+- ADDED IWritableDataStore interface in the Savvyio.Extensions.DependencyInjection.Data namespace that defines a generic way to support multiple implementations of writable data access objects (CrUd)
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Data namespace that consist of extension methods for the IServiceCollection interface: AddDataStore
+- ADDED IDeletableRepository interface in the Savvyio.Extensions.DependencyInjection.Domain namespace that defines a generic way to support multiple implementations of deletable repositories (cruD)
+- ADDED IPersistentRepository interface in the Savvyio.Extensions.DependencyInjection.Domain namespace that defines a generic way to support multiple implementations of persistent repositories (CRUD)
+- ADDED IReadableRepository interface in the Savvyio.Extensions.DependencyInjection.Domain namespace that defines a generic way to support multiple implementations of readable repositories (cRud)
+- ADDED IRepository interface in the Savvyio.Extensions.DependencyInjection.Domain namespace that defines a generic way to support multiple implementations of persistent data access based on the Repository pattern
+- ADDED ISearchableRepository interface in the Savvyio.Extensions.DependencyInjection.Domain namespace that defines a generic way to support multiple implementations of searchable repositories (cRud)
+- ADDED IUnitOfWork interface in the Savvyio.Extensions.DependencyInjection.Domain namespace that defines a generic way to support multiple implementations that bundles transactions from multiple IPersistentRepository{TEntity,TKey} calls into a single unit
+- ADDED IWritableRepository interface in the Savvyio.Extensions.DependencyInjection.Domain namespace that defines a generic way to support multiple implementations of writable repositories (CrUd)
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Domain namespace that consist of extension methods for the IServiceCollection interface: AddRepository
+ 

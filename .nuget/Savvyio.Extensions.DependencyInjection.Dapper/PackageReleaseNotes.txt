@@ -1,0 +1,30 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.1.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+Version: 1.0.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED DapperDataSource class in the Savvyio.Extensions.DependencyInjection.Dapper namespace that provides a default implementation of the IDapperDataSource{TMarker} interface to support the actual I/O communication towards a data store using Dapper
+- ADDED DapperDataSourceOptions class in the Savvyio.Extensions.DependencyInjection.Dapper namespace that provides configuration options for IDapperDataSource{TMarker}
+- ADDED IDapperDataSource interface in the Savvyio.Extensions.DependencyInjection.Dapper namespace that defines a generic way to support multiple implementations that does the actual I/O communication towards a data store optimized for Dapper
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Dapper namespace that consist of extension methods for the IServiceCollection interface: AddDapperDataSource, AddDapperDataStore
+ 

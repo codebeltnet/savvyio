@@ -1,0 +1,71 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# New Features
+- ADDED CloudEventExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace that consist of extension methods for the ICloudEvent{T} interface: SignCloudEvent{T}
+- ADDED SignedCloudEventExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace that consist of extension methods for the ISignedCloudEvent{T} interface: CheckCloudEventSignature{T}
+- ADDED SignedCloudEvent{T} class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace that provides a default implementation of the ISignedCloudEvent{T} interface
+- ADDED CloudEvent{T} class in the Savvyio.EventDriven.Messaging.CloudEvents namespace that provides a default implementation of the ICloudEvent{T} interface
+- ADDED MessageExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents namespace that consist of extension methods for the IMessage{T} interface: ToCloudEvent{T}
+- ADDED IntegrationEventExtensions class in the Savvyio.EventDriven.Messaging namespace that consist of extension methods for the IIntegrationEvent interface: ToMessage{T}
+- ADDED InMemoryEventBus class in the Savvyio.EventDriven.Messaging namespace that provides an in-memory implementation of the IPublishSubscribeChannel{TRequest} interface useful for unit testing and the likes thereof
+ 
+Version: 2.1.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- RENAMED Sign{T} extension method on the CloudEventExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace to SignCloudEvent{T}
+ 
+# New Features
+- EXTENDED CloudEventExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace with new extension methods for the ISignedCloudEvent{T} interface: CheckCloudEventSignature{T}
+ 
+# Improvements
+- REMOVED MessageExtensions class in the Savvyio.EventDriven.Messaging.Cryptography namespace to favor the new generic equivalent in the Savvyio.Messaging.Cryptography namespace
+ 
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# New Features
+- ADDED MessageExtensions class in the Savvyio.EventDriven.Messaging.Cryptography namespace that consist of extension methods for the IMessage{T} interface: Sign{T}
+- ADDED CloudEventExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace that consist of extension methods for the ICloudEvent{T} interface: Sign{T}
+- ADDED SignedCloudEvent{T} class in the Savvyio.EventDriven.Messaging.CloudEvents.Cryptography namespace that provides a default implementation of the ISignedCloudEvent{T} interface
+- ADDED CloudEvent{T} class in the Savvyio.EventDriven.Messaging.CloudEvents namespace that provides a default implementation of the ICloudEvent{T} interface
+- ADDED MessageExtensions class in the Savvyio.EventDriven.Messaging.CloudEvents namespace that consist of extension methods for the IMessage{T} interface: ToCloudEvent{T}
+ 
+# Breaking Changes
+- RENAMED EncloseToMessage{T} extension method on the IntegrationEventExtensions class in the Savvyio.EventDriven.Messaging namespace to ToMessage{T}
+- RENAMED MemoryEventBus class in the Savvyio.EventDriven.Messaging namespace to InMemoryEventBus (consistency with Microsoft naming convention)
+- CHANGED ToMessage{T} extension method on the IntegrationEventExtensions class in the Savvyio.EventDriven.Messaging namespace to include a string that describes the type of event
+- MOVED IIntegrationEvent interface in the Savvyio.EventDriven namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED IIntegrationEventDispatcher interface in the Savvyio.EventDriven namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED IIntegrationEventHandler interface in the Savvyio.EventDriven namespace to the namespace equivalent in the Savvyio.Core assembly
+ 
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED IntegrationEventExtensions class in the Savvyio.EventDriven.Messaging namespace that consist of extension methods for the IIntegrationEvent interface: EncloseToMessage{T}
+- ADDED MemoryEventBus class in the Savvyio.EventDriven.Messaging namespace that provides an in-memory implementation of the IPublishSubscribeChannel{TRequest} interface useful for unit testing and the likes thereof
+ 
+# Improvements
+- CHANGED IntegrationEvent record in the Savvyio.EventDriven namespace to not care for member type (retrospective: this is only relevant for TracedDomainEvents)
+ 
+Version: 1.0.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED IIntegrationEvent interface in the Savvyio.EventDriven namespace that defines a marker interface that specifies something that happened when an Aggregate was successfully persisted and you want other subsystems (out-process/inter-application) to be made aware of
+- ADDED IIntegrationEventDispatcher interface in the Savvyio.EventDriven namespace that defines an Integration Event dispatcher that uses Fire-and-Forget/In-Only MEP
+- ADDED IIntegrationEventHandler interface in the Savvyio.EventDriven namespace that specifies a handler responsible for objects that implements the IIntegrationEvent interface
+- ADDED IntegrationEvent record in the Savvyio.EventDriven namespace that provides a default implementation of of the IIntegrationEvent interface
+- ADDED IntegrationEventDispatcher class in the Savvyio.EventDriven namespace that provides a default implementation of of the IIntegrationEventDispatcher interface
+- ADDED IntegrationEventExtensions class in the Savvyio.EventDriven namespace that consist of extension methods for the IIntegrationEvent interface: GetEventId, GetTimestamp, GetMemberType
+- ADDED IntegrationEventHandler class in the Savvyio.EventDriven namespace that provides a generic and consistent way of handling Integration Event objects that implements the IIntegrationEvent interface
+- ADDED SavvyioOptionsExtensions class in the Savvyio.EventDriven namespace that consist of extension methods for the SavvyioOptions class: AddIntegrationEventHandler, AddIntegrationEventDispatcher
+ 

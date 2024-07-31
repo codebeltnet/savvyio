@@ -1,0 +1,35 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.2.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.1.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# New Features
+- EXTENDED JsonMarshaller class in the Savvyio.Extensions.Text.Json namespace to include a new static method: Default (that provides a default instance of the JsonMarshaller class optimized for messaging)
+ 
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# New Features
+- ADDED DateTimeConverter class in the Savvyio.Extensions.Text.Json.Converters namespace that converts a DateTime value to or from JSON using ISO8601
+- ADDED DateTimeOffsetConverter class in the Savvyio.Extensions.Text.Json.Converters namespace that converts a DateTimeOffset value to or from JSON using ISO8601
+- ADDED MessageConverter class in the Savvyio.Extensions.Text.Json.Converters namespace that converts IMessage{T} (or derived) implementations to or from JSON
+- ADDED MetadataDictionaryConverter class in the Savvyio.Extensions.Text.Json.Converters namespace that converts IMetadataDictionary implementations to or from JSON
+- ADDED RequestConverter class in the Savvyio.Extensions.Text.Json.Converters namespace that converts IRequest implementations to or from JSON
+- ADDED SingleValueObjectConverter class in the Savvyio.Extensions.Text.Json.Converters namespace that converts a SingleValueObject{T} to or from JSON
+- ADDED JsonConverterExtensions class in the Savvyio.Extensions.Text.Json namespace that consist of extension methods for the JsonConverter class: RemoveAllOf, RemoveAllOf{T}, AddMetadataDictionaryConverter, AddMessageConverter, AddRequestConverter, AddDateTimeConverter, AddDateTimeOffsetConverter and AddSingleValueObjectConverter
+- ADDED JsonMarshaller class in the Savvyio.Extensions.Text.Json namespace that provides a class for marshalling data using native JSON support in .NET
+- ADDED JsonSerializerOptionsExtensions class in the Savvyio.Extensions.Text.Json namespace that consist of extension methods for the JsonSerializerOptions class: Clone
+ 

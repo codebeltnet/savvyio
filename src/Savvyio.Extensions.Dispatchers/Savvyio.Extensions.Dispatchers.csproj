@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Savvyio.Extensions</RootNamespace>
+    <Description>Extend the Savvy I/O core assemblies with Mediator support to provide a uniform way of working with DDD, CQRS and Event driven architecture.</Description>
+    <PackageTags>mediator command domain-event integration-event query commit commit-async raise raise-async publish publish-async query-async</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Savvyio.Commands\Savvyio.Commands.csproj" />
+    <ProjectReference Include="..\Savvyio.Core\Savvyio.Core.csproj" />
+    <ProjectReference Include="..\Savvyio.Domain\Savvyio.Domain.csproj" />
+    <ProjectReference Include="..\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
+    <ProjectReference Include="..\Savvyio.Queries\Savvyio.Queries.csproj" />
+  </ItemGroup>
+
+</Project>

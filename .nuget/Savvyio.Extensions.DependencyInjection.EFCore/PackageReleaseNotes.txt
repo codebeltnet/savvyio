@@ -1,0 +1,38 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- RENAMED DefaultEfCoreDataStore{T, TMarker} class in the Savvyio.Extensions.DependencyInjection.EFCore namespace to EfCoreDataStore{T, TMarker}
+- REMOVED EfCoreServiceOptions class from the Savvyio.Extensions.DependencyInjection.EFCore namespace
+ 
+Version: 2.1.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+Version: 1.0.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED DefaultEfCoreDataStore class in the Savvyio.Extensions.DependencyInjection.EFCore namespace that provides a default implementation of the IPersistentDataStore{T,TOptions,TMarker} interface to support multiple implementations that serves as an abstraction layer before the actual I/O communication with a source of data using Microsoft Entity Framework Core
+- ADDED EfCoreDataSource class in the Savvyio.Extensions.DependencyInjection.EFCore namespace that provides a default implementation of the IEfCoreDataSource{TMarker} interface to support multiple implementations that does the actual I/O communication with a source of data using Microsoft Entity Framework Core
+- ADDED EfCoreDataSourceOptions class in the Savvyio.Extensions.EFCore namespace that provides configuration options for IEfCoreDataStore{TMarker}
+- ADDED EfCoreDbContext class in the Savvyio.Extensions.DependencyInjection.EFCore namespace that provides a default implementation of the DbContext class to support Savvy I/O extensions of Microsoft Entity Framework Core in multiple implementations
+- ADDED EfCoreRepository class in the Savvyio.Extensions.DependencyInjection.EFCore namespace that provides a default implementation of the IPersistentRepository{TEntity,TKey,TMarker} interface to support multiple implementations that serves as an abstraction layer before the actual I/O communication towards a data store using Microsoft Entity Framework Core
+- ADDED EfCoreServiceOptions class in the Savvyio.Extensions.DependencyInjection.EFCore namespace that provides configuration options for Microsoft Dependency Injection
+- ADDED IEfCoreDataSource interface in the Savvyio.Extensions.DependencyInjection.EFCore namespace that defines a generic way to support multiple implementations that does the actual I/O communication towards a data store using Microsoft Entity Framework Core
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.EFCore namespace that consist of extension methods for the IServiceCollection interface: AddEfCoreDataSource, AddEfCoreRepository, AddEfCoreDataStore, AddDefaultEfCoreDataStore
+ 

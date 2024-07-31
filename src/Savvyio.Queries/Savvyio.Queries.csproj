@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Provides the fundamental classes and interfaces to work with the Query part of the CQRS pattern (Command and Query Responsibility Segregation).</Description>
+    <PackageTags>cqrs query query-async query-handler</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Savvyio.Core\Savvyio.Core.csproj" />
+  </ItemGroup>
+
+</Project>

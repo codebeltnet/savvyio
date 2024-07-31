@@ -1,0 +1,40 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Improvements
+- CHANGED AddAmazonCommandQueue extension methods on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService namespace to use a default lifetime of Singleton
+- CHANGED AddAmazonEventBus extension methods on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService namespace to use a default lifetime of Singleton
+ 
+Version: 2.1.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- CHANGED AmazonCommandQueue{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.Commands namespace to use AmazonCommandQueueOptions{TMarker} instead of IOptions{AmazonCommandQueueOptions{TMarker}} on the constructor
+- CHANGED AmazonEventBus{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.Commands namespace to use AmazonEventBusOptions{TMarker} instead of IOptions{AmazonEventBusOptions{TMarker}} on the constructor
+ 
+# Improvements
+- CHANGED AmazonCommandQueue{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.Commands namespace to include an IMarshaller interface in the constructor that is used when converting ICommand implementations to messages
+- CHANGED AmazonEventBus{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.EventDriven namespace to include an IMarshaller interface in the constructor that is used when converting IIntegrationEvent implementations to messages
+ 
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED AmazonCommandQueue{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.Commands namespace that provides a default implementation of the AmazonQueue{TRequest} class tailored for messages holding an ICommand implementation
+- ADDED AmazonCommandQueueOptions{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.Commands namespace that provides configuration options for AmazonCommandQueue{TMarker}
+- ADDED AmazonEventBus{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.EventDriven namespace that provides a default implementation of the AmazonBus{TRequest} class tailored for messages holding an IIntegrationEvent implementation
+- ADDED AmazonEventBusOptions{TMarker} class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService.EventDriven namespace that provides configuration options for AmazonEventBus{TMarker}
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.SimpleQueueService namespace that consist of extension methods for the IServiceCollection interface: AddAmazonCommandQueue, AddAmazonEventBus
+ 

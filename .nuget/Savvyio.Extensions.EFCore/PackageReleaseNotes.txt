@@ -1,0 +1,54 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- REMOVED DefaultEfCoreDataStore{T} class in the Savvyio.Extensions.EFCore namespace
+- REFACTORED EfCoreDataStore{T, TOptions} abstract class in the Savvyio.Extensions.EFCore namespace to EfCoreDataStore{T} class using fixed EfCoreQueryOptions{T} while making it consistent with other default implementations
+ 
+# Improvements
+- CHANGED 
+ 
+Version: 2.2.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.1.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- CHANGED EfCoreDataSource class in the Savvyio.Extensions.EFCore namespace to use EfCoreDataSourceOptions instead of IOptions{EfCoreDataSourceOptions} on the constructor
+- CHANGED EfCoreDbContext class in the Savvyio.Extensions.EFCore namespace to use EfCoreDataSourceOptions instead of IOptions{EfCoreDataSourceOptions} on the constructor
+ 
+# Improvements
+- CHANGED EfCoreRepository{TEntity, TKey} class in the Savvyio.Extensions.EFCore namespace to allow access to a new protected property, Set, that returns DbSet{TEntity} and also marked remaining members as virtual
+ 
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+Version: 1.0.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED DefaultEfCoreDataStore class in the Savvyio.Extensions.EFCore namespace that provides a default implementation of the EfCoreDataStore{T,TOptions} class
+- ADDED EfCoreDataSource class in the Savvyio.Extensions.EFCore namespace that provides a default implementation of the IEfCoreDataSource interface to support the actual I/O communication towards a data store using Microsoft Entity Framework Core
+- ADDED EfCoreDataSourceOptions class in the Savvyio.Extensions.EFCore namespace that provides configuration options for IEfCoreDataStore
+- ADDED EfCoreDataStore class in the Savvyio.Extensions.EFCore namespace that represents the base class from which all implementations of EfCoreDataStore{T,TOptions} should derive
+- ADDED EfCoreDbContext class in the Savvyio.Extensions.EFCore namespace that provides a default implementation of the DbContext class to support Savvy I/O extensions of Microsoft Entity Framework Core in multiple implementations
+- ADDED EfCoreQueryOptions class in the Savvyio.Extensions.EFCore namespace that provides configuration options that is related to DefaultEfCoreDataStore{T}
+- ADDED EfCoreRepository class in the Savvyio.Extensions.EFCore namespace that provides a default implementation of the IPersistentRepository{TEntity,TKey,TMarker} interface to serve as an abstraction layer before the actual I/O communication towards a data store using Microsoft Entity Framework Core
+- ADDED IEfCoreDataStore interface in the Savvyio.Extensions.EFCore namespace that defines a generic way to support the actual I/O communication with a source of data - tailored to Microsoft Entity Framework Core
+ 

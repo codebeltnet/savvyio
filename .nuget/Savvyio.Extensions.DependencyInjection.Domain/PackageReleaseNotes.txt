@@ -1,0 +1,33 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Improvements
+- CHANGED AddAggregateRepository{TService, TEntity, TKey} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Domain namespace to use a default lifetime of Scoped
+ 
+Version: 2.1.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+Version: 1.0.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED IAggregateRepository interface in the Savvyio.Extensions.DependencyInjection.Domain namespace that defines a generic way to support multiple implementations of persistent repositories (CRUD) that is optimized for Domain Driven Design
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Domain namespace that consist of extension methods for the IServiceCollection interface: AddAggregateRepository
+- ADDED ITracedAggregateRepository interface in the Savvyio.Extensions.DependencyInjection.Domain.EventSourcing namespace that defines a generic way to support multiple implementations traced read- and writable repositories (CRud) that is optimized for Domain Driven Design
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Domain.EventSourcing namespace that consist of extension methods for the IServiceCollection interface: AddTracedAggregateRepository
+ 

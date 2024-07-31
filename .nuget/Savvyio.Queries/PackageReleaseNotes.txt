@@ -1,0 +1,38 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.1.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- MOVED IQuery interface in the Savvyio.Queries namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED IQueryDispatcher interface in the Savvyio.Queries namespace to the namespace equivalent in the Savvyio.Core assembly
+- MOVED IQueryHandler interface in the Savvyio.Queries namespace to the namespace equivalent in the Savvyio.Core assembly
+ 
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+Version: 1.0.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED IQuery interface in the Savvyio.Queries namespace that defines a marker interface that specifies something that returns data
+- ADDED IQueryDispatcher interface in the Savvyio.Queries namespace that defines a Query dispatcher that uses Request-Reply/In-Out MEP
+- ADDED IQueryHandler interface in the Savvyio.Queries namespace that defines a handler responsible for objects that implements the IQuery interface
+- ADDED Query record in the Savvyio.Queries namespace that provides a default implementation of the IQuery{TResult} interface
+- ADDED QueryDispatcher class in the Savvyio.Queries namespace that provides a default implementation of the IQueryDispatcher interface
+- ADDED QueryHandler class in the Savvyio.Queries namespace that defines a generic and consistent way of handling Query objects that implements the IQuery interface
+- ADDED SavvyioOptionsExtensions class in the Savvyio.Queries namespace that consist of extension methods for the SavvyioOptions class: AddQueryHandler, AddQueryDispatcher
+ 

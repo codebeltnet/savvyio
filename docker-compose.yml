@@ -1,0 +1,51 @@
+services:
+  localstack:
+    image: localstack/localstack:3.5.0
+    environment:
+      - SERVICES=sns,sqs
+      - DEBUG=0
+      - DISABLE_CORS_CHECKS=1
+      - PARITY_AWS_ACCESS_KEY_ID=1
+      - AWS_DEFAULT_REGION=eu-west-1
+    ports:
+      - "4566:4566"
+  awscli:
+    image: amazon/aws-cli:2.17.16
+    environment:
+      - AWS_DEFAULT_REGION=eu-west-1
+      - AWS_REGION=eu-west-1
+      - AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
+      - AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - AWS_DEFAULT_OUTPUT=table
+    depends_on:
+      localstack:
+        condition: service_healthy
+    entrypoint: /bin/sh -c
+    command: >
+      "
+        aws sqs create-queue --queue-name savvyio-commands
+        aws sqs create-queue --queue-name savvyio-commands.fifo --attributes FifoQueue=true,ContentBasedDeduplication=false
+        aws sqs create-queue --queue-name newtonsoft-savvyio-commands
+        aws sqs create-queue --queue-name newtonsoft-savvyio-commands.fifo --attributes FifoQueue=true,ContentBasedDeduplication=false
+        aws sqs create-queue --queue-name savvyio-events
+        aws sqs create-queue --queue-name savvyio-events.fifo --attributes FifoQueue=true,ContentBasedDeduplication=false
+        aws sqs create-queue --queue-name newtonsoft-savvyio-events
+        aws sqs create-queue --queue-name newtonsoft-savvyio-events.fifo --attributes FifoQueue=true,ContentBasedDeduplication=false
+        aws sns create-topic --name member-events-one
+        aws sns create-topic --name member-events-one.fifo --attributes FifoTopic=true,ContentBasedDeduplication=false
+        aws sns create-topic --name member-events-many
+        aws sns create-topic --name member-events-many.fifo --attributes FifoTopic=true,ContentBasedDeduplication=false
+        aws sns create-topic --name newtonsoft-member-events-one
+        aws sns create-topic --name newtonsoft-member-events-one.fifo --attributes FifoTopic=true,ContentBasedDeduplication=false
+        aws sns create-topic --name newtonsoft-member-events-many
+        aws sns create-topic --name newtonsoft-member-events-many.fifo --attributes FifoTopic=true,ContentBasedDeduplication=false
+        aws sns subscribe --topic-arn arn:aws:sns:eu-west-1:000000000000:member-events-one --protocol sqs --notification-endpoint arn:aws:sqs:eu-west-1:000000000000:savvyio-events --attributes RawMessageDelivery=true
+        aws sns subscribe --topic-arn arn:aws:sns:eu-west-1:000000000000:member-events-many --protocol sqs --notification-endpoint arn:aws:sqs:eu-west-1:000000000000:savvyio-events --attributes RawMessageDelivery=true
+        aws sns subscribe --topic-arn arn:aws:sns:eu-west-1:000000000000:member-events-one.fifo --protocol sqs --notification-endpoint arn:aws:sqs:eu-west-1:000000000000:savvyio-events.fifo --attributes RawMessageDelivery=true
+        aws sns subscribe --topic-arn arn:aws:sns:eu-west-1:000000000000:member-events-many.fifo --protocol sqs --notification-endpoint arn:aws:sqs:eu-west-1:000000000000:savvyio-events.fifo --attributes RawMessageDelivery=true
+        aws sns subscribe --topic-arn arn:aws:sns:eu-west-1:000000000000:newtonsoft-member-events-one --protocol sqs --notification-endpoint arn:aws:sqs:eu-west-1:000000000000:newtonsoft-savvyio-events --attributes RawMessageDelivery=true
+        aws sns subscribe --topic-arn arn:aws:sns:eu-west-1:000000000000:newtonsoft-member-events-many --protocol sqs --notification-endpoint arn:aws:sqs:eu-west-1:000000000000:newtonsoft-savvyio-events --attributes RawMessageDelivery=true
+        aws sns subscribe --topic-arn arn:aws:sns:eu-west-1:000000000000:newtonsoft-member-events-one.fifo --protocol sqs --notification-endpoint arn:aws:sqs:eu-west-1:000000000000:newtonsoft-savvyio-events.fifo --attributes RawMessageDelivery=true
+        aws sns subscribe --topic-arn arn:aws:sns:eu-west-1:000000000000:newtonsoft-member-events-many.fifo --protocol sqs --notification-endpoint arn:aws:sqs:eu-west-1:000000000000:newtonsoft-savvyio-events.fifo --attributes RawMessageDelivery=true
+      "

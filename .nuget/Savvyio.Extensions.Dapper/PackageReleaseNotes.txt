@@ -1,0 +1,37 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.2.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.1.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+Version: 1.0.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED DapperDataStore class in the Savvyio.Extensions.Dapper namespace that represents the base class from which all implementations of DapperDataStore{T,TOptions} should derive
+- ADDED DapperDataSource class in the Savvyio.Extensions.Dapper namespace that provides a default implementation of the IDapperDataSource interface to support the actual I/O communication towards a data store using Dapper
+- ADDED DapperDataSourceOptions class in the Savvyio.Extensions.Dapper namespace that provides configuration options for IDapperDataSource
+- ADDED DapperQueryOptions class in the Savvyio.Extensions.Dapper namespace that specifies options that is related to DapperDataStore{T,TOptions}
+- ADDED IDapperDataSource interface in the Savvyio.Extensions.Dapper namespace that defines a generic way to support the actual I/O communication towards a data store optimized for Dapper
+ 

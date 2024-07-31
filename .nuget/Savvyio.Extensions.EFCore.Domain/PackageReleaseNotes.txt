@@ -1,0 +1,38 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.2.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.1.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- CHANGED EfCoreAggregateDataSource class in the Savvyio.Extensions.EFCore.Domain namespace to use EfCoreDataSourceOptions instead of IOptions{EfCoreDataSourceOptions} on the constructor
+ 
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+Version: 1.0.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED DomainEventDispatcherExtensions class in the Savvyio.Extensions.EFCore.Domain namespace that consist of extension methods for the IDomainEventDispatcher interface: RaiseMany, RaiseManyAsync
+- ADDED EfCoreAggregateDataSource class in the Savvyio.Extensions.EFCore.Domain namespace that provides an implementation of the EfCoreDataSource that is optimized for Domain Driven Design and the concept of Aggregate Root
+- ADDED EfCoreAggregateRepository class in the Savvyio.Extensions.EFCore.Domain namespace that provides an implementation of the EfCoreRepository{TEntity,TKey} that is optimized for Domain Driven Design
+ 

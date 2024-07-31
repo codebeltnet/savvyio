@@ -1,0 +1,36 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Improvements
+- CHANGED AddEfCoreAggregateDataSource extension methods on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.EFCore.Domain namespace to use Action{ServiceOptions} instead of Action{EfCoreServiceOptions}
+- CHANGED AddEfCoreAggregateRepository extension methods on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.EFCore.Domain namespace to use Action{ServiceOptions} instead of Action{EfCoreServiceOptions}
+ 
+Version: 2.1.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+Version: 2.0.0
+Availability: .NET 8, .NET 7 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- CHANGED EfCoreAggregateDataSource{TMarker} class in the Savvyio.Extensions.DependencyInjection.EFCore.Domain namespace to use EfCoreDataSourceOptions instead of IOptions{EfCoreDataSourceOptions} on the constructor
+ 
+Version: 1.1.0
+Availability: .NET 7.0, .NET 6.0
+ 
+Version: 1.0.0
+Availability: .NET 7.0, .NET 6.0
+ 
+# New Features
+- ADDED EfCoreAggregateDataSource class in the Savvyio.Extensions.DependencyInjection.EFCore.Domain namespace that provides an implementation of the EfCoreDataSource that is optimized for Domain Driven Design and the concept of Aggregate Root
+- ADDED EfCoreAggregateRepository class in the Savvyio.Extensions.DependencyInjection.EFCore.Domain namespace that provides an implementation of the EfCoreRepository{TEntity,TKey} that is optimized for Domain Driven Design
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.EFCore.Domain namespace that consist of extension methods for the IServiceCollection interface: AddEfCoreAggregateDataSource, AddEfCoreAggregateRepository
+ 
