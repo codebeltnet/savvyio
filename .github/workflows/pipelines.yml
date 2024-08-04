@@ -123,6 +123,7 @@ jobs:
           projects: ${{ matrix.project }}
           configuration: ${{ matrix.configuration }}
           buildSwitches: -p:SkipSignAssembly=true
+          level: normal
         env:
           AWS__CALLERIDENTITY: ${{ secrets.AWS_CALLER_IDENTITY }}
           AWS__IAM__ACCESSKEY: ${{ secrets.AWS_IAM_ACCESSKEY }}

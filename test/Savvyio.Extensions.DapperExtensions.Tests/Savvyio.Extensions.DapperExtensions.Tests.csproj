@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.6" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Savvyio.Extensions.DapperExtensions\Savvyio.Extensions.DapperExtensions.csproj" />
     <ProjectReference Include="..\Savvyio.Assets.Dapper.Tests\Savvyio.Assets.Dapper.Tests.csproj" />
     <ProjectReference Include="..\Savvyio.Assets.Tests\Savvyio.Assets.Tests.csproj" />

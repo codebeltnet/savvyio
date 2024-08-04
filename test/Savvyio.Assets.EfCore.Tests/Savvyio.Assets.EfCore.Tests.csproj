@@ -6,13 +6,13 @@
 
   
   <ItemGroup Condition="$(TargetFramework.StartsWith('net8'))">
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.7" />
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('net6'))">
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.31" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.31" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.32" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.32" />
   </ItemGroup>
 
   <ItemGroup>

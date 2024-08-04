@@ -53,6 +53,26 @@ namespace Savvyio.Extensions.DependencyInjection
         }
 
         /// <summary>
+        /// Adds an implementation of <see cref="IMarshaller" /> to the specified <see cref="IServiceCollection" />.
+        /// </summary>
+        /// <typeparam name="TService">The type of the <see cref="IMarshaller"/> to add.</typeparam>
+        /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
+        /// <param name="implementationFactory">The function delegate that creates the service.</param>
+        /// <param name="setup">The <see cref="ServiceOptions" /> which may be configured.</param>
+        /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
+        public static IServiceCollection AddMarshaller<TService>(this IServiceCollection services, Func<IServiceProvider, TService> implementationFactory, Action<ServiceOptions> setup = null) where TService : class, IMarshaller
+        {
+            Validator.ThrowIfNull(services);
+            Validator.ThrowIfNull(implementationFactory);
+            var options = (setup ?? (o => o.Lifetime = ServiceLifetime.Singleton)).Configure();
+            return services.Add(implementationFactory, o =>
+            {
+                o.Lifetime = options.Lifetime;
+                o.NestedTypePredicate = type => type.HasInterfaces(typeof(IMarshaller));
+            });
+        }
+
+        /// <summary>
         /// Adds an implementation of <see cref="IDataSource" /> to the specified <see cref="IServiceCollection" />.
         /// </summary>
         /// <typeparam name="TService">The type of the <see cref="IDataSource"/> to add.</typeparam>
