@@ -5,16 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Extensions.Core" Version="8.3.1" />
-    <PackageReference Include="Cuemon.Extensions.Text.Json" Version="8.3.1" />
-    <PackageReference Include="Cuemon.Security.Cryptography" Version="8.3.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Savvyio.Commands\Savvyio.Commands.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Core\Savvyio.Core.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Domain\Savvyio.Domain.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.Text.Json\Savvyio.Extensions.Text.Json.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Queries\Savvyio.Queries.csproj" />
     <ProjectReference Include="..\Savvyio.Assets.Tests\Savvyio.Assets.Tests.csproj" />
   </ItemGroup>
