@@ -52,7 +52,7 @@ namespace Savvyio.Messaging
         /// <returns>An enumerator that can be used to iterate asynchronously through the collection.</returns>
         public virtual IAsyncEnumerator<IMessage<T>> GetAsyncEnumerator(CancellationToken cancellationToken = default)
         {
-            return new MessageAsyncEnumerator<T>(_source.GetAsyncEnumerator(cancellationToken), _options.AcknowledgedProperties, _options.MessageCallback, _options.AcknowledgedPropertiesCallback);
+            return new MessageAsyncEnumerator<T>(_source.GetAsyncEnumerator(cancellationToken), _options);
         }
     }
 }

@@ -28,23 +28,18 @@ namespace Savvyio.Messaging
         ///         <description><c>new ConcurrentBag&lt;IDictionary&lt;string, object&gt;&gt;()</c></description>
         ///     </item>
         ///     <item>
+        ///         <term><see cref="AcknowledgedPropertiesCallback"/></term>
+        ///         <description><c>null</c></description>
+        ///     </item>
+        ///     <item>
         ///         <term><see cref="MessageCallback"/></term>
-        ///         <description><code>message =&gt;
-        /// {
-        ///     message.Acknowledged += OnAcknowledgedAsync;
-        ///     return Task.CompletedTask;
-        /// };</code></description>
+        ///         <description><c>null</c></description>
         ///     </item>
         /// </list>
         /// </remarks>
         public MessageAsyncEnumerableOptions()
         {
             AcknowledgedProperties = new ConcurrentBag<IDictionary<string, object>>();
-            MessageCallback = message =>
-            {
-                message.Acknowledged += OnAcknowledgedAsync;
-                return Task.CompletedTask;
-            };
         }
 
         /// <summary>
@@ -64,13 +59,6 @@ namespace Savvyio.Messaging
         /// </summary>
         /// <value>The delegate that is invoked at the end of a sequence with all acknowledged properties.</value>
         public Func<IEnumerable<IDictionary<string, object>>, Task> AcknowledgedPropertiesCallback { get; set; }
-
-        private Task OnAcknowledgedAsync(object sender, AcknowledgedEventArgs e)
-        {
-            if (sender is IAcknowledgeable message) { message.Acknowledged -= OnAcknowledgedAsync; }
-            AcknowledgedProperties.TryAdd(e.Properties);
-            return Task.CompletedTask;
-        }
 
         /// <inheritdoc />
         public void ValidateOptions()
