@@ -10,10 +10,10 @@ namespace Savvyio.Messaging
     {
         private readonly IAsyncEnumerator<IMessage<T>> _source;
         private readonly IProducerConsumerCollection<IDictionary<string, object>> _acknowledgedProperties;
-        private readonly Action<IEnumerable<IDictionary<string, object>>> _acknowledgedPropertiesCallback;
-        private readonly Action<IMessage<T>> _messageCallback;
+        private readonly Func<IEnumerable<IDictionary<string, object>>, Task> _acknowledgedPropertiesCallback;
+        private readonly Func<IMessage<T>, Task> _messageCallback;
 
-        internal MessageAsyncEnumerator(IAsyncEnumerator<IMessage<T>> source, IProducerConsumerCollection<IDictionary<string, object>> acknowledgedProperties, Action<IMessage<T>> messageCallback, Action<IEnumerable<IDictionary<string, object>>> acknowledgedPropertiesCallback)
+        internal MessageAsyncEnumerator(IAsyncEnumerator<IMessage<T>> source, IProducerConsumerCollection<IDictionary<string, object>> acknowledgedProperties, Func<IMessage<T>, Task> messageCallback, Func<IEnumerable<IDictionary<string, object>>, Task> acknowledgedPropertiesCallback)
         {
             Validator.ThrowIfNull(source);
             Validator.ThrowIfNull(acknowledgedProperties);
@@ -35,13 +35,13 @@ namespace Savvyio.Messaging
             var mn = await _source.MoveNextAsync().ConfigureAwait(false);
             if (mn && _messageCallback != null)
             {
-                _messageCallback.Invoke(_source.Current);
+                await _messageCallback(_source.Current).ConfigureAwait(false);
             }
             else
             {
-                if (_acknowledgedProperties.Count > 0)
+                if (_acknowledgedProperties.Count > 0 && _acknowledgedPropertiesCallback != null)
                 {
-                    _acknowledgedPropertiesCallback?.Invoke(_acknowledgedProperties);
+                    await _acknowledgedPropertiesCallback(_acknowledgedProperties).ConfigureAwait(false);
                 }
             }
             return mn;

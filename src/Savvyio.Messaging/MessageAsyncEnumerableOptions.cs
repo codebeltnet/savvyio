@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Cuemon;
 using Cuemon.Configuration;
 
@@ -28,21 +29,29 @@ namespace Savvyio.Messaging
         ///     </item>
         ///     <item>
         ///         <term><see cref="MessageCallback"/></term>
-        ///         <description><c>message =&gt; message.Acknowledged += OnAcknowledged</c></description>
+        ///         <description><code>message =&gt;
+        /// {
+        ///     message.Acknowledged += OnAcknowledgedAsync;
+        ///     return Task.CompletedTask;
+        /// };</code></description>
         ///     </item>
         /// </list>
         /// </remarks>
         public MessageAsyncEnumerableOptions()
         {
             AcknowledgedProperties = new ConcurrentBag<IDictionary<string, object>>();
-            MessageCallback = message => message.Acknowledged += OnAcknowledged;
+            MessageCallback = message =>
+            {
+                message.Acknowledged += OnAcknowledgedAsync;
+                return Task.CompletedTask;
+            };
         }
 
         /// <summary>
         /// Gets or sets the delegate that is invoked once for each message fetched from a source.
         /// </summary>
         /// <value>The delegate that is invoked once for each message fetched from a source.</value>
-        public Action<IMessage<T>> MessageCallback { get; set; }
+        public Func<IMessage<T>, Task> MessageCallback { get; set; }
         
         /// <summary>
         /// Gets or sets the implementation of an <see cref="IProducerConsumerCollection{T}"/> that is used to store all acknowledged properties. Default is a new instance of <see cref="ConcurrentBag{T}"/>.
@@ -54,12 +63,13 @@ namespace Savvyio.Messaging
         /// Gets or sets the delegate that is invoked at the end of a sequence with all acknowledged properties.
         /// </summary>
         /// <value>The delegate that is invoked at the end of a sequence with all acknowledged properties.</value>
-        public Action<IEnumerable<IDictionary<string, object>>> AcknowledgedPropertiesCallback { get; set; }
+        public Func<IEnumerable<IDictionary<string, object>>, Task> AcknowledgedPropertiesCallback { get; set; }
 
-        private void OnAcknowledged(object sender, AcknowledgedEventArgs e)
+        private Task OnAcknowledgedAsync(object sender, AcknowledgedEventArgs e)
         {
+            if (sender is IAcknowledgeable message) { message.Acknowledged -= OnAcknowledgedAsync; }
             AcknowledgedProperties.TryAdd(e.Properties);
-            if (sender is IAcknowledgeable message) { message.Acknowledged -= OnAcknowledged; }
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc />

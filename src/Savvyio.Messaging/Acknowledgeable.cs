@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Savvyio.Messaging
 {
@@ -17,25 +17,25 @@ namespace Savvyio.Messaging
         }
 
         /// <inheritdoc />
-        public event EventHandler<AcknowledgedEventArgs> Acknowledged;
+        public event AsyncEventHandler<AcknowledgedEventArgs> Acknowledged;
 
         /// <inheritdoc />
         public IDictionary<string, object> Properties { get; }
 
         /// <inheritdoc />
-        public void Acknowledge()
+        public async Task AcknowledgeAsync()
         {
-            OnAcknowledged(new AcknowledgedEventArgs(Properties));
+            await OnAcknowledgedAsync(new AcknowledgedEventArgs(Properties)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Raises the <see cref="Acknowledged"/> event.
         /// </summary>
         /// <param name="e">The <see cref="AcknowledgedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnAcknowledged(AcknowledgedEventArgs e)
+        protected virtual async Task OnAcknowledgedAsync(AcknowledgedEventArgs e)
         {
             var handler = Acknowledged;
-            handler?.Invoke(this, e);
+            if (handler != null) { await handler(this, e).ConfigureAwait(false); }
         }
     }
 }

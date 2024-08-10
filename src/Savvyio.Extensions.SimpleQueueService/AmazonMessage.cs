@@ -141,11 +141,11 @@ namespace Savvyio.Extensions.SimpleQueueService
 
             await foreach (var message in new MessageAsyncEnumerable<TRequest>(deserializedMessages, o =>
                            {
-                               o.MessageCallback += message =>
+                               o.MessageCallback = async message =>
                                {
                                    if (Options.ReceiveContext.AssumeMessageProcessed)
                                    {
-                                       message.Acknowledge();
+                                       await message.AcknowledgeAsync().ConfigureAwait(false);
                                    }
                                };
                                o.AcknowledgedPropertiesCallback = async properties =>
