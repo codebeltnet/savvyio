@@ -6,13 +6,14 @@ using Azure.Storage;
 using Azure.Storage.Queues;
 using Cuemon;
 using Cuemon.Configuration;
+using Savvyio.Messaging;
 
-namespace Savvyio.Extensions.QueueStorage.Commands
+namespace Savvyio.Extensions.QueueStorage
 {
     /// <summary>  
-    /// Configuration options for <see cref="AzureCommandQueue"/>.
+    /// Configuration options for <see cref="AzureQueue{TRequest}"/>.
     /// </summary>  
-    public class AzureCommandQueueOptions : IValidatableParameterObject
+    public class AzureQueueOptions : IValidatableParameterObject
     {
         /// <summary>  
         /// The maximum number of messages that Azure Queue Storage supports when retrieving.
@@ -24,11 +25,16 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         /// </summary>  
         public static readonly TimeSpan MaxVisibilityTimeout = TimeSpan.FromDays(7);
 
+        private Action<QueueClient> _clientCallback;
+        private StorageSharedKeyCredential _storageKeyCredential;
+        private AzureSasCredential _sasCredential;
+        private TokenCredential _credential;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="AzureCommandQueueOptions"/> class.
+        /// Initializes a new instance of the <see cref="AzureQueueOptions"/> class.
         /// </summary>
         /// <remarks>
-        /// The following table shows the initial property values for an instance of <see cref="AzureCommandQueueOptions"/>.
+        /// The following table shows the initial property values for an instance of <see cref="AzureQueueOptions"/>.
         /// <list type="table">
         ///     <listheader>
         ///         <term>Property</term>
@@ -60,23 +66,23 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         ///     </item>
         /// </list>
         /// </remarks>
-        public AzureCommandQueueOptions()
+        public AzureQueueOptions()
         {
             Credential = new DefaultAzureCredential();
             Settings = new QueueClientOptions();
-            ReceiveContext = new AzureCommandQueueReceiveOptions();
-            SendContext = new AzureCommandQueueSendOptions();
+            ReceiveContext = new AzureQueueReceiveOptions();
+            SendContext = new AzureQueueSendOptions();
         }
 
         /// <summary>  
         /// Gets the options for receiving messages from the queue.
         /// </summary>  
-        public AzureCommandQueueReceiveOptions ReceiveContext { get; }
+        public AzureQueueReceiveOptions ReceiveContext { get; }
 
         /// <summary>  
         /// Gets the options for sending messages to the queue.
         /// </summary>  
-        public AzureCommandQueueSendOptions SendContext { get; }
+        public AzureQueueSendOptions SendContext { get; }
 
         /// <summary>  
         /// Gets or sets the name of the storage account.
@@ -90,18 +96,48 @@ namespace Savvyio.Extensions.QueueStorage.Commands
 
         /// <summary>  
         /// Gets or sets the credential used to authenticate with Azure.
-        /// </summary>  
-        public TokenCredential Credential { get; set; }
+        /// </summary>
+        /// <remarks>Setting this property will nullify <see cref="SasCredential"/> and <see cref="StorageKeyCredential"/> as they are mutually exclusive.</remarks>
+        public TokenCredential Credential
+        {
+            get => _credential;
+            set
+            {
+                _credential = value;
+                _sasCredential = null;
+                _storageKeyCredential = null;
+            }
+        }
 
         /// <summary>  
         /// Gets or sets the SAS credential used to authenticate with Azure.
-        /// </summary>  
-        public AzureSasCredential SasCredential { get; set; }
+        /// </summary>
+        /// <remarks>Setting this property will nullify <see cref="Credential"/> and <see cref="StorageKeyCredential"/> as they are mutually exclusive.</remarks>
+        public AzureSasCredential SasCredential
+        {
+            get => _sasCredential;
+            set
+            {
+                _sasCredential = value;
+                _credential = null;
+                _storageKeyCredential = null;
+            }
+        }
 
         /// <summary>  
         /// Gets or sets the storage key credential used to authenticate with Azure.
-        /// </summary>  
-        public StorageSharedKeyCredential StorageKeyCredential { get; set; }
+        /// </summary>
+        /// <remarks>Setting this property will nullify <see cref="Credential"/> and <see cref="SasCredential"/> as they are mutually exclusive.</remarks>
+        public StorageSharedKeyCredential StorageKeyCredential
+        {
+            get => _storageKeyCredential;
+            set
+            {
+                _storageKeyCredential = value;
+                _credential = null;
+                _sasCredential = null;
+            }
+        }
 
         /// <summary>  
         /// Gets or sets the connection string used to connect to the Azure storage account.
@@ -113,15 +149,13 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         /// </summary>  
         public QueueClientOptions Settings { get; }
 
-        private Action<QueueClient> _clientCallback;
-
         /// <summary>
         /// Provides a way to post-configure the client after it has been created.
         /// </summary>
         /// <param name="factory">The delegate to post-configure the client.</param>
         /// <returns>A reference to this instance.</returns>
         /// <remarks>This was added to support invoking methods of interest: https://learn.microsoft.com/en-us/dotnet/api/azure.storage.queues.queueclient?view=azure-dotnet#methods</remarks>
-        public AzureCommandQueueOptions PostConfigureClient(Action<QueueClient> factory)
+        public AzureQueueOptions PostConfigureClient(Action<QueueClient> factory)
         {
             _clientCallback = factory;
             return this;
@@ -144,9 +178,10 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         {
             Validator.ThrowIfInvalidState(!string.IsNullOrWhiteSpace(ConnectionString) && string.IsNullOrWhiteSpace(QueueName), $"{nameof(QueueName)} cannot be null, empty, or consists only of white-space when a {nameof(ConnectionString)} has been specified.");
 
-            Validator.ThrowIfInvalidState(Credential == null && SasCredential == null && StorageKeyCredential == null, "At least one credential type has to be specified for Azure authentication.");
+            Validator.ThrowIfInvalidState(Credential == null && SasCredential == null && StorageKeyCredential == null, "A credential type has to be specified for Azure authentication.");
 
             Validator.ThrowIfInvalidState(string.IsNullOrWhiteSpace(StorageAccountName) && string.IsNullOrWhiteSpace(QueueName), $"{nameof(StorageAccountName)} and {nameof(QueueName)} cannot be null, empty, or consists only of white-space characters.");
+
         }
     }
 }

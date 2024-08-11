@@ -3,18 +3,18 @@ using Cuemon.Extensions.Xunit;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions.QueueStorage.Commands
+namespace Savvyio.Extensions.QueueStorage
 {
-    public class AzureCommandQueueSendOptionsTest : Test
+    public class AzureQueueSendOptionsTest : Test
     {
-        public AzureCommandQueueSendOptionsTest(ITestOutputHelper output) : base(output)
+        public AzureQueueSendOptionsTest(ITestOutputHelper output) : base(output)
         {
         }
 
         [Fact]
         public void Constructor_ShouldInitializeWithDefaultValues()
         {
-            var options = new AzureCommandQueueOptions().SendContext;
+            var options = new AzureQueueOptions().SendContext;
 
             Assert.Equal(TimeSpan.Zero, options.VisibilityTimeout);
             Assert.Equal(TimeSpan.FromDays(7), options.TimeToLive);
@@ -23,7 +23,7 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         [Fact]
         public void VisibilityTimeout_ShouldSetAndGetCorrectly()
         {
-            var options = new AzureCommandQueueOptions()
+            var options = new AzureQueueOptions()
             {
                 SendContext = { VisibilityTimeout = TimeSpan.FromMinutes(1) }
             };
@@ -34,7 +34,7 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         [Fact]
         public void TimeToLive_ShouldSetAndGetCorrectly()
         {
-            var options = new AzureCommandQueueOptions()
+            var options = new AzureQueueOptions()
             {
                 SendContext = { TimeToLive = TimeSpan.FromHours(1) }
             };
@@ -45,12 +45,12 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         [Fact]
         public void VisibilityTimeout_ShouldClampToValidRange()
         {
-            var options = new AzureCommandQueueOptions()
+            var options = new AzureQueueOptions()
             {
                 SendContext = { VisibilityTimeout = TimeSpan.FromDays(10) }
             };
 
-            Assert.Equal(AzureCommandQueueOptions.MaxVisibilityTimeout, options.SendContext.VisibilityTimeout);
+            Assert.Equal(AzureQueueOptions.MaxVisibilityTimeout, options.SendContext.VisibilityTimeout);
 
             options.SendContext.VisibilityTimeout = TimeSpan.FromMilliseconds(-1);
 

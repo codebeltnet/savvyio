@@ -3,18 +3,18 @@ using Cuemon.Extensions.Xunit;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions.QueueStorage.Commands
+namespace Savvyio.Extensions.QueueStorage
 {
-    public class AzureCommandQueueReceiveOptionsTest : Test
+    public class AzureQueueReceiveOptionsTest : Test
     {
-        public AzureCommandQueueReceiveOptionsTest(ITestOutputHelper output) : base(output)
+        public AzureQueueReceiveOptionsTest(ITestOutputHelper output) : base(output)
         {
         }
 
         [Fact]
         public void Constructor_ShouldInitializeWithDefaultValues()
         {
-            var options = new AzureCommandQueueOptions().ReceiveContext;
+            var options = new AzureQueueOptions().ReceiveContext;
 
             Assert.Equal(10, options.NumberOfMessagesToTakePerRequest);
             Assert.Equal(TimeSpan.FromSeconds(30), options.VisibilityTimeout);
@@ -23,7 +23,7 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         [Fact]
         public void NumberOfMessagesToTakePerRequest_ShouldSetAndGetCorrectly()
         {
-            var options = new AzureCommandQueueOptions()
+            var options = new AzureQueueOptions()
             {
                 ReceiveContext = { NumberOfMessagesToTakePerRequest = 5 }
             };
@@ -34,12 +34,12 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         [Fact]
         public void NumberOfMessagesToTakePerRequest_ShouldClampToValidRange()
         {
-            var options = new AzureCommandQueueOptions()
+            var options = new AzureQueueOptions()
             {
                 ReceiveContext = { NumberOfMessagesToTakePerRequest = 50 }
             };
 
-            Assert.Equal(AzureCommandQueueOptions.MaxNumberOfMessages, options.ReceiveContext.NumberOfMessagesToTakePerRequest);
+            Assert.Equal(AzureQueueOptions.MaxNumberOfMessages, options.ReceiveContext.NumberOfMessagesToTakePerRequest);
 
             options.ReceiveContext.NumberOfMessagesToTakePerRequest = -1;
 
@@ -49,7 +49,7 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         [Fact]
         public void VisibilityTimeout_ShouldSetAndGetCorrectly()
         {
-            var options = new AzureCommandQueueOptions()
+            var options = new AzureQueueOptions()
             {
                 ReceiveContext = { VisibilityTimeout = TimeSpan.FromMinutes(1) }
             };
@@ -60,12 +60,12 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         [Fact]
         public void VisibilityTimeout_ShouldClampToValidRange()
         {
-            var options = new AzureCommandQueueOptions()
+            var options = new AzureQueueOptions()
             {
                 ReceiveContext = { VisibilityTimeout = TimeSpan.FromDays(10) }
             };
 
-            Assert.Equal(AzureCommandQueueOptions.MaxVisibilityTimeout, options.ReceiveContext.VisibilityTimeout);
+            Assert.Equal(AzureQueueOptions.MaxVisibilityTimeout, options.ReceiveContext.VisibilityTimeout);
 
             options.ReceiveContext.VisibilityTimeout = TimeSpan.FromMilliseconds(500);
 

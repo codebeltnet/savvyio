@@ -14,7 +14,6 @@ using Cuemon.Extensions.Reflection;
 using Cuemon.Extensions.Xunit;
 using Cuemon.Extensions.Xunit.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Savvyio.Commands;
 using Savvyio.Commands.Messaging;
@@ -22,7 +21,6 @@ using Savvyio.Extensions.DependencyInjection;
 using Savvyio.Extensions.DependencyInjection.Messaging;
 using Savvyio.Extensions.Newtonsoft.Json;
 using Savvyio.Extensions.QueueStorage.Assets;
-using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging;
 using Savvyio.Messaging.Cryptography;
 using Xunit;
@@ -166,7 +164,7 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         {
             services.AddMarshaller<NewtonsoftJsonMarshaller>()
                 .AddConfiguredOptions<NewtonsoftJsonFormatterOptions>(o => o.Settings.ContractResolver = new DefaultContractResolver() { NamingStrategy = new KebabCaseNamingStrategy() { ProcessDictionaryKeys = false } });
-            services.AddMessageQueue<AzureCommandQueue, ICommand>().AddConfiguredOptions<AzureCommandQueueOptions>(o =>
+            services.AddMessageQueue<AzureCommandQueue, ICommand>().AddConfiguredOptions<AzureQueueOptions>(o =>
             {
                 o.QueueName = $"newtonsoft-savvyio-commands-{Platform}-{BuildType}";
                 o.ConnectionString = "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;";

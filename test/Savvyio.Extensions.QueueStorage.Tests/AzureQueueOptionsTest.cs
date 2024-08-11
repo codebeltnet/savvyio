@@ -1,30 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Azure;
 using Azure.Identity;
-using Azure.Storage;
-using Azure.Storage.Queues;
 using Cuemon;
 using Cuemon.Extensions.Xunit;
+using Savvyio.Extensions.QueueStorage.Commands;
 using Savvyio.Extensions.Text.Json;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Savvyio.Extensions.QueueStorage.Commands
+namespace Savvyio.Extensions.QueueStorage
 {
-    public class AzureCommandQueueOptionsTest : Test
+    public class AzureQueueOptionsTest : Test
     {
-        public AzureCommandQueueOptionsTest(ITestOutputHelper output) : base(output)
+        public AzureQueueOptionsTest(ITestOutputHelper output) : base(output)
         {
         }
 
         [Fact]
         public void Constructor_ShouldInitializeWithDefaultValues()
         {
-            var options = new AzureCommandQueueOptions();
+            var options = new AzureQueueOptions();
 
             Assert.NotNull(options.Credential);
             Assert.IsType<DefaultAzureCredential>(options.Credential);
@@ -41,7 +35,7 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         [Fact]
         public void ValidateOptions_ShouldThrowException_WhenOptionsAreInvalid()
         {
-            var options = new AzureCommandQueueOptions();
+            var options = new AzureQueueOptions();
 
             Assert.Throws<InvalidOperationException>(() => options.ValidateOptions());
 
@@ -60,7 +54,7 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         [Fact]
         public void ValidateOptions_ThrowsInvalidOperationException_WhenConnectionStringIsSetAndQueueNameIsNull()
         {
-            var sut1 = new AzureCommandQueueOptions
+            var sut1 = new AzureQueueOptions
             {
                 ConnectionString = "DefaultEndpointsProtocol=https;AccountName=testaccount;AccountKey=testkey;EndpointSuffix=core.windows.net",
                 QueueName = null
@@ -70,15 +64,15 @@ namespace Savvyio.Extensions.QueueStorage.Commands
 
             TestOutput.WriteLine(sut2.Message);
 
-            Assert.Equal($"{nameof(AzureCommandQueueOptions.QueueName)} cannot be null, empty, or consists only of white-space when a {nameof(AzureCommandQueueOptions.ConnectionString)} has been specified. (Expression '!string.IsNullOrWhiteSpace({nameof(AzureCommandQueueOptions.ConnectionString)}) && string.IsNullOrWhiteSpace({nameof(AzureCommandQueueOptions.QueueName)})')", sut2.Message);
-            Assert.Equal($"{nameof(AzureCommandQueueOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
+            Assert.Equal($"{nameof(AzureQueueOptions.QueueName)} cannot be null, empty, or consists only of white-space when a {nameof(AzureQueueOptions.ConnectionString)} has been specified. (Expression '!string.IsNullOrWhiteSpace({nameof(AzureQueueOptions.ConnectionString)}) && string.IsNullOrWhiteSpace({nameof(AzureQueueOptions.QueueName)})')", sut2.Message);
+            Assert.Equal($"{nameof(AzureQueueOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
             Assert.IsType<InvalidOperationException>(sut3.InnerException);
         }
 
         [Fact]
         public void ValidateOptions_ThrowsInvalidOperationException_WhenAllCredentialPropertiesAreNull()
         {
-            var sut1 = new AzureCommandQueueOptions
+            var sut1 = new AzureQueueOptions
             {
                 Credential = null,
                 SasCredential = null,
@@ -89,22 +83,22 @@ namespace Savvyio.Extensions.QueueStorage.Commands
 
             TestOutput.WriteLine(sut2.Message);
 
-            Assert.Equal($"At least one credential type has to be specified for Azure authentication. (Expression '{nameof(AzureCommandQueueOptions.Credential)} == null && {nameof(AzureCommandQueueOptions.SasCredential)} == null && {nameof(AzureCommandQueueOptions.StorageKeyCredential)} == null')", sut2.Message);
-            Assert.Equal($"{nameof(AzureCommandQueueOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
+            Assert.Equal($"At least one credential type has to be specified for Azure authentication. (Expression '{nameof(AzureQueueOptions.Credential)} == null && {nameof(AzureQueueOptions.SasCredential)} == null && {nameof(AzureQueueOptions.StorageKeyCredential)} == null')", sut2.Message);
+            Assert.Equal($"{nameof(AzureQueueOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
             Assert.IsType<InvalidOperationException>(sut3.InnerException);
         }
 
         [Fact]
         public void ValidateOptions_ThrowsInvalidOperationException_WhenStorageNameAndQueueNameIsNotSpecified()
         {
-            var sut1 = new AzureCommandQueueOptions();
+            var sut1 = new AzureQueueOptions();
             var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
             var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1, nameof(sut1)));
 
             TestOutput.WriteLine(sut2.Message);
 
-            Assert.Equal($"{nameof(AzureCommandQueueOptions.StorageAccountName)} and {nameof(AzureCommandQueueOptions.QueueName)} cannot be null, empty, or consists only of white-space characters. (Expression 'string.IsNullOrWhiteSpace({nameof(AzureCommandQueueOptions.StorageAccountName)}) && string.IsNullOrWhiteSpace({nameof(AzureCommandQueueOptions.QueueName)})')", sut2.Message);
-            Assert.Equal($"{nameof(AzureCommandQueueOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
+            Assert.Equal($"{nameof(AzureQueueOptions.StorageAccountName)} and {nameof(AzureQueueOptions.QueueName)} cannot be null, empty, or consists only of white-space characters. (Expression 'string.IsNullOrWhiteSpace({nameof(AzureQueueOptions.StorageAccountName)}) && string.IsNullOrWhiteSpace({nameof(AzureQueueOptions.QueueName)})')", sut2.Message);
+            Assert.Equal($"{nameof(AzureQueueOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
             Assert.IsType<InvalidOperationException>(sut3.InnerException);
         }
 
@@ -112,7 +106,7 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         public void PostConfigureClient_ShouldInvokeCallback()
         {
             var callbackInvoked = false;
-            var client = new AzureCommandQueue(JsonMarshaller.Default, new AzureCommandQueueOptions()
+            var client = new AzureCommandQueue(JsonMarshaller.Default, new AzureQueueOptions()
             {
                 ConnectionString = "UseDevelopmentStorage=true",
                 QueueName = "testqueue"
