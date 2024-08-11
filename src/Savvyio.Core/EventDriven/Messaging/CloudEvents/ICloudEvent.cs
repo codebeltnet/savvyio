@@ -15,6 +15,6 @@ namespace Savvyio.EventDriven.Messaging.CloudEvents
         /// </summary>
         /// <value>The version of the CloudEvents specification which the event uses.</value>
         /// <remarks>https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#specversion</remarks>
-        string SpecVersion { get; }
+        string Specversion { get; }
     }
 }

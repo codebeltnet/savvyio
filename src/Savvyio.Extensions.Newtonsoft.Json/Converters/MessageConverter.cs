@@ -101,8 +101,8 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
             if (value.GetType().HasInterfaces(typeof(ICloudEvent<>)))
             {
                 dynamic ce = value;
-                writer.WritePropertyName(nameof(ICloudEvent<IIntegrationEvent>.SpecVersion), serializer);
-                writer.WriteValue(ce.SpecVersion);
+                writer.WritePropertyName(nameof(ICloudEvent<IIntegrationEvent>.Specversion), serializer);
+                writer.WriteValue(ce.Specversion);
             }
 
             if (value is ISignedMessage<T> sm)
@@ -137,7 +137,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
 
             if (objectType.HasInterfaces(typeof(ICloudEvent<>)))
             {
-                var specVersionKey = serializer.ResolvePropertyKeyByConvention(nameof(ICloudEvent<IIntegrationEvent>.SpecVersion));
+                var specVersionKey = serializer.ResolvePropertyKeyByConvention(nameof(ICloudEvent<IIntegrationEvent>.Specversion));
 
                 var requestType = objectType.GetGenericArguments()[0];
                 var cloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.CloudEvent"));

@@ -22,7 +22,7 @@ namespace Savvyio.EventDriven.Messaging.CloudEvents.Cryptography
         /// <exception cref="ArgumentException">
         /// <paramref name="signature"/> cannot be empty or consist only of white-space characters.
         /// </exception>
-        public SignedCloudEvent(ICloudEvent<T> message, string signature) : base(message, message.SpecVersion)
+        public SignedCloudEvent(ICloudEvent<T> message, string signature) : base(message, message.Specversion)
         {
             Validator.ThrowIfNullOrWhitespace(signature);
             Signature = signature;

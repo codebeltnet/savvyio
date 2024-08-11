@@ -141,7 +141,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                 Assert.Equivalent(sut1.Source, sut2.Source);
                 Assert.Equivalent(sut1.Id, sut2.Id);
                 Assert.Equivalent(sut1.Type, sut2.Type);
-                Assert.Equivalent(sut1.SpecVersion, ((ICloudEvent<IIntegrationEvent>)sut2).SpecVersion);
+                Assert.Equivalent(sut1.Specversion, ((ICloudEvent<IIntegrationEvent>)sut2).Specversion);
                 return Task.CompletedTask;
             }).ConfigureAwait(false);
             Assert.Equal(1, handlerInvocations);

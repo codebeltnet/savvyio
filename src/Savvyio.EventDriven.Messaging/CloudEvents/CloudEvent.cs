@@ -15,11 +15,11 @@ namespace Savvyio.EventDriven.Messaging.CloudEvents
         /// Initializes a new instance of the <see cref="CloudEvent{T}"/> class.
         /// </summary>
         /// <param name="message">The message to elevate to an <see cref="ICloudEvent{T}"/> compliance.</param>
-        /// <param name="specVersion">The version of the CloudEvents specification which the event uses.</param>
+        /// <param name="specversion">The version of the CloudEvents specification which the event uses.</param>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="message"/> cannot be null.
         /// </exception>
-        public CloudEvent(IMessage<T> message, string specVersion = null)
+        public CloudEvent(IMessage<T> message, string specversion = null)
         {
             Validator.ThrowIfNull(message);
             Id = message.Id;
@@ -27,7 +27,7 @@ namespace Savvyio.EventDriven.Messaging.CloudEvents
             Type = message.Type;
             Time = message.Time;
             Data = message.Data;
-            SpecVersion = specVersion ?? "1.0";
+            Specversion = specversion ?? "1.0";
         }
 
 
@@ -69,6 +69,6 @@ namespace Savvyio.EventDriven.Messaging.CloudEvents
         public T Data { get; }
 
         /// <inheritdoc />
-        public string SpecVersion { get; }
+        public string Specversion { get; }
     }
 }

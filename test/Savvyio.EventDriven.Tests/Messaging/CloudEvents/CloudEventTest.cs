@@ -32,7 +32,7 @@ namespace Savvyio.EventDriven.Messaging.CloudEvents
             Assert.Equal(type, cloudEventsMessage.Type);
             Assert.InRange(cloudEventsMessage.Time!.Value, time, time.AddSeconds(1));
             Assert.Equal(data, cloudEventsMessage.Data);
-            Assert.Equal("1.0", cloudEventsMessage.SpecVersion);
+            Assert.Equal("1.0", cloudEventsMessage.Specversion);
         }
     }
 }
