@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Newtonsoft.Json;
+using Cuemon.Extensions.Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Savvyio.EventDriven;
@@ -114,27 +116,38 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
 
         public override IMessage<T> ReadJson(JsonReader reader, Type objectType, IMessage<T> existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
+            var idKey = serializer.ResolvePropertyKeyByConvention(nameof(IMessage<T>.Id));
+            var sourceKey = serializer.ResolvePropertyKeyByConvention(nameof(IMessage<T>.Source));
+            var timeKey = serializer.ResolvePropertyKeyByConvention(nameof(IMessage<T>.Time));
+            var typeKey = serializer.ResolvePropertyKeyByConvention(nameof(IMessage<T>.Type));
+            var dataKey = serializer.ResolvePropertyKeyByConvention(nameof(IMessage<T>.Data));
+            var metadataKey = serializer.ResolvePropertyKeyByConvention(nameof(IMetadata.Metadata));
+            var memberTypeKey = serializer.ResolveDictionaryKeyByConvention(nameof(MetadataDictionary.MemberType));
+            var signatureKey = serializer.ResolvePropertyKeyByConvention(nameof(ISignedMessage<T>.Signature));
+
             var document = JObject.Load(reader);
-            var id = document.Root["id"]!.Value<string>();
-            var source = document.Root["source"]!.Value<string>().ToUri();
-            var type = document.Root["type"]!.Value<string>();
-            var memberType = Type.GetType(document.Root["data"]!["metadata"]!["memberType"]!.Value<string>());
-            var time = document.Root["time"]!.Value<DateTime>();
-            var data = (T)serializer.Deserialize(document.Root["data"].CreateReader(), memberType);
+            var id = document.Root[idKey]!.Value<string>();
+            var source = document.Root[sourceKey]!.Value<string>().ToUri();
+            var type = document.Root[typeKey]!.Value<string>();
+            var memberType = Type.GetType(document.Root[dataKey]![metadataKey]![memberTypeKey]!.Value<string>());
+            var time = document.Root[timeKey]!.Value<DateTime>();
+            var data = (T)serializer.Deserialize(document.Root[dataKey].CreateReader(), memberType);
             
             var message = new Message<T>(id, source, type, data, time);
 
             if (objectType.HasInterfaces(typeof(ICloudEvent<>)))
             {
+                var specVersionKey = serializer.ResolvePropertyKeyByConvention(nameof(ICloudEvent<IIntegrationEvent>.SpecVersion));
+
                 var requestType = objectType.GetGenericArguments()[0];
                 var cloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.CloudEvent"));
-                var specVersion = document.Root["specVersion"]!.Value<string>();
+                var specVersion = document.Root[specVersionKey]!.Value<string>();
                 var cloudEvent = Activator.CreateInstance(cloudEventType.MakeGenericType(requestType), [message, specVersion]) as IMessage<T>;
 
                 if (objectType.HasInterfaces(typeof(ISignedCloudEvent<>)))
                 {
                     var signedCloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.Cryptography.SignedCloudEvent"));
-                    var signature = document.Root["signature"]!.Value<string>();
+                    var signature = document.Root[signatureKey]!.Value<string>();
                         
                     return Activator.CreateInstance(signedCloudEventType.MakeGenericType(requestType), [cloudEvent, signature]) as IMessage<T>;
                 }
@@ -144,7 +157,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
 
             if (objectType.HasInterfaces(typeof(ISignedMessage<>)))
             {
-                var signature = document.Root["signature"]!.Value<string>();
+                var signature = document.Root[signatureKey]!.Value<string>();
                 return new SignedMessage<T>(message, signature);
             }
 

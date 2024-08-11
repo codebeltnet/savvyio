@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Cuemon;
 using Cuemon.Extensions.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -58,9 +59,9 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
             var instance = RuntimeHelpers.GetUninitializedObject(objectType);
             var properties = objectType.GetAllProperties();
             var jProperties = document.Properties().ToList();
-            foreach (var property in properties.Where(pi => jProperties.Exists(jp => jp.Name.Equals(pi.Name, StringComparison.OrdinalIgnoreCase))))
+            foreach (var property in properties.Where(pi => jProperties.Exists(jp => jp.Name.Equals(serializer.ResolvePropertyKeyByConvention(pi.Name), StringComparison.OrdinalIgnoreCase))))
             {
-                var jProperty = jProperties.Single(jp => jp.Name.Equals(property.Name, StringComparison.OrdinalIgnoreCase));
+                var jProperty = jProperties.Single(jp => jp.Name.Equals(serializer.ResolvePropertyKeyByConvention(property.Name), StringComparison.OrdinalIgnoreCase));
                 if (document.Root[jProperty.Name] != null)
                 {
                     var value = serializer.Deserialize(document.Root[jProperty.Name].CreateReader(), property.PropertyType);
