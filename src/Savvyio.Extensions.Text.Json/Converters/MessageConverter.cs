@@ -84,7 +84,7 @@ namespace Savvyio.Extensions.Text.Json.Converters
                 var source = document.RootElement.GetProperty(sourceKey).GetString().ToUri();
                 var type = document.RootElement.GetProperty(typeKey).GetString();
                 var memberType = typeToConvert.GenericTypeArguments[0];
-                var time = document.RootElement.GetProperty(timeKey).GetDateTime();
+                var time = document.RootElement.GetProperty(timeKey).GetDateTimeOffset().UtcDateTime;
                 var data = (T)document.RootElement.GetProperty(dataKey).Deserialize(memberType!, options);
                 if (data is IMetadata) // for unknown reasons, Microsoft does not use the custom converter for IMetadataDictionary here; have to fiddle extra around as seen below .. for the record; this just works with Newtonsoft!
                 { 
@@ -107,7 +107,7 @@ namespace Savvyio.Extensions.Text.Json.Converters
 
                 if (typeToConvert.HasInterfaces(typeof(ICloudEvent<>)))
                 {
-                    var specVersionKey = options.PropertyNamingPolicy.ConvertName(nameof(ICloudEvent<IIntegrationEvent>.SpecVersion));
+                    var specVersionKey = options.PropertyNamingPolicy.ConvertName(nameof(ICloudEvent<IIntegrationEvent>.Specversion));
 
                     var requestType = typeToConvert.GetGenericArguments()[0];
                     var cloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.CloudEvent"));
@@ -149,7 +149,7 @@ namespace Savvyio.Extensions.Text.Json.Converters
             if (value.GetType().HasInterfaces(typeof(ICloudEvent<>)))
             {
                 dynamic ce = value;
-                writer.WriteString(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(ICloudEvent<IIntegrationEvent>.SpecVersion)), ce.SpecVersion);
+                writer.WriteString(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(ICloudEvent<IIntegrationEvent>.Specversion)), ce.Specversion);
             }
 
             if (value is ISignedMessage<T> sm)
