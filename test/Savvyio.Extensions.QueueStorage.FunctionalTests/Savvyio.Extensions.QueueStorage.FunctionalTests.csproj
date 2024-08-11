@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Savvyio.Extensions.QueueStorage</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Xunit.Priority" Version="1.1.6" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Savvyio.Commands.Messaging\Savvyio.Commands.Messaging.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.EventDriven.Messaging\Savvyio.EventDriven.Messaging.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection\Savvyio.Extensions.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.Newtonsoft.Json\Savvyio.Extensions.Newtonsoft.Json.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.QueueStorage\Savvyio.Extensions.QueueStorage.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.Text.Json\Savvyio.Extensions.Text.Json.csproj" />
+  </ItemGroup>
+
+</Project>
