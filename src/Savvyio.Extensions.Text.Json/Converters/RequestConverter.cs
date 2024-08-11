@@ -40,9 +40,9 @@ namespace Savvyio.Extensions.Text.Json.Converters
                 var instance = RuntimeHelpers.GetUninitializedObject(typeToConvert);
                 var properties = typeToConvert.GetAllProperties();
                 var jProperties = document.RootElement.EnumerateObject();
-                foreach (var property in properties.Where(pi => jProperties.Any(jp => jp.Name.Equals(pi.Name, StringComparison.OrdinalIgnoreCase))))
+                foreach (var property in properties.Where(pi => jProperties.Any(jp => jp.Name.Equals(options.PropertyNamingPolicy!.ConvertName(pi.Name), StringComparison.OrdinalIgnoreCase))))
                 {
-                    var jProperty = jProperties.Single(jp => jp.Name.Equals(property.Name, StringComparison.OrdinalIgnoreCase));
+                    var jProperty = jProperties.Single(jp => jp.Name.Equals(options.PropertyNamingPolicy!.ConvertName(property.Name), StringComparison.OrdinalIgnoreCase));
                     if (document.RootElement.TryGetProperty(jProperty.Name, out var element))
                     {
                         var value = element.Deserialize(property.PropertyType, options);

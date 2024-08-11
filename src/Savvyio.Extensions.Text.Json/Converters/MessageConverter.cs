@@ -71,15 +71,24 @@ namespace Savvyio.Extensions.Text.Json.Converters
         {
             using (var document = JsonDocument.ParseValue(ref reader))
             {
-                var id = document.RootElement.GetProperty("id").GetString();
-                var source = document.RootElement.GetProperty("source").GetString().ToUri();
-                var type = document.RootElement.GetProperty("type").GetString();
+                var idKey = options.PropertyNamingPolicy!.ConvertName(nameof(IMessage<T>.Id));
+                var sourceKey = options.PropertyNamingPolicy.ConvertName(nameof(IMessage<T>.Source));
+                var timeKey = options.PropertyNamingPolicy.ConvertName(nameof(IMessage<T>.Time));
+                var typeKey = options.PropertyNamingPolicy.ConvertName(nameof(IMessage<T>.Type));
+                var dataKey = options.PropertyNamingPolicy.ConvertName(nameof(IMessage<T>.Data));
+                var metadataKey = options.PropertyNamingPolicy.ConvertName(nameof(IMetadata.Metadata));
+                var signatureKey = options.PropertyNamingPolicy.ConvertName(nameof(ISignedMessage<T>.Signature));
+                
+                
+                var id = document.RootElement.GetProperty(idKey).GetString();
+                var source = document.RootElement.GetProperty(sourceKey).GetString().ToUri();
+                var type = document.RootElement.GetProperty(typeKey).GetString();
                 var memberType = typeToConvert.GenericTypeArguments[0];
-                var time = document.RootElement.GetProperty("time").GetDateTime();
-                var data = (T)document.RootElement.GetProperty("data").Deserialize(memberType!, options);
+                var time = document.RootElement.GetProperty(timeKey).GetDateTime();
+                var data = (T)document.RootElement.GetProperty(dataKey).Deserialize(memberType!, options);
                 if (data is IMetadata) // for unknown reasons, Microsoft does not use the custom converter for IMetadataDictionary here; have to fiddle extra around as seen below .. for the record; this just works with Newtonsoft!
                 { 
-                    var md = document.RootElement.GetProperty("data").GetProperty("metadata").Deserialize<IMetadataDictionary>(options);
+                    var md = document.RootElement.GetProperty(dataKey).GetProperty(metadataKey).Deserialize<IMetadataDictionary>(options);
                     var property = memberType.GetAllProperties().SingleOrDefault(pi => pi.Name == nameof(IMetadata.Metadata));
                     if (property != null)
                     {
@@ -98,15 +107,17 @@ namespace Savvyio.Extensions.Text.Json.Converters
 
                 if (typeToConvert.HasInterfaces(typeof(ICloudEvent<>)))
                 {
+                    var specVersionKey = options.PropertyNamingPolicy.ConvertName(nameof(ICloudEvent<IIntegrationEvent>.SpecVersion));
+
                     var requestType = typeToConvert.GetGenericArguments()[0];
                     var cloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.CloudEvent"));
-                    var specVersion = document.RootElement.GetProperty("specVersion").GetString();
+                    var specVersion = document.RootElement.GetProperty(specVersionKey).GetString();
                     var cloudEvent = Activator.CreateInstance(cloudEventType.MakeGenericType(requestType), [message, specVersion]) as IMessage<T>;
 
                     if (typeToConvert.HasInterfaces(typeof(ISignedCloudEvent<>)))
                     {
                         var signedCloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.Cryptography.SignedCloudEvent"));
-                        var signature = document.RootElement.GetProperty("signature").GetString();
+                        var signature = document.RootElement.GetProperty(signatureKey).GetString();
                         
                         return Activator.CreateInstance(signedCloudEventType.MakeGenericType(requestType), [cloudEvent, signature]) as IMessage<T>;
                     }
@@ -116,7 +127,7 @@ namespace Savvyio.Extensions.Text.Json.Converters
 
                 if (typeToConvert.HasInterfaces(typeof(ISignedMessage<>)))
                 {
-                    var signature = document.RootElement.GetProperty("signature").GetString();
+                    var signature = document.RootElement.GetProperty(signatureKey).GetString();
                     return new SignedMessage<T>(message, signature);
                 }
 
