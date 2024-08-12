@@ -14,15 +14,15 @@ namespace Savvyio.EventDriven.Messaging.CloudEvents
         /// </summary>
         /// <typeparam name="T">The type of the payload constraint to the <see cref="IIntegrationEvent"/> interface.</typeparam>
         /// <param name="message">The payload to attach within the message.</param>
-        /// <param name="specVersion">The version of the CloudEvents specification which the event uses.</param>
+        /// <param name="specversion">The version of the CloudEvents specification which the event uses.</param>
         /// <returns>An instance of <see cref="Message{T}"/> constraint to the <see cref="IIntegrationEvent"/> interface.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="message"/> cannot be null.
         /// </exception>
-        public static ICloudEvent<T> ToCloudEvent<T>(this IMessage<T> message, string specVersion = null) where T : IIntegrationEvent
+        public static ICloudEvent<T> ToCloudEvent<T>(this IMessage<T> message, string specversion = null) where T : IIntegrationEvent
         {
             Validator.ThrowIfNull(message);
-            return new CloudEvent<T>(message, specVersion);
+            return new CloudEvent<T>(message, specversion);
         }
     }
 }
