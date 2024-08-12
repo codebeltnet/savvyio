@@ -15,6 +15,7 @@ Availability: .NET 8 and .NET 6
 # New Features
 - ADDED AcknowledgedEventArgs class in the Savvyio.Messaging namespace that provides data for message related operations
 - ADDED IAcknowledgeable interface in the Savvyio.Messaging namespace that defines a generic way to make a message acknowledgeable
+- ADDED AsyncEventHandler{TEventArgs} delegate in the Savvyio namespace that represents the method that will handle an event when the event provides data asynchronously
  
 # Improvements
 - CHANGED IMessage interface to inherit from IAcknowledgeable

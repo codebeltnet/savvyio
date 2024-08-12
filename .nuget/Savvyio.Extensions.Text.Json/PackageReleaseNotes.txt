@@ -4,6 +4,10 @@ Availability: .NET 8 and .NET 6
 # ALM
 - CHANGED Dependencies to latest and greatest with respect to TFMs
  
+# Bug Fixes
+- FIXED MessageConverter class in the Savvyio.Extensions.Text.Json.Converters namespace so that it supports other naming conventions than the default (camelCase)
+- FIXED RequestConverter class in the Savvyio.Extensions.Text.Json.Converters namespace so that it supports other naming conventions than the default (camelCase)
+ 
 Version: 2.2.0
 Availability: .NET 8, .NET 7 and .NET 6
  

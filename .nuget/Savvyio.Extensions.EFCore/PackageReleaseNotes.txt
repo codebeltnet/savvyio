@@ -8,9 +8,6 @@ Availability: .NET 8 and .NET 6
 - REMOVED DefaultEfCoreDataStore{T} class in the Savvyio.Extensions.EFCore namespace
 - REFACTORED EfCoreDataStore{T, TOptions} abstract class in the Savvyio.Extensions.EFCore namespace to EfCoreDataStore{T} class using fixed EfCoreQueryOptions{T} while making it consistent with other default implementations
  
-# Improvements
-- CHANGED 
- 
 Version: 2.2.0
 Availability: .NET 8, .NET 7 and .NET 6
  

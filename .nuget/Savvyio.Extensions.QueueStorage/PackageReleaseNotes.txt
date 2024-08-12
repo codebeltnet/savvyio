@@ -1,0 +1,15 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# New Features
+- ADDED AzureCommandQueue class in the Savvyio.Extensions.QueueStorage.Commands namespace provides an Azure Storage Queue implementation of the IPointToPointChannel{TRequest}
+- ADDED AzureEventBus class in the Savvyio.Extensions.QueueStorage.EventDriven namespace provides a combined Azure Event Grid/Azure Storage Queue implementation of the IPublishSubscribeChannel{TRequest}
+- ADDED AzureEventBusOptions class in the Savvyio.Extensions.QueueStorage.EventDriven namespace that provides configuration options for AzureEventBus
+- ADDED AzureQueue{TRequest} class in the Savvyio.Extensions.QueueStorage namespace that represents the base class from which all implementations of Azure Storage Queue should derive
+- ADDED AzureQueueOptions class in the Savvyio.Extensions.QueueStorage namespace that provides configuration options for AzureQueue{TRequest}
+- ADDED AzureQueueReceiveOptions class in the Savvyio.Extensions.QueueStorage namespace that provides options that is related to receiving messages from an Azure Storage Queue
+- ADDED AzureQueueSendOptions class in the Savvyio.Extensions.QueueStorage namespace that provides options that is related to sending messages from an Azure Storage Queue
+ 

@@ -6,6 +6,15 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 
 ## [3.0.0] - TBD
 
+This release is a work in progress.
+
+Noticeable highlights:
+
+- Support for Azure Storage Queue
+- Support for Azure Event Grid
+- CloudEvent now supports attribute extensions
+- Both Newtonsoft and System.Text.Json marshallers now supports naming conventions other than camelCase
+
 ### Added
 
 #### Savvyio.Commands.Messaging
@@ -17,6 +26,7 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 
 - AcknowledgedEventArgs class in the Savvyio.Messaging namespace that provides data for message related operations
 - IAcknowledgeable interface in the Savvyio.Messaging namespace that defines a generic way to make a message acknowledgeable
+- AsyncEventHandler{TEventArgs} delegate in the Savvyio namespace that represents the method that will handle an event when the event provides data asynchronously
 
 #### Savvyio.EventDriven.Messaging
 
@@ -31,6 +41,28 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 #### Savvyio.Extensions.DependencyInjection
 
 - ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Domain namespace was extended with a new extension method for the IServiceCollection interface: AddUnitOfWork{TService}
+
+#### Savvyio.Extensions.DependencyInjection.QueueStorage
+
+- AzureCommandQueue{TMarker} class in the Savvyio.Extensions.DependencyInjection.QueueStorage.Commands namespace that provides a default implementation of the AzureCommandQueue class that is optimized for Dependency Injection
+- AzureEventBus{TMarker} class in the Savvyio.Extensions.DependencyInjection.QueueStorage.EventDriven namespace that provides a default implementation of the AzureEventBus class that is optimized for Dependency Injection
+- AzureEventBusOptions{TMarker} class in the Savvyio.Extensions.DependencyInjection.QueueStorage.EventDriven namespace that provides configuration options for AzureEventBus{TMarker}
+- AzureQueueOptions{TMarker} class in the Savvyio.Extensions.DependencyInjection.QueueStorage namespace that provides configuration options for AzureQueueOptions{TMarker}
+- ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.QueueStorage namespace that consist of extension methods for the IServiceCollection interface: AddAzureCommandQueue, AddAzureEventBus
+
+#### Savvyio.Extensions.Newtonsoft.Json
+
+- JsonSerializerExtensions class in the Savvyio.Extensions.Newtonsoft.Json namespace that consist of extension methods for the JsonSerializer class: ResolvePropertyKeyByConvention, ResolveDictionaryKeyByConvention
+
+#### Savvyio.Extensions.QueueStorage
+
+- AzureCommandQueue class in the Savvyio.Extensions.QueueStorage.Commands namespace provides an Azure Storage Queue implementation of the IPointToPointChannel{TRequest}
+- AzureEventBus class in the Savvyio.Extensions.QueueStorage.EventDriven namespace provides a combined Azure Event Grid/Azure Storage Queue implementation of the IPublishSubscribeChannel{TRequest}
+- AzureEventBusOptions class in the Savvyio.Extensions.QueueStorage.EventDriven namespace that provides configuration options for AzureEventBus
+- AzureQueue{TRequest} class in the Savvyio.Extensions.QueueStorage namespace that represents the base class from which all implementations of Azure Storage Queue should derive
+- AzureQueueOptions class in the Savvyio.Extensions.QueueStorage namespace that provides configuration options for AzureQueue{TRequest}
+- AzureQueueReceiveOptions class in the Savvyio.Extensions.QueueStorage namespace that provides options that is related to receiving messages from an Azure Storage Queue
+- AzureQueueSendOptions class in the Savvyio.Extensions.QueueStorage namespace that provides options that is related to sending messages from an Azure Storage Queue
 
 ### Changed
 
@@ -144,6 +176,18 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 #### Savvyio.Queries
 
 - Dependencies to latest and greatest with respect to TFMs
+
+### Fixed
+
+#### Savvyio.Extensions.Newtonsoft.Json
+
+- MessageConverter class in the Savvyio.Extensions.Newtonsoft.Json.Converters namespace so that it supports other naming conventions than the default (camelCase)
+- RequestConverter class in the Savvyio.Extensions.Newtonsoft.Json.Converters namespace so that it supports other naming conventions than the default (camelCase)
+
+#### Savvyio.Extensions.Text.Json
+
+- MessageConverter class in the Savvyio.Extensions.Text.Json.Converters namespace so that it supports other naming conventions than the default (camelCase)
+- RequestConverter class in the Savvyio.Extensions.Text.Json.Converters namespace so that it supports other naming conventions than the default (camelCase)
 
 ### Removed
 

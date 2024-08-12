@@ -1,6 +1,6 @@
-# Savvyio.Commands
+# Savvyio.Extensions.QueueStorage
 
-Provides the fundamental classes to work with the Command part of the CQRS pattern (Command and Query Responsibility Segregation).
+Extend the Savvy I/O core assemblies with support for Azure Queue Storage paired with Azure Event Grid.
 
 ## About
 

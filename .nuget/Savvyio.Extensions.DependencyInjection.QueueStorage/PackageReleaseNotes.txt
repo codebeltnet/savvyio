@@ -1,0 +1,13 @@
+Version: 3.0.0
+Availability: .NET 8 and .NET 6
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+  
+# New Features
+- ADDED AzureCommandQueue{TMarker} class in the Savvyio.Extensions.DependencyInjection.QueueStorage.Commands namespace that provides a default implementation of the AzureCommandQueue class that is optimized for Dependency Injection
+- ADDED AzureEventBus{TMarker} class in the Savvyio.Extensions.DependencyInjection.QueueStorage.EventDriven namespace that provides a default implementation of the AzureEventBus class that is optimized for Dependency Injection
+- ADDED AzureEventBusOptions{TMarker} class in the Savvyio.Extensions.DependencyInjection.QueueStorage.EventDriven namespace that provides configuration options for AzureEventBus{TMarker}
+- ADDED AzureQueueOptions{TMarker} class in the Savvyio.Extensions.DependencyInjection.QueueStorage namespace that provides configuration options for AzureQueueOptions{TMarker}
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.QueueStorage namespace that consist of extension methods for the IServiceCollection interface: AddAzureCommandQueue, AddAzureEventBus
+ 
