@@ -1,5 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <Description>Extend the Savvy I/O core assemblies with support for Azure Queue Storage paired with Azure Event Grid.</Description>
+    <PackageTags>azure queue storage event-grid bus</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.12.0" />
     <PackageReference Include="Azure.Messaging.EventGrid" Version="4.24.1" />
@@ -10,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Savvyio.Commands\Savvyio.Commands.csproj" />
     <ProjectReference Include="..\Savvyio.Core\Savvyio.Core.csproj" />
+    <ProjectReference Include="..\Savvyio.EventDriven.Messaging\Savvyio.EventDriven.Messaging.csproj" />
     <ProjectReference Include="..\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
     <ProjectReference Include="..\Savvyio.Messaging\Savvyio.Messaging.csproj" />
   </ItemGroup>
