@@ -111,6 +111,15 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
                 writer.WriteValue(sm.Signature);
             }
 
+            if (value is IDictionary<string, object> dictionary)
+            {
+                foreach (var kvp in dictionary)
+                {
+                    writer.WritePropertyName(kvp.Key);
+                    writer.WriteObject(kvp.Value, serializer);
+                }
+            }
+
             writer.WriteEndObject();
         }
 
@@ -130,7 +139,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
             var source = document.Root[sourceKey]!.Value<string>().ToUri();
             var type = document.Root[typeKey]!.Value<string>();
             var memberType = Type.GetType(document.Root[dataKey]![metadataKey]![memberTypeKey]!.Value<string>());
-            var time = document.Root[timeKey]!.Value<DateTime>();
+            var time = document.Root[timeKey]!.Value<DateTime>().ToUniversalTime();
             var data = (T)serializer.Deserialize(document.Root[dataKey].CreateReader(), memberType);
             
             var message = new Message<T>(id, source, type, data, time);
@@ -150,6 +159,16 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
                     var signature = document.Root[signatureKey]!.Value<string>();
                         
                     return Activator.CreateInstance(signedCloudEventType.MakeGenericType(requestType), [cloudEvent, signature]) as IMessage<T>;
+                }
+
+                var reservedKeys = new[] { idKey, sourceKey, timeKey, typeKey, dataKey, metadataKey, signatureKey, specVersionKey };
+
+                if (cloudEvent is IDictionary<string, object> dictionary)
+                {
+                    foreach (var property in document.Properties().Where(jp => !reservedKeys.Contains(jp.Name)))
+                    {
+                        dictionary.Add(property.Name, property.Value.ToObject(null, serializer));
+                    }
                 }
 
                 return cloudEvent;

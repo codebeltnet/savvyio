@@ -1,4 +1,5 @@
-﻿using Savvyio.Messaging;
+﻿using System.Collections.Generic;
+using Savvyio.Messaging;
 
 namespace Savvyio.EventDriven.Messaging.CloudEvents
 {
@@ -8,7 +9,7 @@ namespace Savvyio.EventDriven.Messaging.CloudEvents
     /// <typeparam name="T">The type of the payload constraint to the <see cref="IIntegrationEvent"/> interface.</typeparam>
     /// <seealso cref="IMessage{T}" />
     /// <remarks>https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md</remarks>
-    public interface ICloudEvent<out T> : IMessage<T> where T : IIntegrationEvent
+    public interface ICloudEvent<out T> : IMessage<T>, IDictionary<string, object> where T : IIntegrationEvent
     {
         /// <summary>
         /// Gets version of the CloudEvents specification which the event uses.

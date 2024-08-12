@@ -39,7 +39,7 @@ namespace Savvyio.Extensions.Text.Json.Converters
         /// <returns><see langword="true" /> if the instance can convert the specified object type; otherwise, <see langword="false" />.</returns>
 		public override bool CanConvert(Type typeToConvert)
         {
-            return (typeToConvert.IsGenericType && 
+            return (typeToConvert.IsGenericType &&
                     typeToConvert.GetGenericTypeDefinition().HasInterfaces(typeof(IMessage<>)));
         }
 
@@ -79,7 +79,6 @@ namespace Savvyio.Extensions.Text.Json.Converters
                 var metadataKey = options.PropertyNamingPolicy.ConvertName(nameof(IMetadata.Metadata));
                 var signatureKey = options.PropertyNamingPolicy.ConvertName(nameof(ISignedMessage<T>.Signature));
                 
-                
                 var id = document.RootElement.GetProperty(idKey).GetString();
                 var source = document.RootElement.GetProperty(sourceKey).GetString().ToUri();
                 var type = document.RootElement.GetProperty(typeKey).GetString();
@@ -87,7 +86,7 @@ namespace Savvyio.Extensions.Text.Json.Converters
                 var time = document.RootElement.GetProperty(timeKey).GetDateTimeOffset().UtcDateTime;
                 var data = (T)document.RootElement.GetProperty(dataKey).Deserialize(memberType!, options);
                 if (data is IMetadata) // for unknown reasons, Microsoft does not use the custom converter for IMetadataDictionary here; have to fiddle extra around as seen below .. for the record; this just works with Newtonsoft!
-                { 
+                {
                     var md = document.RootElement.GetProperty(dataKey).GetProperty(metadataKey).Deserialize<IMetadataDictionary>(options);
                     var property = memberType.GetAllProperties().SingleOrDefault(pi => pi.Name == nameof(IMetadata.Metadata));
                     if (property != null)
@@ -118,8 +117,18 @@ namespace Savvyio.Extensions.Text.Json.Converters
                     {
                         var signedCloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.Cryptography.SignedCloudEvent"));
                         var signature = document.RootElement.GetProperty(signatureKey).GetString();
-                        
+
                         return Activator.CreateInstance(signedCloudEventType.MakeGenericType(requestType), [cloudEvent, signature]) as IMessage<T>;
+                    }
+
+                    var reservedKeys = new[] { idKey, sourceKey, timeKey, typeKey, dataKey, metadataKey, signatureKey, specVersionKey };
+
+                    if (cloudEvent is IDictionary<string, object> dictionary)
+                    {
+                        foreach (var property in document.RootElement.EnumerateObject().Where(jp => !reservedKeys.Contains(jp.Name)))
+                        {
+                            dictionary.Add(property.Name, property.Value.Deserialize(property.Value.GetType(), options));
+                        }
                     }
 
                     return cloudEvent;
@@ -145,7 +154,7 @@ namespace Savvyio.Extensions.Text.Json.Converters
             writer.WriteObject(value.Time, options);
             writer.WritePropertyName(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(value.Data)));
             writer.WriteObject(value.Data, options);
-            
+
             if (value.GetType().HasInterfaces(typeof(ICloudEvent<>)))
             {
                 dynamic ce = value;
@@ -155,6 +164,15 @@ namespace Savvyio.Extensions.Text.Json.Converters
             if (value is ISignedMessage<T> sm)
             {
                 writer.WriteString(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(sm.Signature)), sm.Signature);
+            }
+
+            if (value is IDictionary<string, object> dictionary)
+            {
+                foreach (var kvp in dictionary)
+                {
+                    writer.WritePropertyName(options.PropertyNamingPolicy.DefaultOrConvertName(kvp.Key));
+                    writer.WriteObject(kvp.Value, options);
+                }
             }
 
             writer.WriteEndObject();
