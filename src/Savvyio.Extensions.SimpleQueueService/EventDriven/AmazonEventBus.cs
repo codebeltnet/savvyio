@@ -87,7 +87,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                 {
                     // ThrowIfCancellationWasRequested was set to false (default)
                 }
-            });
+            }).ConfigureAwait(false);
         }
 
         private async Task InvokeHandlerAsync(Func<IMessage<IIntegrationEvent>, CancellationToken, Task> asyncHandler, CancellationToken cancellationToken)
