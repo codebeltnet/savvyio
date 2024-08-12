@@ -52,7 +52,7 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging.CloudEvents
                                "timestamp": "2023-11-16T23:24:17.8414532Z"
                              }
                            },
-                           "specVersion": "1.0"
+                           "specversion": "1.0"
                          }
                          """.ReplaceLineEndings(), jsonString);
         }
@@ -92,7 +92,7 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging.CloudEvents
                                  "timestamp": "{{utcNow:O}}"
                                }
                              },
-                             "specVersion": "1.0"
+                             "specversion": "1.0"
                            }
                            """.ReplaceLineEndings(), jsonString);
         }

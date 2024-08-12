@@ -83,7 +83,7 @@ namespace Savvyio.Extensions.QueueStorage
 
             TestOutput.WriteLine(sut2.Message);
 
-            Assert.Equal($"At least one credential type has to be specified for Azure authentication. (Expression '{nameof(AzureQueueOptions.Credential)} == null && {nameof(AzureQueueOptions.SasCredential)} == null && {nameof(AzureQueueOptions.StorageKeyCredential)} == null')", sut2.Message);
+            Assert.Equal($"A credential type has to be specified for Azure authentication. (Expression '{nameof(AzureQueueOptions.Credential)} == null && {nameof(AzureQueueOptions.SasCredential)} == null && {nameof(AzureQueueOptions.StorageKeyCredential)} == null')", sut2.Message);
             Assert.Equal($"{nameof(AzureQueueOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
             Assert.IsType<InvalidOperationException>(sut3.InnerException);
         }

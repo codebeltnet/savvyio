@@ -49,7 +49,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.CloudEvents.C
             var sut4 = NewtonsoftJsonMarshaller.Default.Deserialize<ISignedCloudEvent<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
-            Assert.Equal("""{"id":"2d4030d32a254ee8a27046e5bafe696a","source":"https://fancy.api/members","type":"MemberCreated","time":"2023-11-16T23:24:17.8414532Z","data":{"name":"Jane Doe","emailAddress":"jd@office.com","metadata":{"memberType":"Savvyio.Assets.EventDriven.MemberCreated, Savvyio.Assets.Tests","eventId":"69bccf3b1117425397c5ed9ed757bb0f","timestamp":"2023-11-16T23:24:17.8414532Z"}},"specVersion":"1.0","signature":"15526d247706632c2b6e753f6aae55ad2a694c2bbcc63f701f4ef7f1a63a65b3"}""", jsonString);
+            Assert.Equal("""{"id":"2d4030d32a254ee8a27046e5bafe696a","source":"https://fancy.api/members","type":"MemberCreated","time":"2023-11-16T23:24:17.8414532Z","data":{"name":"Jane Doe","emailAddress":"jd@office.com","metadata":{"memberType":"Savvyio.Assets.EventDriven.MemberCreated, Savvyio.Assets.Tests","eventId":"69bccf3b1117425397c5ed9ed757bb0f","timestamp":"2023-11-16T23:24:17.8414532Z"}},"specversion":"1.0","signature":"049ca36b460e2ac4ee002c37e4c34b7963d9db1b14e1ff150eb8acbd7d7b8f6f"}""", jsonString);
         }
 
         [Fact]
@@ -83,7 +83,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.CloudEvents.C
             var sut4 = NewtonsoftJsonMarshaller.Default.Deserialize<SignedCloudEvent<MemberCreated>>(json);
 
             Assert.Equivalent(sut2, sut4, true);
-            Assert.Equal("""{"id":"2d4030d32a254ee8a27046e5bafe696a","source":"https://fancy.api/members","type":"MemberCreated","time":"2023-11-16T23:24:17.8414532Z","data":{"name":"Jane Doe","emailAddress":"jd@office.com","metadata":{"memberType":"Savvyio.Assets.EventDriven.MemberCreated, Savvyio.Assets.Tests","eventId":"69bccf3b1117425397c5ed9ed757bb0f","timestamp":"2023-11-16T23:24:17.8414532Z"}},"specVersion":"1.0","signature":"15526d247706632c2b6e753f6aae55ad2a694c2bbcc63f701f4ef7f1a63a65b3"}""", jsonString);
+            Assert.Equal("""{"id":"2d4030d32a254ee8a27046e5bafe696a","source":"https://fancy.api/members","type":"MemberCreated","time":"2023-11-16T23:24:17.8414532Z","data":{"name":"Jane Doe","emailAddress":"jd@office.com","metadata":{"memberType":"Savvyio.Assets.EventDriven.MemberCreated, Savvyio.Assets.Tests","eventId":"69bccf3b1117425397c5ed9ed757bb0f","timestamp":"2023-11-16T23:24:17.8414532Z"}},"specversion":"1.0","signature":"049ca36b460e2ac4ee002c37e4c34b7963d9db1b14e1ff150eb8acbd7d7b8f6f"}""", jsonString);
         }
     }
 }

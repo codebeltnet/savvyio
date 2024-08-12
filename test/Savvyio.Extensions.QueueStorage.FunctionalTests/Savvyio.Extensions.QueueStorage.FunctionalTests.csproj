@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>Savvyio.Extensions.QueueStorage</RootNamespace>
+    <UserSecretsId>1e7ac69f-8ed2-4d15-9069-fb975f33083f</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Savvyio.Commands.Messaging\Savvyio.Commands.Messaging.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.EventDriven.Messaging\Savvyio.EventDriven.Messaging.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.QueueStorage\Savvyio.Extensions.DependencyInjection.QueueStorage.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection\Savvyio.Extensions.DependencyInjection.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.Newtonsoft.Json\Savvyio.Extensions.Newtonsoft.Json.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.QueueStorage\Savvyio.Extensions.QueueStorage.csproj" />

@@ -18,7 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Commands;
 using Savvyio.Commands.Messaging;
 using Savvyio.Extensions.DependencyInjection;
-using Savvyio.Extensions.DependencyInjection.Messaging;
+using Savvyio.Extensions.DependencyInjection.QueueStorage;
 using Savvyio.Extensions.QueueStorage.Assets;
 using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging;
@@ -164,14 +164,14 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         {
             services.AddMarshaller<JsonMarshaller>()
                 .AddConfiguredOptions<JsonFormatterOptions>(o => o.Settings.PropertyNamingPolicy = JsonNamingPolicy.KebabCaseLower);
-            services.AddMessageQueue<AzureCommandQueue, ICommand>().AddConfiguredOptions<AzureQueueOptions>(o =>
+            services.AddAzureCommandQueue(o =>
             {
                 o.QueueName = $"savvyio-commands-{Platform}-{BuildType}";
-                o.ConnectionString = "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;";
+                o.ConnectionString = Configuration["Azure:Storage:QueueConnectionString"];
                 o.PostConfigureClient(client =>
                 {
-                    client.Create();
-                    //client.ClearMessages();
+                    client.CreateIfNotExists();
+                    client.ClearMessages();
                 });
             });
         }
