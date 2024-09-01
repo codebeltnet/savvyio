@@ -1,13 +1,5 @@
 name: Savvyi I/O Pipeline
 on:
-  push:
-    branches: [main]
-    paths-ignore:
-      - .codecov/**
-      - .docfx/**
-      - .github/**
-      - .nuget/**
-      - '**.md'
   pull_request:
     branches: [main]
     paths-ignore:
