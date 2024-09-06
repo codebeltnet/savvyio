@@ -5,7 +5,7 @@ using Cuemon.Threading;
 namespace Savvyio.Extensions.EFCore
 {
     /// <summary>
-    /// Specifies options that is related to <see cref="DefaultEfCoreDataStore{T}"/>.
+    /// Specifies options that is related to <see cref="EfCoreDataStore{T}"/>.
     /// </summary>
     /// <seealso cref="AsyncOptions" />
     public class EfCoreQueryOptions<T> : AsyncOptions

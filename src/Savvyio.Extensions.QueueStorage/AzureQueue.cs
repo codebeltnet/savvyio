@@ -155,7 +155,7 @@ namespace Savvyio.Extensions.QueueStorage
         /// Receives messages from the Azure Storage Queue.
         /// </summary>
         /// <param name="setup">The <see cref="AsyncOptions" /> which may be configured.</param>
-        /// <returns>A task that represents the asynchronous operation. The task result contains a sequence of <see cref="IMessage{T}"/> whose generic type argument is <see cref="TRequest"/>.</returns>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a sequence of <see cref="IMessage{T}"/> whose generic type argument is <typeparamref name="TRequest"/>.</returns>
         protected async IAsyncEnumerable<IMessage<TRequest>> ReceiveMessagesAsync(Action<AsyncOptions> setup = null)
         {
             Validator.ThrowIfInvalidConfigurator(setup, out var options);
