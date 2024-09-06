@@ -83,7 +83,12 @@ jobs:
       matrix:
         configuration: [Debug, Release]
     needs: [build]
-    steps:     
+    steps:
+      - name: Install .NET
+        uses: codebeltnet/install-dotnet@v1
+        with:
+          includePreview: true
+
       - name: Pack for ${{ matrix.configuration }}
         uses: codebeltnet/dotnet-pack@v2
         with:
