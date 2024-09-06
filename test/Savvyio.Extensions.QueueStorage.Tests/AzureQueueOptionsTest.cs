@@ -60,7 +60,7 @@ namespace Savvyio.Extensions.QueueStorage
                 QueueName = null
             };
             var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
-            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1, nameof(sut1)));
+            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
 
             TestOutput.WriteLine(sut2.Message);
 
@@ -79,7 +79,7 @@ namespace Savvyio.Extensions.QueueStorage
                 StorageKeyCredential = null
             };
             var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
-            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1, nameof(sut1)));
+            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
 
             TestOutput.WriteLine(sut2.Message);
 
@@ -93,7 +93,7 @@ namespace Savvyio.Extensions.QueueStorage
         {
             var sut1 = new AzureQueueOptions();
             var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
-            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1, nameof(sut1)));
+            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
 
             TestOutput.WriteLine(sut2.Message);
 

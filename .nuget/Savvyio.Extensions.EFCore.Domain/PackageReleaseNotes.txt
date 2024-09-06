@@ -1,3 +1,10 @@
+Version: 4.0.0
+Availability: .NET 9 and .NET 8
+ 
+# ALM
+- REMOVED Support for TFM .NET 6 (LTS)
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
 Version: 3.0.0
 Availability: .NET 8 and .NET 6
  

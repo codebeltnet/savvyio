@@ -12,7 +12,7 @@ namespace Savvyio.Assets.Domain
 
         public Name(string value) : base(value)
         {
-            Validator.ThrowIfNullOrWhitespace(value, nameof(value));
+            Validator.ThrowIfNullOrWhitespace(value);
         }
     }
 }

@@ -19,9 +19,9 @@ namespace Savvyio.Assets.Domain.EventSourcing
 
         public TracedAccount(TracedAccountId id, PlatformProviderId platformProviderId, FullName fullName, EmailAddress emailAddress)
         {
-            Validator.ThrowIfNull(platformProviderId, nameof(platformProviderId));
-            Validator.ThrowIfNull(fullName, nameof(fullName));
-            Validator.ThrowIfNull(emailAddress, nameof(emailAddress));
+            Validator.ThrowIfNull(platformProviderId);
+            Validator.ThrowIfNull(fullName);
+            Validator.ThrowIfNull(emailAddress);
             AddEvent(new TracedAccountInitiated(id, platformProviderId, fullName, emailAddress));
         }
 
@@ -58,14 +58,14 @@ namespace Savvyio.Assets.Domain.EventSourcing
 
         public void ChangeFullName(FullName fullName)
         {
-            Validator.ThrowIfNull(fullName, nameof(fullName));
+            Validator.ThrowIfNull(fullName);
             if (fullName.Equals((FullName)FullName)) { return; }
             AddEvent(new TracedAccountFullNameChanged(fullName));
         }
 
         public void ChangeEmailAddress(EmailAddress emailAddress)
         {
-            Validator.ThrowIfNull(emailAddress, nameof(emailAddress));
+            Validator.ThrowIfNull(emailAddress);
             if (emailAddress.Equals((EmailAddress)EmailAddress)) { return; }
             AddEvent(new TracedAccountEmailAddressChanged(emailAddress));
         }

@@ -16,7 +16,7 @@ namespace Savvyio.Assets.Domain
 
         public FullName(string value) : base(value)
         {
-            Validator.ThrowIfNullOrWhitespace(value, nameof(value));
+            Validator.ThrowIfNullOrWhitespace(value);
         }
     }
 }

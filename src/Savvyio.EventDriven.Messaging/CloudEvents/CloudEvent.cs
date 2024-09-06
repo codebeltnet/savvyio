@@ -76,7 +76,7 @@ namespace Savvyio.EventDriven.Messaging.CloudEvents
         private static string EnsureReservedKeywordCompliance(string key) // https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#attribute-naming-convention
         {
             Validator.ThrowIfNullOrWhitespace(key);
-            Validator.ThrowIf.ContainsReservedKeyword(key, ReservedKeywords);
+            Validator.ThrowIfContainsReservedKeyword(key, ReservedKeywords);
             return key.ToLowerInvariant();
         }
 

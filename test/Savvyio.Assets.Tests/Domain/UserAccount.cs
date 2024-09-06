@@ -8,7 +8,7 @@ namespace Savvyio.Assets.Domain
     {
         public UserAccount(AccountId accountId, string userName) : base(accountId)
         {
-            Validator.ThrowIfNullOrWhitespace(userName, nameof(userName));
+            Validator.ThrowIfNullOrWhitespace(userName);
             UserName = userName;
         }
 
