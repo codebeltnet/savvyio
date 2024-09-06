@@ -55,7 +55,6 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
-    <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <RunAnalyzers>false</RunAnalyzers>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
