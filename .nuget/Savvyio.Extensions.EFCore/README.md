@@ -6,7 +6,7 @@ Extend the Savvy I/O core assemblies with support for [Microsoft Entity Framewor
 
 An open-source project (MIT license) that provides a SOLID and clean .NET class library for writing DDD, CQRS and Event Sourcing applications.
 
-![Savvy I/O Flow](https://camo.githubusercontent.com/42bc67d96126f4fb4309553ac8761c599245043b3f07f7eade3bc0cebfe4da14/68747470733a2f2f7374617469632e7361767679696f2e6e65742f7361767679696f2e706e67)
+![Savvy I/O Flow](https://raw.githubusercontent.com/codebeltnet/savvyio/main/.assets/savvyio.png)
 
 It is, by heart, free, flexible and built to extend and boost your agile codebelt.
 
