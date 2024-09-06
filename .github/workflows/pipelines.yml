@@ -41,7 +41,7 @@ jobs:
     strategy:
       matrix:
         configuration: [Debug, Release]
-        framework: [net8.0, net6.0]
+        framework: [net9.0, net8.0]
     outputs:
       version: ${{ steps.minver-calculate.outputs.version }}
     steps:
@@ -50,6 +50,8 @@ jobs:
 
       - name: Install .NET
         uses: codebeltnet/install-dotnet@v1
+        with:
+          includePreview: true
 
       - name: Install MinVer
         uses: codebeltnet/dotnet-tool-install-minver@v1
@@ -105,6 +107,8 @@ jobs:
       
       - name: Install .NET
         uses: codebeltnet/install-dotnet@v1
+        with:
+          includePreview: true
 
       - name: Install .NET Tool - Report Generator
         uses: codebeltnet/dotnet-tool-install-reportgenerator@v1
@@ -141,6 +145,8 @@ jobs:
 
       - name: Install .NET
         uses: codebeltnet/install-dotnet@v1
+        with:
+          includePreview: true
 
       - name: Install .NET Tool - Sonar Scanner
         uses: codebeltnet/dotnet-tool-install-sonarscanner@v1
@@ -191,6 +197,8 @@ jobs:
 
       - name: Install .NET
         uses: codebeltnet/install-dotnet@v1
+        with:
+          includePreview: true
 
       - name: Restore Dependencies
         uses: codebeltnet/dotnet-restore@v2
