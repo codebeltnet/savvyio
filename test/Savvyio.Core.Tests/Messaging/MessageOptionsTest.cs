@@ -32,7 +32,7 @@ namespace Savvyio.Messaging
                 MessageId = messageId
             };
             var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
-            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1, nameof(sut1)));
+            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
 
             Assert.Equal($"Operation is not valid due to the current state of the object. (Expression '{nameof(MessageOptions.MessageId)}.IsNullOrWhiteSpace()')", sut2.Message);
             Assert.Equal($"{nameof(MessageOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
@@ -47,7 +47,7 @@ namespace Savvyio.Messaging
                 Time = DateTime.Now
             };
             var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
-            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1, nameof(sut1)));
+            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
 
             Assert.Equal($"Operation is not valid due to the current state of the object. (Expression '{nameof(MessageOptions.Time)}.HasValue && {nameof(MessageOptions.Time)}.Value.Kind != DateTimeKind.Utc')", sut2.Message);
             Assert.Equal($"{nameof(MessageOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);

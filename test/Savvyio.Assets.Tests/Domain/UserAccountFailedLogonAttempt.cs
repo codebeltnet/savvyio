@@ -7,8 +7,8 @@ namespace Savvyio.Assets.Domain
     {
         public UserAccountFailedLogonAttempt(AccountId accountId, string userHostAddress)
         {
-            Validator.ThrowIfNull(accountId, nameof(accountId));
-            Validator.ThrowIfNullOrWhitespace(userHostAddress, nameof(userHostAddress));
+            Validator.ThrowIfNull(accountId);
+            Validator.ThrowIfNullOrWhitespace(userHostAddress);
 
             AccountId = accountId;
             UserHostAddress = userHostAddress;

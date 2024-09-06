@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Security.Cryptography" Version="8.3.2" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Savvyio.Commands.Messaging\Savvyio.Commands.Messaging.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Commands\Savvyio.Commands.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Domain.EventSourcing\Savvyio.Domain.EventSourcing.csproj" />

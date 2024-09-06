@@ -37,7 +37,7 @@ namespace Savvyio.Extensions.SimpleQueueService
                 Credentials = new AnonymousAWSCredentials()
             };
             var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
-            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1, nameof(sut1)));
+            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
 
             Assert.Equal($"Operation is not valid due to the current state of the object. (Expression '{nameof(AmazonMessageOptions.Endpoint)} == null')", sut2.Message);
             Assert.Equal($"{nameof(AmazonMessageOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
@@ -53,7 +53,7 @@ namespace Savvyio.Extensions.SimpleQueueService
                 Credentials = new AnonymousAWSCredentials()
             };
             var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
-            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1, nameof(sut1)));
+            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
 
             Assert.Equal($"Operation is not valid due to the current state of the object. (Expression '{nameof(AmazonMessageOptions.SourceQueue)} == null')", sut2.Message);
             Assert.Equal($"{nameof(AmazonMessageOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
@@ -69,7 +69,7 @@ namespace Savvyio.Extensions.SimpleQueueService
                 SourceQueue = new Uri("urn:null"),
             };
             var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
-            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1, nameof(sut1)));
+            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
 
             Assert.Equal($"Operation is not valid due to the current state of the object. (Expression '{nameof(AmazonMessageOptions.Credentials)} == null')", sut2.Message);
             Assert.Equal($"{nameof(AmazonMessageOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);

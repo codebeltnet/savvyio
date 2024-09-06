@@ -8,10 +8,11 @@ using Cuemon.Extensions.Collections.Generic;
 using Cuemon.Extensions.Newtonsoft.Json.Formatters;
 using Cuemon.Extensions.Text.Json.Formatters;
 using Cuemon.Extensions.Xunit;
-using Cuemon.Extensions.Xunit.Hosting.AspNetCore.Mvc;
+using Cuemon.Extensions.Xunit.Hosting.AspNetCore;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Savvyio.Assets;
 using Savvyio.Assets.Commands;
 using Savvyio.Assets.Domain;
@@ -49,7 +50,7 @@ namespace Savvyio
         [Fact, Priority(0)]
         public async Task EmulateWebApi_Controller_SendCommand()
         {
-            using (var host = WebApplicationTestFactory.CreateWithHostBuilderContext((context, services) =>
+            using (var host = WebHostTestFactory.CreateWithHostBuilderContext((context, services) =>
                    {
                        services.AddMarshaller<NewtonsoftJsonMarshaller>();
                        services.AddAmazonCommandQueue(o =>
@@ -78,16 +79,8 @@ namespace Savvyio
         [Fact, Priority(1)]
         public async Task EmulateWorker_ReceiveCommand()
         {
-            using (var host = WebApplicationTestFactory.CreateWithHostBuilderContext((context, services) =>
+            using (var host = WebHostTestFactory.CreateWithHostBuilderContext((context, services) =>
                    {
-                       services.AddScoped(_ =>
-                       {
-                           return new Action<JsonFormatterOptions>(o =>
-                           {
-                               o.Settings.Converters.AddMessageConverter().AddMetadataDictionaryConverter();
-                           });
-                       });
-                       //services.Configure<JsonFormatterOptions>(o => o.Settings.Converters.AddMessageConverter().AddMetadataDictionaryConverter());
                        services.AddMarshaller<JsonMarshaller>();
                        services.AddEfCoreAggregateDataSource<Account>(o =>
                        {
@@ -101,7 +94,7 @@ namespace Savvyio
                            o.ModelConstructor = mb => mb.AddPlatformProvider();
                        }).AddEfCoreRepository<PlatformProvider, Guid, PlatformProvider>();
 
-                       services.AddDapperDataSource(o => o.ConnectionFactory = () => new SqliteConnection().SetDefaults().AddAccountTable().AddPlatformProviderTable(), o => o.Lifetime = ServiceLifetime.Scoped)
+                       services.AddDapperDataSource(o => o.ConnectionFactory = () => new SqliteConnection().SetDefaults().AddAccountTable().AddPlatformProviderTable())
                            .AddDapperDataStore<AccountData, AccountProjection>()
                            .AddDapperExtensionsDataStore<PlatformProviderProjection>();
 
@@ -130,15 +123,17 @@ namespace Savvyio
 
                 await Task.Delay(TimeSpan.FromSeconds(5));
 
-                var commandQueue = host.ServiceProvider.GetRequiredService<IPointToPointChannel<ICommand>>();
-                var mediator = host.ServiceProvider.GetRequiredService<IMediator>();
+                using var scope = host.ServiceProvider.GetService<IServiceScopeFactory>().CreateScope();
+
+                var commandQueue = scope.ServiceProvider.GetRequiredService<IPointToPointChannel<ICommand>>();
+                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
                 var createAccountMessage = await commandQueue.ReceiveAsync().SingleOrDefaultAsync().ConfigureAwait(false);
 
                 Assert.IsType<CreateAccount>(createAccountMessage.Data);
 
                 await mediator.CommitAsync(createAccountMessage.Data);
 
-                var accounts = host.ServiceProvider.GetRequiredService<IPersistentRepository<Account, long, Account>>();
+                var accounts = scope.ServiceProvider.GetRequiredService<IPersistentRepository<Account, long, Account>>();
 
                 var entity = await accounts.FindAllAsync(account => account.EmailAddress == "root@aws.dev").SingleOrDefaultAsync();
 
@@ -155,7 +150,7 @@ namespace Savvyio
         [Fact, Priority(2)]
         public async Task EmulateAnotherWorker_SubscribingToAccountCreated()
         {
-            using (var host = WebApplicationTestFactory.CreateWithHostBuilderContext((context, services) =>
+            using (var host = WebHostTestFactory.CreateWithHostBuilderContext((context, services) =>
                    {
                        services.Configure<JsonFormatterOptions>(o => o.Settings.Converters.AddMessageConverter().AddMetadataDictionaryConverter());
                        services.AddMarshaller<JsonMarshaller>();

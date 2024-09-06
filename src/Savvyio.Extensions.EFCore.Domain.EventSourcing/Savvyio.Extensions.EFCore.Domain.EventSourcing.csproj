@@ -5,6 +5,10 @@
     <PackageTags>es event-sourcing ddd domain-driven-design aggregate-repository traced-aggregate-repository di depedency-injection marker data-store dao data-access-object</PackageTags>
   </PropertyGroup>
 
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net9'))">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.0-preview.7.24405.3" />
+  </ItemGroup>
+
   <ItemGroup Condition="$(TargetFramework.StartsWith('net8'))">
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.8" />
   </ItemGroup>

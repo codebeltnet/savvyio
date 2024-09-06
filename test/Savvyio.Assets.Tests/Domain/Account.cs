@@ -65,7 +65,7 @@ namespace Savvyio.Assets.Domain
 
         public void RegisterFailedLogonAttempt(string userHostAddress)
         {
-            Validator.ThrowIfNullOrWhitespace(userHostAddress, nameof(userHostAddress));
+            Validator.ThrowIfNullOrWhitespace(userHostAddress);
             var failedLogonAttempt = new UserAccountFailedLogonAttempt(Id, userHostAddress);
             AddEvent(new UserAccountFailedLogonAttemptCreated(failedLogonAttempt));
         }

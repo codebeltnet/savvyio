@@ -12,8 +12,8 @@ namespace Savvyio.Assets.Domain
 
         public EmailAddress(string value) : base(value)
         {
-            Validator.ThrowIfNullOrWhitespace(value, nameof(value));
-            Validator.ThrowIfNotEmailAddress(value, nameof(value));
+            Validator.ThrowIfNullOrWhitespace(value);
+            Validator.ThrowIfNotEmailAddress(value);
         }
     }
 }

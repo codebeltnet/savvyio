@@ -36,7 +36,7 @@ namespace Savvyio.Extensions.SimpleQueueService
                 AccountId = accountId
             };
             var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
-            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1, nameof(sut1)));
+            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
 
             Assert.Equal($"Operation is not valid due to the current state of the object. (Expression '{nameof(AmazonResourceNameOptions.AccountId)}.IsNullOrWhiteSpace() || {nameof(AmazonResourceNameOptions.AccountId)}.Length != 12 || !{nameof(AmazonResourceNameOptions.AccountId)}.IsNumeric(NumberStyles.Integer)')", sut2.Message);
             Assert.Equal($"{nameof(AmazonResourceNameOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
@@ -54,7 +54,7 @@ namespace Savvyio.Extensions.SimpleQueueService
                 Partition = partition
             };
             var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
-            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1, nameof(sut1)));
+            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
 
             Assert.Equal($"Operation is not valid due to the current state of the object. (Expression '{nameof(AmazonResourceNameOptions.Partition)}.IsNullOrWhiteSpace()')", sut2.Message);
             Assert.Equal($"{nameof(AmazonResourceNameOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
@@ -72,7 +72,7 @@ namespace Savvyio.Extensions.SimpleQueueService
                 Region = region
             };
             var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
-            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1, nameof(sut1)));
+            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
 
             Assert.Equal($"Operation is not valid due to the current state of the object. (Expression '{nameof(AmazonResourceNameOptions.Region)}.IsNullOrWhiteSpace()')", sut2.Message);
             Assert.Equal($"{nameof(AmazonResourceNameOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);

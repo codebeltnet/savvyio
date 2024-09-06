@@ -7,8 +7,8 @@ namespace Savvyio.Assets.Domain
     {
         public UserAccountPassword(AccountId accountId, Credentials password)
         {
-            Validator.ThrowIfNull(accountId, nameof(accountId));
-            Validator.ThrowIfNull(password, nameof(password));
+            Validator.ThrowIfNull(accountId);
+            Validator.ThrowIfNull(password);
 
             AccountId = accountId;
             Hash = password.Hash;

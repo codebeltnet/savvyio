@@ -10,9 +10,9 @@ namespace Savvyio.Assets.Domain
     {
         public Credentials(string username, string password, string salt)
         {
-            Validator.ThrowIfNullOrWhitespace(username, nameof(username));
-            Validator.ThrowIfNullOrWhitespace(password, nameof(password));
-            Validator.ThrowIfNullOrWhitespace(salt, nameof(salt));
+            Validator.ThrowIfNullOrWhitespace(username);
+            Validator.ThrowIfNullOrWhitespace(password);
+            Validator.ThrowIfNullOrWhitespace(salt);
             UserName = username;
             Hash = KeyedHashFactory.CreateHmacCryptoSha256(salt.ToByteArray()).ComputeHash(password).ToHexadecimalString();
             Salt = salt;
