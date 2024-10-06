@@ -86,7 +86,7 @@ namespace Savvyio.Extensions.DependencyInjection
         public static IServiceCollection AddDataSource<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IDataSource
         {
             Validator.ThrowIfNull(services);
-            var options = (setup ?? (o => o.Lifetime = ServiceLifetime.Scoped)).Configure();
+            var options = (setup ?? (o => o.Lifetime = ServiceLifetime.Singleton)).Configure();
             return services.Add<TService>(o =>
             {
                 o.Lifetime = options.Lifetime;

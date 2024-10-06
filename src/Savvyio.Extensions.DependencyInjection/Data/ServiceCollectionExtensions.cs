@@ -35,7 +35,7 @@ namespace Savvyio.Extensions.DependencyInjection.Data
             where TService : class, IPersistentDataStore<T, AsyncOptions>
             where T : class
         {
-            return AddDataStore<TService, T, AsyncOptions>(services, setup ?? (o => o.Lifetime = ServiceLifetime.Scoped));
+            return AddDataStore<TService, T, AsyncOptions>(services, setup ?? (o => o.Lifetime = ServiceLifetime.Singleton));
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Savvyio.Extensions.DependencyInjection.Data
             where TOptions : AsyncOptions, new()
         {
             Validator.ThrowIfNull(services);
-            var options = Patterns.Configure(setup ?? (o => o.Lifetime = ServiceLifetime.Scoped));
+            var options = Patterns.Configure(setup ?? (o => o.Lifetime = ServiceLifetime.Singleton));
             return services.Add<TService>(o =>
             {
                 o.Lifetime = options.Lifetime;
