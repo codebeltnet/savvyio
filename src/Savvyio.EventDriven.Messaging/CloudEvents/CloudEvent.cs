@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Cuemon;
 using Cuemon.Collections.Generic;
-using Cuemon.Extensions;
 using Savvyio.Messaging;
 
 namespace Savvyio.EventDriven.Messaging.CloudEvents
