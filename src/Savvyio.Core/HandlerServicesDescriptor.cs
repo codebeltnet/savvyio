@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using Cuemon;
 using Cuemon.Extensions;
@@ -24,8 +23,11 @@ namespace Savvyio
     ///    *UpdateAccount --> &amp;&lt;RegisterDelegates&gt;b__5_0<br/>
     ///    *CreateAccount --> &amp;CreateAccountAsync<br/>
     /// </remarks>>
-    public class HandlerServicesDescriptor
+    public class HandlerServicesDescriptor : IHandlerServicesDescriptor
     {
+        private List<HandlerDiscoveryModel> _models;
+        private readonly object _locker = new();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="HandlerServicesDescriptor"/> class.
         /// </summary>
@@ -48,81 +50,64 @@ namespace Savvyio
         public override string ToString()
         {
             var builder = new StringBuilder();
-            foreach (var serviceType in ServiceTypes)
+            foreach (var model in GenerateHandlerDiscoveries())
             {
-                var serviceRequestType = serviceType.GetInterface("IHandler`1")?.GenericTypeArguments.Single();
-                if (serviceRequestType == null) { continue; }
-                foreach (var discoveredServicesGroup in DiscoveredServices)
+                var discovery = $"Discovered {model.ImplementationsCount} {model.AbstractionType} implementation{(model.ImplementationsCount > 1 ? "s" : "")} covering a total of {model.DelegatesCount} {model.DelegateType} method{(model.DelegatesCount > 1 ? "s" : "")}";
+                builder.Append(discovery);
+                builder.AppendLine();
+                foreach (var assembly in model.Assemblies)
                 {
-                    AppendServices(builder, serviceType, serviceRequestType, discoveredServicesGroup);
-                }
-            }
-            return builder.ToString();
-        }
+                    builder.AppendLine();
+                    builder.AppendLine($"Assembly: {assembly.Name}");
+                    builder.AppendLine($"Namespace: {assembly.Namespace}");
+                    builder.AppendLine();
 
-        private static void AppendServices(StringBuilder builder, Type serviceType, Type serviceRequestType, IGrouping<Type, KeyValuePair<Type, List<IHierarchy<object>>>> discoveredServicesGroup)
-        {
-            var handlers = discoveredServicesGroup.Where(pair => pair.Key == serviceType).SelectMany(pair => pair.Value).ToList();
-            if (handlers.Count == 0) { return; }
-            var index = builder.Length;
-            var handlerMethodCount = 0;
-            builder.AppendLine();
-            foreach (var group in handlers.GroupBy(h =>
-                     {
-                         var ti = h.Instance.As<Type>();
-                         return new Tuple<string, string>(ti.Assembly.GetName().Name, ti.Namespace);
-                     }))
-            {
-                var methodCount = 0;
-                AppendHandler(builder, group, serviceRequestType, ref methodCount);
-                handlerMethodCount += methodCount;
-            }
-            var text = $"Discovered {handlers.Count} {serviceType.Name} implementation{(handlers.Count > 1 ? "s" : "")} covering a total of {handlerMethodCount} {serviceRequestType.Name} method{(handlerMethodCount > 1 ? "s" : "")}";
-            builder.Insert(index, text);
-            var dashes = Generate.FixedString('-', text.Length.Max(text.Length.Max(text.Length)));
-            builder.AppendLine(dashes);
-            builder.AppendLine();
-        }
-
-        private static void AppendHandler(StringBuilder builder, IGrouping<Tuple<string, string>, IHierarchy<object>> group, Type serviceRequestType, ref int methodCount)
-        {
-            builder.AppendLine();
-            builder.AppendLine($"Assembly: {group.Key.Item1}");
-            builder.AppendLine($"Namespace: {group.Key.Item2}");
-            builder.AppendLine();
-            foreach (var node in group)
-            {
-                if (node.Instance is Type ti)
-                {
-                    AppendHandlerRelations(builder, node, ti, serviceRequestType, ref methodCount);
-                }
-            }
-        }
-
-        private static void AppendHandlerRelations(StringBuilder builder, IHierarchy<object> node, Type ti, Type serviceRequestType, ref int methodCount)
-        {
-            var children = node.GetChildren().ToList();
-            builder.AppendLine($"<{ti.ToFriendlyName()}>");
-            foreach (var child in children.Select(h => h.Instance).OrderBy(h => h.As<MethodInfo>()?.Name, StringComparer.OrdinalIgnoreCase))
-            {
-                if (child is MethodInfo mi)
-                {
-                    var p = mi.GetParameters().Single(p => p.ParameterType.HasInterfaces(serviceRequestType));
-                    builder.AppendLine($"\t*{p.ParameterType.Name} --> &{mi.Name}");
-                    methodCount++;
-                }
-                else if (child is Type runtimeType) // we will get here when no class dependencies is specified (eg. isolated 'method')
-                {
-                    var nestedMethods = runtimeType.GetRuntimeMethods().Where(i => i.GetParameters().Any(p => p.ParameterType.HasInterfaces(serviceRequestType)));
-                    foreach (var nested in nestedMethods)
+                    foreach (var implementation in assembly.Implementations)
                     {
-                        var p = nested.GetParameters().Single();
-                        builder.AppendLine($"\t*{p.ParameterType.Name} --> &{nested.Name}");
-                        methodCount++;
+                        builder.AppendLine($"<{implementation.Name}>");
+                        foreach (var @delegate in implementation.Delegates)
+                        {
+                            builder.AppendLine($"\t*{@delegate.Type} --> &{@delegate.Handler}");
+                        }
+                        builder.AppendLine();
+                    }
+                }
+                builder.AppendLine(Generate.FixedString('-', discovery.Length.Max(discovery.Length.Max(discovery.Length))));
+                builder.AppendLine();
+            }
+            return builder.ToString().TrimEnd();
+        }
+
+        /// <summary>
+        /// Generates the handler discoveries.
+        /// </summary>
+        /// <returns>A collection of <see cref="HandlerDiscoveryModel" /> representing the handler discoveries.</returns>
+        public IEnumerable<HandlerDiscoveryModel> GenerateHandlerDiscoveries()
+        {
+            if (_models == null)
+            {
+                lock (_locker)
+                {
+                    if (_models == null)
+                    {
+                        _models = new List<HandlerDiscoveryModel>();
+                        foreach (var serviceType in ServiceTypes)
+                        {
+                            var serviceRequestType = serviceType.GetInterface("IHandler`1")?.GenericTypeArguments.Single();
+                            if (serviceRequestType == null) { continue; }
+                            foreach (var discoveredServicesGroup in DiscoveredServices)
+                            {
+                                var model = new HandlerDiscoveryModel(serviceType, serviceRequestType, discoveredServicesGroup);
+                                if (model.ImplementationsCount > 0)
+                                {
+                                    _models.Add(model);
+                                }
+                            }
+                        }
                     }
                 }
             }
-            builder.AppendLine();
+            return _models;
         }
     }
 }

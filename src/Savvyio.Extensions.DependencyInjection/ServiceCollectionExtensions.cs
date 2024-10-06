@@ -108,6 +108,20 @@ namespace Savvyio.Extensions.DependencyInjection
         }
 
         /// <summary>
+        /// Adds the <see cref="HandlerServicesDescriptor"/> to the specified <see cref="IServiceCollection"/> if it was allowed included from <see cref="AddSavvyIO"/>.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
+        /// <returns>A reference to <paramref name="services"/> so that additional calls can be chained.</returns>
+        public static IServiceCollection AddHandlerServicesDescriptor(this IServiceCollection services)
+        {
+            if (services.Any(sd => sd.ServiceType == typeof(HandlerServicesDescriptor)))
+            {
+                services.AddSingleton<IHandlerServicesDescriptor>(provider => provider.GetRequiredService<HandlerServicesDescriptor>());
+            }
+            return services;
+        }
+
+        /// <summary>
         /// Adds Savvy I/O related dispatcher- and handler- types to the specified <see cref="IServiceCollection"/>.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>

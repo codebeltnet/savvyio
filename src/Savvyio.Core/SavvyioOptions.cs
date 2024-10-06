@@ -75,7 +75,6 @@ namespace Savvyio
         /// <value><c>true</c> discovery of <see cref="IDispatcher"/> implementations using assembly scanning is enabled; otherwise, <c>false</c>.</value>
         public bool AllowDispatcherDiscovery { get; private set; }
 
-
         /// <summary>
         /// Gets a value indicating whether the <see cref="HandlerServicesDescriptor"/> is enabled.
         /// </summary>
@@ -107,7 +106,7 @@ namespace Savvyio
         /// <summary>
         /// Enables the inclusion of the <see cref="HandlerServicesDescriptor"/> that provides an overview of all handlers presented in a detailed and developer friendly way.
         /// </summary>
-        /// <param name="includeHandlerServicesDescriptor"><c>true</c> enables the inclusion of the <see cref="HandlerServicesDescriptor"/> that provides an overview of all handlers presented in a detailed and developer friendly way; otherwise, <c>false</c>.</param>
+        /// <param name="includeHandlerServicesDescriptor"><c>true</c> enables the inclusion of an <see cref="IHandlerServicesDescriptor"/> implemenation that provides an overview of all handlers presented in a detailed and developer friendly way; otherwise, <c>false</c>.</param>
         /// <returns>A reference to this instance so that additional configuration calls can be chained.</returns>
         public SavvyioOptions EnableHandlerServicesDescriptor(bool includeHandlerServicesDescriptor = true)
         {
@@ -152,7 +151,7 @@ namespace Savvyio
         /// <typeparam name="TRequest">The type of the model to handle.</typeparam>
         /// <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
         /// <returns>A reference to this instance so that additional configuration calls can be chained.</returns>
-        /// <remarks>Handler is only added if the following conditions are true: <c>typeof(THandler).HasInterfaces(typeof(IHandler&lt;TRequest&gt;)) &amp;&amp; typeof(T).IsClass &amp;&amp; !typeof(T).IsAbstract &amp;&amp; !typeof(T).IsInterface</c></remarks>
+        /// <remarks>Type is only added if the following conditions are true: <c>typeof(THandler).HasInterfaces(typeof(IHandler&lt;TRequest&gt;)) &amp;&amp; typeof(T).IsClass &amp;&amp; !typeof(T).IsAbstract &amp;&amp; !typeof(T).IsInterface</c></remarks>
         public SavvyioOptions AddHandler<THandler, TRequest, TImplementation>()
             where THandler : IHandler<TRequest>
             where TRequest : IRequest
