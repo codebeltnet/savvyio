@@ -6,9 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.400.15" />
-    <PackageReference Include="AWSSDK.SQS" Version="3.7.400.15" />
-    <PackageReference Include="Cuemon.Extensions.IO" Version="9.0.0-preview.4" />
+    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.400.30" />
+    <PackageReference Include="AWSSDK.SQS" Version="3.7.400.30" />
+    <PackageReference Include="Cuemon.Extensions.IO" Version="9.0.0-preview.10" />
   </ItemGroup>
 
   <ItemGroup>

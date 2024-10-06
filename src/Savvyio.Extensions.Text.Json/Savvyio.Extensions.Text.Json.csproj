@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Extensions.Text.Json" Version="9.0.0-preview.4" />
+    <PackageReference Include="Cuemon.Extensions.Text.Json" Version="9.0.0-preview.10" />
   </ItemGroup>
 
   <ItemGroup>
