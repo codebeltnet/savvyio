@@ -1,4 +1,4 @@
-﻿using Cuemon.Extensions.Newtonsoft.Json.Serialization;
+﻿using Codebelt.Extensions.Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 
 namespace Savvyio.Extensions.Newtonsoft.Json

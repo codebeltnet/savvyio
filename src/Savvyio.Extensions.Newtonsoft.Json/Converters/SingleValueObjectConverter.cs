@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Cuemon.Extensions;
-using Cuemon.Extensions.Newtonsoft.Json;
+using Codebelt.Extensions.Newtonsoft.Json;
 using Cuemon.Extensions.Reflection;
 using Newtonsoft.Json;
 using Savvyio.Domain;

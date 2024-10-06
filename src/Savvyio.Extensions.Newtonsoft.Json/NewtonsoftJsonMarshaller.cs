@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using Cuemon.Extensions.Newtonsoft.Json.Formatters;
+using Codebelt.Extensions.Newtonsoft.Json.Formatters;
 using Newtonsoft.Json;
 
 namespace Savvyio.Extensions.Newtonsoft.Json
