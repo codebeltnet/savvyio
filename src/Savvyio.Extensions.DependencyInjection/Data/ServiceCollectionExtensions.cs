@@ -35,7 +35,7 @@ namespace Savvyio.Extensions.DependencyInjection.Data
             where TService : class, IPersistentDataStore<T, AsyncOptions>
             where T : class
         {
-            return AddDataStore<TService, T, AsyncOptions>(services, setup ?? (o => o.Lifetime = ServiceLifetime.Singleton));
+            return AddDataStore<TService, T, AsyncOptions>(services, setup);
         }
 
         /// <summary>
