@@ -38,7 +38,7 @@ namespace Savvyio.Extensions.DependencyInjection.Domain
             where TEntity : class, IIdentity<TKey>
         {
             Validator.ThrowIfNull(services);
-            var options = Patterns.Configure(setup ?? (o => o.Lifetime = ServiceLifetime.Scoped));
+            var options = (setup ?? (o => o.Lifetime = ServiceLifetime.Scoped)).Configure();
             return services.Add<TService>(o =>
             {
                 o.Lifetime = options.Lifetime;

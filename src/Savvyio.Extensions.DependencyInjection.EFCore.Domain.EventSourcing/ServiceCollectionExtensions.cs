@@ -25,7 +25,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
         /// <seealso cref="EfCoreAggregateRepository{TEntity,TKey}"/>
         public static IServiceCollection AddEfCoreTracedAggregateRepository<TEntity, TKey>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TEntity : class, ITracedAggregateRoot<TKey>
         {
-            return services.AddTracedAggregateRepository<EfCoreTracedAggregateRepository<TEntity, TKey>, TEntity, TKey>(setup ?? (o => o.Lifetime = ServiceLifetime.Scoped));
+            return services.AddTracedAggregateRepository<EfCoreTracedAggregateRepository<TEntity, TKey>, TEntity, TKey>(setup);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
         /// <seealso cref="EfCoreAggregateRepository{TEntity,TKey,TMarker}"/>
         public static IServiceCollection AddEfCoreTracedAggregateRepository<TEntity, TKey, TMarker>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TEntity : class, ITracedAggregateRoot<TKey>
         {
-            return services.AddTracedAggregateRepository<EfCoreTracedAggregateRepository<TEntity, TKey, TMarker>, TEntity, TKey>(setup ?? (o => o.Lifetime = ServiceLifetime.Scoped));
+            return services.AddTracedAggregateRepository<EfCoreTracedAggregateRepository<TEntity, TKey, TMarker>, TEntity, TKey>(setup);
         }
     }
 }

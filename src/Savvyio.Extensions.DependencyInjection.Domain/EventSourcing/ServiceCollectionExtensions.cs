@@ -35,7 +35,7 @@ namespace Savvyio.Extensions.DependencyInjection.Domain.EventSourcing
             where TEntity : class, ITracedAggregateRoot<TKey>
         {
             Validator.ThrowIfNull(services);
-            var options = Patterns.Configure(setup);
+            var options = (setup ?? (o => o.Lifetime = ServiceLifetime.Scoped)).Configure();
             return services.Add<TService>(o =>
             {
                 o.Lifetime = options.Lifetime;
