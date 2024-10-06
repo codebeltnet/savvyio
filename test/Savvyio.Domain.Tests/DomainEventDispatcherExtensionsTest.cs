@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cuemon;
 using Cuemon.Extensions;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Cuemon.Reflection;
 using Cuemon.Security.Cryptography;
 using Microsoft.Extensions.DependencyInjection;

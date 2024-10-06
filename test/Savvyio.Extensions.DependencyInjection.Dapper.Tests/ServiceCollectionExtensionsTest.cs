@@ -1,4 +1,4 @@
-﻿using Cuemon.Extensions.Xunit;
+﻿using Codebelt.Extensions.Xunit;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Assets;
@@ -18,7 +18,7 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         public void AddDapperDataSource_ShouldAddDefaultImplementation()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddDapperDataSource(o => o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:"), o => o.Lifetime = ServiceLifetime.Scoped);
+            sut1.AddDapperDataSource(o => o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:"));
             var sut2 = sut1.BuildServiceProvider();
 
             Assert.IsType<DapperDataSource>(sut2.GetRequiredService<IDapperDataSource>());
@@ -30,7 +30,7 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         public void AddDapperDataSource_ShouldAddDefaultImplementationWithMarker()
         {
             var sut1 = new ServiceCollection();
-            sut1.AddDapperDataSource<DbMarker>(o => o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:"), o => o.Lifetime = ServiceLifetime.Scoped);
+            sut1.AddDapperDataSource<DbMarker>(o => o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:"));
             var sut2 = sut1.BuildServiceProvider();
 
             Assert.IsType<DapperDataSource<DbMarker>>(sut2.GetRequiredService<IDapperDataSource<DbMarker>>());

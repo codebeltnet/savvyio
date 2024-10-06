@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Cuemon.Extensions.Xunit;
-using Cuemon.Extensions.Xunit.Hosting;
+using Codebelt.Extensions.Xunit;
+using Codebelt.Extensions.Xunit.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -46,16 +46,16 @@ namespace Savvyio.Extensions.Dispatchers
         {
             using (var host = GenericHostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>())))
             {
-                Assert.Throws<InvalidOperationException>(() => host.ServiceProvider.GetRequiredService<HandlerServicesDescriptor>());
+                Assert.Throws<InvalidOperationException>(() => host.ServiceProvider.GetRequiredService<IHandlerServicesDescriptor>());
             }
         }
 
         [Fact]
         public void Host_MediatorDescriptorShouldBeRegistered()
         {
-            using (var host = GenericHostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>().EnableHandlerServicesDescriptor())))
+            using (var host = GenericHostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>().EnableHandlerServicesDescriptor()).AddHandlerServicesDescriptor()))
             {
-                var descriptor = host.ServiceProvider.GetRequiredService<HandlerServicesDescriptor>();
+                var descriptor = host.ServiceProvider.GetRequiredService<IHandlerServicesDescriptor>();
 
                 Assert.IsType<HandlerServicesDescriptor>(descriptor);
 
@@ -79,14 +79,16 @@ namespace Savvyio.Extensions.Dispatchers
                     o.ModelConstructor = mb => mb.AddPlatformProvider();
                 });
                 services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true).AddMediator<Mediator>());
-                services.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
-                services.AddScoped<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
+                services.AddHandlerServicesDescriptor();
+                services.AddSingleton<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
+                services.AddSingleton<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
             }))
             {
-                var mediator = host.ServiceProvider.GetRequiredService<IMediator>();
-                var descriptor = host.ServiceProvider.GetRequiredService<HandlerServicesDescriptor>();
-                var deStore = host.ServiceProvider.GetRequiredService<ITestStore<IDomainEvent>>();
-                var ieStore = host.ServiceProvider.GetRequiredService<ITestStore<IIntegrationEvent>>();
+                using var scope = host.ServiceProvider.CreateScope();
+                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                var descriptor = scope.ServiceProvider.GetRequiredService<IHandlerServicesDescriptor>();
+                var deStore = scope.ServiceProvider.GetRequiredService<ITestStore<IDomainEvent>>();
+                var ieStore = scope.ServiceProvider.GetRequiredService<ITestStore<IIntegrationEvent>>();
 
                 TestOutput.WriteLine(descriptor.ToString());
 
@@ -108,7 +110,7 @@ namespace Savvyio.Extensions.Dispatchers
             using (var host = GenericHostTestFactory.Create(services =>
             {
                 services.AddSingleton(TestOutput);
-                services.AddEfCoreRepository<Account, long>();
+                services.AddEfCoreRepository<Account, long, Account>();
                 services.AddEfCoreDataStore<PlatformProvider, PlatformProvider>();
                 services.AddDataSource<CustomEfCoreDataSource>()
                     .AddUnitOfWork<CustomEfCoreDataSource>();
@@ -121,14 +123,16 @@ namespace Savvyio.Extensions.Dispatchers
                 {
                     o.AddMediator<Mediator>().EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true);
                 });
-                services.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
-                services.AddScoped<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
+                services.AddHandlerServicesDescriptor();
+                services.AddSingleton<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
+                services.AddSingleton<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
             }))
             {
-                var mediator = host.ServiceProvider.GetRequiredService<IMediator>();
-                var descriptor = host.ServiceProvider.GetRequiredService<HandlerServicesDescriptor>();
-                var deStore = host.ServiceProvider.GetRequiredService<ITestStore<IDomainEvent>>();
-                var ieStore = host.ServiceProvider.GetRequiredService<ITestStore<IIntegrationEvent>>();
+                var scope = host.ServiceProvider.CreateScope();
+                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                var descriptor = scope.ServiceProvider.GetRequiredService<IHandlerServicesDescriptor>();
+                var deStore = scope.ServiceProvider.GetRequiredService<ITestStore<IDomainEvent>>();
+                var ieStore = scope.ServiceProvider.GetRequiredService<ITestStore<IIntegrationEvent>>();
 
                 TestOutput.WriteLine(descriptor.ToString());
 
@@ -150,19 +154,21 @@ namespace Savvyio.Extensions.Dispatchers
             using (var host = GenericHostTestFactory.Create(services =>
                    {
                        services.AddSingleton(TestOutput);
-                       services.AddScoped<IPersistentRepository<Account, long>, EfCoreRepository<Account, long, Account>>();
-                       services.AddScoped<IPersistentRepository<PlatformProvider, Guid>, EfCoreRepository<PlatformProvider, Guid, PlatformProvider>>();
+                       services.AddSingleton<IPersistentRepository<Account, long>, EfCoreRepository<Account, long, Account>>();
+                       services.AddSingleton<IPersistentRepository<PlatformProvider, Guid>, EfCoreRepository<PlatformProvider, Guid, PlatformProvider>>();
                        services.AddEfCoreDataSource<Account>(o => o.ModelConstructor = builder => builder.AddAccount());
                        services.AddEfCoreDataSource<PlatformProvider>(o => o.ModelConstructor = builder => builder.AddPlatformProvider());
                        services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true));
-                       services.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
-                       services.AddScoped<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
+                       services.AddHandlerServicesDescriptor();
+                       services.AddSingleton<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
+                       services.AddSingleton<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
                    }))
             {
-                var mediator = host.ServiceProvider.GetRequiredService<IQueryDispatcher>();
-                var descriptor = host.ServiceProvider.GetRequiredService<HandlerServicesDescriptor>();
-                var deStore = host.ServiceProvider.GetRequiredService<ITestStore<IDomainEvent>>();
-                var ieStore = host.ServiceProvider.GetRequiredService<ITestStore<IIntegrationEvent>>();
+                using var scope = host.ServiceProvider.CreateScope();
+                var mediator = scope.ServiceProvider.GetRequiredService<IQueryDispatcher>();
+                var descriptor = scope.ServiceProvider.GetRequiredService<IHandlerServicesDescriptor>();
+                var deStore = scope.ServiceProvider.GetRequiredService<ITestStore<IDomainEvent>>();
+                var ieStore = scope.ServiceProvider.GetRequiredService<ITestStore<IIntegrationEvent>>();
 
                 TestOutput.WriteLine(descriptor.ToString());
 

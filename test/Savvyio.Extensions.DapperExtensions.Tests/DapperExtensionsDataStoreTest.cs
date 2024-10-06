@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using DapperExtensions;
 using DapperExtensions.Sql;
 using Microsoft.Data.Sqlite;

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Microsoft.EntityFrameworkCore;
 using Savvyio.Assets;
 using Savvyio.Assets.Domain;

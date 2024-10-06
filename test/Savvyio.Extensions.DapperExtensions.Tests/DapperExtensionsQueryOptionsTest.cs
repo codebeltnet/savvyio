@@ -1,4 +1,4 @@
-﻿using Cuemon.Extensions.Xunit;
+﻿using Codebelt.Extensions.Xunit;
 using DapperExtensions.Predicate;
 using Savvyio.Assets.Queries;
 using Xunit;

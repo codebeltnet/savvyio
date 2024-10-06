@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.Commands;
 using Savvyio.Commands.Messaging;
 using Savvyio.Messaging.Cryptography;

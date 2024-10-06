@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Cuemon;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Savvyio.Assets;
 using Savvyio.Handlers;
 using Xunit;

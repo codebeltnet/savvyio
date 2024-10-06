@@ -1,5 +1,5 @@
 ﻿using System;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Cuemon.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Assets;

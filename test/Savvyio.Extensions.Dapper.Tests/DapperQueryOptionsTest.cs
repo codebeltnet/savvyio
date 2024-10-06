@@ -2,7 +2,7 @@
 using System.Data;
 using System.Threading;
 using Cuemon.Extensions;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Dapper;
 using Xunit;
 using Xunit.Abstractions;

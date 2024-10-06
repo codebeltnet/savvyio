@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cuemon;
 using Cuemon.Extensions;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Cuemon.Threading;
 using Savvyio.Assets.EventDriven;
 using Savvyio.Messaging;

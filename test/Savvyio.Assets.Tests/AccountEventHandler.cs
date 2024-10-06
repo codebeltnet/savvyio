@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using System.Threading.Tasks;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.EventDriven;
 using Savvyio.Assets.Queries;
 using Savvyio.Data;
