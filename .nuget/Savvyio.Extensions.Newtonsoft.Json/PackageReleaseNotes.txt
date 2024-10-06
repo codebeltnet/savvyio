@@ -5,6 +5,9 @@ Availability: .NET 9 and .NET 8
 - REMOVED Support for TFM .NET 6 (LTS)
 - CHANGED Dependencies to latest and greatest with respect to TFMs
  
+# Breaking Changes
+- CHANGED external dependency on Cuemon.Extensions.Newtonsoft.Json to Codebelt.Extensions.Newtonsoft.Json
+ 
 Version: 3.0.0
 Availability: .NET 8 and .NET 6
  
