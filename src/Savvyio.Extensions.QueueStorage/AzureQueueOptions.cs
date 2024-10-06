@@ -6,7 +6,6 @@ using Azure.Storage;
 using Azure.Storage.Queues;
 using Cuemon;
 using Cuemon.Configuration;
-using Savvyio.Messaging;
 
 namespace Savvyio.Extensions.QueueStorage
 {

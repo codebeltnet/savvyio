@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cuemon;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.Commands;
 using Savvyio.Assets.EventDriven;
 using Savvyio.Assets.Queries;

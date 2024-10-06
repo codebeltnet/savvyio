@@ -86,7 +86,7 @@ namespace Savvyio.Extensions.DependencyInjection
         public static IServiceCollection AddDataSource<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IDataSource
         {
             Validator.ThrowIfNull(services);
-            var options = (setup ?? (o => o.Lifetime = ServiceLifetime.Scoped)).Configure();
+            var options = (setup ?? (o => o.Lifetime = ServiceLifetime.Singleton)).Configure();
             return services.Add<TService>(o =>
             {
                 o.Lifetime = options.Lifetime;
@@ -104,6 +104,20 @@ namespace Savvyio.Extensions.DependencyInjection
         {
             var options = setup.Configure();
             services.TryAdd(typeof(IServiceLocator), options.ImplementationFactory, options.Lifetime);
+            return services;
+        }
+
+        /// <summary>
+        /// Adds the <see cref="HandlerServicesDescriptor"/> to the specified <see cref="IServiceCollection"/> if it was allowed included from <see cref="AddSavvyIO"/>.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
+        /// <returns>A reference to <paramref name="services"/> so that additional calls can be chained.</returns>
+        public static IServiceCollection AddHandlerServicesDescriptor(this IServiceCollection services)
+        {
+            if (services.Any(sd => sd.ServiceType == typeof(HandlerServicesDescriptor)))
+            {
+                services.AddSingleton<IHandlerServicesDescriptor>(provider => provider.GetRequiredService<HandlerServicesDescriptor>());
+            }
             return services;
         }
 

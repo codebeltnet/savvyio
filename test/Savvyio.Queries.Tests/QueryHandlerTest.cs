@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.Queries;
 using Savvyio.Queries.Assets;
 using Xunit;

@@ -1,7 +1,7 @@
 ﻿using System;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Newtonsoft.Json.Formatters;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Newtonsoft.Json.Formatters;
+using Codebelt.Extensions.Xunit;
 using Xunit;
 using Xunit.Abstractions;
 

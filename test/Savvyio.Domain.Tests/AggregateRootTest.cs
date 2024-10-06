@@ -1,6 +1,6 @@
 ﻿using System;
 using Cuemon.Extensions.Reflection;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.Commands;
 using Savvyio.Assets.Domain;
 using Savvyio.Assets.Domain.Events;

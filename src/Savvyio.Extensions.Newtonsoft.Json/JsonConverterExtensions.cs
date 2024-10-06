@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cuemon;
-using Cuemon.Extensions.Newtonsoft.Json;
+using Codebelt.Extensions.Newtonsoft.Json;
 using Cuemon.Reflection;
 using Newtonsoft.Json;
 using Savvyio.Domain;

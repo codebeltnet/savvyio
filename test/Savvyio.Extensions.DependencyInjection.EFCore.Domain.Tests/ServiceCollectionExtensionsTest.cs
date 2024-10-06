@@ -1,4 +1,4 @@
-﻿using Cuemon.Extensions.Xunit;
+﻿using Codebelt.Extensions.Xunit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Assets;

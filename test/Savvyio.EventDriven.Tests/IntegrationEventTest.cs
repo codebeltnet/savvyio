@@ -1,6 +1,6 @@
 ﻿using System;
 using Cuemon.Extensions.Reflection;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.EventDriven;
 using Xunit;
 using Xunit.Abstractions;

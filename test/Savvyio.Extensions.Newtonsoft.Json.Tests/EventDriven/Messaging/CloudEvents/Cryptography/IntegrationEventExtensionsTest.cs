@@ -2,7 +2,7 @@
 using System.Globalization;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.EventDriven;
 using Savvyio.EventDriven.Messaging;
 using Savvyio.EventDriven.Messaging.CloudEvents;

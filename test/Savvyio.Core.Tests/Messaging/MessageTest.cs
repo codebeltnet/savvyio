@@ -2,7 +2,7 @@
 using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Reflection;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Savvyio.Assets;
 using Xunit;
 using Xunit.Abstractions;

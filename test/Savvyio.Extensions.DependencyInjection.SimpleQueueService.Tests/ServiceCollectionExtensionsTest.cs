@@ -1,7 +1,7 @@
 ﻿using System;
 using Amazon;
 using Amazon.Runtime;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Commands;
 using Savvyio.EventDriven;

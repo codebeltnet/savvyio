@@ -1,4 +1,4 @@
-﻿using Cuemon.Extensions.Newtonsoft.Json.Formatters;
+﻿using Codebelt.Extensions.Newtonsoft.Json.Formatters;
 
 namespace Savvyio.Extensions.Newtonsoft.Json
 {

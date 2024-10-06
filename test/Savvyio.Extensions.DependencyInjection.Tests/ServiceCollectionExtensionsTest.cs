@@ -1,4 +1,4 @@
-﻿using Cuemon.Extensions.Xunit;
+﻿using Codebelt.Extensions.Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Commands;
 using Savvyio.Dispatchers;
@@ -22,8 +22,9 @@ namespace Savvyio.Extensions.DependencyInjection
         {
             var sut1 = new ServiceCollection();
             sut1.AddSavvyIO(o => o.EnableHandlerServicesDescriptor());
+            sut1.AddHandlerServicesDescriptor();
             var sut2 = sut1.BuildServiceProvider();
-            var sut3 = sut2.GetRequiredService<HandlerServicesDescriptor>();
+            var sut3 = sut2.GetRequiredService<IHandlerServicesDescriptor>();
             Assert.NotNull(sut3);
         }
 
@@ -42,9 +43,54 @@ namespace Savvyio.Extensions.DependencyInjection
         {
             var sut1 = new ServiceCollection();
             sut1.AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(Command).Assembly, typeof(TestCommand).Assembly).EnableHandlerServicesDescriptor().EnableDispatcherDiscovery().EnableHandlerDiscovery());
+            sut1.AddHandlerServicesDescriptor();
             var sut2 = sut1.BuildServiceProvider();
 
-            TestOutput.WriteLine(sut2.GetRequiredService<HandlerServicesDescriptor>().ToString());
+            var plainText = sut2.GetRequiredService<IHandlerServicesDescriptor>().ToString();
+
+            TestOutput.WriteLine(plainText);
+
+            Assert.True(Match("""
+                              Discovered 1 ICommandHandler implementation covering a total of 1 ICommand method
+                              
+                              Assembly: Savvyio.Extensions.DependencyInjection.Tests
+                              Namespace: Savvyio.Extensions.DependencyInjection.Assets
+                              
+                              <TestCommandHandler>
+                              	*TestCommand --> &<RegisterDelegates>b__1_0
+                              
+                              ---------------------------------------------------------------------------------
+                              
+                              Discovered 1 IDomainEventHandler implementation covering a total of 1 IDomainEvent method
+                              
+                              Assembly: Savvyio.Extensions.DependencyInjection.Tests
+                              Namespace: Savvyio.Extensions.DependencyInjection.Assets
+                              
+                              <TestDomainEventHandler>
+                              	*TestDomainEvent --> &<RegisterDelegates>b__0_0
+                              
+                              -----------------------------------------------------------------------------------------
+                              
+                              Discovered 1 IIntegrationEventHandler implementation covering a total of 1 IIntegrationEvent method
+                              
+                              Assembly: Savvyio.Extensions.DependencyInjection.Tests
+                              Namespace: Savvyio.Extensions.DependencyInjection.Assets
+                              
+                              <TestIntegrationEventHandler>
+                              	*TestIntegrationEvent --> &Handler
+                              
+                              ---------------------------------------------------------------------------------------------------
+                              
+                              Discovered 1 IQueryHandler implementation covering a total of 1 IQuery method
+                              
+                              Assembly: Savvyio.Extensions.DependencyInjection.Tests
+                              Namespace: Savvyio.Extensions.DependencyInjection.Assets
+                              
+                              <TestQueryHandler>
+                              	*TestQuery --> &Handler
+                              
+                              -----------------------------------------------------------------------------
+                              """.ReplaceLineEndings(), plainText, o => o.ThrowOnNoMatch = true));
 
             Assert.IsType<TestCommandHandler>(sut2.GetRequiredService<ICommandHandler>());
         }
@@ -90,9 +136,54 @@ namespace Savvyio.Extensions.DependencyInjection
         {
             var sut1 = new ServiceCollection();
             sut1.AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(DomainEvent).Assembly, typeof(TestDomainEvent).Assembly).EnableHandlerServicesDescriptor().EnableDispatcherDiscovery().EnableHandlerDiscovery());
+            sut1.AddHandlerServicesDescriptor();
             var sut2 = sut1.BuildServiceProvider();
 
-            TestOutput.WriteLine(sut2.GetRequiredService<HandlerServicesDescriptor>().ToString());
+            var plainText = sut2.GetRequiredService<IHandlerServicesDescriptor>().ToString();
+
+            TestOutput.WriteLine(plainText);
+
+            Assert.True(Match("""
+                              Discovered 1 ICommandHandler implementation covering a total of 1 ICommand method
+                              
+                              Assembly: Savvyio.Extensions.DependencyInjection.Tests
+                              Namespace: Savvyio.Extensions.DependencyInjection.Assets
+                              
+                              <TestCommandHandler>
+                              	*TestCommand --> &<RegisterDelegates>b__1_0
+                              
+                              ---------------------------------------------------------------------------------
+                              
+                              Discovered 1 IDomainEventHandler implementation covering a total of 1 IDomainEvent method
+                              
+                              Assembly: Savvyio.Extensions.DependencyInjection.Tests
+                              Namespace: Savvyio.Extensions.DependencyInjection.Assets
+                              
+                              <TestDomainEventHandler>
+                              	*TestDomainEvent --> &<RegisterDelegates>b__0_0
+                              
+                              -----------------------------------------------------------------------------------------
+                              
+                              Discovered 1 IIntegrationEventHandler implementation covering a total of 1 IIntegrationEvent method
+                              
+                              Assembly: Savvyio.Extensions.DependencyInjection.Tests
+                              Namespace: Savvyio.Extensions.DependencyInjection.Assets
+                              
+                              <TestIntegrationEventHandler>
+                              	*TestIntegrationEvent --> &Handler
+                              
+                              ---------------------------------------------------------------------------------------------------
+                              
+                              Discovered 1 IQueryHandler implementation covering a total of 1 IQuery method
+                              
+                              Assembly: Savvyio.Extensions.DependencyInjection.Tests
+                              Namespace: Savvyio.Extensions.DependencyInjection.Assets
+                              
+                              <TestQueryHandler>
+                              	*TestQuery --> &Handler
+                              
+                              -----------------------------------------------------------------------------
+                              """.ReplaceLineEndings(), plainText, o => o.ThrowOnNoMatch = true));
 
             Assert.IsType<TestDomainEventHandler>(sut2.GetRequiredService<IDomainEventHandler>());
         }
@@ -241,7 +332,7 @@ namespace Savvyio.Extensions.DependencyInjection
                     .AddQueryHandler<TestQueryHandler>();
             });
             var sut2 = sut1.BuildServiceProvider();
-            
+
             Assert.NotNull(sut2.GetService<ICommandDispatcher>());
             Assert.NotNull(sut2.GetService<IDomainEventDispatcher>());
             Assert.NotNull(sut2.GetService<IIntegrationEventDispatcher>());

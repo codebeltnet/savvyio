@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace Savvyio.Handlers
 {
     /// <summary>
-    /// Specifies a Fire-and-Forget/In-Only MEP registry that store delegates responsible of handling type <typeparamref name="TRequest"/>.
+    /// Specifies a Fire-and-Forget/In-Only MEP registry that store delegates responsible for handling type <typeparamref name="TRequest"/>.
     /// </summary>
     /// <typeparam name="TRequest">The type of the model to store in the registry.</typeparam>
     /// <seealso cref="IFireForgetActivator{TModel}"/>

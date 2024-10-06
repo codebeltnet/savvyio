@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Cuemon;
 
 namespace Savvyio.Messaging.Cryptography

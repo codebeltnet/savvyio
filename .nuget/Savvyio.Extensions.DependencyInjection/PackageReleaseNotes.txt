@@ -5,6 +5,14 @@ Availability: .NET 9 and .NET 8
 - REMOVED Support for TFM .NET 6 (LTS)
 - CHANGED Dependencies to latest and greatest with respect to TFMs
  
+# New Features
+- EXTENDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace with a new extension method for the IServiceCollection interface: AddHandlerServicesDescriptor
+- ADDED ServiceProviderExtensions class in the Savvyio.Extensions.DependencyInjection namespace that consist of extension methods for the IServiceCollection interface: WriteHandlerDiscoveriesToLog{TCategoryName}
+ 
+# Improvements
+- CHANGED AddDataStore{TService, T, TOptions} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Data namespace to use a default lifetime of Singleton
+- CHANGED AddDataSource{TService} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace to use a default lifetime of Singleton
+ 
 Version: 3.0.0
 Availability: .NET 8 and .NET 6
  

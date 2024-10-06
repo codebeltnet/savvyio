@@ -40,7 +40,7 @@ namespace Savvyio.Extensions.DependencyInjection
         ///     </item>
         ///     <item>
         ///         <term><see cref="ServiceLocatorLifetime"/></term>
-        ///         <description><see cref="ServiceLifetime.Scoped"/></description>
+        ///         <description><see cref="ServiceLifetime.Transient"/></description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="ServiceLocatorImplementationFactory"/></term>
@@ -48,7 +48,7 @@ namespace Savvyio.Extensions.DependencyInjection
         ///     </item>
         ///     <item>
         ///         <term><see cref="DispatcherServicesLifetime"/></term>
-        ///         <description><see cref="ServiceLifetime.Scoped"/></description>
+        ///         <description><see cref="ServiceLifetime.Transient"/></description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="HandlerServicesLifetime"/></term>

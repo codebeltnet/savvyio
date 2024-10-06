@@ -5,6 +5,10 @@ Availability: .NET 9 and .NET 8
 - REMOVED Support for TFM .NET 6 (LTS)
 - CHANGED Dependencies to latest and greatest with respect to TFMs
  
+# New Features
+- ADDED HandlerDiscoveryModel record in the Savvyio namespace that represents a model for handler services discovery
+- ADDED IHandlerServicesDescriptor interface in the Savvyio namespace that defines a contract about implementations of the IHandler{TRequest} interface such as name, declared members and what type of request they handle
+ 
 Version: 3.0.0
 Availability: .NET 8 and .NET 6
  

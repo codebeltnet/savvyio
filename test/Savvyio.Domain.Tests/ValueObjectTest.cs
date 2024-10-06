@@ -1,5 +1,5 @@
 ﻿using System;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.Domain;
 using Savvyio.Domain.Assets;
 using Xunit;

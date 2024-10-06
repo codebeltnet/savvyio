@@ -5,7 +5,7 @@ using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Collections.Generic;
 using Cuemon.Extensions.IO;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Cuemon.Threading;
 using Savvyio.Assets.Commands;
 using Savvyio.Commands;

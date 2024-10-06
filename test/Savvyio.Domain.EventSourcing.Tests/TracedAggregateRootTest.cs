@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cuemon;
 using Cuemon.Collections.Generic;
-using Cuemon.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
