@@ -8,6 +8,29 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 
 This major release is first and foremost focused on ironing out any wrinkles that have been introduced with .NET 9 preview releases so the final release is production ready together with the official launch from Microsoft.
 
+### Added
+
+#### Savvyio.Core
+
+- HandlerDiscoveryModel record in the Savvyio namespace that represents a model for handler services discovery
+- IHandlerServicesDescriptor interface in the Savvyio namespace that defines a contract about implementations of the IHandler{TRequest} interface such as name, declared members and what type of request they handle
+
+#### Savvyio.Extensions.DependencyInjection
+
+- ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace was extended with a new extension method for the IServiceCollection interface: AddHandlerServicesDescriptor
+- ServiceProviderExtensions class in the Savvyio.Extensions.DependencyInjection namespace that consist of extension methods for the IServiceCollection interface: WriteHandlerDiscoveriesToLog{TCategoryName}
+
+### Changed
+
+#### Savvyio.Extensions.DependencyInjection
+
+- AddDataStore{TService, T, TOptions} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Data namespace to use a default lifetime of Singleton
+- AddDataSource{TService} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace to use a default lifetime of Singleton
+
+#### Savvyio.Extensions.Newtonsoft.Json
+
+- External dependency on `Cuemon.Extensions.Newtonsoft.Json` was changed to `Codebelt.Extensions.Newtonsoft.Json`
+
 ## [3.0.0] - 2024-09-01
 
 Noticeable highlights:
