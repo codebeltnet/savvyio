@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Reflection;
@@ -13,7 +14,7 @@ namespace Savvyio.Domain
     public abstract record ValueObject
     {
         private const int NullHashCode = 472074819;
-        private readonly object _locker = new();
+        private readonly Lock _locker = new();
         private IEnumerable<object> _equalityComponents;
 
         /// <summary>

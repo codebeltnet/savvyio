@@ -11,6 +11,7 @@
     <PackageReference Include="Cuemon.Extensions.Core" Version="9.0.0-preview.10" />
     <PackageReference Include="Cuemon.Extensions.Collections.Generic" Version="9.0.0-preview.10" />
     <PackageReference Include="Cuemon.Extensions.Reflection" Version="9.0.0-preview.10" />
+    <PackageReference Include="Cuemon.Extensions.Threading" Version="9.0.0-preview.10" />	  
   </ItemGroup>
 
 </Project>

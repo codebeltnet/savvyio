@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Cuemon;
 using Cuemon.Extensions;
 
@@ -26,7 +27,7 @@ namespace Savvyio
     public class HandlerServicesDescriptor : IHandlerServicesDescriptor
     {
         private List<HandlerDiscoveryModel> _models;
-        private readonly object _locker = new();
+        private readonly Lock _locker = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HandlerServicesDescriptor"/> class.
