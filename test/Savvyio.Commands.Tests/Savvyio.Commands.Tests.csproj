@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Extensions.IO" Version="9.0.0-preview.10" />
-    <PackageReference Include="Cuemon.Extensions.Text.Json" Version="9.0.0-preview.10" />
-    <PackageReference Include="Xunit.Priority" Version="1.1.6" />
+    <PackageReference Include="Cuemon.Extensions.IO" />
+    <PackageReference Include="Cuemon.Extensions.Text.Json" />
+    <PackageReference Include="Xunit.Priority" />
   </ItemGroup>
 
   <ItemGroup>
