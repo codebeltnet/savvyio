@@ -11,7 +11,7 @@ namespace Savvyio.Extensions.DependencyInjection.Assets
     {
         public FakeDataStore(IDataSource ds)
         {
-            
+
         }
 
         public Task CreateAsync(T dto, Action<AsyncOptions> setup = null)

@@ -17,7 +17,7 @@ namespace Savvyio.Assets.Commands
         public Guid Id { get; }
 
         public string Name { get; }
-        
+
         public string ThirdLevelDomainName { get; }
 
         public string Description { get; }

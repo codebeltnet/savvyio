@@ -178,7 +178,7 @@ namespace Savvyio
         {
             return _dictionary.Remove(key);
         }
-        
+
         /// <summary>
         /// Gets the value associated with the specified key.
         /// </summary>

@@ -30,7 +30,7 @@ namespace Savvyio
                 registry.Register<FakeCommand<DateTime>>(c => store.Add(c));
                 registry.Register<FakeCommand<Stream>>(c => store.Add(c));
             });
-            
+
             Assert.NotNull(sut1);
             Assert.True(sut1.TryInvoke(new FakeCommand()));
             Assert.True(sut1.TryInvoke(new FakeCommand<int>()));
@@ -52,7 +52,7 @@ namespace Savvyio
             var store = new List<FakeCommand>();
             var sut1 = HandlerFactory.CreateFireForget<IRequest>(registry =>
             {
-                registry.RegisterAsync<FakeCommand>((c, _) => 
+                registry.RegisterAsync<FakeCommand>((c, _) =>
                 {
                     store.Add(c);
                     return Task.CompletedTask;
@@ -78,7 +78,7 @@ namespace Savvyio
                     return Task.CompletedTask;
                 });
             });
-            
+
             Assert.NotNull(sut1);
             Assert.True(sut1.TryInvokeAsync(new FakeCommand()).GetAwaiter().GetResult().Succeeded);
             Assert.True(sut1.TryInvokeAsync(new FakeCommand<int>()).GetAwaiter().GetResult().Succeeded);
@@ -107,7 +107,7 @@ namespace Savvyio
                 registry.Register<FakeCommand<DateTime>, Type>(c => c.Type);
                 registry.Register<FakeCommand<Stream>, Type>(c => c.Type);
             });
-            
+
             Assert.NotNull(sut1);
             Assert.True(sut1.TryInvoke<Type>(new FakeCommand(), out var fc1));
             Assert.True(sut1.TryInvoke<Type>(new FakeCommand<int>(), out var fc2));

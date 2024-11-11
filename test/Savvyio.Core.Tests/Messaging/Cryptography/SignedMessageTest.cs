@@ -45,7 +45,7 @@ namespace Savvyio.Messaging.Cryptography
             var email = "jdoe@me.com";
             var message = new Message<CreateAccount>("MyId", "uri:source".ToUri(), nameof(CreateAccount), new CreateAccount(uuid, fullName, email));
             var ex = Assert.Throws<ArgumentException>(() => new SignedMessage<CreateAccount>(message, string.Empty));
-            
+
             TestOutput.WriteLine(ex.Message);
 
             Assert.Equal("Value cannot be empty. (Parameter 'signature')", ex.Message);

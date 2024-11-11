@@ -15,49 +15,49 @@ namespace Savvyio.Extensions.SimpleQueueService
     /// <seealso cref="IValidatableParameterObject" />
     public class AmazonMessageOptions : IValidatableParameterObject
     {
-	    /// <summary>
-	    /// The maximum number of messages that AWS SQS supports when sending or retrieving.
-	    /// </summary>
-	    public const int MaxNumberOfMessages = 10;
+        /// <summary>
+        /// The maximum number of messages that AWS SQS supports when sending or retrieving.
+        /// </summary>
+        public const int MaxNumberOfMessages = 10;
 
-		/// <summary>
-		/// The maximum seconds that a call waits for a message to arrive in AWS SQS.
-		/// </summary>
-		public const int MaxPollingWaitTimeInSeconds = 20;
+        /// <summary>
+        /// The maximum seconds that a call waits for a message to arrive in AWS SQS.
+        /// </summary>
+        public const int MaxPollingWaitTimeInSeconds = 20;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AmazonMessageOptions"/> class.
-		/// </summary>
-		/// <remarks>
-		/// The following table shows the initial property values for an instance of <see cref="AmazonMessageOptions"/>.
-		/// <list type="table">
-		///     <listheader>
-		///         <term>Property</term>
-		///         <description>Initial Value</description>
-		///     </listheader>
-		///     <item>
-		///         <term><see cref="Credentials"/></term>
-		///         <description><c>null</c></description>
-		///     </item>
-		///     <item>
-		///         <term><see cref="Endpoint"/></term>
-		///         <description><c>null</c></description>
-		///     </item>
-		///     <item>
-		///         <term><see cref="SourceQueue"/></term>
-		///         <description><c>null</c></description>
-		///     </item>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AmazonMessageOptions"/> class.
+        /// </summary>
+        /// <remarks>
+        /// The following table shows the initial property values for an instance of <see cref="AmazonMessageOptions"/>.
+        /// <list type="table">
+        ///     <listheader>
+        ///         <term>Property</term>
+        ///         <description>Initial Value</description>
+        ///     </listheader>
+        ///     <item>
+        ///         <term><see cref="Credentials"/></term>
+        ///         <description><c>null</c></description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="Endpoint"/></term>
+        ///         <description><c>null</c></description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="SourceQueue"/></term>
+        ///         <description><c>null</c></description>
+        ///     </item>
         ///     <item>
         ///         <term><see cref="ClientConfigurations"/></term>
         ///         <description><c>Enumerable.Empty&lt;ClientConfig&gt;().ToArray();</c></description>
         ///     </item>
-		/// </list>
-		/// </remarks>
-		public AmazonMessageOptions()
-		{
-			ReceiveContext = new AmazonMessageReceiveOptions();
+        /// </list>
+        /// </remarks>
+        public AmazonMessageOptions()
+        {
+            ReceiveContext = new AmazonMessageReceiveOptions();
             ClientConfigurations = Enumerable.Empty<ClientConfig>().ToArray();
-		}
+        }
 
         /// <summary>
         /// Gets or sets the credentials required to connect to AWS SQS/SNS.
@@ -103,11 +103,11 @@ namespace Savvyio.Extensions.SimpleQueueService
         /// <value>The URI that represents an AWS SQS/SNS endpoint.</value>
         public Uri SourceQueue { get; set; }
 
-		/// <summary>
-		/// Gets the options related to receive operations on AWS SQS.
-		/// </summary>
-		/// <value>The options related to receive operations on AWS SQS.</value>
-		public AmazonMessageReceiveOptions ReceiveContext { get; }
+        /// <summary>
+        /// Gets the options related to receive operations on AWS SQS.
+        /// </summary>
+        /// <value>The options related to receive operations on AWS SQS.</value>
+        public AmazonMessageReceiveOptions ReceiveContext { get; }
 
         /// <summary>
         /// Determines whether the public read-write properties of this instance are in a valid state.

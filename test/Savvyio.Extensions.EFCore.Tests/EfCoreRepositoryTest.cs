@@ -22,7 +22,7 @@ namespace Savvyio.Extensions.EFCore
         {
             var sut1 = new EfCoreDataSource<Account>(new EfCoreDataSourceOptions<Account>()
             {
-	            ContextConfigurator = b => b.UseInMemoryDatabase("Dummy")
+                ContextConfigurator = b => b.UseInMemoryDatabase("Dummy")
             });
             var sut2 = new EfCoreRepository<Account, long, Account>(sut1);
             var ex = Assert.Throws<InvalidOperationException>(() => sut2.Add(new Account(1)));
@@ -70,7 +70,7 @@ namespace Savvyio.Extensions.EFCore
             var sut2 = new EfCoreRepository<Account, long>(sut1);
             sut2.Add(entity);
             await sut1.SaveChangesAsync();
-            
+
             var sut3 = await sut2.FindAllAsync(a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
             sut2.Remove(entity);
@@ -107,11 +107,11 @@ namespace Savvyio.Extensions.EFCore
             };
 
             var sut2 = new EfCoreRepository<Account, long>(sut1);
-            
+
             sut2.Add(entity);
-            
+
             await sut1.SaveChangesAsync();
-            
+
             var sut3 = await sut2.FindAllAsync(a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
             Assert.Equal(entity, sut3);

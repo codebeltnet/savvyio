@@ -16,7 +16,7 @@ namespace Savvyio.Domain
         /// </summary>
         /// <param name="request">The <see cref="IDomainEvent"/> to raise.</param>
         void Raise(IDomainEvent request);
-        
+
         /// <summary>
         /// Invokes any domain event handlers that is assigned to the specified event.
         /// </summary>

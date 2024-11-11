@@ -28,7 +28,7 @@ namespace Savvyio.Extensions.EFCore
             var sut1 = new ServiceCollection();
             sut1.AddDataSource<EfCoreDataSource>()
                 .AddUnitOfWork<EfCoreDataSource>();
-            sut1.AddConfiguredOptions<EfCoreDataSourceOptions>(_ => {});
+            sut1.AddConfiguredOptions<EfCoreDataSourceOptions>(_ => { });
             var sut2 = sut1.BuildServiceProvider();
 
             Assert.IsType<EfCoreDataSource>(sut2.GetRequiredService<IEfCoreDataSource>());
@@ -118,7 +118,7 @@ namespace Savvyio.Extensions.EFCore
             Assert.NotSame(sut2.GetRequiredService<IPersistentRepository<Account, long, DbMarker>>(), sut2.GetRequiredService<IPersistentRepository<Account, long, AnotherDbMarker>>());
             Assert.NotSame(sut2.GetRequiredService<IPersistentRepository<PlatformProvider, Guid, DbMarker>>(), sut2.GetRequiredService<IPersistentRepository<PlatformProvider, Guid, AnotherDbMarker>>());
         }
-        
+
         [Fact]
         public void AddEfCoreDataStore_ShouldAddManyImplementations()
         {

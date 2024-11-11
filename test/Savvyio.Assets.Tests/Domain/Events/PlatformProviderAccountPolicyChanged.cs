@@ -7,7 +7,7 @@ namespace Savvyio.Assets.Domain.Events
     {
         PlatformProviderAccountPolicyChanged()
         {
-            
+
         }
 
         public PlatformProviderAccountPolicyChanged(PlatformProvider provider)

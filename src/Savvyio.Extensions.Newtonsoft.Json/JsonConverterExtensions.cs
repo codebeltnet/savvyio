@@ -59,7 +59,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json
         public static ICollection<JsonConverter> AddMetadataDictionaryConverter(this ICollection<JsonConverter> converters)
         {
             Validator.ThrowIfNull(converters);
-            converters.Add(DynamicJsonConverter.Create<IMetadataDictionary>(null, (reader, _, _, _) =>
+            converters.Add(JsonConverterFactory.Create<IMetadataDictionary>(null, (reader, _, _, _) =>
             {
                 var md = new MetadataDictionary();
                 var result = JData.ReadAll(reader);
@@ -112,9 +112,9 @@ namespace Savvyio.Extensions.Newtonsoft.Json
         /// </exception>
         public static ICollection<JsonConverter> AddSingleValueObjectConverter(this ICollection<JsonConverter> converters)
         {
-	        Validator.ThrowIfNull(converters);
-	        converters.Add(new SingleValueObjectConverter());
-	        return converters;
+            Validator.ThrowIfNull(converters);
+            converters.Add(new SingleValueObjectConverter());
+            return converters;
         }
     }
 }

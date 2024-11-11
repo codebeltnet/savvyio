@@ -14,8 +14,8 @@ namespace Savvyio.Extensions.Dapper
     /// <typeparam name="TOptions">The type of options associated with this DTO.</typeparam>
     /// <seealso cref="Disposable"/>
     /// <seealso cref="IPersistentDataStore{T,TOptions}" />
-    public abstract class DapperDataStore<T, TOptions> : Disposable, IPersistentDataStore<T, TOptions> 
-        where T : class 
+    public abstract class DapperDataStore<T, TOptions> : Disposable, IPersistentDataStore<T, TOptions>
+        where T : class
         where TOptions : AsyncOptions, new()
     {
         /// <summary>
@@ -40,7 +40,7 @@ namespace Savvyio.Extensions.Dapper
         /// <param name="setup">The <see cref="AsyncOptions"/> which may be configured.</param>
         /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
         public abstract Task CreateAsync(T dto, Action<AsyncOptions> setup = null);
-        
+
         /// <summary>
         /// Updates the specified <paramref name="dto"/> asynchronous in the associated <seealso cref="IDapperDataSource"/>.
         /// </summary>

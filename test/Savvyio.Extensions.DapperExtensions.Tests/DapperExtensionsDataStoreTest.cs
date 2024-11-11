@@ -26,9 +26,9 @@ namespace Savvyio.Extensions.DapperExtensions
 
             var options = new DapperDataSourceOptions()
             {
-				ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable()
-			};
-		
+                ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable()
+            };
+
             var sut1 = new DapperDataSource(options);
 
             var sut2 = new DapperExtensionsDataStore<AccountProjection>(sut1);

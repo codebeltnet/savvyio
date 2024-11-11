@@ -62,7 +62,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         {
             var handlerInvocations = 0;
             var sut1 = Comparer.Query(message => message.Type.Contains($"{BuildType}.updated-event")).Single();
-            
+
             await _bus.SubscribeAsync((sut2, _) =>
             {
                 if (!sut2.Type.Contains($"{BuildType}.updated-event")) { return Task.CompletedTask; }
@@ -96,7 +96,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         {
             var handlerInvocations = 0;
             var sut1 = Comparer.Query(message => message.Type.Contains($"{BuildType}.updated-event.signed")).Single();
-            
+
             await _bus.SubscribeAsync((sut2, _) =>
             {
                 if (!sut2.Type.Contains($"{BuildType}.updated-event.signed")) { return Task.CompletedTask; }
@@ -131,7 +131,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         {
             var handlerInvocations = 0;
             var sut1 = Comparer.Query(message => message.Type.Contains($"{BuildType}.updated-event.cloud-event")).Single() as ICloudEvent<IIntegrationEvent>;
-            
+
             await _bus.SubscribeAsync((sut2, _) =>
             {
                 if (!sut2.Type.Contains($"{BuildType}.updated-event.cloud-event")) { return Task.CompletedTask; }
@@ -166,7 +166,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         {
             var handlerInvocations = 0;
             var sut1 = Comparer.Query(message => message.Type.Contains($"{BuildType}.updated-event.signed-cloud-event")).Single();
-            
+
             await _bus.SubscribeAsync((sut2, _) =>
             {
                 if (!sut2.Type.Contains($"{BuildType}.updated-event.signed-cloud-event")) { return Task.CompletedTask; }
@@ -207,7 +207,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
 
             await _bus.SubscribeAsync((message, _) =>
             {
-                if (!message.Type.Contains($"{BuildType}")) { return Task.CompletedTask; }  
+                if (!message.Type.Contains($"{BuildType}")) { return Task.CompletedTask; }
                 sut2.Add(message);
                 return Task.CompletedTask;
             }, o => o.CancellationToken = sut3.Token).ConfigureAwait(false);
@@ -226,8 +226,8 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             services.AddMarshaller<JsonMarshaller>();
             services.AddAmazonEventBus(o =>
             {
-	            var queue = IsLinux ? "savvyio-events" : "savvyio-events.fifo";
-	            o.Endpoint = RegionEndpoint.EUWest1;
+                var queue = IsLinux ? "savvyio-events" : "savvyio-events.fifo";
+                o.Endpoint = RegionEndpoint.EUWest1;
                 if (Configuration["AWS:LocalStack"] != null)
                 {
                     o.Credentials = new BasicAWSCredentials("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");

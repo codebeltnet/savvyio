@@ -7,7 +7,7 @@ namespace Savvyio.Extensions.DependencyInjection.Assets
     {
         protected override void RegisterDelegates(IFireForgetRegistry<IDomainEvent> handlers)
         {
-            handlers.Register<TestDomainEvent>(delegate(TestDomainEvent _) {  });
+            handlers.Register<TestDomainEvent>(delegate (TestDomainEvent _) { });
         }
     }
 }

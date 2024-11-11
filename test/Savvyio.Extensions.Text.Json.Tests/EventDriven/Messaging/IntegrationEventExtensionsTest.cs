@@ -16,7 +16,7 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging
         public IntegrationEventExtensionsTest(ITestOutputHelper output) : base(output)
         {
         }
-        
+
         [Fact]
         public void ToMessage_ShouldSerializeAndDeserialize_MemberCreated_UsingInterface()
         {
@@ -69,7 +69,7 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging
 
             var json = new JsonMarshaller().Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
-            
+
             TestOutput.WriteLine(jsonString);
 
             var sut4 = new JsonMarshaller().Deserialize<Message<MemberCreated>>(json);

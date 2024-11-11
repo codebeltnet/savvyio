@@ -11,7 +11,7 @@ using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain
 {
-    public class ServiceCollectionExtensionsTest  : Test
+    public class ServiceCollectionExtensionsTest : Test
     {
         public ServiceCollectionExtensionsTest(ITestOutputHelper output) : base(output)
         {

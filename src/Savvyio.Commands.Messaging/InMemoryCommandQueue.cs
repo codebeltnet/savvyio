@@ -26,9 +26,9 @@ namespace Savvyio.Commands.Messaging
             var options = setup.Configure();
             foreach (var command in messages)
             {
-	            await _channel.Writer.WriteAsync(command, options.CancellationToken).ConfigureAwait(false);
+                await _channel.Writer.WriteAsync(command, options.CancellationToken).ConfigureAwait(false);
             }
-		}
+        }
 
         /// <summary>
         /// Receive one or more command(s) asynchronous using Point-to-Point Channel/P2P MEP.
@@ -40,8 +40,8 @@ namespace Savvyio.Commands.Messaging
             var options = setup.Configure();
             await foreach (var message in _channel.Reader.ReadAllAsync(options.CancellationToken).ConfigureAwait(false))
             {
-	            yield return message;
-	            if (_channel.Reader.Count == 0) { yield break; }
+                yield return message;
+                if (_channel.Reader.Count == 0) { yield break; }
             }
         }
     }

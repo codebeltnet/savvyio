@@ -31,7 +31,7 @@ namespace Savvyio.Extensions.Text.Json.Commands.Messaging
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
             TestOutput.WriteLine(jsonString);
-            
+
             var sut4 = new JsonMarshaller().Deserialize<IMessage<CreateMemberCommand>>(json);
 
             Assert.Equivalent(sut2, sut4, true);

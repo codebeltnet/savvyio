@@ -62,7 +62,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
         public async Task ReceiveAsync_CreateMemberCommand_OneTime()
         {
             var sut1 = Comparer.Query(message => message.Source == "https://fancy.io/members").Single();
-            
+
             var ct = new CancellationTokenSource(TimeSpan.FromSeconds(30)).Token;
             IMessage<ICommand> sut2 = null;
             while (sut2 == null)
@@ -97,7 +97,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
         public async Task ReceiveAsync_CreateMemberCommand_OneTime_Signed()
         {
             var sut1 = Comparer.Query(message => message.Source == "https://fancy.io/members/signed").Single();
-            
+
             var ct = new CancellationTokenSource(TimeSpan.FromSeconds(30)).Token;
             ISignedMessage<ICommand> sut2 = null;
             while (sut2 == null)
@@ -140,7 +140,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
             {
                 realizedCommands.AddRange(await _queue.ReceiveAsync(o => o.CancellationToken = ct).ToListAsync(ct).ConfigureAwait(false));
             }
-            
+
             TestOutput.WriteLine(realizedCommands.Count.ToString());
             TestOutput.WriteLines(realizedCommands.Take(10));
 
@@ -152,10 +152,10 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 
         public override void ConfigureServices(IServiceCollection services)
         {
-	        services.AddMarshaller<NewtonsoftJsonMarshaller>();
+            services.AddMarshaller<NewtonsoftJsonMarshaller>();
             services.AddAmazonCommandQueue(o =>
             {
-	            var queue = IsLinux ? "newtonsoft-savvyio-commands" : "newtonsoft-savvyio-commands.fifo";
+                var queue = IsLinux ? "newtonsoft-savvyio-commands" : "newtonsoft-savvyio-commands.fifo";
                 o.Endpoint = RegionEndpoint.EUWest1;
                 if (Configuration["AWS:LocalStack"] != null)
                 {
@@ -172,7 +172,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
                     o.Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]);
                     o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}");
                 }
-	            o.ReceiveContext.UseApproximateNumberOfMessages = true;
+                o.ReceiveContext.UseApproximateNumberOfMessages = true;
             });
         }
     }

@@ -7,7 +7,7 @@ namespace Savvyio.Domain.Assets
     {
         public Mixed()
         {
-            
+
         }
 
         public AccountId AccountId { get; set; }

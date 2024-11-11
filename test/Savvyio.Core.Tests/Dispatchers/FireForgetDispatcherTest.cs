@@ -35,12 +35,12 @@ namespace Savvyio.Dispatchers
             var sc = new ServiceCollection()
                 .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(FireForgetDispatcherTest).Assembly, typeof(ICommand).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery())
                 .AddScoped<ITestStore<ICommand>, InMemoryTestStore<ICommand>>();
-            
+
             var sp = sc.BuildServiceProvider();
             var sut = new CommandDispatcher(sp.GetRequiredService<IServiceLocator>());
             var ca = new CreateAccount(Guid.NewGuid(), "Michael Mortensen", "root@gimlichael.dev");
             var cs = sp.GetRequiredService<ITestStore<ICommand>>();
-            
+
             sut.Commit(ca);
 
             Assert.Equal(ca.FullName, cs.QueryFor<CreateAccount>().Single().FullName);
@@ -64,12 +64,12 @@ namespace Savvyio.Dispatchers
             var sc = new ServiceCollection()
                 .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(FireForgetDispatcherTest).Assembly, typeof(ICommand).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery())
                 .AddScoped<ITestStore<ICommand>, InMemoryTestStore<ICommand>>();
-            
+
             var sp = sc.BuildServiceProvider();
             var sut = new CommandDispatcher(sp.GetRequiredService<IServiceLocator>());
             var ca = new CreateAccount(Guid.NewGuid(), "Michael Mortensen", "root@gimlichael.dev");
             var cs = sp.GetRequiredService<ITestStore<ICommand>>();
-            
+
             await sut.CommitAsync(ca);
 
             Assert.Equal(ca.FullName, cs.QueryFor<CreateAccount>().Single().FullName);

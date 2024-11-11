@@ -91,7 +91,7 @@ namespace Savvyio.Extensions.DependencyInjection.Data
             Assert.NotSame(sut2.GetRequiredService<IPersistentRepository<Account, long, DbMarker>>(), sut2.GetRequiredService<IPersistentRepository<Account, long, AnotherDbMarker>>());
             Assert.NotSame(sut2.GetRequiredService<IPersistentRepository<PlatformProvider, Guid, DbMarker>>(), sut2.GetRequiredService<IPersistentRepository<PlatformProvider, Guid, AnotherDbMarker>>());
         }
-        
+
         [Fact]
         public void AddDataAccessObject_ShouldAddManyImplementations()
         {

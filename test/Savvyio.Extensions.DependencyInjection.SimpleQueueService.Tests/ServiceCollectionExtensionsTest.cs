@@ -29,12 +29,12 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
         [Fact]
         public void AddAmazonCommandQueue_ShouldAddDefaultImplementation()
         {
-	        Action<AmazonCommandQueueOptions> awsSetup = o =>
-	        {
-		        o.Credentials = new AnonymousAWSCredentials();
-		        o.Endpoint = RegionEndpoint.EUWest1;
-		        o.SourceQueue = new Uri("urn:queue");
-	        };
+            Action<AmazonCommandQueueOptions> awsSetup = o =>
+            {
+                o.Credentials = new AnonymousAWSCredentials();
+                o.Endpoint = RegionEndpoint.EUWest1;
+                o.SourceQueue = new Uri("urn:queue");
+            };
 
             var sut1 = new ServiceCollection();
             sut1.AddMarshaller<NewtonsoftJsonMarshaller>();
@@ -48,7 +48,7 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
             var opt1 = new AmazonCommandQueueOptions();
             var opt2 = new AmazonCommandQueueOptions();
             var opt3 = new AmazonCommandQueueOptions();
-            
+
             awsSetup.Invoke(opt1);
             sut2.GetRequiredService<Action<AmazonCommandQueueOptions>>().Invoke(opt2);
 
@@ -62,12 +62,12 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
         [Fact]
         public void AddAmazonCommandQueue_ShouldAddDefaultImplementationWithMarker()
         {
-	        Action<AmazonCommandQueueOptions<QueueMarker>> awsSetup = o =>
-	        {
-		        o.Credentials = new AnonymousAWSCredentials();
-		        o.Endpoint = RegionEndpoint.EUWest1;
-		        o.SourceQueue = new Uri("urn:queue");
-	        };
+            Action<AmazonCommandQueueOptions<QueueMarker>> awsSetup = o =>
+            {
+                o.Credentials = new AnonymousAWSCredentials();
+                o.Endpoint = RegionEndpoint.EUWest1;
+                o.SourceQueue = new Uri("urn:queue");
+            };
 
             var sut1 = new ServiceCollection();
             sut1.AddMarshaller<JsonMarshaller>();
@@ -81,7 +81,7 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
             var opt1 = new AmazonCommandQueueOptions<QueueMarker>();
             var opt2 = new AmazonCommandQueueOptions<QueueMarker>();
             var opt3 = new AmazonCommandQueueOptions<QueueMarker>();
-            
+
             awsSetup.Invoke(opt1);
             sut2.GetRequiredService<Action<AmazonCommandQueueOptions<QueueMarker>>>().Invoke(opt2);
 
@@ -95,12 +95,12 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
         [Fact]
         public void AddAmazonEventBus_ShouldAddDefaultImplementation()
         {
-	        Action<AmazonEventBusOptions> awsSetup = o =>
-	        {
-		        o.Credentials = new AnonymousAWSCredentials();
-		        o.Endpoint = RegionEndpoint.EUWest1;
-		        o.SourceQueue = new Uri("urn:bus");
-	        };
+            Action<AmazonEventBusOptions> awsSetup = o =>
+            {
+                o.Credentials = new AnonymousAWSCredentials();
+                o.Endpoint = RegionEndpoint.EUWest1;
+                o.SourceQueue = new Uri("urn:bus");
+            };
 
             var sut1 = new ServiceCollection();
             sut1.AddMarshaller<NewtonsoftJsonMarshaller>();
@@ -114,7 +114,7 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
             var opt1 = new AmazonEventBusOptions();
             var opt2 = new AmazonEventBusOptions();
             var opt3 = new AmazonEventBusOptions();
-            
+
             awsSetup.Invoke(opt1);
             sut2.GetRequiredService<Action<AmazonEventBusOptions>>().Invoke(opt2);
 
@@ -128,12 +128,12 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
         [Fact]
         public void AddAmazonEventBus_ShouldAddDefaultImplementationWithMarker()
         {
-	        Action<AmazonEventBusOptions<BusMarker>> awsSetup = o =>
-	        {
-		        o.Credentials = new AnonymousAWSCredentials();
-		        o.Endpoint = RegionEndpoint.EUWest1;
-		        o.SourceQueue = new Uri("urn:bus");
-	        };
+            Action<AmazonEventBusOptions<BusMarker>> awsSetup = o =>
+            {
+                o.Credentials = new AnonymousAWSCredentials();
+                o.Endpoint = RegionEndpoint.EUWest1;
+                o.SourceQueue = new Uri("urn:bus");
+            };
 
             var sut1 = new ServiceCollection();
             sut1.AddMarshaller<JsonMarshaller>();
@@ -147,7 +147,7 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
             var opt1 = new AmazonEventBusOptions<BusMarker>();
             var opt2 = new AmazonEventBusOptions<BusMarker>();
             var opt3 = new AmazonEventBusOptions<BusMarker>();
-            
+
             awsSetup.Invoke(opt1);
             sut2.GetRequiredService<Action<AmazonEventBusOptions<BusMarker>>>().Invoke(opt2);
 

@@ -32,7 +32,7 @@ namespace Savvyio.Dispatchers
         /// <param name="handlerFactory">The function delegate that will locate and invoke the handler registered to the specified <paramref name="request"/>.</param>
         /// <returns>The response of the request.</returns>
         /// <remarks>A <paramref name="request"/> can be a command, domain event, integration event, query etc.</remarks>
-        protected virtual TResponse Dispatch<TRequest, THandler, TResponse>(TRequest request, Func<THandler, IRequestReplyActivator<TRequest>> handlerFactory) 
+        protected virtual TResponse Dispatch<TRequest, THandler, TResponse>(TRequest request, Func<THandler, IRequestReplyActivator<TRequest>> handlerFactory)
             where TRequest : IRequest
             where THandler : IHandler<TRequest>
         {

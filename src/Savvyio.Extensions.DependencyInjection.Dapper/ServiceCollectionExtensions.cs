@@ -22,8 +22,8 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         public static IServiceCollection AddDapperDataSource(this IServiceCollection services, Action<DapperDataSourceOptions> dataSourceSetup, Action<ServiceOptions> serviceSetup = null)
         {
             return services
-	            .AddDapperDataSource<DapperDataSource>(serviceSetup)
-	            .AddConfiguredOptions(dataSourceSetup);
+                .AddDapperDataSource<DapperDataSource>(serviceSetup)
+                .AddConfiguredOptions(dataSourceSetup);
         }
 
         /// <summary>
@@ -37,8 +37,8 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         public static IServiceCollection AddDapperDataSource<TMarker>(this IServiceCollection services, Action<DapperDataSourceOptions<TMarker>> dataSourceSetup, Action<ServiceOptions> serviceSetup = null)
         {
             return services
-	            .AddDapperDataSource<DapperDataSource<TMarker>>(serviceSetup)
-	            .AddConfiguredOptions(dataSourceSetup);
+                .AddDapperDataSource<DapperDataSource<TMarker>>(serviceSetup)
+                .AddConfiguredOptions(dataSourceSetup);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         /// <typeparam name="T">The type of the DTO to use.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
-        public static IServiceCollection AddDapperDataStore<TService, T>(this IServiceCollection services) 
+        public static IServiceCollection AddDapperDataStore<TService, T>(this IServiceCollection services)
             where TService : DapperDataStore<T, DapperQueryOptions>
             where T : class
         {

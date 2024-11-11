@@ -67,7 +67,7 @@ namespace Savvyio.Extensions.DependencyInjection
             ServiceLocatorImplementationFactory = _serviceLocatorOptions.ImplementationFactory;
             ServiceLocatorLifetime = _serviceLocatorOptions.Lifetime;
         }
-        
+
         /// <summary>
         /// Gets or sets the function delegate that creates an instance of an <see cref="IServiceLocator"/> implementation.
         /// </summary>

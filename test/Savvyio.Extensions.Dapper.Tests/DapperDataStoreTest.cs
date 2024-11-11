@@ -14,7 +14,7 @@ namespace Savvyio.Extensions.Dapper
     {
         public DapperDataStoreTest(ITestOutputHelper output) : base(output)
         {
-            
+
         }
 
         [Fact]
@@ -26,14 +26,14 @@ namespace Savvyio.Extensions.Dapper
 
             var options = new DapperDataSourceOptions()
             {
-				ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable()
-			};
+                ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable()
+            };
 
             var sut1 = new DapperDataSource(options);
 
             var sut2 = new AccountData(sut1);
             await sut2.CreateAsync(new Account(id, name, email));
-            
+
             var sut3 = await sut2.FindAllAsync(o => o.CommandText = "SELECT * FROM AccountProjection WHERE Id = 1").SingleOrDefaultAsync();
 
             sut2.Dispose();
@@ -54,14 +54,14 @@ namespace Savvyio.Extensions.Dapper
 
             var options = new DapperDataSourceOptions()
             {
-	            ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable()
+                ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable()
             };
 
-			var sut1 = new DapperDataSource(options);
+            var sut1 = new DapperDataSource(options);
 
             var sut2 = new AccountData(sut1);
             await sut2.CreateAsync(dto);
-            
+
             var sut3 = await sut2.FindAllAsync(o => o.CommandText = "SELECT * FROM AccountProjection WHERE Id = 1").SingleOrDefaultAsync();
 
             await sut2.DeleteAsync(sut3);
@@ -92,7 +92,7 @@ namespace Savvyio.Extensions.Dapper
 
             var sut2 = new AccountData(sut1);
             await sut2.CreateAsync(dto);
-            
+
             var sut3 = await sut2.FindAllAsync(o => o.CommandText = "SELECT * FROM AccountProjection WHERE Id = 1").SingleOrDefaultAsync();
 
             sut3.ChangeFullName(newName);

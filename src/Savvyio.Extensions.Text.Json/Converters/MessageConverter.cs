@@ -78,7 +78,7 @@ namespace Savvyio.Extensions.Text.Json.Converters
                 var dataKey = options.PropertyNamingPolicy.ConvertName(nameof(IMessage<T>.Data));
                 var metadataKey = options.PropertyNamingPolicy.ConvertName(nameof(IMetadata.Metadata));
                 var signatureKey = options.PropertyNamingPolicy.ConvertName(nameof(ISignedMessage<T>.Signature));
-                
+
                 var id = document.RootElement.GetProperty(idKey).GetString();
                 var source = document.RootElement.GetProperty(sourceKey).GetString().ToUri();
                 var type = document.RootElement.GetProperty(typeKey).GetString();

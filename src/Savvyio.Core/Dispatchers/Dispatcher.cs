@@ -24,6 +24,6 @@ namespace Savvyio.Dispatchers
         /// Gets the function delegate that creates the services.
         /// </summary>
         /// <value>The function delegate that creates the services.</value>
-        protected Func<Type, IEnumerable<object>> ServiceFactory { get;  }
+        protected Func<Type, IEnumerable<object>> ServiceFactory { get; }
     }
 }

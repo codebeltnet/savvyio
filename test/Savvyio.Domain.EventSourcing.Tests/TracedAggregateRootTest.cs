@@ -110,12 +110,12 @@ namespace Savvyio.Domain.EventSourcing
                     sc.AddEfCoreTracedAggregateRepository<TracedAccount, Guid, JsonMarshaller>();
                     break;
             }
-            
+
             sc.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
 
             var sp = sc.BuildServiceProvider();
 
-            var ds = formatterType == typeof(NewtonsoftJsonMarshaller) 
+            var ds = formatterType == typeof(NewtonsoftJsonMarshaller)
                 ? sp.GetRequiredService<IEfCoreDataSource<NewtonsoftJsonMarshaller>>() as IEfCoreDataSource
                 : sp.GetRequiredService<IEfCoreDataSource<JsonMarshaller>>() as IEfCoreDataSource;
             var sut4 = formatterType == typeof(NewtonsoftJsonMarshaller)

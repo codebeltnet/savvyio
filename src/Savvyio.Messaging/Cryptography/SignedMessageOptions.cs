@@ -10,7 +10,7 @@ namespace Savvyio.Messaging.Cryptography
     /// </summary>
     /// <seealso cref="IValidatableParameterObject" />
 	public class SignedMessageOptions : IValidatableParameterObject
-	{
+    {
         /// <summary>
         /// Initializes a new instance of the <see cref="SignedMessageOptions"/> class.
         /// </summary>
@@ -28,9 +28,9 @@ namespace Savvyio.Messaging.Cryptography
         /// </list>
         /// </remarks>
         public SignedMessageOptions()
-		{
-			SignatureAlgorithm = KeyedCryptoAlgorithm.HmacSha256;
-			SignatureSecret = null;
+        {
+            SignatureAlgorithm = KeyedCryptoAlgorithm.HmacSha256;
+            SignatureSecret = null;
         }
 
         /// <summary>
@@ -54,8 +54,8 @@ namespace Savvyio.Messaging.Cryptography
         /// <see cref="SignatureSecret"/> cannot have a length of zero.
         /// </exception>
 		public void ValidateOptions()
-		{
-			Validator.ThrowIfInvalidState(SignatureSecret == null || SignatureSecret.Length == 0);
-		}
-	}
+        {
+            Validator.ThrowIfInvalidState(SignatureSecret == null || SignatureSecret.Length == 0);
+        }
+    }
 }

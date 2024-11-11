@@ -14,8 +14,8 @@ namespace Savvyio.Extensions.DependencyInjection.Data
     /// <seealso cref="IReadableDataStore{T,TMarker}"/>
     /// <seealso cref="ISearchableDataStore{T,TOptions,TMarker}"/>
     /// <seealso cref="IDeletableDataStore{T,TMarker}"/>
-    public interface IPersistentDataStore<T, out TOptions, TMarker> : IPersistentDataStore<T, TOptions>, IWritableDataStore<T, TMarker>, IReadableDataStore<T, TMarker>, ISearchableDataStore<T, TOptions, TMarker>, IDeletableDataStore<T, TMarker> 
-        where T : class 
+    public interface IPersistentDataStore<T, out TOptions, TMarker> : IPersistentDataStore<T, TOptions>, IWritableDataStore<T, TMarker>, IReadableDataStore<T, TMarker>, ISearchableDataStore<T, TOptions, TMarker>, IDeletableDataStore<T, TMarker>
+        where T : class
         where TOptions : AsyncOptions, new()
     {
     }
