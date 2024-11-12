@@ -4,14 +4,9 @@
     <RootNamespace>Savvyio.Assets</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net9'))">
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0-rc.1.24451.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.0-rc.1.24451.1" />
-  </ItemGroup>
-  
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net8'))">
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.8" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
   </ItemGroup>
 
   <ItemGroup>

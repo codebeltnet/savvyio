@@ -47,7 +47,7 @@ namespace Savvyio.Messaging
         /// </summary>
         /// <value>The delegate that is invoked once for each message fetched from a source.</value>
         public Func<IMessage<T>, Task> MessageCallback { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the implementation of an <see cref="IProducerConsumerCollection{T}"/> that is used to store all acknowledged properties. Default is a new instance of <see cref="ConcurrentBag{T}"/>.
         /// </summary>

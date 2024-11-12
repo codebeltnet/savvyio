@@ -134,9 +134,9 @@ namespace Savvyio.Extensions.Text.Json
         /// </exception>
         public static ICollection<JsonConverter> AddSingleValueObjectConverter(this ICollection<JsonConverter> converters)
         {
-	        Validator.ThrowIfNull(converters);
-	        converters.Add(new SingleValueObjectConverter());
-	        return converters;
+            Validator.ThrowIfNull(converters);
+            converters.Add(new SingleValueObjectConverter());
+            return converters;
         }
     }
 }

@@ -28,10 +28,10 @@ namespace Savvyio.Domain
                 .SetCausationId(idString)
                 .SetCorrelationId(idString)
                 .SetMemberType(fakeMemberType);
-            
+
             var sut = new Account(command.PlatformProviderId, command.FullName, command.EmailAddress).MergeMetadata(command);
-            
-            Assert.Collection(sut.Metadata, 
+
+            Assert.Collection(sut.Metadata,
                 pair =>
                 {
                     Assert.Equal(pair.Key, MetadataDictionary.MemberType);
@@ -98,7 +98,7 @@ namespace Savvyio.Domain
             Assert.Equal(sut.ThirdLevelDomainName, thirdLvlDomainName);
             Assert.Equal(sut.Policy, new PlatformProviderAccountPolicy());
             Assert.True(sut.Events.Count == 0, "sut.Events.Count == 0");
-            
+
             sut.ChangeAccountPolicy(newAccountPolicy);
             sut.ChangeDescription(newDescription);
             sut.ChangeName(newName);

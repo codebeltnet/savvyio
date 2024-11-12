@@ -27,7 +27,7 @@ namespace Savvyio.EventDriven
             Assert.Equal(fullname, sut.FullName);
             Assert.Equal(id, sut.Id);
 
-            Assert.Collection(sut.Metadata, 
+            Assert.Collection(sut.Metadata,
                 kvp =>
                 {
                     Assert.Equal(kvp.Key, MetadataDictionary.MemberType);

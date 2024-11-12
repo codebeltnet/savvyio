@@ -10,7 +10,7 @@ namespace Savvyio.Handlers
     {
         private readonly ConcurrentDictionary<Type, Func<TModel, object>> _handlers = new();
         private readonly ConcurrentDictionary<Type, Func<TModel, CancellationToken, Task<object>>> _asyncHandlers = new();
-        
+
         public RequestReplyManager()
         {
         }

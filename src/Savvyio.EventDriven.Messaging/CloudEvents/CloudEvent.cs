@@ -47,7 +47,7 @@ namespace Savvyio.EventDriven.Messaging.CloudEvents
         /// <value>The value describing the type of event related to the originating occurrence.</value>
         /// <remarks>https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#type</remarks>
         public string Type { get; protected set; }
-        
+
         /// <summary>
         /// Gets the time, expressed as the Coordinated Universal Time (UTC), of when the occurrence happened.
         /// </summary>

@@ -31,16 +31,16 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Commands
         [Fact]
         public void CreateAccountWithValueObjects_ShouldUseCustomConverter()
         {
-	        var ca = new CreateAccountWithValueObjects(Guid.NewGuid(), "Michael Mortensen", "root@gimlichael.dev");
+            var ca = new CreateAccountWithValueObjects(Guid.NewGuid(), "Michael Mortensen", "root@gimlichael.dev");
 
-	        var json = new NewtonsoftJsonMarshaller().Serialize(ca);
-	        var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
+            var json = new NewtonsoftJsonMarshaller().Serialize(ca);
+            var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
-	        TestOutput.WriteLine(jsonString);
+            TestOutput.WriteLine(jsonString);
 
-	        var rehydrated = new NewtonsoftJsonMarshaller().Deserialize<CreateAccountWithValueObjects>(json);
+            var rehydrated = new NewtonsoftJsonMarshaller().Deserialize<CreateAccountWithValueObjects>(json);
 
-	        Assert.Equivalent(ca, rehydrated, true);
+            Assert.Equivalent(ca, rehydrated, true);
         }
     }
 }

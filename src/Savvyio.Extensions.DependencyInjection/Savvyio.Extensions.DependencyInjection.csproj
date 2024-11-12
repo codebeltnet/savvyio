@@ -10,15 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Extensions.DependencyInjection" Version="9.0.0-preview.10" />
-  </ItemGroup>
-
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net9'))">
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0-rc.1.24431.7" />
-  </ItemGroup>
-
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net8'))">
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
+    <PackageReference Include="Cuemon.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
   </ItemGroup>
 
 </Project>

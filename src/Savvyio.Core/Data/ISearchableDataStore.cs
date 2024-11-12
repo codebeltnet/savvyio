@@ -11,8 +11,8 @@ namespace Savvyio.Data
     /// <typeparam name="T">The type of the DTO.</typeparam>
     /// <typeparam name="TOptions">The type of the options associated with this DTO.</typeparam>
     /// <seealso cref="IDataStore{T}"/>
-    public interface ISearchableDataStore<T, out TOptions> : IDataStore<T> 
-        where T : class 
+    public interface ISearchableDataStore<T, out TOptions> : IDataStore<T>
+        where T : class
         where TOptions : AsyncOptions, new()
     {
         /// <summary>

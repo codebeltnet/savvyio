@@ -33,10 +33,10 @@ namespace Savvyio.Extensions.EFCore
         [Fact]
         public async Task EfCoreDataSource_ShouldFailWithObjectDisposedException()
         {
-	        var sut = new EfCoreDataSource(new EfCoreDataSourceOptions()
-	        {
-		        ContextConfigurator = b => b.UseInMemoryDatabase("Dummy")
-	        });
+            var sut = new EfCoreDataSource(new EfCoreDataSourceOptions()
+            {
+                ContextConfigurator = b => b.UseInMemoryDatabase("Dummy")
+            });
             sut.Dispose();
 
             await Assert.ThrowsAsync<ObjectDisposedException>(() => sut.SaveChangesAsync());
@@ -53,8 +53,8 @@ namespace Savvyio.Extensions.EFCore
             sut1.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
             sut1.AddConfiguredOptions<EfCoreDataSourceOptions>(o =>
             {
-	            o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy");
-	            o.ModelConstructor = mb => mb.AddAccount();
+                o.ContextConfigurator = b => b.UseInMemoryDatabase("Dummy");
+                o.ModelConstructor = mb => mb.AddAccount();
             });
             var sut2 = sut1.BuildServiceProvider();
             var sut3 = new EfCoreAggregateDataSource(sut2.GetRequiredService<IDomainEventDispatcher>(), sut2.GetRequiredService<EfCoreDataSourceOptions>());

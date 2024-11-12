@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Codebelt.Extensions.Newtonsoft.Json" Version="9.0.0-preview.2" />
+    <PackageReference Include="Codebelt.Extensions.Newtonsoft.Json" />
   </ItemGroup>
 
   <ItemGroup>

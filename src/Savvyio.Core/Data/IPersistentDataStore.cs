@@ -11,7 +11,7 @@ namespace Savvyio.Data
     /// <seealso cref="IReadableDataStore{T}"/>
     /// <seealso cref="IDeletableDataStore{T}"/>
     /// <seealso cref="ISearchableDataStore{T,TOptions}"/>
-    public interface IPersistentDataStore<T, out TOptions> : IWritableDataStore<T>, IReadableDataStore<T>, ISearchableDataStore<T, TOptions>, IDeletableDataStore<T> 
+    public interface IPersistentDataStore<T, out TOptions> : IWritableDataStore<T>, IReadableDataStore<T>, ISearchableDataStore<T, TOptions>, IDeletableDataStore<T>
         where T : class
         where TOptions : AsyncOptions, new()
     {

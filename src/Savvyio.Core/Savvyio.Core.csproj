@@ -7,10 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Security.Cryptography" Version="9.0.0-preview.10" />
-    <PackageReference Include="Cuemon.Extensions.Core" Version="9.0.0-preview.10" />
-    <PackageReference Include="Cuemon.Extensions.Collections.Generic" Version="9.0.0-preview.10" />
-    <PackageReference Include="Cuemon.Extensions.Reflection" Version="9.0.0-preview.10" />
+    <PackageReference Include="Cuemon.Security.Cryptography" />
+    <PackageReference Include="Cuemon.Extensions.Core" />
+    <PackageReference Include="Cuemon.Extensions.Collections.Generic" />
+    <PackageReference Include="Cuemon.Extensions.Reflection" />
   </ItemGroup>
 
 </Project>

@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 
 namespace Savvyio.Queries
 {
-    public class QueryHandlerTest: Test
+    public class QueryHandlerTest : Test
     {
         public QueryHandlerTest(ITestOutputHelper output) : base(output)
         {

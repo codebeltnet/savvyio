@@ -30,7 +30,7 @@ namespace Savvyio.Dispatchers
         /// <param name="request">The model that is being handled by a registered delegate.</param>
         /// <param name="handlerFactory">The function delegate that will locate and invoke the handler registered to the specified <paramref name="request"/>.</param>
         /// <remarks>A <paramref name="request"/> can be a command, domain event, integration event, query etc.</remarks>
-        protected virtual void Dispatch<TRequest, THandler>(TRequest request, Func<THandler, IFireForgetActivator<TRequest>> handlerFactory) 
+        protected virtual void Dispatch<TRequest, THandler>(TRequest request, Func<THandler, IFireForgetActivator<TRequest>> handlerFactory)
             where TRequest : IRequest
             where THandler : IHandler<TRequest>
         {
@@ -58,7 +58,7 @@ namespace Savvyio.Dispatchers
         /// <param name="setup">The <see cref="AsyncOptions"/> which may be configured.</param>
         /// <returns>A <see cref="Task"/> that represents the asynchronous operation.</returns>
         /// <remarks>A <paramref name="request"/> can be a command, domain event, integration event, query etc.</remarks>
-        protected virtual async Task DispatchAsync<TRequest, THandler>(TRequest request, Func<THandler, IFireForgetActivator<TRequest>> handlerFactory, Action<AsyncOptions> setup) 
+        protected virtual async Task DispatchAsync<TRequest, THandler>(TRequest request, Func<THandler, IFireForgetActivator<TRequest>> handlerFactory, Action<AsyncOptions> setup)
             where TRequest : IRequest
             where THandler : IHandler<TRequest>
         {

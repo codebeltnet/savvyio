@@ -50,7 +50,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
                 writer.WritePropertyName(property.Name, serializer);
                 writer.WriteObject(property.GetValue(value), serializer);
             }
-            
+
             writer.WriteEndObject();
         }
 
@@ -68,7 +68,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
             var idProperty = objectType.GetProperty(nameof(IEntity<TKey>.Id), _options.Flags);
             var properties = objectType.GetRuntimePropertiesExceptOf<AggregateRoot<TKey>>().Where(pi => pi.CanRead).ToList();
             if (idProperty != null) { properties.Insert(0, idProperty); }
-            
+
             var propertyData = new List<DataPair>();
             if (reader.TokenType == JsonToken.StartObject)
             {

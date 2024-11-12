@@ -77,7 +77,7 @@ namespace Savvyio.EventDriven.Messaging
             var sut2 = new List<IMessage<IIntegrationEvent>>();
             var sut3 = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 
-            await Bus.SubscribeAsync((message, _) => 
+            await Bus.SubscribeAsync((message, _) =>
             {
                 sut2.Add(message);
                 return Task.CompletedTask;

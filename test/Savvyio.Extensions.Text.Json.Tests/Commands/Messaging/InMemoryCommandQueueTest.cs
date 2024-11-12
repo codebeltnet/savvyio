@@ -77,7 +77,7 @@ namespace Savvyio.Extensions.Text.Json.Commands.Messaging
         {
             var sut1 = Comparer.Query(message => message.Source.StartsWith("urn")).ToList();
             var sut2 = await Queue.ReceiveAsync().ToListAsync();
-            
+
             TestOutput.WriteLines(sut2.Take(10));
 
             Assert.Equal(sut1.Count, sut2.Count);

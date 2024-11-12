@@ -40,8 +40,8 @@ namespace Savvyio.Commands
             sut.Commit(new DefaultCommand());
             await sut.CommitAsync(new DefaultCommand());
 
-            Assert.Collection(ts.Query(), 
-                s => Assert.Equal(s, nameof(DefaultCommand)), 
+            Assert.Collection(ts.Query(),
+                s => Assert.Equal(s, nameof(DefaultCommand)),
                 s => Assert.Equal(s, nameof(DefaultCommand) + "Async"));
         }
     }

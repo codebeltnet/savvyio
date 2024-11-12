@@ -16,7 +16,7 @@ namespace Savvyio.EventDriven
         /// </summary>
         /// <param name="request">The <see cref="IIntegrationEvent"/> to publish.</param>
         void Publish(IIntegrationEvent request);
-        
+
         /// <summary>
         /// Publishes the specified <paramref name="request"/> asynchronous using Fire-and-Forget/In-Only MEP.
         /// </summary>

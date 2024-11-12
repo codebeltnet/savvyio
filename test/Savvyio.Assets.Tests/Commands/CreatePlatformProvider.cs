@@ -13,7 +13,7 @@ namespace Savvyio.Assets.Commands
         }
 
         public string Name { get; }
-        
+
         public string ThirdLevelDomainName { get; }
 
         public string Description { get; }

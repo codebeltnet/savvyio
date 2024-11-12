@@ -35,7 +35,7 @@ namespace Savvyio.Extensions.Dapper
             Assert.Equal(sut.CommandType, cd.CommandType);
             Assert.Equal(sut.Parameters, cd.Parameters);
             Assert.Equal(sut.Transaction, cd.Transaction);
-            
+
         }
     }
 }

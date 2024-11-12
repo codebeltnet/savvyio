@@ -12,7 +12,7 @@ namespace Savvyio.Extensions.DependencyInjection.Assets
     {
         public FakeRepository(IDataSource ds)
         {
-            
+
         }
 
         public void Add(TEntity entity)
@@ -55,7 +55,7 @@ namespace Savvyio.Extensions.DependencyInjection.Assets
     {
         public FakeRepository(IDataSource<TMarker> ds) : base(ds)
         {
-            
+
         }
     }
 }

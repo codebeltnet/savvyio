@@ -71,7 +71,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
         /// <returns><c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.</returns>
         public override bool CanConvert(Type objectType)
         {
-            return (objectType.IsGenericType && 
+            return (objectType.IsGenericType &&
                     objectType.GetGenericTypeDefinition().HasInterfaces(typeof(IMessage<>)));
         }
     }
@@ -95,7 +95,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
             writer.WriteObject(value.Time, serializer);
             writer.WritePropertyName(nameof(value.Data), serializer);
             writer.WriteObject(value.Data, serializer);
-            
+
             if (value.GetType().HasInterfaces(typeof(ICloudEvent<>)))
             {
                 dynamic ce = value;
@@ -139,7 +139,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
             var memberType = Type.GetType(document.Root[dataKey]![metadataKey]![memberTypeKey]!.Value<string>());
             var time = document.Root[timeKey]!.Value<DateTime>().ToUniversalTime();
             var data = (T)serializer.Deserialize(document.Root[dataKey].CreateReader(), memberType);
-            
+
             var message = new Message<T>(id, source, type, data, time);
 
             if (objectType.HasInterfaces(typeof(ICloudEvent<>)))
@@ -155,7 +155,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
                 {
                     var signedCloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.Cryptography.SignedCloudEvent"));
                     var signature = document.Root[signatureKey]!.Value<string>();
-                        
+
                     return Activator.CreateInstance(signedCloudEventType.MakeGenericType(requestType), [cloudEvent, signature]) as IMessage<T>;
                 }
 

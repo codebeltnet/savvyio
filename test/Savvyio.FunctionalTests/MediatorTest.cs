@@ -48,7 +48,7 @@ namespace Savvyio
             var caEmailAddress = "root@gimlichael.dev";
 
             var mediator = ServiceProvider.GetRequiredService<IMediator>();
-            
+
             var hsd = ServiceProvider.GetRequiredService<IHandlerServicesDescriptor>();
             var plaintext = hsd.ToString();
 
@@ -62,11 +62,11 @@ namespace Savvyio
             TestOutput.WriteLine(Environment.NewLine);
             TestOutput.WriteLine("---");
             TestOutput.WriteLine(Environment.NewLine);
-            
+
             TestOutput.WriteLine(yaml);
 
             var accountRepo = ServiceProvider.GetRequiredService<ISearchableRepository<Account, long, Account>>();
-            
+
             await mediator.CommitAsync(new CreateAccount(caPpId, caFullName, caEmailAddress).SetCorrelationId(correlationId));
 
             var entity = await accountRepo.FindAllAsync(a => a.Metadata.Contains(new KeyValuePair<string, object>(MetadataDictionary.CorrelationId, correlationId))).SingleOrDefaultAsync();
@@ -446,7 +446,7 @@ namespace Savvyio
             var caEmailAddress = "root@gimlichael.dev";
 
             var mediator = ServiceProvider.GetRequiredService<IMediator>();
-            
+
             await Assert.ThrowsAsync<ValidationException>(() => mediator.CommitAsync(new CreateAccount(caPpId, caFullName, caEmailAddress).SetCorrelationId(correlationId)));
         }
 
@@ -458,7 +458,7 @@ namespace Savvyio
             var caEmailAddress = "makemyday@us.gov";
 
             var mediator = ServiceProvider.GetRequiredService<IMediator>();
-            
+
             await mediator.CommitAsync(new CreateAccount(caPpId, caFullName, caEmailAddress));
         }
 

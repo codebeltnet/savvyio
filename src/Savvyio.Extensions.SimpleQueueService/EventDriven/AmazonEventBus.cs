@@ -98,8 +98,8 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                 hasMessages = false;
                 await foreach (var message in RetrieveMessagesAsync(cancellationToken).ConfigureAwait(false))
                 {
-	                hasMessages = true;
-	                await asyncHandler.Invoke(message, cancellationToken).ConfigureAwait(false);
+                    hasMessages = true;
+                    await asyncHandler.Invoke(message, cancellationToken).ConfigureAwait(false);
                 }
             }
         }

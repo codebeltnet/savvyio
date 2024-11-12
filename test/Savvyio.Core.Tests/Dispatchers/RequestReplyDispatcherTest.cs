@@ -34,12 +34,12 @@ namespace Savvyio.Dispatchers
             var sc = new ServiceCollection()
                 .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(RequestReplyDispatcherTest).Assembly, typeof(IQuery).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery())
                 .AddScoped<ITestStore<IQuery>, InMemoryTestStore<IQuery>>();
-            
+
             var sp = sc.BuildServiceProvider();
             var sut = new QueryDispatcher(sp.GetRequiredService<IServiceLocator>());
             var ga = new GetFakeAccount(2313);
             var cs = sp.GetRequiredService<ITestStore<IQuery>>();
-            
+
             var result = sut.Query(ga);
 
             Assert.NotNull(result);
@@ -63,12 +63,12 @@ namespace Savvyio.Dispatchers
             var sc = new ServiceCollection()
                 .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(RequestReplyDispatcherTest).Assembly, typeof(IQuery).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery())
                 .AddScoped<ITestStore<IQuery>, InMemoryTestStore<IQuery>>();
-            
+
             var sp = sc.BuildServiceProvider();
             var sut = new QueryDispatcher(sp.GetRequiredService<IServiceLocator>());
             var ga = new GetFakeAccount(74893297432);
             var cs = sp.GetRequiredService<ITestStore<IQuery>>();
-            
+
             var result = await sut.QueryAsync(ga);
 
             Assert.NotNull(result);

@@ -29,7 +29,7 @@ namespace Savvyio.Extensions.DependencyInjection.DapperExtensions
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         public static IServiceCollection AddDapperExtensionsDataStore<T, TMarker>(this IServiceCollection services) where T : class
         {
-            return services.AddDataStore<DapperExtensionsDataStore<T, TMarker>,  T, DapperExtensionsQueryOptions<T>>();
+            return services.AddDataStore<DapperExtensionsDataStore<T, TMarker>, T, DapperExtensionsQueryOptions<T>>();
         }
     }
 }

@@ -119,7 +119,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
                     var paramters = info.GetParameters().ToList();
                     return paramters.Count == propertyData.Count && paramters.Select(pi => pi.ParameterType).SequenceEqual(propertyData.Select(pair => pair.Type));
                 });
-                
+
                 if (matchingCtor != null)
                 {
                     return matchingCtor.Invoke(propertyData.Select(pair => pair.Value).ToArray()) as ValueObject;

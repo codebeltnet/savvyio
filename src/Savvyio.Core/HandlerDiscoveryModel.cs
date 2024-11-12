@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Cuemon.Extensions;
+using Cuemon.Extensions.Runtime;
 
 namespace Savvyio
 {
@@ -116,7 +117,7 @@ namespace Savvyio
         /// </summary>
         public IEnumerable<HandlerServiceTypeImplementationModel> Implementations { get; internal set; }
     }
-    
+
     /// <summary>
     /// Represents a model for handler service type implementations.
     /// </summary>

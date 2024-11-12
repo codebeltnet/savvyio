@@ -16,7 +16,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.CloudEvents
         public IntegrationEventExtensionsTest(ITestOutputHelper output) : base(output)
         {
         }
-        
+
         [Fact]
         public void ToMessage_ToCloudEvent_ShouldSerializeAndDeserialize_MemberCreated_UsingInterface()
         {
@@ -70,7 +70,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.CloudEvents
 
             var json = new NewtonsoftJsonMarshaller().Serialize(sut2);
             var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
-            
+
             TestOutput.WriteLine(jsonString);
 
             var sut4 = new NewtonsoftJsonMarshaller().Deserialize<CloudEvent<MemberCreated>>(json);

@@ -14,7 +14,7 @@ namespace Savvyio.Assets.Domain
 
         public UserAccount(AccountId id) : base(id)
         {
-            
+
         }
 
         public string UserName { get; private set; }

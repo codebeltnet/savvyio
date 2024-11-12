@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 
 namespace Savvyio.Commands
 {
-    public class CommandHandlerTest: Test
+    public class CommandHandlerTest : Test
     {
         public CommandHandlerTest(ITestOutputHelper output) : base(output)
         {

@@ -13,12 +13,8 @@
     <ProjectReference Include="..\Savvyio.Assets.Tests\Savvyio.Assets.Tests.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net9'))">
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0-rc.1.24451.1" />
-  </ItemGroup>
-
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net8'))">
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.8" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
   </ItemGroup>
 
 </Project>
