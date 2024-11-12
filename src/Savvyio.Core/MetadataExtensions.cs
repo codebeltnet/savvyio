@@ -33,6 +33,17 @@ namespace Savvyio
         }
 
         /// <summary>
+        /// Gets the string representation of the request identifier from the <paramref name="request"/>.
+        /// </summary>
+        /// <typeparam name="T">The model that implements the <see cref="IMetadata"/> interface.</typeparam>
+        /// <param name="request">The <see cref="IMetadata"/> to extend.</param>
+        /// <returns>The string representation of the request identifier from the <paramref name="request"/>.</returns>
+        public static string GetRequestId<T>(this T request) where T : IMetadata
+        {
+            return MetadataFactory.Get(request, MetadataDictionary.RequestId).As<string>();
+        }
+
+        /// <summary>
         /// Gets the string representation of the underlying member type of <paramref name="request"/>.
         /// </summary>
         /// <typeparam name="T">The model that implements the <see cref="IMetadata"/> interface.</typeparam>
@@ -67,6 +78,19 @@ namespace Savvyio
         public static T SetCorrelationId<T>(this T request, string correlationId) where T : IMetadata
         {
             MetadataFactory.Set(request, MetadataDictionary.CorrelationId, correlationId);
+            return request;
+        }
+
+        /// <summary>
+        /// Assigns a new <paramref name="requestId"/> to the <paramref name="request"/>.
+        /// </summary>
+        /// <typeparam name="T">The model that implements the <see cref="IMetadata"/> interface.</typeparam>
+        /// <param name="request">The <see cref="IMetadata"/> to extend.</param>
+        /// <param name="requestId">The request identifier of the model.</param>
+        /// <returns>A reference to <paramref name="request"/> after the operation has completed.</returns>
+        public static T SetRequestId<T>(this T request, string requestId) where T : IMetadata
+        {
+            MetadataFactory.Set(request, MetadataDictionary.RequestId, requestId);
             return request;
         }
 

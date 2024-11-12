@@ -18,7 +18,7 @@ namespace Savvyio
         /// Gets a list of the reserved keywords.
         /// </summary>
         /// <value>A list of the reserved keywords.</value>
-        public static IReadOnlyCollection<string> ReservedKeywords { get; } = Arguments.ToEnumerableOf(Timestamp, MemberType, CorrelationId, CausationId, EventId, AggregateVersion).ToList();
+        public static IReadOnlyCollection<string> ReservedKeywords { get; } = Arguments.ToEnumerableOf(Timestamp, MemberType, CorrelationId, RequestId, CausationId, EventId, AggregateVersion).ToList();
 
         internal static string EnsureReservedKeywordCapitalization(string key)
         {
@@ -39,6 +39,11 @@ namespace Savvyio
         /// CorrelationId is a reserved keyword.
         /// </summary>
         public const string CorrelationId = nameof(CorrelationId);
+
+        /// <summary>
+        /// RequestId is a reserved keyword.
+        /// </summary>
+        public const string RequestId = nameof(RequestId);
 
         /// <summary>
         /// CausationId is a reserved keyword.
