@@ -2,7 +2,7 @@
 
 # Savvy I/O
 
-An open-source project (MIT license) that provides a SOLID and clean .NET class library for writing DDD, CQRS and Event Sourcing applications for .NET 8 (LTS) and .NET 6 (LTS).
+An open-source project (MIT license) that provides a SOLID and clean .NET class library for writing DDD, CQRS and Event Sourcing applications for .NET 9 (STS) and .NET 8 (LTS).
 
 ![Savvy I/O Flow](.assets/savvyio.png)
 
