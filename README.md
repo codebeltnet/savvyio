@@ -16,7 +16,7 @@ The grand idea and motivation was to remove the complexity normally associated w
 
 ## State of the Union
 
-Support for .NET 7 has been deprecated as these are out of [support](https://endoflife.date/dotnet).
+Support for .NET 6 and .NET 7 has been deprecated as these are out of [support](https://endoflife.date/dotnet).
 
 > [!IMPORTANT]
 > Version 2.2.0 of Savvy I/O will be the last version to support .NET 7.
