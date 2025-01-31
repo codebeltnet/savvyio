@@ -1,3 +1,33 @@
+Version: 4.0.1
+Availability: .NET 9 and .NET 8
+ 
+# References
+- Savvyio
+- Savvyio.Commands
+- Savvyio.Commands.Messaging
+- Savvyio.Domain
+- Savvyio.Domain.EventSourcing
+- Savvyio.EventDriven
+- Savvyio.EventDriven.Messaging
+- Savvyio.Extensions.Dapper
+- Savvyio.Extensions.DependencyInjection
+- Savvyio.Extensions.DependencyInjection.Dapper
+- Savvyio.Extensions.DependencyInjection.Domain
+- Savvyio.Extensions.DependencyInjection.EFCore
+- Savvyio.Extensions.DependencyInjection.EFCore.Domain
+- Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
+- Savvyio.Extensions.DependencyInjection.QueueStorage
+- Savvyio.Extensions.DependencyInjection.SimpleQueueService
+- Savvyio.Extensions.Dispatchers
+- Savvyio.Extensions.EFCore
+- Savvyio.Extensions.EFCore.Domain
+- Savvyio.Extensions.EFCore.Domain.EventSourcing
+- Savvyio.Extensions.QueueStorage
+- Savvyio.Extensions.SimpleQueueService
+- Savvyio.Extensions.Text.Json
+- Savvyio.Messaging
+- Savvyio.Queries
+ 
 Version: 4.0.0
 Availability: .NET 9 and .NET 8
  
