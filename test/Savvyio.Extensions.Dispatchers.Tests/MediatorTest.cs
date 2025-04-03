@@ -33,7 +33,7 @@ namespace Savvyio.Extensions.Dispatchers
         [Fact]
         public void Host_MediatorShouldBeRegistered_UsingDefaultOptions()
         {
-            using (var host = GenericHostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>())))
+            using (var host = GenericHostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>()), hostFixture: null))
             {
                 var mediator = host.ServiceProvider.GetRequiredService<IMediator>();
 
@@ -44,7 +44,7 @@ namespace Savvyio.Extensions.Dispatchers
         [Fact]
         public void Host_MediatorDescriptorShouldNotBeRegistered_UsingDefaultOptions()
         {
-            using (var host = GenericHostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>())))
+            using (var host = GenericHostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>()), hostFixture: null))
             {
                 Assert.Throws<InvalidOperationException>(() => host.ServiceProvider.GetRequiredService<IHandlerServicesDescriptor>());
             }
@@ -53,7 +53,7 @@ namespace Savvyio.Extensions.Dispatchers
         [Fact]
         public void Host_MediatorDescriptorShouldBeRegistered()
         {
-            using (var host = GenericHostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>().EnableHandlerServicesDescriptor()).AddHandlerServicesDescriptor()))
+            using (var host = GenericHostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>().EnableHandlerServicesDescriptor()).AddHandlerServicesDescriptor(), hostFixture: null))
             {
                 var descriptor = host.ServiceProvider.GetRequiredService<IHandlerServicesDescriptor>();
 
@@ -82,7 +82,7 @@ namespace Savvyio.Extensions.Dispatchers
                 services.AddHandlerServicesDescriptor();
                 services.AddSingleton<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
                 services.AddSingleton<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
-            }))
+            }, hostFixture: null))
             {
                 using var scope = host.ServiceProvider.CreateScope();
                 var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
@@ -126,7 +126,7 @@ namespace Savvyio.Extensions.Dispatchers
                 services.AddHandlerServicesDescriptor();
                 services.AddSingleton<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
                 services.AddSingleton<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
-            }))
+            }, hostFixture: null))
             {
                 var scope = host.ServiceProvider.CreateScope();
                 var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
@@ -162,7 +162,7 @@ namespace Savvyio.Extensions.Dispatchers
                        services.AddHandlerServicesDescriptor();
                        services.AddSingleton<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
                        services.AddSingleton<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
-                   }))
+                   }, hostFixture: null))
             {
                 using var scope = host.ServiceProvider.CreateScope();
                 var mediator = scope.ServiceProvider.GetRequiredService<IQueryDispatcher>();

@@ -24,7 +24,7 @@ namespace Savvyio.Extensions.DependencyInjection
                     services.AddXunitTestLogging(TestOutput);
                     services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true));
                     services.AddHandlerServicesDescriptor();
-                });
+                }, hostFixture: null);
 
             host.ServiceProvider.WriteHandlerDiscoveriesToLog<ServiceCollectionExtensionsTest>();
 
@@ -114,7 +114,7 @@ namespace Savvyio.Extensions.DependencyInjection
                     services.AddXunitTestLogging(TestOutput);
                     services.AddSavvyIO(o => o.UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true));
                     services.AddHandlerServicesDescriptor();
-                });
+                }, hostFixture: null);
 
             Assert.Throws<InvalidOperationException>(() => host.ServiceProvider.WriteHandlerDiscoveriesToLog<ServiceCollectionExtensionsTest>());
             Assert.Null(host.ServiceProvider.GetService<IHandlerServicesDescriptor>());

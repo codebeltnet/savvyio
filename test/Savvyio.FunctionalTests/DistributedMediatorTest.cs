@@ -60,7 +60,7 @@ namespace Savvyio
                        });
 
                        AmazonResourceNameOptions.DefaultAccountId = context.Configuration["AWS:CallerIdentity"];
-                   }))
+                   }, hostFixture: null))
             {
                 var correlationId = Guid.NewGuid().ToString("N");
                 var platformProviderId = Guid.NewGuid();
@@ -117,7 +117,7 @@ namespace Savvyio
                        });
 
                        AmazonResourceNameOptions.DefaultAccountId = context.Configuration["AWS:CallerIdentity"];
-                   }))
+                   }, hostFixture: null))
             {
 
                 await Task.Delay(TimeSpan.FromSeconds(5));
@@ -161,7 +161,7 @@ namespace Savvyio
                        });
 
                        AmazonResourceNameOptions.DefaultAccountId = context.Configuration["AWS:CallerIdentity"];
-                   }))
+                   }, hostFixture: null))
             {
                 var eventBus = host.ServiceProvider.GetRequiredService<IPublishSubscribeChannel<IIntegrationEvent>>();
 
