@@ -30,7 +30,7 @@ using Xunit.Priority;
 namespace Savvyio.Extensions.QueueStorage.Commands
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class AzureCommandQueueNewtonsoftJsonSerializerContextTest : HostTest<HostFixture>
+    public class AzureCommandQueueNewtonsoftJsonSerializerContextTest : HostTest<ManagedHostFixture>
     {
         private static readonly string Platform = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux" : "windows";
         private static readonly string BuildType = typeof(AzureCommandQueue).Assembly.IsDebugBuild() ? "debug" : "release";
@@ -38,10 +38,10 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         private readonly AzureCommandQueue _queue;
         private readonly IMarshaller _marshaller;
 
-        public AzureCommandQueueNewtonsoftJsonSerializerContextTest(HostFixture fixture, ITestOutputHelper output) : base(fixture, output)
+        public AzureCommandQueueNewtonsoftJsonSerializerContextTest(ManagedHostFixture fixture, ITestOutputHelper output) : base(fixture, output)
         {
-            _queue = fixture.ServiceProvider.GetRequiredService<AzureCommandQueue>();
-            _marshaller = fixture.ServiceProvider.GetRequiredService<IMarshaller>();
+            _queue = fixture.Host.Services.GetRequiredService<AzureCommandQueue>();
+            _marshaller = fixture.Host.Services.GetRequiredService<IMarshaller>();
         }
 
         [Fact, Priority(0)]
@@ -51,7 +51,7 @@ namespace Savvyio.Extensions.QueueStorage.Commands
             var sut2 = "https://fancy.io/members".ToUri();
             var sut3 = sut1.ToMessage(sut2, nameof(CreateMemberCommand));
 
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
+            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
 
             TestOutput.WriteLine(_marshaller.Serialize(sut3).ToEncodedString());
 
@@ -89,7 +89,7 @@ namespace Savvyio.Extensions.QueueStorage.Commands
             var sut2 = "https://fancy.io/members/signed".ToUri();
             var sut3 = sut1.ToMessage(sut2, nameof(CreateMemberCommand)).Sign(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
 
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
+            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
 
             TestOutput.WriteLine(_marshaller.Serialize(sut2).ToEncodedString());
 

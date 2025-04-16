@@ -29,7 +29,7 @@ using Xunit.Priority;
 namespace Savvyio.Extensions.SimpleQueueService.EventDriven
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class AmazonEventBusJsonSerializerContextTest : HostTest<HostFixture>
+    public class AmazonEventBusJsonSerializerContextTest : HostTest<ManagedHostFixture>
     {
         private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
         private readonly AmazonEventBus _bus;
@@ -37,10 +37,10 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         private readonly IMarshaller _marshaller;
         private static readonly string BuildType = typeof(AmazonMessageOptions).Assembly.IsDebugBuild() ? "Debug" : "Release";
 
-        public AmazonEventBusJsonSerializerContextTest(HostFixture fixture, ITestOutputHelper output) : base(fixture, output)
+        public AmazonEventBusJsonSerializerContextTest(ManagedHostFixture fixture, ITestOutputHelper output) : base(fixture, output)
         {
-            _bus = fixture.ServiceProvider.GetRequiredService<AmazonEventBus>();
-            _marshaller = fixture.ServiceProvider.GetRequiredService<IMarshaller>();
+            _bus = fixture.Host.Services.GetRequiredService<AmazonEventBus>();
+            _marshaller = fixture.Host.Services.GetRequiredService<IMarshaller>();
         }
 
         [Fact, Priority(0)]
@@ -50,8 +50,8 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
             var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{BuildType}.updated-event");
 
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut3, o => o.Delimiter = Environment.NewLine));
+            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
+            TestOutput.WriteLine(Generate.ObjectPortrayal(sut3, o => o.Delimiter = System.Environment.NewLine));
             Comparer.Add(sut3);
 
             await _bus.PublishAsync(sut3);
@@ -84,7 +84,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
             var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{BuildType}.updated-event.signed").Sign(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
 
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
+            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
 
             Comparer.Add(sut3);
 
@@ -119,7 +119,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
             var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{BuildType}.updated-event.cloud-event").ToCloudEvent();
 
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
+            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
 
             Comparer.Add(sut3);
 
@@ -154,7 +154,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
             var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{BuildType}.updated-event.signed-cloud-event").ToCloudEvent().SignCloudEvent(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
 
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
+            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
 
             Comparer.Add(sut3);
 

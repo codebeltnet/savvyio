@@ -33,9 +33,9 @@ namespace Savvyio.Extensions.Dispatchers
         [Fact]
         public void Host_MediatorShouldBeRegistered_UsingDefaultOptions()
         {
-            using (var host = GenericHostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>()), hostFixture: null))
+            using (var test = HostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>())))
             {
-                var mediator = host.ServiceProvider.GetRequiredService<IMediator>();
+                var mediator = test.Host.Services.GetRequiredService<IMediator>();
 
                 Assert.IsType<Mediator>(mediator);
             }
@@ -44,29 +44,25 @@ namespace Savvyio.Extensions.Dispatchers
         [Fact]
         public void Host_MediatorDescriptorShouldNotBeRegistered_UsingDefaultOptions()
         {
-            using (var host = GenericHostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>()), hostFixture: null))
-            {
-                Assert.Throws<InvalidOperationException>(() => host.ServiceProvider.GetRequiredService<IHandlerServicesDescriptor>());
-            }
+            using var test = HostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>()));
+            Assert.Throws<InvalidOperationException>(() => test.Host.Services.GetRequiredService<IHandlerServicesDescriptor>());
         }
 
         [Fact]
         public void Host_MediatorDescriptorShouldBeRegistered()
         {
-            using (var host = GenericHostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>().EnableHandlerServicesDescriptor()).AddHandlerServicesDescriptor(), hostFixture: null))
-            {
-                var descriptor = host.ServiceProvider.GetRequiredService<IHandlerServicesDescriptor>();
+            using var test = HostTestFactory.Create(services => services.AddSavvyIO(registry => registry.AddMediator<Mediator>().EnableHandlerServicesDescriptor()).AddHandlerServicesDescriptor());
+            var descriptor = test.Host.Services.GetRequiredService<IHandlerServicesDescriptor>();
 
-                Assert.IsType<HandlerServicesDescriptor>(descriptor);
+            Assert.IsType<HandlerServicesDescriptor>(descriptor);
 
-                TestOutput.WriteLine(descriptor.ToString());
-            }
+            TestOutput.WriteLine(descriptor.ToString());
         }
 
         [Fact]
         public async Task Mediator_ShouldInvoke_CreateAccountAsync_OnInProcAccountCreated_OnOutProcAccountCreated()
         {
-            using (var host = GenericHostTestFactory.Create(services =>
+            await using var test = HostTestFactory.Create(services =>
             {
                 services.AddSingleton(TestOutput);
                 services.AddEfCoreRepository<Account, long, Account>();
@@ -82,32 +78,30 @@ namespace Savvyio.Extensions.Dispatchers
                 services.AddHandlerServicesDescriptor();
                 services.AddSingleton<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
                 services.AddSingleton<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
-            }, hostFixture: null))
-            {
-                using var scope = host.ServiceProvider.CreateScope();
-                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-                var descriptor = scope.ServiceProvider.GetRequiredService<IHandlerServicesDescriptor>();
-                var deStore = scope.ServiceProvider.GetRequiredService<ITestStore<IDomainEvent>>();
-                var ieStore = scope.ServiceProvider.GetRequiredService<ITestStore<IIntegrationEvent>>();
+            });
+            using var scope = test.Host.Services.CreateScope();
+            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+            var descriptor = scope.ServiceProvider.GetRequiredService<IHandlerServicesDescriptor>();
+            var deStore = scope.ServiceProvider.GetRequiredService<ITestStore<IDomainEvent>>();
+            var ieStore = scope.ServiceProvider.GetRequiredService<ITestStore<IIntegrationEvent>>();
 
-                TestOutput.WriteLine(descriptor.ToString());
+            TestOutput.WriteLine(descriptor.ToString());
 
-                var id = Guid.NewGuid();
-                var clientProvidedCorrelationId = Guid.NewGuid().ToString("N");
+            var id = Guid.NewGuid();
+            var clientProvidedCorrelationId = Guid.NewGuid().ToString("N");
 
-                await mediator.CommitAsync(new CreateAccount(id, "Michael Mortensen", "root@gimlichael.dev")
-                    .SetCorrelationId(clientProvidedCorrelationId)
-                    .SetCausationId(clientProvidedCorrelationId));
+            await mediator.CommitAsync(new CreateAccount(id, "Michael Mortensen", "root@gimlichael.dev")
+                .SetCorrelationId(clientProvidedCorrelationId)
+                .SetCausationId(clientProvidedCorrelationId));
 
-                Assert.Equal(id, deStore.QueryFor<AccountInitiated>().Single().PlatformProviderId);
-                Assert.InRange(ieStore.QueryFor<AccountCreated>().Single().Id, 1, 100000);
-            }
+            Assert.Equal(id, deStore.QueryFor<AccountInitiated>().Single().PlatformProviderId);
+            Assert.InRange(ieStore.QueryFor<AccountCreated>().Single().Id, 1, 100000);
         }
 
         [Fact]
         public async Task Mediator_ShouldInvoke_CreatePlatformProviderAsyncLambda_OnInProcPlatformProviderInitiated_OnOutProcPlatformProviderCreated()
         {
-            using (var host = GenericHostTestFactory.Create(services =>
+            await using var test = HostTestFactory.Create(services =>
             {
                 services.AddSingleton(TestOutput);
                 services.AddEfCoreRepository<Account, long, Account>();
@@ -126,58 +120,54 @@ namespace Savvyio.Extensions.Dispatchers
                 services.AddHandlerServicesDescriptor();
                 services.AddSingleton<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
                 services.AddSingleton<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
-            }, hostFixture: null))
-            {
-                var scope = host.ServiceProvider.CreateScope();
-                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-                var descriptor = scope.ServiceProvider.GetRequiredService<IHandlerServicesDescriptor>();
-                var deStore = scope.ServiceProvider.GetRequiredService<ITestStore<IDomainEvent>>();
-                var ieStore = scope.ServiceProvider.GetRequiredService<ITestStore<IIntegrationEvent>>();
+            });
+            var scope = test.Host.Services.CreateScope();
+            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+            var descriptor = scope.ServiceProvider.GetRequiredService<IHandlerServicesDescriptor>();
+            var deStore = scope.ServiceProvider.GetRequiredService<ITestStore<IDomainEvent>>();
+            var ieStore = scope.ServiceProvider.GetRequiredService<ITestStore<IIntegrationEvent>>();
 
-                TestOutput.WriteLine(descriptor.ToString());
+            TestOutput.WriteLine(descriptor.ToString());
 
-                var createPlatformProvider = new CreatePlatformProvider("Whitelabel Inc.", "wl", "An example of a whitelabel platform provider.");
-                var clientProvidedCorrelationId = Guid.NewGuid().ToString("N");
+            var createPlatformProvider = new CreatePlatformProvider("Whitelabel Inc.", "wl", "An example of a whitelabel platform provider.");
+            var clientProvidedCorrelationId = Guid.NewGuid().ToString("N");
 
-                await mediator.CommitAsync(createPlatformProvider
-                    .SetCorrelationId(clientProvidedCorrelationId)
-                    .SetCausationId(clientProvidedCorrelationId));
+            await mediator.CommitAsync(createPlatformProvider
+                .SetCorrelationId(clientProvidedCorrelationId)
+                .SetCausationId(clientProvidedCorrelationId));
 
-                Assert.NotEqual(Guid.Empty, deStore.QueryFor<PlatformProviderInitiated>().Single().Id);
-                Assert.Equal(deStore.QueryFor<PlatformProviderInitiated>().Single().Id, ieStore.QueryFor<PlatformProviderCreated>().Single().Id);
-            }
+            Assert.NotEqual(Guid.Empty, deStore.QueryFor<PlatformProviderInitiated>().Single().Id);
+            Assert.Equal(deStore.QueryFor<PlatformProviderInitiated>().Single().Id, ieStore.QueryFor<PlatformProviderCreated>().Single().Id);
         }
 
         [Fact]
         public async Task QueryTest()
         {
-            using (var host = GenericHostTestFactory.Create(services =>
-                   {
-                       services.AddSingleton(TestOutput);
-                       services.AddSingleton<IPersistentRepository<Account, long>, EfCoreRepository<Account, long, Account>>();
-                       services.AddSingleton<IPersistentRepository<PlatformProvider, Guid>, EfCoreRepository<PlatformProvider, Guid, PlatformProvider>>();
-                       services.AddEfCoreDataSource<Account>(o => o.ModelConstructor = builder => builder.AddAccount());
-                       services.AddEfCoreDataSource<PlatformProvider>(o => o.ModelConstructor = builder => builder.AddPlatformProvider());
-                       services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true));
-                       services.AddHandlerServicesDescriptor();
-                       services.AddSingleton<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
-                       services.AddSingleton<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
-                   }, hostFixture: null))
+            await using var test = HostTestFactory.Create(services =>
             {
-                using var scope = host.ServiceProvider.CreateScope();
-                var mediator = scope.ServiceProvider.GetRequiredService<IQueryDispatcher>();
-                var descriptor = scope.ServiceProvider.GetRequiredService<IHandlerServicesDescriptor>();
-                var deStore = scope.ServiceProvider.GetRequiredService<ITestStore<IDomainEvent>>();
-                var ieStore = scope.ServiceProvider.GetRequiredService<ITestStore<IIntegrationEvent>>();
+                services.AddSingleton(TestOutput);
+                services.AddSingleton<IPersistentRepository<Account, long>, EfCoreRepository<Account, long, Account>>();
+                services.AddSingleton<IPersistentRepository<PlatformProvider, Guid>, EfCoreRepository<PlatformProvider, Guid, PlatformProvider>>();
+                services.AddEfCoreDataSource<Account>(o => o.ModelConstructor = builder => builder.AddAccount());
+                services.AddEfCoreDataSource<PlatformProvider>(o => o.ModelConstructor = builder => builder.AddPlatformProvider());
+                services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true));
+                services.AddHandlerServicesDescriptor();
+                services.AddSingleton<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
+                services.AddSingleton<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
+            });
+            using var scope = test.Host.Services.CreateScope();
+            var mediator = scope.ServiceProvider.GetRequiredService<IQueryDispatcher>();
+            var descriptor = scope.ServiceProvider.GetRequiredService<IHandlerServicesDescriptor>();
+            var deStore = scope.ServiceProvider.GetRequiredService<ITestStore<IDomainEvent>>();
+            var ieStore = scope.ServiceProvider.GetRequiredService<ITestStore<IIntegrationEvent>>();
 
-                TestOutput.WriteLine(descriptor.ToString());
+            TestOutput.WriteLine(descriptor.ToString());
 
-                var result = await mediator.QueryAsync(new GetFakeAccount(10));
+            var result = await mediator.QueryAsync(new GetFakeAccount(10));
 
-                TestOutput.WriteLine(JsonConvert.SerializeObject(result));
+            TestOutput.WriteLine(JsonConvert.SerializeObject(result));
 
-                Assert.Equal(10, result.Id);
-            }
+            Assert.Equal(10, result.Id);
         }
     }
 }

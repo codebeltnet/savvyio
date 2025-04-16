@@ -18,24 +18,24 @@ namespace Savvyio.Extensions.DependencyInjection
         [Fact]
         public void AddHandlerServicesDescriptor_ShouldAddHandlerServiceDescriptorAsIHandlerServicesDescriptor()
         {
-            using var host = GenericHostTestFactory.Create(
+            using var test = HostTestFactory.Create(
                 services =>
                 {
                     services.AddXunitTestLogging(TestOutput);
                     services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true));
                     services.AddHandlerServicesDescriptor();
-                }, hostFixture: null);
+                });
 
-            host.ServiceProvider.WriteHandlerDiscoveriesToLog<ServiceCollectionExtensionsTest>();
+            test.Host.Services.WriteHandlerDiscoveriesToLog<ServiceCollectionExtensionsTest>();
 
-            var loggerEntry = host.ServiceProvider.GetRequiredService<ILogger<ServiceCollectionExtensionsTest>>()
+            var loggerEntry = test.Host.Services.GetRequiredService<ILogger<ServiceCollectionExtensionsTest>>()
                 .GetTestStore()
                 .Query(entry => entry.Severity == LogLevel.Information && entry.Message.Contains("Discovered 2 ICommandHandler implementations"))
                 .SingleOrDefault();
 
             Assert.NotNull(loggerEntry);
-            Assert.NotNull(host.ServiceProvider.GetService<IHandlerServicesDescriptor>());
-            Assert.IsType<HandlerServicesDescriptor>(host.ServiceProvider.GetService<IHandlerServicesDescriptor>());
+            Assert.NotNull(test.Host.Services.GetService<IHandlerServicesDescriptor>());
+            Assert.IsType<HandlerServicesDescriptor>(test.Host.Services.GetService<IHandlerServicesDescriptor>());
             Assert.Equal("""
                          Information: Discovered 2 ICommandHandler implementations covering a total of 5 ICommand methods
                          
@@ -108,16 +108,16 @@ namespace Savvyio.Extensions.DependencyInjection
         [Fact]
         public void AddHandlerServicesDescriptor_ShouldThrowInvalidOperationException_SinceEnableHandlerServicesDescriptorWasNotSetupInAddSavvyIO()
         {
-            using var host = GenericHostTestFactory.Create(
+            using var test = HostTestFactory.Create(
                 services =>
                 {
                     services.AddXunitTestLogging(TestOutput);
                     services.AddSavvyIO(o => o.UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true));
                     services.AddHandlerServicesDescriptor();
-                }, hostFixture: null);
+                });
 
-            Assert.Throws<InvalidOperationException>(() => host.ServiceProvider.WriteHandlerDiscoveriesToLog<ServiceCollectionExtensionsTest>());
-            Assert.Null(host.ServiceProvider.GetService<IHandlerServicesDescriptor>());
+            Assert.Throws<InvalidOperationException>(() => test.Host.Services.WriteHandlerDiscoveriesToLog<ServiceCollectionExtensionsTest>());
+            Assert.Null(test.Host.Services.GetService<IHandlerServicesDescriptor>());
         }
     }
 }
