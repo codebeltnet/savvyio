@@ -4,24 +4,24 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AWSSDK.SQS" Version="3.7.400.127" />
-    <PackageVersion Include="AWSSDK.SimpleNotificationService" Version="3.7.400.127" />
+    <PackageVersion Include="AWSSDK.SQS" Version="3.7.400.134" />
+    <PackageVersion Include="AWSSDK.SimpleNotificationService" Version="3.7.400.134" />
     <PackageVersion Include="Azure.Identity" Version="1.13.2" />
     <PackageVersion Include="Azure.Messaging.EventGrid" Version="4.30.0" />
     <PackageVersion Include="Azure.Storage.Queues" Version="12.22.0" />
-    <PackageVersion Include="Codebelt.Extensions.Newtonsoft.Json" Version="9.0.1" />
-    <PackageVersion Include="Codebelt.Extensions.Xunit.App" Version="9.1.2" />
-    <PackageVersion Include="Codebelt.Extensions.YamlDotNet" Version="9.0.1" />
-    <PackageVersion Include="Cuemon.Extensions.Collections.Generic" Version="9.0.3" />
-    <PackageVersion Include="Cuemon.Extensions.Core" Version="9.0.3" />
-    <PackageVersion Include="Cuemon.Extensions.DependencyInjection" Version="9.0.3" />
-    <PackageVersion Include="Cuemon.Extensions.IO" Version="9.0.3" />
-    <PackageVersion Include="Cuemon.Extensions.Reflection" Version="9.0.3" />
-    <PackageVersion Include="Cuemon.Extensions.Text.Json" Version="9.0.3" />
-    <PackageVersion Include="Cuemon.Security.Cryptography" Version="9.0.3" />
+    <PackageVersion Include="Codebelt.Extensions.Newtonsoft.Json" Version="9.0.2" />
+    <PackageVersion Include="Codebelt.Extensions.Xunit.App" Version="10.0.0" />
+    <PackageVersion Include="Codebelt.Extensions.YamlDotNet" Version="9.0.2" />
+    <PackageVersion Include="Cuemon.Extensions.Collections.Generic" Version="9.0.4" />
+    <PackageVersion Include="Cuemon.Extensions.Core" Version="9.0.4" />
+    <PackageVersion Include="Cuemon.Extensions.DependencyInjection" Version="9.0.4" />
+    <PackageVersion Include="Cuemon.Extensions.IO" Version="9.0.4" />
+    <PackageVersion Include="Cuemon.Extensions.Reflection" Version="9.0.4" />
+    <PackageVersion Include="Cuemon.Extensions.Text.Json" Version="9.0.4" />
+    <PackageVersion Include="Cuemon.Security.Cryptography" Version="9.0.4" />
     <PackageVersion Include="Dapper.StrongName" Version="2.1.66" />
     <PackageVersion Include="DapperExtensions.StrongNameReference" Version="1.10.0" />
-    <PackageVersion Include="Microsoft.Data.Sqlite" Version="9.0.3" />
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="9.0.4" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageVersion Include="Microsoft.TestPlatform.ObjectModel" Version="17.13.0" />
     <PackageVersion Include="MinVer" Version="6.0.0" />
@@ -35,15 +35,15 @@
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.0.2" />
   </ItemGroup>
   <ItemGroup Condition="$(TargetFramework.StartsWith('net9'))">
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.3" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.3" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.3" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.3" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.4" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.4" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.4" />
   </ItemGroup>
   <ItemGroup Condition="$(TargetFramework.StartsWith('net8'))">
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.14" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.14" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.14" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.15" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.15" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.15" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.3" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
   </ItemGroup>
