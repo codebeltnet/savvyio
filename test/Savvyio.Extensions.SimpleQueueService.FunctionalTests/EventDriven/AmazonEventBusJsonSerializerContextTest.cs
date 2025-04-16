@@ -36,6 +36,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         private static readonly InMemoryTestStore<IMessage<IIntegrationEvent>> Comparer = new();
         private readonly IMarshaller _marshaller;
         private static readonly string BuildType = typeof(AmazonMessageOptions).Assembly.IsDebugBuild() ? "Debug" : "Release";
+        private static readonly string Platform = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux" : "win";
 
         public AmazonEventBusJsonSerializerContextTest(ManagedHostFixture fixture, ITestOutputHelper output) : base(fixture, output)
         {
@@ -63,16 +64,16 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var handlerInvocations = 0;
             var sut1 = Comparer.Query(message => message.Type.Contains($"{BuildType}.updated-event")).Single();
 
-            await _bus.SubscribeAsync((sut2, _) =>
+            await _bus.SubscribeAsync(async (sut2, _) =>
             {
-                if (!sut2.Type.Contains($"{BuildType}.updated-event")) { return Task.CompletedTask; }
+                if (!sut2.Type.Contains($"{BuildType}.updated-event")) { return; }
                 handlerInvocations++;
                 Assert.Equivalent(sut1.Data, sut2.Data);
                 Assert.Equivalent(sut1.Time, sut2.Time);
                 Assert.Equivalent(sut1.Source, sut2.Source);
                 Assert.Equivalent(sut1.Id, sut2.Id);
                 Assert.Equivalent(sut1.Type, sut2.Type);
-                return Task.CompletedTask;
+                await sut2.AcknowledgeAsync().ConfigureAwait(false);
             }).ConfigureAwait(false);
             Assert.Equal(1, handlerInvocations);
         }
@@ -97,9 +98,9 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var handlerInvocations = 0;
             var sut1 = Comparer.Query(message => message.Type.Contains($"{BuildType}.updated-event.signed")).Single();
 
-            await _bus.SubscribeAsync((sut2, _) =>
+            await _bus.SubscribeAsync(async (sut2, _) =>
             {
-                if (!sut2.Type.Contains($"{BuildType}.updated-event.signed")) { return Task.CompletedTask; }
+                if (!sut2.Type.Contains($"{BuildType}.updated-event.signed")) { return; }
                 ((ISignedMessage<IIntegrationEvent>)sut2).CheckSignature(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
                 handlerInvocations++;
                 Assert.Equivalent(sut1.Data, sut2.Data);
@@ -107,7 +108,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                 Assert.Equivalent(sut1.Source, sut2.Source);
                 Assert.Equivalent(sut1.Id, sut2.Id);
                 Assert.Equivalent(sut1.Type, sut2.Type);
-                return Task.CompletedTask;
+                await sut2.AcknowledgeAsync().ConfigureAwait(false);
             }).ConfigureAwait(false);
             Assert.Equal(1, handlerInvocations);
         }
@@ -132,9 +133,9 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var handlerInvocations = 0;
             var sut1 = Comparer.Query(message => message.Type.Contains($"{BuildType}.updated-event.cloud-event")).Single() as ICloudEvent<IIntegrationEvent>;
 
-            await _bus.SubscribeAsync((sut2, _) =>
+            await _bus.SubscribeAsync(async (sut2, _) =>
             {
-                if (!sut2.Type.Contains($"{BuildType}.updated-event.cloud-event")) { return Task.CompletedTask; }
+                if (!sut2.Type.Contains($"{BuildType}.updated-event.cloud-event")) { return; }
                 handlerInvocations++;
                 Assert.Equivalent(sut1.Data, sut2.Data);
                 Assert.Equivalent(sut1.Time, sut2.Time);
@@ -142,7 +143,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                 Assert.Equivalent(sut1.Id, sut2.Id);
                 Assert.Equivalent(sut1.Type, sut2.Type);
                 Assert.Equivalent(sut1.Specversion, ((ICloudEvent<IIntegrationEvent>)sut2).Specversion);
-                return Task.CompletedTask;
+                await sut2.AcknowledgeAsync();
             }).ConfigureAwait(false);
             Assert.Equal(1, handlerInvocations);
         }
@@ -167,9 +168,9 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var handlerInvocations = 0;
             var sut1 = Comparer.Query(message => message.Type.Contains($"{BuildType}.updated-event.signed-cloud-event")).Single();
 
-            await _bus.SubscribeAsync((sut2, _) =>
+            await _bus.SubscribeAsync(async (sut2, _) =>
             {
-                if (!sut2.Type.Contains($"{BuildType}.updated-event.signed-cloud-event")) { return Task.CompletedTask; }
+                if (!sut2.Type.Contains($"{BuildType}.updated-event.signed-cloud-event")) { return; }
                 ((ISignedCloudEvent<IIntegrationEvent>)sut2).CheckCloudEventSignature(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
                 handlerInvocations++;
                 Assert.Equivalent(sut1.Data, sut2.Data);
@@ -177,7 +178,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                 Assert.Equivalent(sut1.Source, sut2.Source);
                 Assert.Equivalent(sut1.Id, sut2.Id);
                 Assert.Equivalent(sut1.Type, sut2.Type);
-                return Task.CompletedTask;
+                await sut2.AcknowledgeAsync();
             }).ConfigureAwait(false);
             Assert.Equal(1, handlerInvocations);
         }
@@ -205,11 +206,11 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var sut2 = new List<IMessage<IIntegrationEvent>>();
             var sut3 = new CancellationTokenSource(TimeSpan.FromSeconds(30));
 
-            await _bus.SubscribeAsync((message, _) =>
+            await _bus.SubscribeAsync(async (message, _) =>
             {
-                if (!message.Type.Contains($"{BuildType}")) { return Task.CompletedTask; }
+                if (!message.Type.Contains($"{BuildType}")) { return; }
                 sut2.Add(message);
-                return Task.CompletedTask;
+                await message.AcknowledgeAsync().ConfigureAwait(false);
             }, o => o.CancellationToken = sut3.Token).ConfigureAwait(false);
 
             TestOutput.WriteLine(sut2.Count.ToString());
