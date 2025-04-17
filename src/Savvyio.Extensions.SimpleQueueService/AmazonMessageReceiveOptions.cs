@@ -74,7 +74,7 @@ namespace Savvyio.Extensions.SimpleQueueService
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether each message should be automatically assumed processed. Default is <c>false</c>.
+        /// Gets or sets a value indicating whether each message should be automatically assumed processed. Default is <c>true</c>.
         /// </summary>
         /// <value><c>true</c> if each message should be assumed automatically processed; otherwise, <c>false</c>.</value>
         public bool AssumeMessageProcessed { get; set; }
@@ -86,7 +86,7 @@ namespace Savvyio.Extensions.SimpleQueueService
         public bool RemoveProcessedMessages { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to retrieve the approximate number of messages for the queue in question.
+        /// Gets or sets a value indicating whether to retrieve the approximate number of messages for the queue in question. Default is <c>false</c>.
         /// </summary>
         /// <value><c>true</c> to retrieve the approximate number of messages for the queue in question; otherwise, <c>false</c>.</value>
         public bool UseApproximateNumberOfMessages { get; set; }
