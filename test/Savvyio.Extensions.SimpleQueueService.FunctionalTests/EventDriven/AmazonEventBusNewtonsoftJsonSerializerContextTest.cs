@@ -23,7 +23,6 @@ using Savvyio.Messaging.Cryptography;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Priority;
-using Cuemon.Extensions.Reflection;
 using Savvyio.Extensions.DependencyInjection;
 
 namespace Savvyio.Extensions.SimpleQueueService.EventDriven
@@ -35,7 +34,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         private readonly AmazonEventBus _bus;
         private static readonly InMemoryTestStore<IMessage<IIntegrationEvent>> Comparer = new();
         private readonly IMarshaller _marshaller;
-        private static readonly string BuildType = typeof(AmazonMessageOptions).Assembly.IsDebugBuild() ? "Debug" : "Release";
+        private static readonly string UniqueType = $"{Guid.NewGuid():N}";
 
         public AmazonEventBusNewtonsoftJsonSerializerContextTest(ManagedHostFixture fixture, ITestOutputHelper output) : base(fixture, output)
         {
@@ -48,7 +47,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         {
             var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
             var sut2 = (IsLinux ? "newtonsoft-member-events-one" : "newtonsoft-member-events-one.fifo").ToSnsUri();
-            var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{BuildType}.updated-event");
+            var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{UniqueType}.updated-event");
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
 
@@ -61,18 +60,18 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         public async Task SubscribeAsync_MemberCreated_OneTime()
         {
             var handlerInvocations = 0;
-            var sut1 = Comparer.Query(message => message.Type.Contains($"{BuildType}.updated-event")).Single();
+            var sut1 = Comparer.Query(message => message.Type.Contains($"{UniqueType}.updated-event")).Single();
 
-            await _bus.SubscribeAsync(async (sut2, _) =>
+            await _bus.SubscribeAsync((sut2, _) =>
             {
-                if (!sut2.Type.Contains($"{BuildType}.updated-event")) { return; }
+                if (!sut2.Type.Contains($"{UniqueType}.updated-event")) { return Task.CompletedTask; }
                 handlerInvocations++;
                 Assert.Equivalent(sut1.Data, sut2.Data);
                 Assert.Equivalent(sut1.Time, sut2.Time);
                 Assert.Equivalent(sut1.Source, sut2.Source);
                 Assert.Equivalent(sut1.Id, sut2.Id);
                 Assert.Equivalent(sut1.Type, sut2.Type);
-                await sut2.AcknowledgeAsync().ConfigureAwait(false);
+                return Task.CompletedTask;
             }).ConfigureAwait(false);
             Assert.Equal(1, handlerInvocations);
         }
@@ -82,7 +81,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         {
             var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
             var sut2 = (IsLinux ? "newtonsoft-member-events-one" : "newtonsoft-member-events-one.fifo").ToSnsUri();
-            var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{BuildType}.updated-event.signed").Sign(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
+            var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{UniqueType}.updated-event.signed").Sign(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
 
@@ -95,11 +94,11 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         public async Task SubscribeAsync_MemberCreated_OneTime_Signed()
         {
             var handlerInvocations = 0;
-            var sut1 = Comparer.Query(message => message.Type.Contains($"{BuildType}.updated-event.signed")).Single();
+            var sut1 = Comparer.Query(message => message.Type.Contains($"{UniqueType}.updated-event.signed")).Single();
 
-            await _bus.SubscribeAsync(async (sut2, _) =>
+            await _bus.SubscribeAsync((sut2, _) =>
             {
-                if (!sut2.Type.Contains($"{BuildType}.updated-event.signed")) { return; }
+                if (!sut2.Type.Contains($"{UniqueType}.updated-event.signed")) { return Task.CompletedTask; }
                 ((ISignedMessage<IIntegrationEvent>)sut2).CheckSignature(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
                 handlerInvocations++;
                 Assert.Equivalent(sut1.Data, sut2.Data);
@@ -107,7 +106,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                 Assert.Equivalent(sut1.Source, sut2.Source);
                 Assert.Equivalent(sut1.Id, sut2.Id);
                 Assert.Equivalent(sut1.Type, sut2.Type);
-                await sut2.AcknowledgeAsync().ConfigureAwait(false);
+                return Task.CompletedTask;
             }).ConfigureAwait(false);
             Assert.Equal(1, handlerInvocations);
         }
@@ -117,7 +116,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         {
             var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
             var sut2 = (IsLinux ? "newtonsoft-member-events-one" : "newtonsoft-member-events-one.fifo").ToSnsUri();
-            var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{BuildType}.updated-event.cloud-event").ToCloudEvent();
+            var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{UniqueType}.updated-event.cloud-event").ToCloudEvent();
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
 
@@ -130,11 +129,11 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         public async Task SubscribeAsync_MemberCreated_OneTime_CloudEvent()
         {
             var handlerInvocations = 0;
-            var sut1 = Comparer.Query(message => message.Type.Contains($"{BuildType}.updated-event.cloud-event")).Single() as ICloudEvent<IIntegrationEvent>;
+            var sut1 = Comparer.Query(message => message.Type.Contains($"{UniqueType}.updated-event.cloud-event")).Single() as ICloudEvent<IIntegrationEvent>;
 
-            await _bus.SubscribeAsync(async (sut2, _) =>
+            await _bus.SubscribeAsync((sut2, _) =>
             {
-                if (!sut2.Type.Contains($"{BuildType}.updated-event.cloud-event")) { return; }
+                if (!sut2.Type.Contains($"{UniqueType}.updated-event.cloud-event")) { return Task.CompletedTask; }
                 handlerInvocations++;
                 Assert.Equivalent(sut1.Data, sut2.Data);
                 Assert.Equivalent(sut1.Time, sut2.Time);
@@ -142,7 +141,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                 Assert.Equivalent(sut1.Id, sut2.Id);
                 Assert.Equivalent(sut1.Type, sut2.Type);
                 Assert.Equivalent(sut1.Specversion, ((ICloudEvent<IIntegrationEvent>)sut2).Specversion);
-                await sut2.AcknowledgeAsync().ConfigureAwait(false);
+                return Task.CompletedTask;
             }).ConfigureAwait(false);
             Assert.Equal(1, handlerInvocations);
         }
@@ -152,7 +151,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         {
             var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
             var sut2 = (IsLinux ? "newtonsoft-member-events-one" : "newtonsoft-member-events-one.fifo").ToSnsUri();
-            var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{BuildType}.updated-event.signed-cloud-event").ToCloudEvent().SignCloudEvent(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
+            var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{UniqueType}.updated-event.signed-cloud-event").ToCloudEvent().SignCloudEvent(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
 
             TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
 
@@ -165,11 +164,11 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         public async Task SubscribeAsync_MemberCreated_OneTime_CloudEvent_Signed()
         {
             var handlerInvocations = 0;
-            var sut1 = Comparer.Query(message => message.Type.Contains($"{BuildType}.updated-event.signed-cloud-event")).Single();
+            var sut1 = Comparer.Query(message => message.Type.Contains($"{UniqueType}.updated-event.signed-cloud-event")).Single();
 
-            await _bus.SubscribeAsync(async (sut2, _) =>
+            await _bus.SubscribeAsync((sut2, _) =>
             {
-                if (!sut2.Type.Contains($"{BuildType}.updated-event.signed-cloud-event")) { return; }
+                if (!sut2.Type.Contains($"{UniqueType}.updated-event.signed-cloud-event")) { return Task.CompletedTask; }
                 ((ISignedCloudEvent<IIntegrationEvent>)sut2).CheckCloudEventSignature(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
                 handlerInvocations++;
                 Assert.Equivalent(sut1.Data, sut2.Data);
@@ -177,7 +176,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                 Assert.Equivalent(sut1.Source, sut2.Source);
                 Assert.Equivalent(sut1.Id, sut2.Id);
                 Assert.Equivalent(sut1.Type, sut2.Type);
-                await sut2.AcknowledgeAsync().ConfigureAwait(false);
+                return Task.CompletedTask;
             }).ConfigureAwait(false);
             Assert.Equal(1, handlerInvocations);
         }
@@ -188,7 +187,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             var messages = Generate.RangeOf(100, _ =>
             {
                 var email = $"{Generate.RandomString(5)}@outlook.com";
-                return new MemberCreated(Generate.RandomString(10), email).ToMessage((IsLinux ? "newtonsoft-member-events-many" : "newtonsoft-member-events-many.fifo").ToSnsUri(), $"{nameof(MemberCreated)}.{BuildType}");
+                return new MemberCreated(Generate.RandomString(10), email).ToMessage((IsLinux ? "newtonsoft-member-events-many" : "newtonsoft-member-events-many.fifo").ToSnsUri(), $"{nameof(MemberCreated)}.{UniqueType}");
             });
 
             await ParallelFactory.ForEachAsync(messages, (message, token) =>
@@ -201,15 +200,15 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         [Fact, Priority(9)]
         public async Task SubscribeAsync_MemberCreated_All()
         {
-            var sut1 = Comparer.Query(message => message.Source.Contains("newtonsoft-member-events-many") && message.Type.Contains($"{BuildType}")).ToList();
+            var sut1 = Comparer.Query(message => message.Source.Contains("newtonsoft-member-events-many") && message.Type.Contains($"{UniqueType}")).ToList();
             var sut2 = new List<IMessage<IIntegrationEvent>>();
             var sut3 = new CancellationTokenSource(TimeSpan.FromSeconds(30));
 
-            await _bus.SubscribeAsync(async (message, _) =>
+            await _bus.SubscribeAsync((message, _) =>
             {
-                if (!message.Type.Contains($"{BuildType}")) { return; }
+                if (!message.Type.Contains($"{UniqueType}")) { return Task.CompletedTask; }
                 sut2.Add(message);
-                await message.AcknowledgeAsync().ConfigureAwait(false);
+                return Task.CompletedTask;
             }, o => o.CancellationToken = sut3.Token).ConfigureAwait(false);
 
             TestOutput.WriteLine(sut2.Count.ToString());
