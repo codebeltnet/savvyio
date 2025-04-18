@@ -6,6 +6,7 @@
     <Description>Provides a complete and convenient set of API additions for building a DDD, CQRS and Event Sourcing enabled .NET application using Microsoft Dependency Injection, Microsoft Entity Framework Core, Dapper, AWS SNS/SQS and Azure Queue Storage/Azure Event Grid.</Description>
     <PackageTags>ddd domain-driven-design cqrs command-query-responsibility-segregation es event-sourcing datastore data-store datasource data-source dataaccessobject data-access-object repository de domain-event ie integration-event valueobject value-object entity aggregate aggregate-root eventdriven event-driven ef-core ef entity-framework entity-framework-core di dependency-injection aws amazon awssqs awssns simplequeueservice sqs simplenotificationservice sns queue bus json converters converter azure storage event-grid</PackageTags>
     <Title>Savvyio.App</Title>
+    <NoWarn>NU5128</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

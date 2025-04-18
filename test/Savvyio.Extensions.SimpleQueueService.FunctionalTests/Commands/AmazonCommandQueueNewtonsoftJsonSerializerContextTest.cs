@@ -29,17 +29,17 @@ using Savvyio.Messaging.Cryptography;
 namespace Savvyio.Extensions.SimpleQueueService.Commands
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class AmazonCommandQueueNewtonsoftJsonSerializerContextTest : HostTest<HostFixture>
+    public class AmazonCommandQueueNewtonsoftJsonSerializerContextTest : HostTest<ManagedHostFixture>
     {
         private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
         private readonly AmazonCommandQueue _queue;
         private static readonly InMemoryTestStore<IMessage<ICommand>> Comparer = new();
         private readonly IMarshaller _marshaller;
 
-        public AmazonCommandQueueNewtonsoftJsonSerializerContextTest(HostFixture fixture, ITestOutputHelper output) : base(fixture, output)
+        public AmazonCommandQueueNewtonsoftJsonSerializerContextTest(ManagedHostFixture fixture, ITestOutputHelper output) : base(fixture, output)
         {
-            _queue = fixture.ServiceProvider.GetRequiredService<AmazonCommandQueue>();
-            _marshaller = fixture.ServiceProvider.GetRequiredService<IMarshaller>();
+            _queue = fixture.Host.Services.GetRequiredService<AmazonCommandQueue>();
+            _marshaller = fixture.Host.Services.GetRequiredService<IMarshaller>();
         }
 
         [Fact, Priority(0)]
@@ -49,7 +49,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
             var sut2 = "https://fancy.io/members".ToUri();
             var sut3 = sut1.ToMessage(sut2, nameof(CreateMemberCommand));
 
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
+            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
 
             TestOutput.WriteLine(_marshaller.Serialize(sut2).ToEncodedString());
 
@@ -84,7 +84,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
             var sut2 = "https://fancy.io/members/signed".ToUri();
             var sut3 = sut1.ToMessage(sut2, nameof(CreateMemberCommand)).Sign(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
 
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
+            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
 
             TestOutput.WriteLine(_marshaller.Serialize(sut2).ToEncodedString());
 

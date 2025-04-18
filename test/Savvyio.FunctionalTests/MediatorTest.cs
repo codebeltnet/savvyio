@@ -32,11 +32,14 @@ using YamlDotNet.Serialization.NamingConventions;
 namespace Savvyio
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class MediatorTest : HostTest<HostFixture>
+    public class MediatorTest : HostTest<ManagedHostFixture>
     {
-        public MediatorTest(HostFixture hostFixture, ITestOutputHelper output) : base(hostFixture, output)
+        private IServiceProvider _provider;
+
+
+        public MediatorTest(ManagedHostFixture hostFixture, ITestOutputHelper output) : base(hostFixture, output)
         {
-            ServiceProvider = hostFixture.ServiceProvider.CreateScope().ServiceProvider;
+            _provider = hostFixture.Host.Services.CreateScope().ServiceProvider;
         }
 
         [Fact, Priority(0)]
@@ -47,9 +50,9 @@ namespace Savvyio
             var caFullName = "Michael Mortensen";
             var caEmailAddress = "root@gimlichael.dev";
 
-            var mediator = ServiceProvider.GetRequiredService<IMediator>();
+            var mediator = _provider.GetRequiredService<IMediator>();
 
-            var hsd = ServiceProvider.GetRequiredService<IHandlerServicesDescriptor>();
+            var hsd = _provider.GetRequiredService<IHandlerServicesDescriptor>();
             var plaintext = hsd.ToString();
 
             var mappings = hsd.GenerateHandlerDiscoveries();
@@ -59,13 +62,13 @@ namespace Savvyio
 
             TestOutput.WriteLine(json);
 
-            TestOutput.WriteLine(Environment.NewLine);
+            TestOutput.WriteLine(System.Environment.NewLine);
             TestOutput.WriteLine("---");
-            TestOutput.WriteLine(Environment.NewLine);
+            TestOutput.WriteLine(System.Environment.NewLine);
 
             TestOutput.WriteLine(yaml);
 
-            var accountRepo = ServiceProvider.GetRequiredService<ISearchableRepository<Account, long, Account>>();
+            var accountRepo = _provider.GetRequiredService<ISearchableRepository<Account, long, Account>>();
 
             await mediator.CommitAsync(new CreateAccount(caPpId, caFullName, caEmailAddress).SetCorrelationId(correlationId));
 
@@ -445,7 +448,7 @@ namespace Savvyio
             var caFullName = "El Presidente";
             var caEmailAddress = "root@gimlichael.dev";
 
-            var mediator = ServiceProvider.GetRequiredService<IMediator>();
+            var mediator = _provider.GetRequiredService<IMediator>();
 
             await Assert.ThrowsAsync<ValidationException>(() => mediator.CommitAsync(new CreateAccount(caPpId, caFullName, caEmailAddress).SetCorrelationId(correlationId)));
         }
@@ -457,7 +460,7 @@ namespace Savvyio
             var caFullName = "El Presidento";
             var caEmailAddress = "makemyday@us.gov";
 
-            var mediator = ServiceProvider.GetRequiredService<IMediator>();
+            var mediator = _provider.GetRequiredService<IMediator>();
 
             await mediator.CommitAsync(new CreateAccount(caPpId, caFullName, caEmailAddress));
         }
@@ -465,8 +468,8 @@ namespace Savvyio
         [Fact, Priority(3)]
         public async Task VerifyUsers()
         {
-            var accountRepo = ServiceProvider.GetRequiredService<ISearchableRepository<Account, long, Account>>();
-            var accountDao = ServiceProvider.GetRequiredService<ISearchableDataStore<AccountProjection, DapperQueryOptions>>();
+            var accountRepo = _provider.GetRequiredService<ISearchableRepository<Account, long, Account>>();
+            var accountDao = _provider.GetRequiredService<ISearchableDataStore<AccountProjection, DapperQueryOptions>>();
             var daos = new List<AccountProjection>(await accountDao.FindAllAsync().ConfigureAwait(false));
             var entities = new List<Account>(await accountRepo.FindAllAsync().ConfigureAwait(false));
             foreach (var entity in entities)

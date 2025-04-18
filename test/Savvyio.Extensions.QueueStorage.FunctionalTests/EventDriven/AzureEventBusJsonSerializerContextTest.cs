@@ -32,7 +32,7 @@ using Xunit.Priority;
 namespace Savvyio.Extensions.QueueStorage.EventDriven
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    public class AzureEventBusJsonSerializerContextTest : HostTest<HostFixture>
+    public class AzureEventBusJsonSerializerContextTest : HostTest<ManagedHostFixture>
     {
         private static readonly string Platform = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux" : "win";
         private static readonly string BuildType = typeof(AzureCommandQueue).Assembly.IsDebugBuild() ? "debug" : "release";
@@ -40,26 +40,26 @@ namespace Savvyio.Extensions.QueueStorage.EventDriven
         private readonly AzureEventBus _bus;
         private readonly IMarshaller _marshaller;
 
-        public AzureEventBusJsonSerializerContextTest(HostFixture fixture, ITestOutputHelper output) : base(fixture, output)
+        public AzureEventBusJsonSerializerContextTest(ManagedHostFixture fixture, ITestOutputHelper output) : base(fixture, output)
         {
             _bus = ResolveEventBus(fixture);
-            _marshaller = fixture.ServiceProvider.GetRequiredService<IMarshaller>();
+            _marshaller = fixture.Host.Services.GetRequiredService<IMarshaller>();
         }
 
-        private static AzureEventBus ResolveEventBus(HostFixture fixture)
+        private static AzureEventBus ResolveEventBus(ManagedHostFixture fixture)
         {
             return Platform switch
             {
                 "win" => BuildType switch
                 {
-                    "debug" => fixture.ServiceProvider.GetRequiredService<AzureEventBus<WindowsDebug>>(),
-                    "release" => fixture.ServiceProvider.GetRequiredService<AzureEventBus<WindowsRelease>>(),
+                    "debug" => fixture.Host.Services.GetRequiredService<AzureEventBus<WindowsDebug>>(),
+                    "release" => fixture.Host.Services.GetRequiredService<AzureEventBus<WindowsRelease>>(),
                     _ => throw new NotSupportedException()
                 },
                 "linux" => BuildType switch
                 {
-                    "debug" => fixture.ServiceProvider.GetRequiredService<AzureEventBus<LinuxDebug>>(),
-                    "release" => fixture.ServiceProvider.GetRequiredService<AzureEventBus<LinuxRelease>>(),
+                    "debug" => fixture.Host.Services.GetRequiredService<AzureEventBus<LinuxDebug>>(),
+                    "release" => fixture.Host.Services.GetRequiredService<AzureEventBus<LinuxRelease>>(),
                     _ => throw new NotSupportedException()
                 },
                 _ => throw new NotSupportedException()
@@ -73,8 +73,8 @@ namespace Savvyio.Extensions.QueueStorage.EventDriven
             var sut2 = "urn:member-events-one".ToUri();
             var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{BuildType}.updated-event");
 
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut3, o => o.Delimiter = Environment.NewLine));
+            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
+            TestOutput.WriteLine(Generate.ObjectPortrayal(sut3, o => o.Delimiter = System.Environment.NewLine));
 
             TestOutput.WriteLine(_marshaller.Serialize(sut3.ToCloudEvent()).ToEncodedString(o => o.LeaveOpen = true));
 
@@ -117,7 +117,7 @@ namespace Savvyio.Extensions.QueueStorage.EventDriven
             var sut2 = "urn:member-events-one".ToUri();
             var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{Platform}.{BuildType}.updated-event.signed").Sign(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
 
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
+            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
 
             TestOutput.WriteLine(_marshaller.Serialize(sut3).ToEncodedString(o => o.LeaveOpen = true));
 
@@ -160,7 +160,7 @@ namespace Savvyio.Extensions.QueueStorage.EventDriven
             var sut2 = "urn:member-events-one".ToUri();
             var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{Platform}.{BuildType}.updated-event.cloud-event").ToCloudEvent();
 
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
+            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
 
             TestOutput.WriteLine(_marshaller.Serialize(sut3).ToEncodedString(o => o.LeaveOpen = true));
 
@@ -204,7 +204,7 @@ namespace Savvyio.Extensions.QueueStorage.EventDriven
             var sut2 = "urn:member-events-one".ToUri();
             var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{Platform}.{BuildType}.updated-event.signed-cloud-event").ToCloudEvent().SignCloudEvent(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
 
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = Environment.NewLine));
+            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
 
             TestOutput.WriteLine(_marshaller.Serialize(sut3).ToEncodedString(o => o.LeaveOpen = true));
 

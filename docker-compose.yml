@@ -1,6 +1,6 @@
 services:
   localstack:
-    image: localstack/localstack:3.5.0
+    image: localstack/localstack:4.3.0
     environment:
       - SERVICES=sns,sqs
       - DEBUG=0
@@ -10,7 +10,7 @@ services:
     ports:
       - "4566:4566"
   awscli:
-    image: amazon/aws-cli:2.17.16
+    image: amazon/aws-cli:2.26.4
     environment:
       - AWS_DEFAULT_REGION=eu-west-1
       - AWS_REGION=eu-west-1
