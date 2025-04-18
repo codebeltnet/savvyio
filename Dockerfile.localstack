@@ -1,5 +1,5 @@
 # Use the LocalStack base image
-FROM localstack/localstack:3.5.0
+FROM localstack/localstack:4.3.0
 
 # Expose the port for LocalStack
 EXPOSE 4566
@@ -17,4 +17,4 @@ ENV AWS_DEFAULT_OUTPUT=table
 
 # Copy entrypoint script into the container
 COPY --chown=localstack init-aws.sh /etc/localstack/init/ready.d/init-aws.sh
-RUN chmod +x /etc/localstack/init/ready.d/init-aws.sh
+RUN chmod u+x /etc/localstack/init/ready.d/init-aws.sh
