@@ -41,6 +41,9 @@ jobs:
             !test/**/Savvyio.Extensions.SimpleQueueService.FunctionalTests.csproj
             !test/**/Savvyio.Extensions.QueueStorage.FunctionalTests.csproj
   
+      - name: JSON output
+        run: echo "${{ steps.test-projects.outputs.result }}"
+
   build:
     name: call-build
     strategy:
