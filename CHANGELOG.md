@@ -4,6 +4,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [4.0.3] - 2025-05-28
+
+This is a service update that primarily focuses on package dependencies and minor improvements.
+
+### Changed
+
+#### Savvyio.Extensions.SimpleQueueService
+
+- AmazonMessageReceiveOptions class in the Savvyio.Extensions.SimpleQueueService namespace now include a new property, VisibilityTimeout, that is used to set the visibility timeout for messages when receiving them from AWS SQS
+- AmazonMessageOptions class in the Savvyio.Extensions.SimpleQueueService namespace now include two new properties, MaxVisibilityTimeoutInSeconds and DefaultVisibilityTimeoutInSeconds, that are used to get the maximum and default visibility timeout for messages when receiving them from AWS SQS
+
+### Fixed
+
+#### Savvyio.Extensions.SimpleQueueService
+
+- AmazonMessage{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace was fixed to work with AWS SDK V4 and later, due to collections defaults to null instead of empty collections (https://docs.aws.amazon.com/sdk-for-net/v4/developer-guide/net-dg-v4.html#net-dg-v4-collections)
+  - My take on this aired on LinkedIn: https://www.linkedin.com/feed/update/urn:li:activity:7333199302648926209/
+
 ## [4.0.2] - 2025-04-18
 
 This is a service update that focuses on package dependencies.
