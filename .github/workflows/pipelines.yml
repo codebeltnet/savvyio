@@ -109,6 +109,7 @@ jobs:
           projects: ${{ matrix.project }}
           configuration: ${{ matrix.configuration }}
           buildSwitches: -p:SkipSignAssembly=true
+          level: normal
         env:
           AWS__CALLERIDENTITY: ${{ secrets.AWS_CALLER_IDENTITY }}
           AWS__IAM__ACCESSKEY: ${{ secrets.AWS_IAM_ACCESSKEY }}
@@ -126,7 +127,7 @@ jobs:
 
   sonarcloud:
     name: call-sonarcloud
-    needs: [build,test]
+    needs: [build, test, integration_test]
     uses: codebeltnet/jobs-sonarcloud/.github/workflows/default.yml@v1
     with:
       organization: geekle
@@ -136,7 +137,7 @@ jobs:
 
   codecov:
     name: call-codecov
-    needs: [build,test]
+    needs: [build, test, integration_test]
     uses: codebeltnet/jobs-codecov/.github/workflows/default.yml@v1
     with:
       repository: codebeltnet/savvyio
@@ -144,7 +145,7 @@ jobs:
           
   codeql:
     name: call-codeql
-    needs: [build,test]
+    needs: [build, test, integration_test]
     uses: codebeltnet/jobs-codeql/.github/workflows/default.yml@v1
     permissions:
       security-events: write
@@ -152,7 +153,7 @@ jobs:
   deploy:
     if: github.event_name != 'pull_request'
     name: call-nuget
-    needs: [build, pack, test, sonarcloud, codecov, codeql]
+    needs: [build, pack, test, integration_test, sonarcloud, codecov, codeql]
     uses: codebeltnet/jobs-nuget-push/.github/workflows/default.yml@v1
     with:
       version: ${{ needs.build.outputs.version }}
