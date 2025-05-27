@@ -45,7 +45,19 @@ namespace Savvyio.Extensions.QueueStorage
         ///     </item>
         ///     <item>
         ///         <term><see cref="StorageAccountName"/></term>
+        ///         <description><c>null</c></description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="Settings"/></term>
         ///         <description><c>new QueueClientOptions()</c></description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="ReceiveContext"/></term>
+        ///         <description><c>new AzureQueueReceiveOptions()</c></description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="SendContext"/></term>
+        ///         <description><c>new AzureQueueSendOptions()</c></description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="QueueName"/></term>
