@@ -21,9 +21,19 @@ namespace Savvyio.Extensions.SimpleQueueService
         public const int MaxNumberOfMessages = 10;
 
         /// <summary>
-        /// The maximum seconds that a call waits for a message to arrive in AWS SQS.
+        /// The maximum amount of seconds that a call waits for a message to arrive in AWS SQS.
         /// </summary>
         public const int MaxPollingWaitTimeInSeconds = 20;
+
+        /// <summary>
+        /// The maximum amount of seconds that a message can be hidden from other consumers in AWS SQS after it has been received.
+        /// </summary>
+        public const int MaxVisibilityTimeoutInSeconds = 12 * 60 * 60;
+
+        /// <summary>
+        /// The default amount of seconds that a message can be hidden from other consumers in AWS SQS after it has been received.
+        /// </summary>
+        public const int DefaultVisibilityTimeoutInSeconds = 30;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonMessageOptions"/> class.

@@ -8,6 +8,7 @@ namespace Savvyio.Extensions.SimpleQueueService
     public class AmazonMessageReceiveOptions
     {
         private TimeSpan _pollingTimeout;
+        private TimeSpan _visibilityTimeout;
         private int _numberOfMessagesToTakePerRequest;
 
         /// <summary>
@@ -46,6 +47,7 @@ namespace Savvyio.Extensions.SimpleQueueService
         {
             NumberOfMessagesToTakePerRequest = AmazonMessageOptions.MaxNumberOfMessages;
             PollingTimeout = TimeSpan.FromSeconds(AmazonMessageOptions.MaxPollingWaitTimeInSeconds);
+            VisibilityTimeout = TimeSpan.FromSeconds(AmazonMessageOptions.DefaultVisibilityTimeoutInSeconds);
             AssumeMessageProcessed = true;
             RemoveProcessedMessages = true;
             UseApproximateNumberOfMessages = false;
@@ -71,6 +73,17 @@ namespace Savvyio.Extensions.SimpleQueueService
         {
             get => _pollingTimeout;
             set => _pollingTimeout = TimeSpan.FromSeconds(Math.Clamp(value.TotalSeconds, 0, AmazonMessageOptions.MaxPollingWaitTimeInSeconds));
+        }
+
+        /// <summary>
+        /// Gets or sets the visibility timeout per request. Default is 30 seconds.
+        /// </summary>
+        /// <value>The visibility timeout per request.</value>
+        /// <remarks>Max. allowed value is limited to <see cref="AmazonMessageOptions.MaxVisibilityTimeoutInSeconds"/>.</remarks>
+        public TimeSpan VisibilityTimeout
+        {
+            get => _visibilityTimeout;
+            set => _visibilityTimeout = TimeSpan.FromSeconds(Math.Clamp(value.TotalSeconds, 0, AmazonMessageOptions.MaxVisibilityTimeoutInSeconds));
         }
 
         /// <summary>
