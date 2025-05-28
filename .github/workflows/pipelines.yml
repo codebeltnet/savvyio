@@ -22,100 +22,83 @@ permissions:
   contents: read
 
 jobs:
-  prepare:
-    name: 🧰 Prepare
+  prepare_test:
+    name: 📜 Prepare Test
     runs-on: ubuntu-24.04
     outputs:
-      testProjects: ${{ steps.test-projects.outputs.result }}
+      json: ${{ steps.test-projects.outputs.result }}
     steps:
       - name: Checkout
         uses: codebeltnet/git-checkout@v1
 
       - id: test-projects
         name: Generate matrix for test projects
-        uses: codebeltnet/shell-globbing@v1
+        uses: codebeltnet/shell-globbing@v2
         with:
-          pattern: test/**/*.csproj
+          pattern: |
+            test/**/*.csproj
+            !test/**/Savvyio.FunctionalTests.csproj
+            !test/**/Savvyio.Extensions.SimpleQueueService.FunctionalTests.csproj
+            !test/**/Savvyio.Extensions.QueueStorage.FunctionalTests.csproj
   
+      - name: JSON output
+        run: echo "${{ steps.test-projects.outputs.result }}"
+
   build:
-    name: 🛠️ Build
-    runs-on: ubuntu-24.04
+    name: call-build
     strategy:
       matrix:
         configuration: [Debug, Release]
-        framework: [net9.0, net8.0]
-    outputs:
-      version: ${{ steps.minver-calculate.outputs.version }}
-    steps:
-      - name: Checkout
-        uses: codebeltnet/git-checkout@v1
-
-      - name: Install .NET
-        uses: codebeltnet/install-dotnet@v1
-        with:
-          includePreview: true
-
-      - name: Install MinVer
-        uses: codebeltnet/dotnet-tool-install-minver@v1
-
-      - id: minver-calculate
-        name: Calculate Version
-        uses: codebeltnet/minver-calculate@v2
-
-      - name: Download savvyio.snk file
-        uses: codebeltnet/gcp-download-file@v1
-        with: 
-          serviceAccountKey: ${{ secrets.GCP_TOKEN }}
-          bucketName: ${{ secrets.GCP_BUCKETNAME }}
-          objectName: savvyio.snk
-
-      - name: Restore Dependencies
-        uses: codebeltnet/dotnet-restore@v2
-
-      - name: Build for ${{ matrix.framework }} (${{ matrix.configuration }})
-        uses: codebeltnet/dotnet-build@v2
-        with:
-          configuration: ${{ matrix.configuration }}
-          framework: ${{ matrix.framework }}
+    uses: codebeltnet/jobs-dotnet-build/.github/workflows/default.yml@v1
+    with:
+      configuration: ${{ matrix.configuration }}
+      strong-name-key-filename: savvyio.snk
+    secrets: inherit
 
   pack:
-    name: 📦 Pack
-    runs-on: ubuntu-24.04
+    name: call-pack
+    needs: [build]
     strategy:
       matrix:
         configuration: [Debug, Release]
-    needs: [build]
-    steps:
-      - name: Install .NET
-        uses: codebeltnet/install-dotnet@v1
-        with:
-          includePreview: true
-
-      - name: Pack for ${{ matrix.configuration }}
-        uses: codebeltnet/dotnet-pack@v2
-        with:
-          configuration: ${{ matrix.configuration }}
-          uploadPackedArtifact: true
-          version: ${{ needs.build.outputs.version }}
+    uses: codebeltnet/jobs-dotnet-pack/.github/workflows/default.yml@v1
+    with:
+      configuration: ${{ matrix.configuration }}
+      upload-packed-artifact: true
+      version: ${{ needs.build.outputs.version }}
 
   test:
-    name: 🧪 Test
-    needs: [prepare, build]
+    name: call-test
+    needs: [build, prepare_test]
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-24.04, windows-2022]
         configuration: [Debug, Release]
-        project: ${{ fromJson(needs.prepare.outputs.testProjects) }}
+        project: ${{ fromJson(needs.prepare_test.outputs.json) }}
+    uses: codebeltnet/jobs-dotnet-test/.github/workflows/default.yml@v1
+    with:
+      runs-on: ${{ matrix.os }}
+      configuration: ${{ matrix.configuration }}
+      projects: ${{ matrix.project }}
+      build-switches: -p:SkipSignAssembly=true
+
+  integration_test:
+    name: 🧪 Test
+    needs: [build]
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+        configuration: [Release]
+        project: [ test/**/Savvyio.FunctionalTests.csproj, test/**/Savvyio.Extensions.SimpleQueueService.FunctionalTests.csproj, test/**/Savvyio.Extensions.QueueStorage.FunctionalTests.csproj ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: codebeltnet/git-checkout@v1
       
       - name: Install .NET
-        uses: codebeltnet/install-dotnet@v1
-        with:
-          includePreview: true
+        uses: codebeltnet/install-dotnet@v2
 
       - name: Install .NET Tool - Report Generator
         uses: codebeltnet/dotnet-tool-install-reportgenerator@v1
@@ -144,7 +127,7 @@ jobs:
 
   sonarcloud:
     name: call-sonarcloud
-    needs: [build,test]
+    needs: [build, test, integration_test]
     uses: codebeltnet/jobs-sonarcloud/.github/workflows/default.yml@v1
     with:
       organization: geekle
@@ -152,10 +135,9 @@ jobs:
       version: ${{ needs.build.outputs.version }}
     secrets: inherit
 
-
   codecov:
     name: call-codecov
-    needs: [build,test]
+    needs: [build, test, integration_test]
     uses: codebeltnet/jobs-codecov/.github/workflows/default.yml@v1
     with:
       repository: codebeltnet/savvyio
@@ -163,7 +145,7 @@ jobs:
           
   codeql:
     name: call-codeql
-    needs: [build,test]
+    needs: [build, test, integration_test]
     uses: codebeltnet/jobs-codeql/.github/workflows/default.yml@v1
     permissions:
       security-events: write
@@ -171,8 +153,8 @@ jobs:
   deploy:
     if: github.event_name != 'pull_request'
     name: call-nuget
-    needs: [build,pack,test,sonarcloud,codecov,codeql]
-    uses: codebeltnet/jobs-nuget/.github/workflows/default.yml@v1
+    needs: [build, pack, test, integration_test, sonarcloud, codecov, codeql]
+    uses: codebeltnet/jobs-nuget-push/.github/workflows/default.yml@v1
     with:
       version: ${{ needs.build.outputs.version }}
       environment: Production

@@ -124,10 +124,12 @@ namespace Savvyio.Extensions.SimpleQueueService
                 MessageAttributeNames = new List<string>()
                 {
                     MessageTypeAttributeKey
-                }
+                },
+                VisibilityTimeout = (int)Options.ReceiveContext.VisibilityTimeout.TotalSeconds
             };
 
             var response = await sqs.ReceiveMessageAsync(request, cancellationToken).ConfigureAwait(false); // cost 1 request with fetching of up to 10 messages
+            if (response.Messages == null || response.Messages.Count == 0) { yield break; } // v4 requirement as per https://docs.aws.amazon.com/sdk-for-net/v4/developer-guide/net-dg-v4.html#net-dg-v4-collections
             var deserializedMessages = new List<IMessage<TRequest>>();
             foreach (var message in response.Messages)
             {
