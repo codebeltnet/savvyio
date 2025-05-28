@@ -1,14 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Amazon;
+﻿using Amazon;
 using Amazon.Runtime;
-using Cuemon.Extensions;
-using Cuemon.Extensions.Collections.Generic;
 using Codebelt.Extensions.Newtonsoft.Json.Formatters;
-using Cuemon.Extensions.Text.Json.Formatters;
 using Codebelt.Extensions.Xunit;
 using Codebelt.Extensions.Xunit.Hosting.AspNetCore;
+using Cuemon.Extensions;
+using Cuemon.Extensions.Collections.Generic;
+using Cuemon.Extensions.Text.Json.Formatters;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,6 +30,10 @@ using Savvyio.Extensions.Newtonsoft.Json.Converters;
 using Savvyio.Extensions.SimpleQueueService;
 using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging;
+using System;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Priority;
 
@@ -41,6 +42,8 @@ namespace Savvyio
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
     public class DistributedMediatorTest : Test
     {
+        private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+
         public DistributedMediatorTest()
         {
             NewtonsoftJsonFormatterOptions.DefaultConverters += list => list.Add(new ValueObjectConverter());
@@ -64,7 +67,7 @@ namespace Savvyio
             var correlationId = Guid.NewGuid().ToString("N");
             var platformProviderId = Guid.NewGuid();
             var fullName = "Michael Amazortensen";
-            var emailAddress = "root@aws.dev";
+            var emailAddress = IsLinux ? "linux@aws.dev" : "windows@aws.dev";
 
             var createAccount = new CreateAccount(platformProviderId, fullName, emailAddress).SetCorrelationId(correlationId);
 
@@ -130,7 +133,8 @@ namespace Savvyio
 
             var accounts = scope.ServiceProvider.GetRequiredService<IPersistentRepository<Account, long, Account>>();
 
-            var entity = await accounts.FindAllAsync(account => account.EmailAddress == "root@aws.dev").SingleOrDefaultAsync();
+            var expectedEmailAddress = IsLinux ? "linux@aws.dev" : "windows@aws.dev";
+            var entity = await accounts.FindAllAsync(account => account.EmailAddress == expectedEmailAddress).SingleOrDefaultAsync();
 
             var dao = await mediator.QueryAsync(new GetAccount(entity.Id)).ConfigureAwait(false);
 
