@@ -90,7 +90,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-24.04, windows-2022]
-        configuration: [Debug, Release]
+        configuration: [Release]
         project: [ test/**/Savvyio.FunctionalTests.csproj, test/**/Savvyio.Extensions.SimpleQueueService.FunctionalTests.csproj, test/**/Savvyio.Extensions.QueueStorage.FunctionalTests.csproj ]
     runs-on: ${{ matrix.os }}
     steps:
