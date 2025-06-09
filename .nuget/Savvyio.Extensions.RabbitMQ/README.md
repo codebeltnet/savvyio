@@ -1,6 +1,6 @@
-# Savvyio.Extensions.EFCore.Domain
+# Savvyio.Extensions.RabbitMQ
 
-Extend the Savvy I/O support for [Microsoft Entity Framework Core](https://github.com/dotnet/efcore) - optimized for DDD (Domain Driven Design).
+Extend the Savvy I/O core assemblies with support for RabbitMQ Work Queue and RabbitMQ Publish/Subscribe.
 
 ## About
 

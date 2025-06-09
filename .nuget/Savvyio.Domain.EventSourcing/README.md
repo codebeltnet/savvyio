@@ -14,10 +14,12 @@ It is, by heart, free, flexible and built to extend and boost your agile codebel
 
 * [Savvyio.App](https://www.nuget.org/packages/Savvyio.App/) 🏭
 * [Savvyio.Commands](https://www.nuget.org/packages/Savvyio.Commands/) 📦
+* [Savvyio.Commands.Messaging](https://www.nuget.org/packages/Savvyio.Commands.Messaging/) 📦
 * [Savvyio.Core](https://www.nuget.org/packages/Savvyio.Core/) 📦
 * [Savvyio.Domain](https://www.nuget.org/packages/Savvyio.Domain/) 📦
 * [Savvyio.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Domain.EventSourcing/) 📦
 * [Savvyio.EventDriven](https://www.nuget.org/packages/Savvyio.EventDriven/) 📦
+* [Savvyio.EventDriven.Messaging](https://www.nuget.org/packages/Savvyio.EventDriven.Messaging/) 📦
 * [Savvyio.Extensions.Dapper](https://www.nuget.org/packages/Savvyio.Extensions.Dapper/) 📦
 * [Savvyio.Extensions.DapperExtensions](https://www.nuget.org/packages/Savvyio.Extensions.DapperExtensions/) 📦
 * [Savvyio.Extensions.DependencyInjection](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection/) 📦
@@ -27,13 +29,17 @@ It is, by heart, free, flexible and built to extend and boost your agile codebel
 * [Savvyio.Extensions.DependencyInjection.EFCore](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore/) 📦
 * [Savvyio.Extensions.DependencyInjection.EFCore.Domain](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore.Domain/) 📦
 * [Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing/) 📦
+* [Savvyio.Extensions.DependencyInjection.QueueStorage](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.QueueStorage/) 📦
+* [Savvyio.Extensions.DependencyInjection.RabbitMQ](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.RabbitMQ/) 📦
 * [Savvyio.Extensions.DependencyInjection.SimpleQueueService](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.SimpleQueueService/) 📦
 * [Savvyio.Extensions.Dispatchers](https://www.nuget.org/packages/Savvyio.Extensions.Dispatchers/) 📦
 * [Savvyio.Extensions.EFCore](https://www.nuget.org/packages/Savvyio.Extensions.EFCore/) 📦
 * [Savvyio.Extensions.EFCore.Domain](https://www.nuget.org/packages/Savvyio.Extensions.EFCore.Domain/) 📦
 * [Savvyio.Extensions.EFCore.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Extensions.EFCore.Domain.EventSourcing/) 📦
 * [Savvyio.Extensions.Newtonsoft.Json](https://www.nuget.org/packages/Savvyio.Extensions.Newtonsoft.Json/) 📦
+* [Savvyio.Extensions.QueueStorage](https://www.nuget.org/packages/Savvyio.Extensions.QueueStorage/) 📦
+* [Savvyio.Extensions.RabbitMQ](https://www.nuget.org/packages/Savvyio.Extensions.RabbitMQ/) 📦
 * [Savvyio.Extensions.SimpleQueueService](https://www.nuget.org/packages/Savvyio.Extensions.SimpleQueueService/) 📦
 * [Savvyio.Extensions.Text.Json](https://www.nuget.org/packages/Savvyio.Extensions.Text.Json/) 📦
-* [Savvyio.Extensions.Text.Json](https://www.nuget.org/packages/Savvyio.Extensions.Text.Json/) 📦
+* [Savvyio.Messaging](https://www.nuget.org/packages/Savvyio.Messaging/) 📦
 * [Savvyio.Queries](https://www.nuget.org/packages/Savvyio.Queries/) 📦
