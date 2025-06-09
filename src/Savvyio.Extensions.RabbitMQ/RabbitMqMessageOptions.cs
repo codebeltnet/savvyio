@@ -14,7 +14,7 @@ namespace Savvyio.Extensions.RabbitMQ
         /// Initializes a new instance of the <see cref="RabbitMqMessageOptions"/> class with default values.
         /// </summary>
         /// <remarks>
-        /// The following table shows the initial property values for an instance of <see cref="AmazonMessageOptions"/>.
+        /// The following table shows the initial property values for an instance of <see cref="RabbitMqMessageOptions"/>.
         /// <list type="table">
         ///     <listheader>
         ///         <term>Property</term>
@@ -23,6 +23,10 @@ namespace Savvyio.Extensions.RabbitMQ
         ///     <item>
         ///         <term><see cref="AmqpUrl"/></term>
         ///         <description><c>new Uri("amqp://localhost:5672")</c></description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="Persistent"/></term>
+        ///         <description><c>false</c></description>
         ///     </item>
         /// </list>
         /// </remarks>
@@ -38,6 +42,16 @@ namespace Savvyio.Extensions.RabbitMQ
         /// The <see cref="Uri"/> representing the AMQP endpoint for the RabbitMQ broker.
         /// </value>
         public Uri AmqpUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether messages should be published as persistent.
+        /// </summary>
+        /// <value><c>true</c> if messages are marked as persistent and survive broker restarts; otherwise, <c>false</c>.</value>
+        /// <remarks>
+        /// When set to <c>true</c>, messages are stored to disk by RabbitMQ, ensuring delivery even if the broker restarts.
+        /// This corresponds to setting the delivery mode to persistent (2) in RabbitMQ.
+        /// </remarks>
+        public bool Persistent { get; set; }
 
         /// <summary>
         /// Determines whether the public read-write properties of this instance are in a valid state.

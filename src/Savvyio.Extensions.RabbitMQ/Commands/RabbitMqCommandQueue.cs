@@ -16,8 +16,10 @@ using System.Threading.Tasks;
 namespace Savvyio.Extensions.RabbitMQ.Commands
 {
     /// <summary>
-    /// Represents a RabbitMQ-based implementation of a point-to-point command queue.
+    /// Provides a default implementation of the <see cref="RabbitMqMessage"/> class for messages holding an <see cref="ICommand"/> implementation.
     /// </summary>
+    /// <seealso cref="RabbitMqMessage"/>
+    /// <seealso cref="IPointToPointChannel{TRequest}"/>
     public class RabbitMqCommandQueue : RabbitMqMessage, IPointToPointChannel<ICommand>
     {
         private readonly RabbitMqCommandQueueOptions _options;
@@ -52,13 +54,13 @@ namespace Savvyio.Extensions.RabbitMQ.Commands
 
             await EnsureConnectivityAsync(options.CancellationToken).ConfigureAwait(false);
 
-            await RabbitMqChannel.QueueDeclareAsync(_options.QueueName, false, false, false, cancellationToken: options.CancellationToken).ConfigureAwait(false);
+            await RabbitMqChannel.QueueDeclareAsync(_options.QueueName, _options.Durable, _options.Exclusive, _options.AutoDelete, cancellationToken: options.CancellationToken).ConfigureAwait(false);
 
             foreach (var message in messages)
             {
                 await RabbitMqChannel.BasicPublishAsync("", _options.QueueName, true, basicProperties: new BasicProperties()
                 {
-                    //Persistent = true,
+                    Persistent = _options.Persistent,
                     Headers = new Dictionary<string, object>()
                     {
                         { MessageType, message.GetType().ToFullNameIncludingAssemblyName() }
@@ -80,7 +82,7 @@ namespace Savvyio.Extensions.RabbitMQ.Commands
 
             await EnsureConnectivityAsync(options.CancellationToken).ConfigureAwait(false);
 
-            await RabbitMqChannel.QueueDeclareAsync(_options.QueueName, false, false, false, cancellationToken: options.CancellationToken).ConfigureAwait(false);
+            await RabbitMqChannel.QueueDeclareAsync(_options.QueueName, _options.Durable, _options.Exclusive, _options.AutoDelete, cancellationToken: options.CancellationToken).ConfigureAwait(false);
 
             var buffer = Channel.CreateUnbounded<IMessage<ICommand>>();
             var consumer = new AsyncEventingBasicConsumer(RabbitMqChannel);

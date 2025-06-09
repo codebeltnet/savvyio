@@ -16,11 +16,12 @@ using System.Threading.Tasks;
 namespace Savvyio.Extensions.RabbitMQ.EventDriven
 {
     /// <summary>
-    /// Represents a RabbitMQ-based implementation of a publish-subscribe event bus for integration events.
+    /// Provides a default implementation of the <see cref="RabbitMqMessage"/> class for messages holding an <see cref="IIntegrationEvent"/> implementation.
     /// </summary>
+    /// <seealso cref="RabbitMqMessage"/>
+    /// <seealso cref="IPointToPointChannel{TRequest}"/>
     public class RabbitMqEventBus : RabbitMqMessage, IPublishSubscribeChannel<IIntegrationEvent>
     {
-        private readonly ConnectionFactory _factory;
         private readonly RabbitMqEventBusOptions _options;
 
         /// <summary>
@@ -57,6 +58,7 @@ namespace Savvyio.Extensions.RabbitMQ.EventDriven
 
             await RabbitMqChannel.BasicPublishAsync(_options.ExchangeName, "", false, basicProperties: new BasicProperties()
             {
+                Persistent = _options.Persistent,
                 Headers = new Dictionary<string, object>()
                     {
                         { MessageType, message.GetType().ToFullNameIncludingAssemblyName() }

@@ -27,6 +27,18 @@ namespace Savvyio.Extensions.RabbitMQ.Commands
         ///         <term><see cref="AutoAcknowledge"/></term>
         ///         <description><c>false</c></description>
         ///     </item>
+        ///     <item>
+        ///         <term><see cref="Durable"/></term>
+        ///         <description><c>false</c></description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="Exclusive"/></term>
+        ///         <description><c>false</c></description>
+        ///     </item>
+        ///     <item>
+        ///         <term><see cref="AutoDelete"/></term>
+        ///         <description><c>false</c></description>
+        ///     </item>
         /// </list>
         /// </remarks>
         public RabbitMqCommandQueueOptions()
@@ -48,6 +60,33 @@ namespace Savvyio.Extensions.RabbitMQ.Commands
         /// <c>true</c> if messages are automatically acknowledged; otherwise, <c>false</c>.
         /// </value>
         public bool AutoAcknowledge { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the queue should be durable.
+        /// </summary>
+        /// <value><c>true</c> if the queue should survive broker restarts; otherwise, <c>false</c>.</value>
+        /// <remarks>
+        /// Durable queues remain declared after a RabbitMQ broker restart, but messages in non-persistent queues will be lost.
+        /// </remarks>
+        public bool Durable { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the queue should be exclusive.
+        /// </summary>
+        /// <value><c>true</c> if the queue is used by only one connection and deleted when that connection closes; otherwise, <c>false</c>.</value>
+        /// <remarks>
+        /// Exclusive queues are only accessible by the connection that declares them and are deleted when that connection closes.
+        /// </remarks>
+        public bool Exclusive { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the queue should be automatically deleted when no longer in use.
+        /// </summary>
+        /// <value><c>true</c> if the queue is automatically deleted when the last consumer unsubscribes; otherwise, <c>false</c>.</value>
+        /// <remarks>
+        /// Auto-delete queues are deleted when the last consumer unsubscribes. If there are no consumers, the queue is not deleted.
+        /// </remarks>
+        public bool AutoDelete { get; set; }
 
         /// <summary>
         /// Determines whether the public read-write properties of this instance are in a valid state.

@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Extend the Savvy I/O core assemblies with support for RabbitMQ Work Queue and RabbitMQ Publish-Subscribe.</Description>
-    <PackageTags>azure queue storage event-grid bus</PackageTags>
+    <Description>Extend the Savvy I/O core assemblies with support for RabbitMQ Work Queue and RabbitMQ Publish/Subscribe.</Description>
+    <PackageTags>rabbitmq worker queue publish subscribe bus</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
