@@ -148,6 +148,7 @@ jobs:
         uses: codebeltnet/dotnet-test@v4
         with:
           projects: test/**/Savvyio.Extensions.RabbitMQ.FunctionalTests.csproj
+          build-switches: -p:SkipSignAssembly=true
 
       - name: Stop RabbitMQ
         run: |
