@@ -1,0 +1,10 @@
+Version: 4.1.0
+Availability: .NET 9 and .NET 8
+ 
+# New Features
+- ADDED RabbitMqCommandQueue{TMarker} class in the Savvyio.Extensions.DependencyInjection.RabbitMQ.Commands namespace that provides default implementation of the RabbitMqMessage class for messages holding an ICommand implementation
+- ADDED RabbitMqCommandQueueOptions{TMarker} class in the Savvyio.Extensions.DependencyInjection.RabbitMQ.Commands namespace that provides configuration options for RabbitMqCommandQueue{TMarker}
+- ADDED RabbitMqEventBus{TMarker} class in the Savvyio.Extensions.DependencyInjection.RabbitMQ.EventDriven namespace that provides a default implementation of the RabbitMqMessage class for messages holding an IIntegrationEvent implementation
+- ADDED RabbitMqEventBusOptions{TMarker} class in the Savvyio.Extensions.DependencyInjection.RabbitMQ.EventDriven namespace that provides configuration options for RabbitMqEventBus{TMarker}
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.RabbitMQ namespace that consist of extension methods for the IServiceCollection interface: AddRabbitMqCommandQueue, AddRabbitMqEventBus
+ 

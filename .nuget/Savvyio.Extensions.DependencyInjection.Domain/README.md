@@ -30,6 +30,7 @@ It is, by heart, free, flexible and built to extend and boost your agile codebel
 * [Savvyio.Extensions.DependencyInjection.EFCore.Domain](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore.Domain/) 📦
 * [Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing/) 📦
 * [Savvyio.Extensions.DependencyInjection.QueueStorage](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.QueueStorage/) 📦
+* [Savvyio.Extensions.DependencyInjection.RabbitMQ](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.RabbitMQ/) 📦
 * [Savvyio.Extensions.DependencyInjection.SimpleQueueService](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.SimpleQueueService/) 📦
 * [Savvyio.Extensions.Dispatchers](https://www.nuget.org/packages/Savvyio.Extensions.Dispatchers/) 📦
 * [Savvyio.Extensions.EFCore](https://www.nuget.org/packages/Savvyio.Extensions.EFCore/) 📦
@@ -37,6 +38,7 @@ It is, by heart, free, flexible and built to extend and boost your agile codebel
 * [Savvyio.Extensions.EFCore.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Extensions.EFCore.Domain.EventSourcing/) 📦
 * [Savvyio.Extensions.Newtonsoft.Json](https://www.nuget.org/packages/Savvyio.Extensions.Newtonsoft.Json/) 📦
 * [Savvyio.Extensions.QueueStorage](https://www.nuget.org/packages/Savvyio.Extensions.QueueStorage/) 📦
+* [Savvyio.Extensions.RabbitMQ](https://www.nuget.org/packages/Savvyio.Extensions.RabbitMQ/) 📦
 * [Savvyio.Extensions.SimpleQueueService](https://www.nuget.org/packages/Savvyio.Extensions.SimpleQueueService/) 📦
 * [Savvyio.Extensions.Text.Json](https://www.nuget.org/packages/Savvyio.Extensions.Text.Json/) 📦
 * [Savvyio.Messaging](https://www.nuget.org/packages/Savvyio.Messaging/) 📦

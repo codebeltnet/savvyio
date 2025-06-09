@@ -3,8 +3,8 @@
   <PropertyGroup>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IncludeSymbols>false</IncludeSymbols>
-    <Description>Provides a complete and convenient set of API additions for building a DDD, CQRS and Event Sourcing enabled .NET application using Microsoft Dependency Injection, Microsoft Entity Framework Core, Dapper, AWS SNS/SQS and Azure Queue Storage/Azure Event Grid.</Description>
-    <PackageTags>ddd domain-driven-design cqrs command-query-responsibility-segregation es event-sourcing datastore data-store datasource data-source dataaccessobject data-access-object repository de domain-event ie integration-event valueobject value-object entity aggregate aggregate-root eventdriven event-driven ef-core ef entity-framework entity-framework-core di dependency-injection aws amazon awssqs awssns simplequeueservice sqs simplenotificationservice sns queue bus json converters converter azure storage event-grid</PackageTags>
+    <Description>Provides a complete and convenient set of API additions for building a DDD, CQRS and Event Sourcing enabled .NET application using Microsoft Dependency Injection, Microsoft Entity Framework Core, Dapper, AWS SNS/SQS, Azure Queue Storage/Azure Event Grid and RabbitMQ Worker Queue/Publish-Subscribe.</Description>
+    <PackageTags>ddd domain-driven-design cqrs command-query-responsibility-segregation es event-sourcing datastore data-store datasource data-source dataaccessobject data-access-object repository de domain-event ie integration-event valueobject value-object entity aggregate aggregate-root eventdriven event-driven ef-core ef entity-framework entity-framework-core di dependency-injection aws amazon awssqs awssns simplequeueservice sqs simplenotificationservice sns queue bus json converters converter azure storage event-grid rabbitmq worker worker-queue publish subscribe</PackageTags>
     <Title>Savvyio.App</Title>
     <NoWarn>NU5128</NoWarn>
   </PropertyGroup>
@@ -24,6 +24,7 @@
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.EFCore.Domain\Savvyio.Extensions.DependencyInjection.EFCore.Domain.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.EFCore\Savvyio.Extensions.DependencyInjection.EFCore.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.QueueStorage\Savvyio.Extensions.DependencyInjection.QueueStorage.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.RabbitMQ\Savvyio.Extensions.DependencyInjection.RabbitMQ.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.SimpleQueueService\Savvyio.Extensions.DependencyInjection.SimpleQueueService.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection\Savvyio.Extensions.DependencyInjection.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.Dispatchers\Savvyio.Extensions.Dispatchers.csproj" />
@@ -31,6 +32,7 @@
     <ProjectReference Include="..\Savvyio.Extensions.EFCore.Domain\Savvyio.Extensions.EFCore.Domain.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.EFCore\Savvyio.Extensions.EFCore.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.QueueStorage\Savvyio.Extensions.QueueStorage.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.RabbitMQ\Savvyio.Extensions.RabbitMQ.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.SimpleQueueService\Savvyio.Extensions.SimpleQueueService.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.Text.Json\Savvyio.Extensions.Text.Json.csproj" />
     <ProjectReference Include="..\Savvyio.Messaging\Savvyio.Messaging.csproj" />
