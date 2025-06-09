@@ -11,6 +11,7 @@ namespace Savvyio.Extensions.RabbitMQ
             var options = new RabbitMqMessageOptions();
 
             Assert.NotNull(options.AmqpUrl);
+            Assert.False(options.Persistent);
             Assert.Equal(new Uri("amqp://localhost:5672"), options.AmqpUrl);
         }
 

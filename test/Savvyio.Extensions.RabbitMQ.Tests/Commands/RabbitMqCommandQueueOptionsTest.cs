@@ -12,6 +12,9 @@ namespace Savvyio.Extensions.RabbitMQ.Commands
 
             Assert.Null(options.QueueName);
             Assert.False(options.AutoAcknowledge);
+            Assert.False(options.Durable);
+            Assert.False(options.Exclusive);
+            Assert.False(options.AutoDelete);
             Assert.NotNull(options.AmqpUrl); // Inherited from RabbitMqMessageOptions
         }
 
