@@ -4,6 +4,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [4.1.0] - 2025-06-09
+
+This is a feature release that offers support for RabbitMQ as a message broker in the context of RabbitMQ Worker Queue (Command) and RabbitMQ Publish/Subscribe (Integration Event).
+
+Also includes a service update that primarily focuses on bumping package dependencies.
+
+### Added
+
+#### Savvyio.Extensions.DependencyInjection.RabbitMQ
+
+- RabbitMqCommandQueue{TMarker} class in the Savvyio.Extensions.DependencyInjection.RabbitMQ.Commands namespace that provides default implementation of the RabbitMqMessage class for messages holding an ICommand implementation
+- RabbitMqCommandQueueOptions{TMarker} class in the Savvyio.Extensions.DependencyInjection.RabbitMQ.Commands namespace that provides configuration options for RabbitMqCommandQueue{TMarker}
+- RabbitMqEventBus{TMarker} class in the Savvyio.Extensions.DependencyInjection.RabbitMQ.EventDriven namespace that provides a default implementation of the RabbitMqMessage class for messages holding an IIntegrationEvent implementation
+- RabbitMqEventBusOptions{TMarker} class in the Savvyio.Extensions.DependencyInjection.RabbitMQ.EventDriven namespace that provides configuration options for RabbitMqEventBus{TMarker}
+- ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.RabbitMQ namespace that consist of extension methods for the IServiceCollection interface: AddRabbitMqCommandQueue, AddRabbitMqEventBus
+
+#### Savvyio.Extensions.RabbitMQ
+
+- RabbitMqCommandQueue class in the Savvyio.Extensions.RabbitMQ.Commands namespace that provides a default implementation of the RabbitMqMessage class for messages holding an ICommand implementation
+- RabbitMqCommandQueueOptions class in the Savvyio.Extensions.RabbitMQ.Commands namespace that provides configuration options for RabbitMqCommandQueue
+- RabbitMqEventBus class in the Savvyio.Extensions.RabbitMQ.EventDriven namespace that provides a default implementation of the RabbitMqMessage class for messages holding an IIntegrationEvent implementation
+- RabbitMqEventBusOptions class in the Savvyio.Extensions.RabbitMQ.EventDriven namespace that provides configuration options for RabbitMqEventBus
+- RabbitMqMessage class in the Savvyio.Extensions.RabbitMQ namespace that provides a base class for RabbitMQ message operations, including connection and channel management, marshalling, and resource disposal while ensuring thread-safe initialization of RabbitMQ connectivity
+- RabbitMqMessageOptions class in the Savvyio.Extensions.RabbitMQ namespace that provides configuration options for RabbitMqMessage
+
 ## [4.0.3] - 2025-05-28
 
 This is a service update that primarily focuses on package dependencies and minor improvements.
