@@ -152,8 +152,8 @@ jobs:
 
       - name: Stop RabbitMQ
         run: |
-          docker stop --name rabbitmq
-          docker rm --name rabbitmq
+          docker stop rabbitmq
+          docker rm rabbitmq
 
   sonarcloud:
     name: call-sonarcloud
