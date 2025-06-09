@@ -5,7 +5,7 @@ Availability: .NET 9 and .NET 8
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
  
 # New Features
-- ADDED RabbitMqCommandQueue class in the Savvyio.Extensions.RabbitMQ.Commands namespace that provides a a default implementation of the RabbitMqMessage class for messages holding an ICommand implementation
+- ADDED RabbitMqCommandQueue class in the Savvyio.Extensions.RabbitMQ.Commands namespace that provides a default implementation of the RabbitMqMessage class for messages holding an ICommand implementation
 - ADDED RabbitMqCommandQueueOptions class in the Savvyio.Extensions.RabbitMQ.Commands namespace that provides configuration options for RabbitMqCommandQueue
 - ADDED RabbitMqEventBus class in the Savvyio.Extensions.RabbitMQ.EventDriven namespace that provides a default implementation of the RabbitMqMessage class for messages holding an IIntegrationEvent implementation
 - ADDED RabbitMqEventBusOptions class in the Savvyio.Extensions.RabbitMQ.EventDriven namespace that provides configuration options for RabbitMqEventBus
