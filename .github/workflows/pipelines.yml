@@ -110,7 +110,7 @@ jobs:
           projects: ${{ matrix.project }}
           configuration: ${{ matrix.configuration }}
           build-switches: -p:SkipSignAssembly=true
-          restore: true
+          build: true
         env:
           AWS__CALLERIDENTITY: ${{ secrets.AWS_CALLER_IDENTITY }}
           AWS__IAM__ACCESSKEY: ${{ secrets.AWS_IAM_ACCESSKEY }}
@@ -150,7 +150,7 @@ jobs:
         with:
           projects: test/**/Savvyio.Extensions.RabbitMQ.FunctionalTests.csproj
           build-switches: -p:SkipSignAssembly=true
-          restore: true
+          build: true
 
       - name: Stop RabbitMQ
         run: |
