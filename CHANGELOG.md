@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [4.1.1] - 2025-06-16
+
+This is a service update that focuses on package dependencies.
+
 ## [4.1.0] - 2025-06-09
 
 This is a feature release that offers support for RabbitMQ as a message broker in the context of RabbitMQ Worker Queue (Command) and RabbitMQ Publish/Subscribe (Integration Event).

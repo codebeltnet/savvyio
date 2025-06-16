@@ -37,6 +37,7 @@
             "Savvyio.Extensions.DependencyInjection.EFCore.Domain/**.csproj",
             "Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing/**.csproj",
             "Savvyio.Extensions.DependencyInjection.QueueStorage/**.csproj",
+            "Savvyio.Extensions.DependencyInjection.RabbitMQ/**.csproj",
             "Savvyio.Extensions.DependencyInjection.SimpleQueueService/**.csproj",
             "Savvyio.Extensions.Dispatchers/**.csproj",
             "Savvyio.Extensions.EFCore/**.csproj",
@@ -44,6 +45,7 @@
             "Savvyio.Extensions.EFCore.Domain.EventSourcing/**.csproj",
             "Savvyio.Extensions.Newtonsoft.Json/**.csproj",
             "Savvyio.Extensions.QueueStorage/**.csproj",
+            "Savvyio.Extensions.RabbitMQ/**.csproj",
             "Savvyio.Extensions.SimpleQueueService/**.csproj",
             "Savvyio.Extensions.Text.Json/**.csproj"
           ],

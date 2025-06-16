@@ -1,4 +1,4 @@
-name: Savvyi I/O Pipeline
+name: Savvy I/O Pipeline
 on:
   pull_request:
     branches: [main]
@@ -82,6 +82,7 @@ jobs:
       configuration: ${{ matrix.configuration }}
       projects: ${{ matrix.project }}
       build-switches: -p:SkipSignAssembly=true
+      restore: true
 
   integration_test:
     name: ⚗️ Integration Test - Azure and AWS
@@ -109,7 +110,7 @@ jobs:
           projects: ${{ matrix.project }}
           configuration: ${{ matrix.configuration }}
           build-switches: -p:SkipSignAssembly=true
-          level: normal
+          build: true
         env:
           AWS__CALLERIDENTITY: ${{ secrets.AWS_CALLER_IDENTITY }}
           AWS__IAM__ACCESSKEY: ${{ secrets.AWS_IAM_ACCESSKEY }}
@@ -149,6 +150,7 @@ jobs:
         with:
           projects: test/**/Savvyio.Extensions.RabbitMQ.FunctionalTests.csproj
           build-switches: -p:SkipSignAssembly=true
+          build: true
 
       - name: Stop RabbitMQ
         run: |
