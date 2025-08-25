@@ -1,0 +1,9 @@
+Version: 4.2.0
+Availability: .NET 9 and .NET 8
+ 
+# New Features
+- ADDED NatsCommandQueue{TMarker} class in the Savvyio.Extensions.DependencyInjection.NATS.Commands namespace that provides default implementation of the NatsMessage class for messages holding an ICommand implementation
+- ADDED NatsCommandQueueOptions{TMarker} class in the Savvyio.Extensions.DependencyInjection.NATS.Commands namespace that provides configuration options for NatsCommandQueue{TMarker}
+- ADDED NatsEventBus{TMarker} class in the Savvyio.Extensions.DependencyInjection.NATS.EventDriven namespace that provides a default implementation of the NatsMessage class for messages holding an IIntegrationEvent implementation
+- ADDED NatsEventBusOptions{TMarker} class in the Savvyio.Extensions.DependencyInjection.NATS.EventDriven namespace that provides configuration options for NatsEventBus{TMarker}
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.NATS namespace that consist of extension methods for the IServiceCollection interface: AddNatsCommandQueue, AddNatsEventBus

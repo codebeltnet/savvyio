@@ -1,6 +1,6 @@
-# Savvyio.Commands
+# Savvyio.Extensions.DependencyInjection.RabbitMQ
 
-Provides the fundamental classes to work with the Command part of the CQRS pattern (Command and Query Responsibility Segregation).
+Extend the Savvy I/O support for Microsoft Dependency Injection with NATS Work-Queue Stream and NATS Core Publish-Subscribe implementations.
 
 ## About
 
