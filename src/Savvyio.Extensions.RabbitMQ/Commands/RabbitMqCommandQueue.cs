@@ -118,6 +118,7 @@ namespace Savvyio.Extensions.RabbitMQ.Commands
             var queueName = e.Properties[nameof(QueueDeclareOk.QueueName)] as string;
             await RabbitMqChannel.QueueDeclareAsync(queueName, _options.Durable, _options.Exclusive, _options.AutoDelete, cancellationToken: ct).ConfigureAwait(false);
             await RabbitMqChannel.BasicAckAsync((ulong)e.Properties[nameof(BasicDeliverEventArgs.DeliveryTag)], false, ct).ConfigureAwait(false);
+            if (sender is IAcknowledgeable ack) { ack.Acknowledged -= OnMessageAcknowledgedAsync; }
         }
     }
 }

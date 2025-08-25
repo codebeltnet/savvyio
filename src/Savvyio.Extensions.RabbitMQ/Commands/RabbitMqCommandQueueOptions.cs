@@ -97,7 +97,7 @@ namespace Savvyio.Extensions.RabbitMQ.Commands
         /// </exception>
         public override void ValidateOptions()
         {
-            Validator.ThrowIfInvalidState(string.IsNullOrEmpty(QueueName));
+            Validator.ThrowIfInvalidState(string.IsNullOrWhiteSpace(QueueName));
             base.ValidateOptions();
         }
     }

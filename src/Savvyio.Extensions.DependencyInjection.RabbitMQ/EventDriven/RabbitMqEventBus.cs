@@ -10,7 +10,7 @@ namespace Savvyio.Extensions.DependencyInjection.RabbitMQ.EventDriven
     /// Provides a default implementation of the <see cref="RabbitMqMessage"/> class for messages holding an <see cref="IIntegrationEvent"/> implementation.
     /// </summary>
     /// <seealso cref="RabbitMqEventBus"/>
-    /// <seealso cref="IPointToPointChannel{TRequest,TMarker}"/>
+    /// <seealso cref="IPublishSubscribeChannel{TRequest,TMarker}"/>
     public class RabbitMqEventBus<TMarker> : RabbitMqEventBus, IPublishSubscribeChannel<IIntegrationEvent, TMarker>
     {
         

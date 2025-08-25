@@ -105,8 +105,8 @@ namespace Savvyio.Extensions.RabbitMQ
         /// <returns>A <see cref="ValueTask"/> representing the asynchronous dispose operation.</returns>
         protected override async ValueTask OnDisposeManagedResourcesAsync()
         {
-            if (RabbitMqChannel != null) { await RabbitMqChannel.DisposeAsync(); }
-            if (RabbitMqConnection != null) { await RabbitMqConnection.DisposeAsync(); }
+            if (RabbitMqChannel != null) { await RabbitMqChannel.DisposeAsync().ConfigureAwait(false); }
+            if (RabbitMqConnection != null) { await RabbitMqConnection.DisposeAsync().ConfigureAwait(false); }
         }
     }
 }
