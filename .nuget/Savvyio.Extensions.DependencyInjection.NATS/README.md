@@ -1,4 +1,4 @@
-# Savvyio.Extensions.DependencyInjection.RabbitMQ
+# Savvyio.Extensions.DependencyInjection.NATS
 
 Extend the Savvy I/O support for Microsoft Dependency Injection with NATS Work-Queue Stream and NATS Core Publish-Subscribe implementations.
 
