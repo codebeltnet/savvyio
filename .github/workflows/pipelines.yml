@@ -40,6 +40,7 @@ jobs:
             !test/**/Savvyio.FunctionalTests.csproj
             !test/**/Savvyio.Extensions.SimpleQueueService.FunctionalTests.csproj
             !test/**/Savvyio.Extensions.QueueStorage.FunctionalTests.csproj
+            !test/**/Savvyio.Extensions.NATS.FunctionalTests.csproj
             !test/**/Savvyio.Extensions.RabbitMQ.FunctionalTests.csproj
   
       - name: JSON output
@@ -157,10 +158,41 @@ jobs:
           docker stop rabbitmq
           docker rm rabbitmq
 
+  integration_test_nats:
+    name: ⚗️ Integration Test - NATS
+    needs: [build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: codebeltnet/git-checkout@v1
+
+      - name: Install .NET
+        uses: codebeltnet/install-dotnet@v2
+
+      - name: Install .NET Tool - Report Generator
+        uses: codebeltnet/dotnet-tool-install-reportgenerator@v1
+
+      - name: Spin up NATS test dependency
+        run: |
+          docker run -d --name nats -p 4222:4222 nats:latest --js
+
+      - name: Test with Release build
+        uses: codebeltnet/dotnet-test@v4
+        with:
+          projects: test/**/Savvyio.Extensions.NATS.FunctionalTests.csproj
+          build-switches: -p:SkipSignAssembly=true
+          build: true
+
+      - name: Stop NATS
+        run: |
+          docker stop nats
+          docker rm nats
+
   sonarcloud:
     name: call-sonarcloud
-    needs: [build, test, integration_test]
-    uses: codebeltnet/jobs-sonarcloud/.github/workflows/default.yml@v1
+    needs: [build, test, integration_test, integration_test_rabbitmq, integration_test_nats]
+    uses: codebeltnet/jobs-sonarcloud/.github/workflows/default.yml@v2
     with:
       organization: geekle
       projectKey: savvyio
@@ -169,7 +201,7 @@ jobs:
 
   codecov:
     name: call-codecov
-    needs: [build, test, integration_test]
+    needs: [build, test, integration_test, integration_test_rabbitmq, integration_test_nats]
     uses: codebeltnet/jobs-codecov/.github/workflows/default.yml@v1
     with:
       repository: codebeltnet/savvyio
@@ -177,15 +209,15 @@ jobs:
           
   codeql:
     name: call-codeql
-    needs: [build, test, integration_test]
-    uses: codebeltnet/jobs-codeql/.github/workflows/default.yml@v1
+    needs: [build, test, integration_test, integration_test_rabbitmq, integration_test_nats]
+    uses: codebeltnet/jobs-codeql/.github/workflows/default.yml@v2
     permissions:
       security-events: write
 
   deploy:
     if: github.event_name != 'pull_request'
     name: call-nuget
-    needs: [build, pack, test, integration_test, sonarcloud, codecov, codeql]
+    needs: [build, pack, test, integration_test, integration_test_rabbitmq, integration_test_nats, sonarcloud, codecov, codeql]
     uses: codebeltnet/jobs-nuget-push/.github/workflows/default.yml@v1
     with:
       version: ${{ needs.build.outputs.version }}

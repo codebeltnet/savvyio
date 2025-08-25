@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Savvyio.Extensions.DependencyInjection.NATS</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.NATS\Savvyio.Extensions.DependencyInjection.NATS.csproj" />
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.Text.Json\Savvyio.Extensions.Text.Json.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -9,7 +9,7 @@
         {
             "name": "Docker-Ubuntu",
             "type": "docker",
-            "dockerImage": "gimlichael/ubuntu-testrunner:net8.0.411-9.0.301",
+            "dockerImage": "gimlichael/ubuntu-testrunner:net8.0.413-9.0.304",
             "dockerArgs": "-e AWS__CallerIdentity -e AWS__IAM__AccessKey -e AWS__IAM__SecretKey"
         }
     ]
