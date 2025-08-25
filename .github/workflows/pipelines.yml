@@ -174,7 +174,7 @@ jobs:
 
       - name: Spin up NATS test dependency
         run: |
-          docker run -d --name nats -p 4222:4222 --network nats-net nats:latest --js
+          docker run -d --name nats -p 4222:4222 nats:latest --js
 
       - name: Test with Release build
         uses: codebeltnet/dotnet-test@v4
