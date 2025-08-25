@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Extend the Savvy I/O core assemblies with support for NATS JetStream and NATS Publish-Subscribe.</Description>
-    <PackageTags>azure queue storage event-grid bus</PackageTags>
+    <Description>Extend the Savvy I/O core assemblies with support for NATS Work-Queue Stream and NATS Core Publish-Subscribe.</Description>
+    <PackageTags>nats jetstream worker queue publish subscribe bus</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
