@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing\Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.EFCore.Domain\Savvyio.Extensions.DependencyInjection.EFCore.Domain.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.EFCore\Savvyio.Extensions.DependencyInjection.EFCore.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.NATS\Savvyio.Extensions.DependencyInjection.NATS.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.QueueStorage\Savvyio.Extensions.DependencyInjection.QueueStorage.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.RabbitMQ\Savvyio.Extensions.DependencyInjection.RabbitMQ.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.SimpleQueueService\Savvyio.Extensions.DependencyInjection.SimpleQueueService.csproj" />
@@ -31,6 +32,7 @@
     <ProjectReference Include="..\Savvyio.Extensions.EFCore.Domain.EventSourcing\Savvyio.Extensions.EFCore.Domain.EventSourcing.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.EFCore.Domain\Savvyio.Extensions.EFCore.Domain.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.EFCore\Savvyio.Extensions.EFCore.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.NATS\Savvyio.Extensions.NATS.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.QueueStorage\Savvyio.Extensions.QueueStorage.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.RabbitMQ\Savvyio.Extensions.RabbitMQ.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.SimpleQueueService\Savvyio.Extensions.SimpleQueueService.csproj" />
