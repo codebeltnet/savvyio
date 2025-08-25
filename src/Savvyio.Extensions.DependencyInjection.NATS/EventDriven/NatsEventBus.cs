@@ -18,7 +18,7 @@ namespace Savvyio.Extensions.DependencyInjection.NATS.EventDriven
         /// Initializes a new instance of the <see cref="NatsEventBus"/> class.
         /// </summary>
         /// <param name="marshaller">The marshaller used for serializing and deserializing messages.</param>
-        /// <param name="options">The options used to configure the RabbitMQ event bus.</param>
+        /// <param name="options">The options used to configure the NATS event bus.</param>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="marshaller"/> cannot be null -or-
         /// <paramref name="options"/> cannot be null.
