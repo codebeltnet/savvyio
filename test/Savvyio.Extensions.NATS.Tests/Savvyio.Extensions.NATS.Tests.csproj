@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Savvyio.Extensions.NATS</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="EventDriven\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.NATS\Savvyio.Extensions.NATS.csproj" />
+  </ItemGroup>
+
+</Project>
