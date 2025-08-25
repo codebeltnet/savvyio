@@ -40,6 +40,7 @@ jobs:
             !test/**/Savvyio.FunctionalTests.csproj
             !test/**/Savvyio.Extensions.SimpleQueueService.FunctionalTests.csproj
             !test/**/Savvyio.Extensions.QueueStorage.FunctionalTests.csproj
+            !test/**/Savvyio.Extensions.NATS.FunctionalTests.csproj
             !test/**/Savvyio.Extensions.RabbitMQ.FunctionalTests.csproj
   
       - name: JSON output
