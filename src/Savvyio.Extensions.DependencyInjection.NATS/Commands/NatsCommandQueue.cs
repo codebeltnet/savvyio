@@ -17,7 +17,7 @@ namespace Savvyio.Extensions.DependencyInjection.NATS.Commands
         /// Initializes a new instance of the <see cref="NatsCommandQueue{TMarker}"/> class.
         /// </summary>
         /// <param name="marshaller">The marshaller used for serializing and deserializing messages.</param>
-        /// <param name="options">The options used to configure the RabbitMQ command queue.</param>
+        /// <param name="options">The options used to configure the NATS command queue.</param>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="marshaller"/> cannot be null -or-
         /// <paramref name="options"/> cannot be null.
