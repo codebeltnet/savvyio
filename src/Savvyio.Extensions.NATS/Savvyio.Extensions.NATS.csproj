@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Extend the Savvy I/O core assemblies with support for NATS JetStream and NATS Publish-Subscribe.</Description>
+    <PackageTags>azure queue storage event-grid bus</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+
+    <PackageReference Include="Cuemon.Extensions.IO" />
+    <PackageReference Include="NATS.Client.Core" />
+    <PackageReference Include="NATS.Client.JetStream" />
+    <PackageReference Include="NATS.Client.Simplified" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Savvyio.Commands\Savvyio.Commands.csproj" />
+    <ProjectReference Include="..\Savvyio.Core\Savvyio.Core.csproj" />
+    <ProjectReference Include="..\Savvyio.EventDriven.Messaging\Savvyio.EventDriven.Messaging.csproj" />
+    <ProjectReference Include="..\Savvyio.EventDriven\Savvyio.EventDriven.csproj" />
+    <ProjectReference Include="..\Savvyio.Messaging\Savvyio.Messaging.csproj" />
+  </ItemGroup>
+
+</Project>
