@@ -4,6 +4,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [4.2.0] - 2025-08-26
+
+This is a feature release that offers support for NATS as a message broker in the context of NATS Work-Queue Stream (Command) and NATS Core Publish-Subscribe (Integration Event).
+
+Also includes a service update that primarily focuses on bumping package dependencies.
+
+### Added
+
+#### Savvyio.Extensions.DependencyInjection.NATS
+
+- NatsCommandQueue{TMarker} class in the Savvyio.Extensions.DependencyInjection.NATS.Commands namespace that provides default implementation of the NatsMessage class for messages holding an ICommand implementation
+- NatsCommandQueueOptions{TMarker} class in the Savvyio.Extensions.DependencyInjection.NATS.Commands namespace that provides configuration options for NatsCommandQueue{TMarker}
+- NatsEventBus{TMarker} class in the Savvyio.Extensions.DependencyInjection.NATS.EventDriven namespace that provides a default implementation of the NatsMessage class for messages holding an IIntegrationEvent implementation
+- NatsEventBusOptions{TMarker} class in the Savvyio.Extensions.DependencyInjection.NATS.EventDriven namespace that provides configuration options for NatsEventBus{TMarker}
+- ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.NATS namespace that consist of extension methods for the IServiceCollection interface: AddNatsCommandQueue, AddNatsEventBus
+
+#### Savvyio.Extensions.NATS
+
+- NatsCommandQueue class in the Savvyio.Extensions.NATS.Commands namespace that provides a default implementation of the NatsMessage class for messages holding an ICommand implementation
+- NatsCommandQueueOptions class in the Savvyio.Extensions.NATS.Commands namespace that provides configuration options for NatsCommandQueue
+- NatsEventBus class in the Savvyio.Extensions.NATS.EventDriven namespace that provides a default implementation of the NatsMessage class for messages holding an IIntegrationEvent implementation
+- NatsEventBusOptions class in the Savvyio.Extensions.NATS.EventDriven namespace that provides configuration options for NatsEventBus
+- NatsMessage class in the Savvyio.Extensions.NATS namespace that provides a base class for NATS message operations, supporting asynchronous disposal and message serialization
+- NatsMessageOptions class in the Savvyio.Extensions.NATS namespace that provides configuration options related to NATS
+
 ## [4.1.1] - 2025-06-16
 
 This is a service update that focuses on package dependencies.
