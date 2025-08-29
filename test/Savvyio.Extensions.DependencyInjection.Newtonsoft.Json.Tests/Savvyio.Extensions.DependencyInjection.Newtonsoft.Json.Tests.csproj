@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Savvyio.Extensions.DependencyInjection.Newtonsoft.Json</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.Newtonsoft.Json\Savvyio.Extensions.DependencyInjection.Newtonsoft.Json.csproj" />
+  </ItemGroup>
+
+</Project>
