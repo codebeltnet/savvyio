@@ -1,4 +1,4 @@
-# Savvyio.Extensions.DependencyInjection.NATS
+# Savvyio.Extensions.DependencyInjection.Newtonsoft.Json
 
 Extend the Savvy I/O support for Microsoft Dependency Injection with Newtonsoft JSON implementations.
 

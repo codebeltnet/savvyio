@@ -1,4 +1,4 @@
-# Savvyio.Extensions.DependencyInjection.NATS
+# Savvyio.Extensions.DependencyInjection.Text.Json
 
 Extend the Savvy I/O support for Microsoft Dependency Injection with official built-in JSON implementations.
 
