@@ -1,6 +1,6 @@
 ---
 description: 'Writing Unit Tests in Savvyio'
-applyTo: '**/*.cs'
+applyTo: "**/*.{cs,csproj}"
 ---
 
 # Writing Unit Tests in Savvyio
@@ -117,7 +117,7 @@ and
 
 ---
 description: 'Writing XML documentation in Savvyio'
-applyTo: '**/*.cs'
+applyTo: "**/*.cs"
 ---
 
 # Writing XML documentation in Savvyio

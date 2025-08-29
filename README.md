@@ -108,7 +108,7 @@ Provides a focused API for building various types of modern .NET applications su
 
 ### 🏭 Productivity Packages
 
-Provides a convenient set of default API additions for building complete DDD, CQRS and Event Sourcing enabled .NET applications using Microsoft Dependency Injection, Microsoft Entity Framework Core, Dapper, AWS SNS/SQS, Azure Queue Storage/Event Grid, RabbitMQ and NATS.
+Provides a convenient set of default API additions for building complete DDD, CQRS and Event Sourcing enabled .NET applications using Microsoft Dependency Injection, Microsoft Entity Framework Core, Dapper, JSON Marshaller, AWS SNS/SQS, Azure Queue Storage/Event Grid, RabbitMQ and NATS.
 
 |Package|vNext|Stable|Downloads|
 |:--|:-:|:-:|:-:|
