@@ -1,4 +1,5 @@
 ﻿using System;
+using Cuemon;
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Commands;
@@ -25,8 +26,12 @@ namespace Savvyio.Extensions.DependencyInjection.QueueStorage
         /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional calls can be chained.</returns>
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddAzureCommandQueue(this IServiceCollection services, Action<AzureQueueOptions> azureQueueSetup, Action<ServiceOptions> serviceSetup = null)
         {
+            Validator.ThrowIfNull(services);
             return services
                     .AddMessageQueue<AzureCommandQueue, ICommand>(serviceSetup ?? (o => o.Lifetime = ServiceLifetime.Singleton))
                     .AddConfiguredOptions(azureQueueSetup);
@@ -40,8 +45,12 @@ namespace Savvyio.Extensions.DependencyInjection.QueueStorage
         /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddAzureCommandQueue<TMarker>(this IServiceCollection services, Action<AzureQueueOptions<TMarker>> azureQueueSetup, Action<ServiceOptions> serviceSetup = null)
         {
+            Validator.ThrowIfNull(services);
             return services
                     .AddMessageQueue<AzureCommandQueue<TMarker>, ICommand>(serviceSetup ?? (o => o.Lifetime = ServiceLifetime.Singleton))
                     .AddConfiguredOptions(azureQueueSetup);
@@ -56,8 +65,12 @@ namespace Savvyio.Extensions.DependencyInjection.QueueStorage
         /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddAzureEventBus(this IServiceCollection services, Action<AzureQueueOptions> azureQueueSetup, Action<AzureEventBusOptions> azureEventBusSetup, Action<ServiceOptions> serviceSetup = null)
         {
+            Validator.ThrowIfNull(services);
             return services
                     .AddMessageBus<AzureEventBus, IIntegrationEvent>(serviceSetup ?? (o => o.Lifetime = ServiceLifetime.Singleton))
                     .AddConfiguredOptions(azureQueueSetup)
@@ -73,8 +86,12 @@ namespace Savvyio.Extensions.DependencyInjection.QueueStorage
         /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddAzureEventBus<TMarker>(this IServiceCollection services, Action<AzureQueueOptions<TMarker>> azureQueueSetup, Action<AzureEventBusOptions<TMarker>> azureEventBusSetup, Action<ServiceOptions> serviceSetup = null)
         {
+            Validator.ThrowIfNull(services);
             return services
                     .AddMessageBus<AzureEventBus<TMarker>, IIntegrationEvent>(serviceSetup ?? (o => o.Lifetime = ServiceLifetime.Singleton))
                     .AddConfiguredOptions(azureQueueSetup)

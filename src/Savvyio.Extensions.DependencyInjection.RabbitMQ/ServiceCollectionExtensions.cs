@@ -4,6 +4,7 @@ using Savvyio.Extensions.DependencyInjection.Messaging;
 using Savvyio.Extensions.DependencyInjection.RabbitMQ.Commands;
 using Savvyio.Extensions.DependencyInjection.RabbitMQ.EventDriven;
 using System;
+using Cuemon;
 using Savvyio.Commands;
 using Savvyio.EventDriven;
 using Savvyio.Extensions.RabbitMQ.Commands;
@@ -24,8 +25,12 @@ namespace Savvyio.Extensions.DependencyInjection.RabbitMQ
         /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional calls can be chained.</returns>
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddRabbitMqCommandQueue(this IServiceCollection services, Action<RabbitMqCommandQueueOptions> rabbitMqSetup, Action<ServiceOptions> serviceSetup = null)
         {
+            Validator.ThrowIfNull(services);
             return services
                     .AddMessageQueue<RabbitMqCommandQueue, ICommand>(serviceSetup ?? (o => o.Lifetime = ServiceLifetime.Singleton))
                     .AddConfiguredOptions(rabbitMqSetup);
@@ -39,8 +44,12 @@ namespace Savvyio.Extensions.DependencyInjection.RabbitMQ
         /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddRabbitMqCommandQueue<TMarker>(this IServiceCollection services, Action<RabbitMqCommandQueueOptions<TMarker>> rabbitMqSetup, Action<ServiceOptions> serviceSetup = null)
         {
+            Validator.ThrowIfNull(services);
             return services
                     .AddMessageQueue<RabbitMqCommandQueue<TMarker>, ICommand>(serviceSetup ?? (o => o.Lifetime = ServiceLifetime.Singleton))
                     .AddConfiguredOptions(rabbitMqSetup);
@@ -54,8 +63,12 @@ namespace Savvyio.Extensions.DependencyInjection.RabbitMQ
         /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddRabbitMqEventBus(this IServiceCollection services, Action<RabbitMqEventBusOptions> rabbitMqSetup, Action<ServiceOptions> serviceSetup = null)
         {
+            Validator.ThrowIfNull(services);
             return services
                     .AddMessageBus<RabbitMqEventBus, IIntegrationEvent>(serviceSetup ?? (o => o.Lifetime = ServiceLifetime.Singleton))
                     .AddConfiguredOptions(rabbitMqSetup);
@@ -69,8 +82,12 @@ namespace Savvyio.Extensions.DependencyInjection.RabbitMQ
         /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddRabbitMqEventBus<TMarker>(this IServiceCollection services, Action<RabbitMqEventBusOptions<TMarker>> rabbitMqSetup, Action<ServiceOptions> serviceSetup = null)
         {
+            Validator.ThrowIfNull(services);
             return services
                     .AddMessageBus<RabbitMqEventBus<TMarker>, IIntegrationEvent>(serviceSetup ?? (o => o.Lifetime = ServiceLifetime.Singleton))
                     .AddConfiguredOptions(rabbitMqSetup);

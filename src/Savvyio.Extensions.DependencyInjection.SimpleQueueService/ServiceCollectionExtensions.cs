@@ -1,4 +1,5 @@
 ﻿using System;
+using Cuemon;
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Commands;
@@ -24,8 +25,12 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
         /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional calls can be chained.</returns>
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddAmazonCommandQueue(this IServiceCollection services, Action<AmazonCommandQueueOptions> awsSetup, Action<ServiceOptions> serviceSetup = null)
         {
+            Validator.ThrowIfNull(services);
             return services
                     .AddMessageQueue<AmazonCommandQueue, ICommand>(serviceSetup ?? (o => o.Lifetime = ServiceLifetime.Singleton))
                     .AddConfiguredOptions(awsSetup);
@@ -39,8 +44,12 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
         /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddAmazonCommandQueue<TMarker>(this IServiceCollection services, Action<AmazonCommandQueueOptions<TMarker>> awsSetup, Action<ServiceOptions> serviceSetup = null)
         {
+            Validator.ThrowIfNull(services);
             return services
                     .AddMessageQueue<AmazonCommandQueue<TMarker>, ICommand>(serviceSetup ?? (o => o.Lifetime = ServiceLifetime.Singleton))
                     .AddConfiguredOptions(awsSetup);
@@ -54,8 +63,12 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
         /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddAmazonEventBus(this IServiceCollection services, Action<AmazonEventBusOptions> awsSetup, Action<ServiceOptions> serviceSetup = null)
         {
+            Validator.ThrowIfNull(services);
             return services
                     .AddMessageBus<AmazonEventBus, IIntegrationEvent>(serviceSetup ?? (o => o.Lifetime = ServiceLifetime.Singleton))
                     .AddConfiguredOptions(awsSetup);
@@ -69,8 +82,12 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
         /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddAmazonEventBus<TMarker>(this IServiceCollection services, Action<AmazonEventBusOptions<TMarker>> awsSetup, Action<ServiceOptions> serviceSetup = null)
         {
+            Validator.ThrowIfNull(services);
             return services
                     .AddMessageBus<AmazonEventBus<TMarker>, IIntegrationEvent>(serviceSetup ?? (o => o.Lifetime = ServiceLifetime.Singleton))
                     .AddConfiguredOptions(awsSetup);
