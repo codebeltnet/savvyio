@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Extend the Savvy I/O support for Microsoft Dependency Injection with support for Newtonsoft JSON implementations.</Description>
+    <PackageTags>newtonsoft json converters converter di depedency-injection</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection\Savvyio.Extensions.DependencyInjection.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.Newtonsoft.Json\Savvyio.Extensions.Newtonsoft.Json.csproj" />
+  </ItemGroup>
+
+</Project>
