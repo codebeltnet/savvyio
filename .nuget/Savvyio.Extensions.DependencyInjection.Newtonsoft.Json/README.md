@@ -1,6 +1,6 @@
-# Savvyio.Extensions.DependencyInjection.EFCore.Domain
+# Savvyio.Extensions.DependencyInjection.NATS
 
-Extend the Savvy I/O support for Microsoft Dependency Injection with [Microsoft Entity Framework Core](https://github.com/dotnet/efcore) implementation - optimized for DDD (Domain Driven Design).
+Extend the Savvy I/O support for Microsoft Dependency Injection with Newtonsoft JSON implementations.
 
 ## About
 
