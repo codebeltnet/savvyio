@@ -1,6 +1,6 @@
 # Savvyio.App
 
-Provides a complete and convenient set of API additions for building a DDD, CQRS and Event Sourcing enabled .NET application using Microsoft Dependency Injection, Microsoft Entity Framework Core and Dapper.
+Provides a complete and convenient set of API additions for building a DDD, CQRS and Event Sourcing enabled .NET application using Microsoft Dependency Injection, Microsoft Entity Framework Core, Dapper, JSON Marshaller, AWS SNS/SQS, Azure Queue Storage/Event Grid, RabbitMQ and NATS.
 
 ## About
 
@@ -30,9 +30,11 @@ It is, by heart, free, flexible and built to extend and boost your agile codebel
 * [Savvyio.Extensions.DependencyInjection.EFCore.Domain](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore.Domain/) 📦
 * [Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing/) 📦
 * [Savvyio.Extensions.DependencyInjection.NATS](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.NATS/) 📦
+* [Savvyio.Extensions.DependencyInjection.Newtonsoft.Json](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.Newtonsoft.Json/) 📦
 * [Savvyio.Extensions.DependencyInjection.QueueStorage](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.QueueStorage/) 📦
 * [Savvyio.Extensions.DependencyInjection.RabbitMQ](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.RabbitMQ/) 📦
 * [Savvyio.Extensions.DependencyInjection.SimpleQueueService](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.SimpleQueueService/) 📦
+* [Savvyio.Extensions.DependencyInjection.Text.Json](https://www.nuget.org/packages/Savvyio.Extensions.DependencyInjection.Text.Json/) 📦
 * [Savvyio.Extensions.Dispatchers](https://www.nuget.org/packages/Savvyio.Extensions.Dispatchers/) 📦
 * [Savvyio.Extensions.EFCore](https://www.nuget.org/packages/Savvyio.Extensions.EFCore/) 📦
 * [Savvyio.Extensions.EFCore.Domain](https://www.nuget.org/packages/Savvyio.Extensions.EFCore.Domain/) 📦

@@ -27,6 +27,9 @@ namespace Savvyio.Extensions.DependencyInjection.Domain
         /// <seealso cref="IAggregateRepository{TEntity,TKey,TMarker}"/>
         /// <seealso cref="IPersistentRepository{TEntity,TKey}"/>
         /// <seealso cref="IPersistentRepository{TEntity,TKey,TMarker}"/>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddAggregateRepository<TService, TEntity, TKey>(this IServiceCollection services, Action<ServiceOptions> setup = null)
             where TService : class, IAggregateRepository<TEntity, TKey>
             where TEntity : class, IAggregateRoot<IDomainEvent, TKey>

@@ -1,0 +1,6 @@
+Version: 4.3.0
+Availability: .NET 9 and .NET 8
+ 
+# New Features
+- ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Newtonsoft.Json namespace that consist of extension methods for the IServiceCollection interface: AddNewtonsoftJsonMarshaller
+ 

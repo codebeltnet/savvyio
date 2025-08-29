@@ -1,4 +1,5 @@
 ﻿using System;
+using Cuemon;
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Domain.EventSourcing;
@@ -23,8 +24,12 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The <see cref="EfCoreAggregateRepository{TEntity,TKey,TMarker}"/> will be type forwarded accordingly.</remarks>
         /// <seealso cref="EfCoreAggregateRepository{TEntity,TKey}"/>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddEfCoreTracedAggregateRepository<TEntity, TKey>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TEntity : class, ITracedAggregateRoot<TKey>
         {
+            Validator.ThrowIfNull(services);
             return services.AddTracedAggregateRepository<EfCoreTracedAggregateRepository<TEntity, TKey>, TEntity, TKey>(setup);
         }
 
@@ -39,8 +44,12 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The <see cref="EfCoreAggregateRepository{TEntity,TKey,TMarker}"/> will be type forwarded accordingly.</remarks>
         /// <seealso cref="EfCoreAggregateRepository{TEntity,TKey,TMarker}"/>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddEfCoreTracedAggregateRepository<TEntity, TKey, TMarker>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TEntity : class, ITracedAggregateRoot<TKey>
         {
+            Validator.ThrowIfNull(services);
             return services.AddTracedAggregateRepository<EfCoreTracedAggregateRepository<TEntity, TKey, TMarker>, TEntity, TKey>(setup);
         }
     }

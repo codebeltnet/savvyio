@@ -27,6 +27,7 @@
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.QueueStorage\Savvyio.Extensions.DependencyInjection.QueueStorage.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.RabbitMQ\Savvyio.Extensions.DependencyInjection.RabbitMQ.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.SimpleQueueService\Savvyio.Extensions.DependencyInjection.SimpleQueueService.csproj" />
+    <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection.Text.Json\Savvyio.Extensions.DependencyInjection.Text.Json.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.DependencyInjection\Savvyio.Extensions.DependencyInjection.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.Dispatchers\Savvyio.Extensions.Dispatchers.csproj" />
     <ProjectReference Include="..\Savvyio.Extensions.EFCore.Domain.EventSourcing\Savvyio.Extensions.EFCore.Domain.EventSourcing.csproj" />

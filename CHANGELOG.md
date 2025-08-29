@@ -4,11 +4,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [4.3.0] - 2025-08-30
+
+This is a feature release that extends the two projects, `Savvyio.Extensions.Newtonsoft.Json` and `Savvyio.Extensions.Text.Json` with support for Microsoft Dependency Injection.
+
+Also includes a service update that focuses on bumping package dependencies.
+
+### Added
+
+#### Savvyio.Extensions.DependencyInjection.Newtonsoft.Json
+
+- ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Newtonsoft.Json namespace that consist of extension methods for the IServiceCollection interface: AddNewtonsoftJsonMarshaller
+
+#### Savvyio.Extensions.DependencyInjection.Text.Json
+
+- ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Text.Json namespace that consist of extension methods for the IServiceCollection interface: AddJsonMarshaller
+
 ## [4.2.0] - 2025-08-26
 
 This is a feature release that offers support for NATS as a message broker in the context of NATS Work-Queue Stream (Command) and NATS Core Publish-Subscribe (Integration Event).
 
-Also includes a service update that primarily focuses on bumping package dependencies.
+Also includes a service update that focuses on bumping package dependencies.
 
 ### Added
 

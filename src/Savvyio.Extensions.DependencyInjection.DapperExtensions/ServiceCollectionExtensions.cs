@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Cuemon;
+using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Extensions.DapperExtensions;
 using Savvyio.Extensions.DependencyInjection.Data;
 
@@ -15,8 +17,12 @@ namespace Savvyio.Extensions.DependencyInjection.DapperExtensions
         /// <typeparam name="T">The type of the DTO to use.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddDapperExtensionsDataStore<T>(this IServiceCollection services) where T : class
         {
+            Validator.ThrowIfNull(services);
             return services.AddDataStore<DapperExtensionsDataStore<T>, T, DapperExtensionsQueryOptions<T>>();
         }
 
@@ -27,8 +33,12 @@ namespace Savvyio.Extensions.DependencyInjection.DapperExtensions
         /// <typeparam name="TMarker">The type used to mark the implementation that this data access object represents. Optimized for DapperExtensions.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddDapperExtensionsDataStore<T, TMarker>(this IServiceCollection services) where T : class
         {
+            Validator.ThrowIfNull(services);
             return services.AddDataStore<DapperExtensionsDataStore<T, TMarker>, T, DapperExtensionsQueryOptions<T>>();
         }
     }

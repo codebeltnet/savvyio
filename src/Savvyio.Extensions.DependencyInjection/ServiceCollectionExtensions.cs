@@ -24,10 +24,16 @@ namespace Savvyio.Extensions.DependencyInjection
         /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
         /// <param name="setup">The <typeparamref name="TOptions"/> which need to be configured by the <paramref name="setup"/> delegate.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null -or-
+        /// <paramref name="setup"/> cannot be null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="setup"/> are not in a valid state.
+        /// </exception>
         public static IServiceCollection AddConfiguredOptions<TOptions>(this IServiceCollection services, Action<TOptions> setup) where TOptions : class, IParameterObject, new()
         {
             Validator.ThrowIfNull(services);
-            Validator.ThrowIfNull(setup);
             Validator.ThrowIfInvalidConfigurator(setup, out var options);
             return services
                 .Configure(setup) // support for IOptions<TOptions>
@@ -42,6 +48,9 @@ namespace Savvyio.Extensions.DependencyInjection
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <param name="setup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddMarshaller<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IMarshaller
         {
             Validator.ThrowIfNull(services);
@@ -61,6 +70,10 @@ namespace Savvyio.Extensions.DependencyInjection
         /// <param name="implementationFactory">The function delegate that creates the service.</param>
         /// <param name="setup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null -or-
+        /// <paramref name="implementationFactory"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddMarshaller<TService>(this IServiceCollection services, Func<IServiceProvider, TService> implementationFactory, Action<ServiceOptions> setup = null) where TService : class, IMarshaller
         {
             Validator.ThrowIfNull(services);
@@ -84,6 +97,9 @@ namespace Savvyio.Extensions.DependencyInjection
         /// <seealso cref="IDependencyInjectionMarker{TMarker}"/>
         /// <seealso cref="IDataSource"/>
         /// <seealso cref="IDataSource{TMarker}"/>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddDataSource<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IDataSource
         {
             Validator.ThrowIfNull(services);
@@ -101,8 +117,12 @@ namespace Savvyio.Extensions.DependencyInjection
         /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
         /// <param name="setup">The <see cref="ServiceLocatorOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddServiceLocator(this IServiceCollection services, Action<ServiceLocatorOptions> setup = null)
         {
+            Validator.ThrowIfNull(services);
             var options = setup.Configure();
             services.TryAdd(typeof(IServiceLocator), options.ImplementationFactory, options.Lifetime);
             return services;
@@ -113,8 +133,12 @@ namespace Savvyio.Extensions.DependencyInjection
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddHandlerServicesDescriptor(this IServiceCollection services)
         {
+            Validator.ThrowIfNull(services);
             if (services.Any(sd => sd.ServiceType == typeof(HandlerServicesDescriptor)))
             {
                 services.AddSingleton<IHandlerServicesDescriptor>(provider => provider.GetRequiredService<HandlerServicesDescriptor>());
@@ -128,8 +152,12 @@ namespace Savvyio.Extensions.DependencyInjection
         /// <param name="services">The <see cref="IServiceCollection"/> to extend.</param>
         /// <param name="setup">The <see cref="SavvyioDependencyInjectionOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services"/> so that additional calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddSavvyIO(this IServiceCollection services, Action<SavvyioDependencyInjectionOptions> setup = null)
         {
+            Validator.ThrowIfNull(services);
             var options = setup.Configure();
 
             if (options.AssembliesToScan != null)

@@ -1,4 +1,5 @@
 ﻿using System;
+using Cuemon;
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Extensions.Dapper;
@@ -19,8 +20,12 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddDapperDataSource(this IServiceCollection services, Action<DapperDataSourceOptions> dataSourceSetup, Action<ServiceOptions> serviceSetup = null)
         {
+            Validator.ThrowIfNull(services);
             return services
                 .AddDapperDataSource<DapperDataSource>(serviceSetup)
                 .AddConfiguredOptions(dataSourceSetup);
@@ -34,8 +39,12 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The implementation will be type forwarded accordingly.</remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddDapperDataSource<TMarker>(this IServiceCollection services, Action<DapperDataSourceOptions<TMarker>> dataSourceSetup, Action<ServiceOptions> serviceSetup = null)
         {
+            Validator.ThrowIfNull(services);
             return services
                 .AddDapperDataSource<DapperDataSource<TMarker>>(serviceSetup)
                 .AddConfiguredOptions(dataSourceSetup);
@@ -52,8 +61,12 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         /// <seealso cref="IDependencyInjectionMarker{TMarker}"/>
         /// <seealso cref="IDapperDataSource"/>
         /// <seealso cref="IDapperDataSource{TMarker}"/>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddDapperDataSource<TService>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TService : class, IDapperDataSource
         {
+            Validator.ThrowIfNull(services);
             return services.AddDataSource<TService>(setup);
         }
 
@@ -64,10 +77,14 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
         /// <typeparam name="T">The type of the DTO to use.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection" /> to add the service to.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddDapperDataStore<TService, T>(this IServiceCollection services)
             where TService : DapperDataStore<T, DapperQueryOptions>
             where T : class
         {
+            Validator.ThrowIfNull(services);
             return services.AddDataStore<TService, T, DapperQueryOptions>();
         }
     }

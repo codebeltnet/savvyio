@@ -1,4 +1,5 @@
 ﻿using System;
+using Cuemon;
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Domain;
@@ -21,8 +22,12 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain
         /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The <see cref="EfCoreAggregateDataSource"/> will be type forwarded accordingly.</remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddEfCoreAggregateDataSource(this IServiceCollection services, Action<EfCoreDataSourceOptions> dataSourceSetup, Action<ServiceOptions> serviceSetup = null)
         {
+            Validator.ThrowIfNull(services);
             return services.AddDataSource<EfCoreAggregateDataSource>(serviceSetup)
                 .AddUnitOfWork<EfCoreAggregateDataSource>(serviceSetup)
                 .AddConfiguredOptions(dataSourceSetup);
@@ -36,8 +41,12 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain
         /// <param name="serviceSetup">The <see cref="ServiceOptions" /> which may be configured.</param>
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The <see cref="EfCoreAggregateDataSource{TMarker}"/> will be type forwarded accordingly.</remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddEfCoreAggregateDataSource<TMarker>(this IServiceCollection services, Action<EfCoreDataSourceOptions<TMarker>> dataSourceSetup, Action<ServiceOptions> serviceSetup = null)
         {
+            Validator.ThrowIfNull(services);
             return services.AddDataSource<EfCoreAggregateDataSource<TMarker>>(serviceSetup)
                 .AddUnitOfWork<EfCoreAggregateDataSource<TMarker>>(serviceSetup)
                 .AddConfiguredOptions(dataSourceSetup);
@@ -53,8 +62,12 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The <see cref="EfCoreAggregateRepository{TEntity,TKey,TMarker}"/> will be type forwarded accordingly.</remarks>
         /// <seealso cref="EfCoreAggregateRepository{TEntity,TKey}"/>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddEfCoreAggregateRepository<TEntity, TKey>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TEntity : class, IAggregateRoot<IDomainEvent, TKey>
         {
+            Validator.ThrowIfNull(services);
             return services.AddAggregateRepository<EfCoreAggregateRepository<TEntity, TKey>, TEntity, TKey>(setup);
         }
 
@@ -69,8 +82,12 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain
         /// <returns>A reference to <paramref name="services" /> so that additional calls can be chained.</returns>
         /// <remarks>The <see cref="EfCoreAggregateRepository{TEntity,TKey,TMarker}"/> will be type forwarded accordingly.</remarks>
         /// <seealso cref="EfCoreAggregateRepository{TEntity,TKey,TMarker}"/>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="services"/> cannot be null.
+        /// </exception>
         public static IServiceCollection AddEfCoreAggregateRepository<TEntity, TKey, TMarker>(this IServiceCollection services, Action<ServiceOptions> setup = null) where TEntity : class, IAggregateRoot<IDomainEvent, TKey>
         {
+            Validator.ThrowIfNull(services);
             return services.AddAggregateRepository<EfCoreAggregateRepository<TEntity, TKey, TMarker>, TEntity, TKey>(setup);
         }
     }
