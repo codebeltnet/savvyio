@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Moq" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\Savvyio.Extensions.QueueStorage\Savvyio.Extensions.QueueStorage.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.Text.Json\Savvyio.Extensions.Text.Json.csproj" />
   </ItemGroup>

@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Moq" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\Savvyio.Commands.Messaging\Savvyio.Commands.Messaging.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.EventDriven.Messaging\Savvyio.EventDriven.Messaging.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.SimpleQueueService\Savvyio.Extensions.DependencyInjection.SimpleQueueService.csproj" />
