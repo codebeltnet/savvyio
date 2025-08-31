@@ -11,6 +11,7 @@ using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Reflection;
 using Cuemon.Threading;
 using Savvyio.Commands;
+using Savvyio.Diagnostics;
 using Savvyio.Messaging;
 
 namespace Savvyio.Extensions.SimpleQueueService.Commands
@@ -19,7 +20,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
     /// Provides a default implementation of the <see cref="AmazonQueue{TRequest}"/> class tailored for messages holding an <see cref="ICommand"/> implementation.
     /// </summary>
     /// <seealso cref="AmazonQueue{TRequest}" />
-    public class AmazonCommandQueue : AmazonQueue<ICommand>
+    public class AmazonCommandQueue : AmazonQueue<ICommand>, IHealthCheckProvider<IAmazonSQS>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonCommandQueue"/> class.
@@ -93,6 +94,18 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
         {
             var options = setup.Configure();
             return RetrieveMessagesAsync(options.CancellationToken);
+        }
+
+        /// <summary>
+        /// Returns a new <see cref="IAmazonSQS"/> client instance configured for health probing of the underlying Amazon SQS service.
+        /// </summary>
+        /// <returns>An <see cref="IAmazonSQS"/> client instance used to probe the health status of the queue service.</returns>
+        public IAmazonSQS GetHealthCheckTarget()
+        {
+            var sqs = Options.ClientConfigurations.IsValid()
+                ? new AmazonSQSClient(Options.Credentials, Options.ClientConfigurations.SimpleQueueService())
+                : new AmazonSQSClient(Options.Credentials, Options.Endpoint);
+            return sqs;
         }
     }
 }

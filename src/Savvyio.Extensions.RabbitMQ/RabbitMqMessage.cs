@@ -4,13 +4,14 @@ using Cuemon.Extensions;
 using RabbitMQ.Client;
 using System.Threading;
 using System.Threading.Tasks;
+using Savvyio.Diagnostics;
 
 namespace Savvyio.Extensions.RabbitMQ
 {
     /// <summary>
     /// Provides a base class for RabbitMQ message operations, including connection and channel management, marshalling, and resource disposal. Ensures thread-safe initialization of RabbitMQ connectivity.
     /// </summary>
-    public abstract class RabbitMqMessage : AsyncDisposable
+    public abstract class RabbitMqMessage : AsyncDisposable, IAsyncHealthCheckProvider<IConnection>
     {
         /// <summary>
         /// The header key used to indicate the message type in RabbitMQ properties.
@@ -46,7 +47,7 @@ namespace Savvyio.Extensions.RabbitMQ
         /// <summary>
         /// Gets the RabbitMQ connection factory used to create connections to the broker.
         /// </summary>
-        protected ConnectionFactory RabbitMqFactory { get; }
+        protected IConnectionFactory RabbitMqFactory { get; private set; }
 
         /// <summary>
         /// Ensures that a connection and channel to the RabbitMQ broker are established and initialized.
@@ -107,6 +108,16 @@ namespace Savvyio.Extensions.RabbitMQ
         {
             if (RabbitMqChannel != null) { await RabbitMqChannel.DisposeAsync().ConfigureAwait(false); }
             if (RabbitMqConnection != null) { await RabbitMqConnection.DisposeAsync().ConfigureAwait(false); }
+        }
+
+        /// <summary>
+        /// Asynchronously an <see cref="IConnection"/> instance used for probing the health status of the RabbitMQ broker.
+        /// </summary>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> that can be used to cancel the asynchronous operation.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the <see cref="IConnection"/> instance representing the active connection to the RabbitMQ broker, or a newly created connection if not already initialized.</returns>
+        public async Task<IConnection> GetHealthCheckTargetAsync(CancellationToken cancellationToken = default)
+        {
+            return RabbitMqConnection ?? await RabbitMqFactory.CreateConnectionAsync(cancellationToken).ConfigureAwait(false);
         }
     }
 }

@@ -3,13 +3,15 @@ using Cuemon.Extensions;
 using NATS.Net;
 using System.Threading.Tasks;
 using Cuemon;
+using NATS.Client.Core;
+using Savvyio.Diagnostics;
 
 namespace Savvyio.Extensions.NATS
 {
     /// <summary>
     /// Provides a base class for NATS message operations, supporting asynchronous disposal and message serialization.
     /// </summary>
-    public abstract class NatsMessage : AsyncDisposable
+    public abstract class NatsMessage : AsyncDisposable, IHealthCheckProvider<INatsConnection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NatsMessage"/> class with the specified marshaller and options.
@@ -49,6 +51,14 @@ namespace Savvyio.Extensions.NATS
         protected override async ValueTask OnDisposeManagedResourcesAsync()
         {
             if (NatsClient != null) { await NatsClient.DisposeAsync().ConfigureAwait(false); }
+        }
+        /// <summary>
+        /// Gets the <see cref="INatsConnection"/> instance used for probing the health status of the NATS server.
+        /// </summary>
+        /// <returns><see cref="INatsConnection"/> instance representing the active connection to the NATS server.</returns>
+        public INatsConnection GetHealthCheckTarget()
+        {
+            return NatsClient.Connection;
         }
     }
 }

@@ -9,6 +9,7 @@ using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Reflection;
 using Cuemon.Threading;
+using Savvyio.Diagnostics;
 using Savvyio.EventDriven;
 using Savvyio.Messaging;
 
@@ -18,7 +19,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
     /// Provides a default implementation of the <see cref="AmazonBus{TRequest}"/> class tailored for messages holding an <see cref="IIntegrationEvent"/> implementation.
     /// </summary>
     /// <seealso cref="AmazonBus{TRequest}" />
-    public class AmazonEventBus : AmazonBus<IIntegrationEvent>
+    public class AmazonEventBus : AmazonBus<IIntegrationEvent>, IHealthCheckProvider<IAmazonSimpleNotificationService>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonEventBus"/> class.
@@ -102,6 +103,18 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
                     await asyncHandler.Invoke(message, cancellationToken).ConfigureAwait(false);
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns a new <see cref="IAmazonSimpleNotificationService"/> client instance configured for health probing of the underlying Amazon SNS service.
+        /// </summary>
+        /// <returns>An <see cref="IAmazonSimpleNotificationService"/> client instance used to probe the health status of the notification service.</returns>
+        public IAmazonSimpleNotificationService GetHealthCheckTarget()
+        {
+            var sns = Options.ClientConfigurations.IsValid()
+                ? new AmazonSimpleNotificationServiceClient(Options.Credentials, Options.ClientConfigurations.SimpleNotificationService())
+                : new AmazonSimpleNotificationServiceClient(Options.Credentials, Options.Endpoint);
+            return sns;
         }
     }
 }

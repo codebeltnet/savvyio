@@ -21,6 +21,7 @@ namespace Savvyio.Extensions.QueueStorage
     {
         private readonly IMarshaller _marshaller;
         private readonly AzureQueueOptions _options;
+        private readonly QueueServiceClient _serviceClient;
         private readonly QueueClient _client;
 
         private readonly Func<IMessage<TRequest>, IMarshaller, string> _sendMessageFormatter = (message, marshaller) =>
@@ -109,21 +110,23 @@ namespace Savvyio.Extensions.QueueStorage
                 var queueUri = $"https://{options.StorageAccountName}.queue.core.windows.net/{options.QueueName}".ToUri();
                 if (options.Credential != null)
                 {
-                    _client = new QueueClient(queueUri, options.Credential, options.Settings);
+                    _serviceClient = new QueueServiceClient(queueUri, options.Credential, options.Settings);
                 }
                 else if (options.SasCredential != null)
                 {
-                    _client = new QueueClient(queueUri, options.SasCredential, options.Settings);
+                    _serviceClient = new QueueServiceClient(queueUri, options.SasCredential, options.Settings);
                 }
                 else if (options.StorageKeyCredential != null)
                 {
-                    _client = new QueueClient(queueUri, options.StorageKeyCredential, options.Settings);
+                    _serviceClient = new QueueServiceClient(queueUri, options.StorageKeyCredential, options.Settings);
                 }
             }
             else
             {
-                _client = new QueueClient(options.ConnectionString, options.QueueName, options.Settings);
+                _serviceClient = new QueueServiceClient(options.ConnectionString, options.Settings);
             }
+
+            _client = _serviceClient!.GetQueueClient(options.QueueName);
 
             options.SetConfiguredClient(_client);
         }
@@ -194,6 +197,11 @@ namespace Savvyio.Extensions.QueueStorage
             await _client.DeleteMessageAsync(messageId, popReceipt, cancellationToken).ConfigureAwait(false);
 
             if (sender is IAcknowledgeable message) { message.Acknowledged -= OnAcknowledgedAsync; }
+        }
+
+        internal QueueServiceClient GetQueueServiceClient()
+        {
+            return _serviceClient;
         }
     }
 }
