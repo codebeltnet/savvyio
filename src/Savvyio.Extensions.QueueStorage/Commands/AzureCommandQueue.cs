@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using Azure.Storage.Queues;
 using Cuemon.Threading;
 using Savvyio.Commands;
+using Savvyio.Diagnostics;
 using Savvyio.Messaging;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Savvyio.Extensions.QueueStorage.Commands
 {
     /// <summary>
     /// Provides an Azure Storage Queue implementation of the <see cref="IPointToPointChannel{TRequest}"/>.
     /// </summary>
-    public class AzureCommandQueue : AzureQueue<ICommand>, IPointToPointChannel<ICommand>
+    public class AzureCommandQueue : AzureQueue<ICommand>, IPointToPointChannel<ICommand>, IHealthCheckProvider<QueueServiceClient>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureCommandQueue"/> class.
@@ -50,6 +52,15 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         public IAsyncEnumerable<IMessage<ICommand>> ReceiveAsync(Action<AsyncOptions> setup = null)
         {
             return ReceiveMessagesAsync(setup);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="QueueServiceClient"/> instance used for probing the health status of the Azure Storage Queue service.
+        /// </summary>
+        /// <returns>The <see cref="QueueServiceClient"/> instance representing the client connection to the Azure Storage Queue service.</returns>
+        public QueueServiceClient GetHealthCheckTarget()
+        {
+            return GetQueueServiceClient(); // fetch from base class
         }
     }
 }

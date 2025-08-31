@@ -8,6 +8,7 @@ using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Reflection;
 using Cuemon.Threading;
+using Savvyio.Diagnostics;
 using Savvyio.EventDriven;
 using Savvyio.EventDriven.Messaging.CloudEvents;
 using Savvyio.Messaging;
@@ -18,10 +19,11 @@ namespace Savvyio.Extensions.QueueStorage.EventDriven
     /// <summary>
     /// Provides a combined Azure Event Grid/Azure Storage Queue implementation of the <see cref="IPublishSubscribeChannel{TRequest}"/>.
     /// </summary>
-    public class AzureEventBus : AzureQueue<IIntegrationEvent>, IPublishSubscribeChannel<IIntegrationEvent>
+    public class AzureEventBus : AzureQueue<IIntegrationEvent>, IPublishSubscribeChannel<IIntegrationEvent>, IHealthCheckProvider<Uri>
     {
         private readonly EventGridPublisherClient _client;
         private readonly IMarshaller _marshaller;
+        private readonly AzureEventBusOptions _options;
 
         /// <summary>
         /// The attribute name for the CloudEvent type extension.
@@ -42,6 +44,8 @@ namespace Savvyio.Extensions.QueueStorage.EventDriven
             return serializer.Deserialize(jsonStream, Type.GetType(type)!) as IMessage<IIntegrationEvent>;
         })
         {
+            Validator.ThrowIfInvalidOptions(azureEventBusOptions);
+
             _marshaller = marshaller;
 
             if (azureEventBusOptions.Credential != null)
@@ -56,6 +60,8 @@ namespace Savvyio.Extensions.QueueStorage.EventDriven
             {
                 _client = new EventGridPublisherClient(azureEventBusOptions.TopicEndpoint, azureEventBusOptions.KeyCredential, azureEventBusOptions.Settings);
             }
+
+            _options = azureEventBusOptions;
         }
 
         /// <summary>
@@ -121,6 +127,15 @@ namespace Savvyio.Extensions.QueueStorage.EventDriven
                     await asyncHandler.Invoke(message, cancellationToken).ConfigureAwait(false);
                 }
             }
+        }
+        
+        /// <summary>
+        /// Gets the <see cref="Uri"/> representing the health check endpoint for the configured Azure Event Grid topic.
+        /// </summary>
+        /// <returns>A <see cref="Uri"/> instance pointing to the health check endpoint of the Azure Event Grid topic.</returns>
+        public Uri GetHealthCheckTarget()
+        {
+            return new Uri(_options.TopicEndpoint, "/api/health");
         }
     }
 }
