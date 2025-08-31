@@ -108,6 +108,13 @@ namespace Savvyio.Commands
 - Do not rely on external systems except for xUnit itself and Codebelt.Extensions.Xunit (and derived from this).
 - Ensure tests are deterministic and repeatable.
 
+## 8. Test Doubles
+
+- Preferred test doubles include dummies, fakes, stubs and spies if and when the design allows it.
+- Under special circumstances, mock can be used (using Moq library).
+- Before overriding methods, verify that the method is virtual or abstract; this rule also applies to mocks.
+- Never mock IMarshaller; always use a new instance of JsonMarshaller.
+
 ---
 
 For further examples, refer to existing test files such as  
