@@ -4,6 +4,37 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [4.4.0] - 2025-08-31
+
+This is a feature release that introduces a generic way to complement [health monitoring](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/monitor-app-health) by implementing either IHealthCheckProvider{T} or IAsyncHealthCheckProvider{T} on components that is suitable for health checks.
+
+### Added
+
+#### Savvyio.Core
+
+- IAsyncHealthCheckProvider interface in the Savvyio.Diagnostics namespace that defines a contract for asynchronously providing an underlying target that can be probed to assess health status
+- IHealthCheckProvider interface in the Savvyio.Diagnostics namespace that defines a contract for providing an underlying target that can be probed to assess health status
+
+### Changed
+
+#### Savvyio.Extensions.NATS
+
+- NatsMessage class in the Savvyio.Extensions.NATS namespace now implements the IHealthCheckProvider{INatsConnection} interface
+
+#### Savvyio.Extensions.QueueStorage
+
+- AzureCommandQueue class in the Savvyio.Extensions.QueueStorage.Commands namespace now implements the IHealthCheckProvider{QueueServiceClient} interface
+- AzureEventBus class in the Savvyio.Extensions.QueueStorage.EventDriven namespace now implements the IHealthCheckProvider{Uri} interface
+
+#### Savvyio.Extensions.RabbitMQ
+
+- RabbitMqMessage class in the Savvyio.Extensions.RabbitMQ namespace now implements the IAsyncHealthCheckProvider{IConnection} interface
+
+#### Savvyio.Extensions.SimpleQueueService
+
+- AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace now implements the IHealthCheckProvider{IAmazonSQS} interface
+- AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace now implements the IHealthCheckProvider{IAmazonSimpleNotificationService} interface
+
 ## [4.3.0] - 2025-08-30
 
 This is a feature release that extends the two projects, `Savvyio.Extensions.Newtonsoft.Json` and `Savvyio.Extensions.Text.Json` with support for Microsoft Dependency Injection.
