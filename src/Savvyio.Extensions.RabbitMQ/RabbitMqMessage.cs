@@ -111,7 +111,7 @@ namespace Savvyio.Extensions.RabbitMQ
         }
 
         /// <summary>
-        /// Asynchronously an <see cref="IConnection"/> instance used for probing the health status of the RabbitMQ broker.
+        /// Asynchronously returns an <see cref="IConnection"/> instance used for probing the health status of the RabbitMQ broker.
         /// </summary>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> that can be used to cancel the asynchronous operation.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the <see cref="IConnection"/> instance representing the active connection to the RabbitMQ broker, or a newly created connection if not already initialized.</returns>
