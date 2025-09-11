@@ -70,6 +70,18 @@ namespace Savvyio.Extensions.NATS.Commands
         }
 
         [Fact]
+        public void Heartbeat_Can_Be_Overridden_After_Expires()
+        {
+            var options = new NatsCommandQueueOptions();
+
+            options.Expires = TimeSpan.FromSeconds(60);
+            Assert.Equal(TimeSpan.FromSeconds(5), options.Heartbeat);
+
+            options.Heartbeat = TimeSpan.FromSeconds(15);
+            Assert.Equal(TimeSpan.FromSeconds(15), options.Heartbeat);
+        }
+
+        [Fact]
         public void StreamName_And_ConsumerName_Can_Be_Set_And_Gotten()
         {
             var options = new NatsCommandQueueOptions
