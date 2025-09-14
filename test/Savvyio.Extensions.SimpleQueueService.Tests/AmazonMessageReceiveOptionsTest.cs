@@ -45,5 +45,17 @@ namespace Savvyio.Extensions.SimpleQueueService
             sut.PollingTimeout = TimeSpan.MaxValue;
             Assert.Equal(TimeSpan.FromSeconds(AmazonMessageOptions.MaxPollingWaitTimeInSeconds), sut.PollingTimeout);
         }
+
+        [Fact]
+        public void VisibilityTimeout_ShouldClampValue_WhenOutsideRangeOfAllowedLimits()
+        {
+            var sut = new AmazonMessageReceiveOptions();
+
+            sut.VisibilityTimeout = TimeSpan.MinValue;
+            Assert.Equal(TimeSpan.Zero, sut.VisibilityTimeout);
+
+            sut.VisibilityTimeout = TimeSpan.FromSeconds(AmazonMessageOptions.MaxVisibilityTimeoutInSeconds + 1);
+            Assert.Equal(TimeSpan.FromSeconds(AmazonMessageOptions.MaxVisibilityTimeoutInSeconds), sut.VisibilityTimeout);
+        }
     }
 }

@@ -102,6 +102,33 @@ namespace Savvyio.Extensions.RabbitMQ
         }
 
         [Fact]
+        public async Task EnsureConnectivityAsync_IsThreadSafe_WhenCalledConcurrently()
+        {
+            var marshaller = new Mock<IMarshaller>().Object;
+            var options = new RabbitMqMessageOptions { AmqpUrl = new Uri("amqp://localhost:5672") };
+
+            var connectionMock = new Mock<IConnection>();
+            var channelMock = new Mock<IChannel>();
+            connectionMock.Setup(c => c.CreateChannelAsync(It.IsAny<CreateChannelOptions?>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(channelMock.Object);
+
+            var factoryMock = new Mock<IConnectionFactory>();
+            factoryMock.Setup(f => f.CreateConnectionAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(connectionMock.Object);
+
+            var sut = new TestRabbitMqMessage(marshaller, options);
+            typeof(RabbitMqMessage)
+                .GetProperty("RabbitMqFactory", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                .SetValue(sut, factoryMock.Object);
+
+            await Task.WhenAll(
+                sut.CallEnsureConnectivityAsync(),
+                sut.CallEnsureConnectivityAsync());
+
+            factoryMock.Verify(f => f.CreateConnectionAsync(It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
         public async Task OnDisposeManagedResourcesAsync_DisposesChannelAndConnection()
         {
             var marshaller = new Mock<IMarshaller>().Object;
