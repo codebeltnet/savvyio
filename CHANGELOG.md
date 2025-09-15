@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [4.4.1] - 2025-09-16
+
+This is a service update that focuses on package dependencies.
+
 ## [4.4.0] - 2025-08-31
 
 This is a feature release that introduces a generic way to complement [health monitoring](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/monitor-app-health) by implementing either IHealthCheckProvider{T} or IAsyncHealthCheckProvider{T} on components that is suitable for health checks.
