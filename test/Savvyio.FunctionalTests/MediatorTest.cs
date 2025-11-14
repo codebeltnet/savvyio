@@ -25,13 +25,12 @@ using Savvyio.Extensions.DependencyInjection.EFCore.Domain;
 using Savvyio.Extensions.Newtonsoft.Json;
 using Savvyio.Extensions.Text.Json;
 using Xunit;
-using Xunit.Abstractions;
-using Xunit.Priority;
+using Xunit.v3.Priority;
 using YamlDotNet.Serialization.NamingConventions;
 
 namespace Savvyio
 {
-    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
+    [TestCaseOrderer(typeof(PriorityOrderer))]
     public class MediatorTest : HostTest<ManagedHostFixture>
     {
         private IServiceProvider _provider;

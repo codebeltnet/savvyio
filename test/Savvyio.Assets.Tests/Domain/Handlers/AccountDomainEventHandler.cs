@@ -8,7 +8,7 @@ using Savvyio.Data;
 using Savvyio.Domain;
 using Savvyio.Extensions.Dapper;
 using Savvyio.Handlers;
-using Xunit.Abstractions;
+using Xunit;
 
 namespace Savvyio.Assets.Domain.Handlers
 {

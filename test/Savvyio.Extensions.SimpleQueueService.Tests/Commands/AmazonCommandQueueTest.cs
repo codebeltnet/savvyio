@@ -14,7 +14,6 @@ using Savvyio.Extensions.SimpleQueueService.Commands;
 using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.SimpleQueueService.Commands
 {

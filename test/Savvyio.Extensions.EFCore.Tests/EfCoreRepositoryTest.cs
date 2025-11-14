@@ -7,7 +7,6 @@ using Savvyio.Assets;
 using Savvyio.Assets.Domain;
 using Savvyio.Extensions.DependencyInjection.EFCore;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.EFCore
 {

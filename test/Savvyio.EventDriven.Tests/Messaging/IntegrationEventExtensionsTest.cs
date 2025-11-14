@@ -3,7 +3,6 @@ using Cuemon.Extensions.Reflection;
 using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.EventDriven;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.EventDriven.Messaging
 {

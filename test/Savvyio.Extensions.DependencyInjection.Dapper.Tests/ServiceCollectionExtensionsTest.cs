@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Assets;
 using Savvyio.Extensions.Dapper;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.DependencyInjection.Dapper
 {

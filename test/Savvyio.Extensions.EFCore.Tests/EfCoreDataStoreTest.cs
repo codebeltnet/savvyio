@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Savvyio.Assets;
 using Savvyio.Assets.Domain;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.EFCore
 {

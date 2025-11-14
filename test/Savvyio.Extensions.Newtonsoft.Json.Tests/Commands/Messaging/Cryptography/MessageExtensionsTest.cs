@@ -8,7 +8,6 @@ using Savvyio.Commands.Messaging;
 using Savvyio.Messaging;
 using Savvyio.Messaging.Cryptography;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.Newtonsoft.Json.Commands.Messaging.Cryptography
 {

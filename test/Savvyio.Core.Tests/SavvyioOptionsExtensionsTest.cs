@@ -9,7 +9,6 @@ using Savvyio.EventDriven;
 using Savvyio.Extensions;
 using Savvyio.Queries;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio
 {

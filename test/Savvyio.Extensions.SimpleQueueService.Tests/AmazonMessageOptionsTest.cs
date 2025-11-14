@@ -7,7 +7,6 @@ using Amazon.SQS;
 using Cuemon;
 using Codebelt.Extensions.Xunit;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.SimpleQueueService
 {

@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Cuemon.Extensions.IO" />
-    <PackageReference Include="Xunit.Priority" />
+    <PackageReference Include="Xunit.v3.Priority" />
   </ItemGroup>
 
   <ItemGroup>

@@ -19,7 +19,6 @@ using System.Threading.Channels;
 using System.Threading.Tasks;
 using Cuemon.Extensions.IO;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.RabbitMQ.EventDriven
 {

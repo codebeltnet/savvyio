@@ -1,12 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <RootNamespace>Savvyio.Extensions.RabbitMQ</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.Linq.Async" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Savvyio.Commands.Messaging\Savvyio.Commands.Messaging.csproj" />

@@ -11,7 +11,6 @@ using Savvyio.Extensions.NATS.EventDriven;
 using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.DependencyInjection.NATS
 {

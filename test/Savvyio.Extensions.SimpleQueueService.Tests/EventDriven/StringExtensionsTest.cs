@@ -1,7 +1,6 @@
 using System;
 using Codebelt.Extensions.Xunit;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.SimpleQueueService.EventDriven
 {

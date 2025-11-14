@@ -22,12 +22,11 @@ using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging;
 using Savvyio.Messaging.Cryptography;
 using Xunit;
-using Xunit.Abstractions;
-using Xunit.Priority;
+using Xunit.v3.Priority;
 
 namespace Savvyio.Extensions.SimpleQueueService.EventDriven
 {
-    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
+    [TestCaseOrderer(typeof(PriorityOrderer))]
     public class AmazonEventBusJsonSerializerContextTest : HostTest<ManagedHostFixture>
     {
         private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);

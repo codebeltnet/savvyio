@@ -16,7 +16,6 @@ using CoreEvent = Savvyio.Extensions.QueueStorage.EventDriven;
 using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging;
 using Xunit;
-using Xunit.Abstractions;
 using Xunit.Sdk;
 
 namespace Savvyio.Extensions.DependencyInjection.QueueStorage

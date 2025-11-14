@@ -5,7 +5,6 @@ using Cuemon;
 using Savvyio.Extensions.QueueStorage.Commands;
 using Savvyio.Extensions.Text.Json;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.QueueStorage
 {

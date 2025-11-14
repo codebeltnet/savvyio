@@ -6,7 +6,6 @@ using Savvyio.Assets;
 using Savvyio.Assets.Domain;
 using Savvyio.Extensions.Dapper.Assets;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.Dapper
 {

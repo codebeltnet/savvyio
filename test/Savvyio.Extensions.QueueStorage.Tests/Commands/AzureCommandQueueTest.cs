@@ -10,7 +10,6 @@ using Savvyio.Commands;
 using Savvyio.Extensions.QueueStorage.Commands;
 using Savvyio.Messaging;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.QueueStorage.Commands
 {

@@ -3,7 +3,6 @@ using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.Queries;
 using Savvyio.Queries.Assets;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Queries
 {

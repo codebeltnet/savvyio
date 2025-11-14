@@ -20,7 +20,6 @@ using Savvyio.Extensions.DependencyInjection.EFCore;
 using Savvyio.Extensions.DependencyInjection.EFCore.Domain;
 using Savvyio.Queries;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.Dispatchers
 {

@@ -12,7 +12,6 @@ using Savvyio.Extensions.DependencyInjection.Data;
 using Savvyio.Extensions.DependencyInjection.Domain;
 using Savvyio.Extensions.DependencyInjection.EFCore;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.EFCore
 {

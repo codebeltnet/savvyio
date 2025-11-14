@@ -3,7 +3,6 @@ using Cuemon.Extensions.IO;
 using Codebelt.Extensions.Newtonsoft.Json.Formatters;
 using Codebelt.Extensions.Xunit;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.Newtonsoft.Json
 {
