@@ -1,9 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Codebelt.Extensions.Xunit;
 using Cuemon;
 using Cuemon.Collections.Generic;
-using Codebelt.Extensions.Xunit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +18,10 @@ using Savvyio.Extensions.EFCore;
 using Savvyio.Extensions.EFCore.Domain.EventSourcing;
 using Savvyio.Extensions.Newtonsoft.Json;
 using Savvyio.Extensions.Text.Json;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Savvyio.Domain.EventSourcing
@@ -76,6 +77,7 @@ namespace Savvyio.Domain.EventSourcing
         {
             string schema = null;
             var sc = new ServiceCollection();
+            var dbName = "Dummy_" + Generate.RandomString(10); // ensure unique in-memory database name per test run due to .NET 10 changes from Microsoft
             sc.AddSavvyIO(o => o.AddDomainEventDispatcher().AddDomainEventHandler<AccountDomainEventHandler>());
 
             switch (formatterType)
@@ -84,7 +86,7 @@ namespace Savvyio.Domain.EventSourcing
                     sc.AddMarshaller<NewtonsoftJsonMarshaller>();
                     sc.AddEfCoreAggregateDataSource<NewtonsoftJsonMarshaller>(o =>
                     {
-                        o.ContextConfigurator = b => b.UseInMemoryDatabase($"Dummy").EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
+                        o.ContextConfigurator = b => b.UseInMemoryDatabase(dbName).EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
                         o.ModelConstructor = mb =>
                         {
                             mb.AddEventSourcing<TracedAccount, Guid>(eo => eo.TableName = $"{nameof(TracedAccount)}_DomainEvents");
@@ -98,7 +100,7 @@ namespace Savvyio.Domain.EventSourcing
                     sc.AddMarshaller<JsonMarshaller>();
                     sc.AddEfCoreAggregateDataSource<JsonMarshaller>(o =>
                     {
-                        o.ContextConfigurator = b => b.UseInMemoryDatabase($"Dummy").EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
+                        o.ContextConfigurator = b => b.UseInMemoryDatabase(dbName).EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
                         o.ModelConstructor = mb =>
                         {
                             mb.AddEventSourcing<TracedAccount, Guid>(eo => eo.TableName = $"{nameof(TracedAccount)}_DomainEvents");
@@ -136,7 +138,6 @@ namespace Savvyio.Domain.EventSourcing
             ta.ChangeEmailAddress("root@gimlichael.dev");
 
             sut4.Add(ta);
-
 
             await ds.SaveChangesAsync(); // should raise domain events
 
