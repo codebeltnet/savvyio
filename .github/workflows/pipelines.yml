@@ -84,6 +84,7 @@ jobs:
       projects: ${{ matrix.project }}
       build-switches: -p:SkipSignAssembly=true
       restore: true
+      build: true # needed for xunitv3
 
   integration_test:
     name: ⚗️ Integration Test - Azure and AWS
@@ -112,7 +113,7 @@ jobs:
           configuration: ${{ matrix.configuration }}
           build-switches: -p:SkipSignAssembly=true
           restore: true
-          build: true
+          build: true # needed for xunitv3
         env:
           AWS__CALLERIDENTITY: ${{ secrets.AWS_CALLER_IDENTITY }}
           AWS__IAM__ACCESSKEY: ${{ secrets.AWS_IAM_ACCESSKEY }}
@@ -153,7 +154,7 @@ jobs:
           projects: test/**/Savvyio.Extensions.RabbitMQ.FunctionalTests.csproj
           build-switches: -p:SkipSignAssembly=true
           restore: true
-          build: true
+          build: true # needed for xunitv3
 
       - name: Stop RabbitMQ
         run: |
@@ -185,7 +186,7 @@ jobs:
           projects: test/**/Savvyio.Extensions.NATS.FunctionalTests.csproj
           build-switches: -p:SkipSignAssembly=true
           restore: true
-          build: true
+          build: true # needed for xunitv3
 
       - name: Stop NATS
         run: |
