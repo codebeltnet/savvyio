@@ -5,7 +5,7 @@
     <PackageTags>messaging signed acknowledgeable asyncenumerable asyncenumerator</PackageTags>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
     <PackageReference Include="System.Linq.Async" />
   </ItemGroup>
 
