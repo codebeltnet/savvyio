@@ -51,7 +51,7 @@ jobs:
     strategy:
       matrix:
         configuration: [Debug, Release]
-    uses: codebeltnet/jobs-dotnet-build/.github/workflows/default.yml@v2
+    uses: codebeltnet/jobs-dotnet-build/.github/workflows/default.yml@v3
     with:
       configuration: ${{ matrix.configuration }}
       strong-name-key-filename: savvyio.snk
@@ -63,7 +63,7 @@ jobs:
     strategy:
       matrix:
         configuration: [Debug, Release]
-    uses: codebeltnet/jobs-dotnet-pack/.github/workflows/default.yml@v2
+    uses: codebeltnet/jobs-dotnet-pack/.github/workflows/default.yml@v3
     with:
       configuration: ${{ matrix.configuration }}
       version: ${{ needs.build.outputs.version }}
@@ -77,7 +77,7 @@ jobs:
         os: [ubuntu-24.04, windows-2022]
         configuration: [Debug, Release]
         project: ${{ fromJson(needs.prepare_test.outputs.json) }}
-    uses: codebeltnet/jobs-dotnet-test/.github/workflows/default.yml@v2
+    uses: codebeltnet/jobs-dotnet-test/.github/workflows/default.yml@v3
     with:
       runs-on: ${{ matrix.os }}
       configuration: ${{ matrix.configuration }}
@@ -100,7 +100,7 @@ jobs:
         uses: codebeltnet/git-checkout@v1
       
       - name: Install .NET
-        uses: codebeltnet/install-dotnet@v2
+        uses: codebeltnet/install-dotnet@v3
 
       - name: Install .NET Tool - Report Generator
         uses: codebeltnet/dotnet-tool-install-reportgenerator@v1
@@ -138,7 +138,7 @@ jobs:
         uses: codebeltnet/git-checkout@v1
 
       - name: Install .NET
-        uses: codebeltnet/install-dotnet@v2
+        uses: codebeltnet/install-dotnet@v3
 
       - name: Install .NET Tool - Report Generator
         uses: codebeltnet/dotnet-tool-install-reportgenerator@v1
@@ -170,7 +170,7 @@ jobs:
         uses: codebeltnet/git-checkout@v1
 
       - name: Install .NET
-        uses: codebeltnet/install-dotnet@v2
+        uses: codebeltnet/install-dotnet@v3
 
       - name: Install .NET Tool - Report Generator
         uses: codebeltnet/dotnet-tool-install-reportgenerator@v1
@@ -195,7 +195,7 @@ jobs:
   sonarcloud:
     name: call-sonarcloud
     needs: [build, test, integration_test, integration_test_rabbitmq, integration_test_nats]
-    uses: codebeltnet/jobs-sonarcloud/.github/workflows/default.yml@v2
+    uses: codebeltnet/jobs-sonarcloud/.github/workflows/default.yml@v3
     with:
       organization: geekle
       projectKey: savvyio
@@ -213,7 +213,7 @@ jobs:
   codeql:
     name: call-codeql
     needs: [build, test, integration_test, integration_test_rabbitmq, integration_test_nats]
-    uses: codebeltnet/jobs-codeql/.github/workflows/default.yml@v2
+    uses: codebeltnet/jobs-codeql/.github/workflows/default.yml@v3
     permissions:
       security-events: write
 
@@ -221,7 +221,7 @@ jobs:
     if: github.event_name != 'pull_request'
     name: call-nuget
     needs: [build, pack, test, integration_test, integration_test_rabbitmq, integration_test_nats, sonarcloud, codecov, codeql]
-    uses: codebeltnet/jobs-nuget-push/.github/workflows/default.yml@v1
+    uses: codebeltnet/jobs-nuget-push/.github/workflows/default.yml@v2
     with:
       version: ${{ needs.build.outputs.version }}
       environment: Production
