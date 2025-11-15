@@ -15,8 +15,6 @@ using Savvyio.Commands.Messaging;
 using Savvyio.Extensions.SimpleQueueService.Assets;
 using Savvyio.Messaging;
 using Xunit;
-using Xunit.Abstractions;
-using Xunit.Priority;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Cuemon.Diagnostics;
@@ -25,10 +23,11 @@ using Savvyio.Extensions.DependencyInjection;
 using Savvyio.Extensions.DependencyInjection.SimpleQueueService;
 using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging.Cryptography;
+using Xunit.v3.Priority;
 
 namespace Savvyio.Extensions.SimpleQueueService.Commands
 {
-    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
+    [TestCaseOrderer(typeof(PriorityOrderer))]
     public class AmazonCommandQueueJsonSerializerContextTest : HostTest<ManagedHostFixture>
     {
         private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);

@@ -6,7 +6,6 @@ using Savvyio.Extensions.DependencyInjection;
 using Savvyio.Handlers;
 using Savvyio.Queries.Assets;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Queries
 {

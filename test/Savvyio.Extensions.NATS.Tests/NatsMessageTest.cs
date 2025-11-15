@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Codebelt.Extensions.Xunit;
 using Xunit;
-using Xunit.Abstractions;
 using Savvyio.Extensions.NATS;
 using NATS.Client.Core;
 using System.Threading;

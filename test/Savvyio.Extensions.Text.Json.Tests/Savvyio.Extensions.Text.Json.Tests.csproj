@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="Cuemon.Extensions.IO" />
-    <PackageReference Include="System.Linq.Async" />
   </ItemGroup>
 
   <ItemGroup>

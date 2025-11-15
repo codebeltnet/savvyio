@@ -9,7 +9,6 @@ using Savvyio.Domain;
 using Savvyio.Extensions.DependencyInjection.Assets;
 using Savvyio.Extensions.DependencyInjection.Domain;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.DependencyInjection.Data
 {

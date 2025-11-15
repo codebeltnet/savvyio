@@ -12,12 +12,11 @@ using Savvyio.Commands;
 using Savvyio.Commands.Messaging;
 using Savvyio.Messaging;
 using Xunit;
-using Xunit.Abstractions;
-using Xunit.Priority;
+using Xunit.v3.Priority;
 
 namespace Savvyio.Extensions.Text.Json.Commands.Messaging
 {
-    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
+    [TestCaseOrderer(typeof(PriorityOrderer))]
     public class InMemoryCommandQueueTest : Test
     {
         private static readonly InMemoryCommandQueue Queue = new();

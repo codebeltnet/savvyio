@@ -1,5 +1,4 @@
 using Xunit;
-using Xunit.Abstractions;
 using Codebelt.Extensions.Xunit;
 
 namespace Savvyio.Extensions.NATS.EventDriven

@@ -2,7 +2,6 @@
 using DapperExtensions.Predicate;
 using Savvyio.Assets.Queries;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.DapperExtensions
 {

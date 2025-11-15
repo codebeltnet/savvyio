@@ -19,7 +19,6 @@ using Savvyio.Messaging.Cryptography;
 using Savvyio.Extensions.QueueStorage.EventDriven;
 using Savvyio.Extensions.Text.Json;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.QueueStorage.EventDriven
 {

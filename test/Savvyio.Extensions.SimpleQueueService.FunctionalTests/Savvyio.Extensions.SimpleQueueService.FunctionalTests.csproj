@@ -5,8 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xunit.Priority" />
-    <PackageReference Include="System.Linq.Async" />
+    <PackageReference Include="Xunit.v3.Priority" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,5 +17,5 @@
     <ProjectReference Include="..\..\src\Savvyio.Extensions.Text.Json\Savvyio.Extensions.Text.Json.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.Newtonsoft.Json\Savvyio.Extensions.Newtonsoft.Json.csproj" />
   </ItemGroup>
-
+  
 </Project>

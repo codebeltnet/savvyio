@@ -8,7 +8,6 @@ using Savvyio.EventDriven.Messaging;
 using Savvyio.EventDriven.Messaging.CloudEvents;
 using Savvyio.EventDriven.Messaging.CloudEvents.Cryptography;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.CloudEvents.Cryptography
 {

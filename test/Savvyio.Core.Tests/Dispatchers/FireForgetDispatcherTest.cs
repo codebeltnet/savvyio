@@ -9,7 +9,6 @@ using Savvyio.Commands;
 using Savvyio.Extensions.DependencyInjection;
 using Savvyio.Handlers;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Dispatchers
 {

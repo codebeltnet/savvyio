@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Codebelt.Extensions.Xunit;
 using Microsoft.Data.Sqlite;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.Dapper
 {

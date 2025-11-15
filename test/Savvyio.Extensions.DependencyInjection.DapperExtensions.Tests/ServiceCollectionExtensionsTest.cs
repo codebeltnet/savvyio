@@ -8,7 +8,6 @@ using Savvyio.Extensions.DapperExtensions;
 using Savvyio.Extensions.DependencyInjection.Dapper;
 using Savvyio.Extensions.DependencyInjection.Data;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.DependencyInjection.DapperExtensions
 {

@@ -13,7 +13,6 @@ using Savvyio.Extensions.RabbitMQ.EventDriven;
 using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging;
 using Xunit;
-using Xunit.Abstractions;
 using Xunit.Sdk;
 
 namespace Savvyio.Extensions.DependencyInjection.RabbitMQ

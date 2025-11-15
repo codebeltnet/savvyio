@@ -7,7 +7,6 @@ using Savvyio.EventDriven;
 using Savvyio.Extensions.DependencyInjection.Assets;
 using Savvyio.Queries;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.DependencyInjection
 {

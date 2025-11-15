@@ -5,7 +5,6 @@ using Cuemon.Extensions;
 using Codebelt.Extensions.Xunit;
 using Dapper;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.Dapper
 {

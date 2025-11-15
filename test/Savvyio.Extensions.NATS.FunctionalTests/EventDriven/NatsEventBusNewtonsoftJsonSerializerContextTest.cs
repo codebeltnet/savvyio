@@ -19,7 +19,6 @@ using Savvyio.Extensions.Newtonsoft.Json;
 using Savvyio.Messaging;
 using Savvyio.Messaging.Cryptography;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.NATS.EventDriven
 {

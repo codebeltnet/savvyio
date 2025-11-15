@@ -20,7 +20,6 @@ using Savvyio.Extensions.SimpleQueueService.EventDriven;
 using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.SimpleQueueService.EventDriven
 {

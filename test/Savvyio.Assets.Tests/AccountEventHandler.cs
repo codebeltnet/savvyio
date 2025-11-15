@@ -10,7 +10,7 @@ using Savvyio.Extensions.Dapper;
 using Savvyio.Extensions.SimpleQueueService.EventDriven;
 using Savvyio.Handlers;
 using Savvyio.Messaging;
-using Xunit.Abstractions;
+using Xunit;
 
 namespace Savvyio.Assets
 {

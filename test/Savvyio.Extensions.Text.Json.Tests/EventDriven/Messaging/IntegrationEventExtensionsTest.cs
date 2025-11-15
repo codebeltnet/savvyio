@@ -7,7 +7,6 @@ using Savvyio.Assets.EventDriven;
 using Savvyio.EventDriven.Messaging;
 using Savvyio.Messaging;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging
 {

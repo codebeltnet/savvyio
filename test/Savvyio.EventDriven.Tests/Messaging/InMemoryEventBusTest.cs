@@ -10,12 +10,11 @@ using Cuemon.Threading;
 using Savvyio.Assets.EventDriven;
 using Savvyio.Messaging;
 using Xunit;
-using Xunit.Abstractions;
-using Xunit.Priority;
+using Xunit.v3.Priority;
 
 namespace Savvyio.EventDriven.Messaging
 {
-    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
+    [TestCaseOrderer(typeof(PriorityOrderer))]
     public class InMemoryEventBusTest : Test
     {
         private static readonly InMemoryEventBus Bus = new();

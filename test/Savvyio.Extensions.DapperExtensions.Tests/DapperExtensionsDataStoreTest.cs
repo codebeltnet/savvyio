@@ -7,7 +7,6 @@ using Savvyio.Assets;
 using Savvyio.Assets.Queries;
 using Savvyio.Extensions.Dapper;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.DapperExtensions
 {

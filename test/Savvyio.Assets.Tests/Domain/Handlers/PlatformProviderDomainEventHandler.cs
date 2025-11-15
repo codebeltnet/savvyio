@@ -4,7 +4,7 @@ using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.Domain.Events;
 using Savvyio.Domain;
 using Savvyio.Handlers;
-using Xunit.Abstractions;
+using Xunit;
 
 namespace Savvyio.Assets.Domain.Handlers
 {

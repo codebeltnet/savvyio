@@ -12,7 +12,6 @@ using Savvyio.Assets.Domain.Events;
 using Savvyio.Dispatchers;
 using Savvyio.Extensions.DependencyInjection;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Domain
 {

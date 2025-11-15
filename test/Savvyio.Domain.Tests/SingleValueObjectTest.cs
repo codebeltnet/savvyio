@@ -2,7 +2,6 @@
 using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.Domain;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Domain
 {

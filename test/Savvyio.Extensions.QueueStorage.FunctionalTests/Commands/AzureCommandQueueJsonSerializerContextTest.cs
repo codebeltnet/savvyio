@@ -24,12 +24,11 @@ using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging;
 using Savvyio.Messaging.Cryptography;
 using Xunit;
-using Xunit.Abstractions;
-using Xunit.Priority;
+using Xunit.v3.Priority;
 
 namespace Savvyio.Extensions.QueueStorage.Commands
 {
-    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
+    [TestCaseOrderer(typeof(PriorityOrderer))]
     public class AzureCommandQueueJsonSerializerContextTest : HostTest<ManagedHostFixture>
     {
         private static readonly string Platform = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux" : "windows";

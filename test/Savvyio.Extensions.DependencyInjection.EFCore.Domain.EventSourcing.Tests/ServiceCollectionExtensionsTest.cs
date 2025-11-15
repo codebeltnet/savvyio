@@ -12,7 +12,6 @@ using Savvyio.Extensions.EFCore.Domain.EventSourcing;
 using Savvyio.Extensions.Newtonsoft.Json;
 using Savvyio.Extensions.Text.Json;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio.Extensions.DependencyInjection.EFCore.Domain.EventSourcing
 {

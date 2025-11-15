@@ -20,7 +20,7 @@
       "dest": "api/dotnet",
       "filter": "filterConfig.yml",
       "properties": {
-        "TargetFramework": "net9.0"
+        "TargetFramework": "net10.0"
       }
     },
     {
@@ -59,7 +59,7 @@
       "dest": "api/extensions/dotnet",
       "filter": "filterConfig.yml",
       "properties": {
-        "TargetFramework": "net9.0"
+        "TargetFramework": "net10.0"
       }
     }
   ],

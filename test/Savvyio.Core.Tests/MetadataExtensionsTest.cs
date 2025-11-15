@@ -2,7 +2,6 @@ using System;
 using Codebelt.Extensions.Xunit;
 using Cuemon.Extensions.Reflection;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Savvyio
 {
