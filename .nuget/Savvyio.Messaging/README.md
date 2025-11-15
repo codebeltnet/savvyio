@@ -6,7 +6,7 @@ Provides the fundamental classes to work with Messaging in a distributed archite
 
 An open-source project (MIT license) that provides a SOLID and clean .NET class library for writing DDD, CQRS and Event Sourcing applications.
 
-![Savvy I/O Flow](https://raw.githubusercontent.com/codebeltnet/savvyio/main/.assets/savvyio.png)
+Your versatile DDD, CQRS and Event Sourcing companion for modern development with `.NET 9` and `.NET 10`.
 
 It is, by heart, free, flexible and built to extend and boost your agile codebelt.
 
