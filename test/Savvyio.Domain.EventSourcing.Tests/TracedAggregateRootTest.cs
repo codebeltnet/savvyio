@@ -142,7 +142,6 @@ namespace Savvyio.Domain.EventSourcing
 
             var sut5 = await sut4.GetByIdAsync(id);
 
-
             Assert.Equal(id, sp.GetRequiredService<ITestStore<IDomainEvent>>().QueryFor<TracedAccountInitiated>().Single().Id);
             Assert.Equal(providerId, sp.GetRequiredService<ITestStore<IDomainEvent>>().QueryFor<TracedAccountInitiated>().Single().PlatformProviderId);
             Assert.Equal(name, sp.GetRequiredService<ITestStore<IDomainEvent>>().QueryFor<TracedAccountInitiated>().Single().FullName);
@@ -154,42 +153,6 @@ namespace Savvyio.Domain.EventSourcing
             Assert.Equal(name, sut5.FullName);
             Assert.Equal("root@gimlichael.dev", sut5.EmailAddress);
 
-#if NET8_0
-            Assert.True(Match(@"Model: 
-  EntityType: EfCoreTracedAggregateEntity<TracedAccount, Guid>
-    Properties: 
-      Id (_id, Guid) Required PK AfterSave:Throw
-        Annotations: 
-          Relational:ColumnName: id
-          Relational:ColumnType: uniqueidentifier
-      Version (_version, long) Required PK AfterSave:Throw
-        Annotations: 
-          Relational:ColumnName: version
-          Relational:ColumnType: int
-      Payload (_payload, byte[])
-        Annotations: 
-          Relational:ColumnName: payload
-          Relational:ColumnType: varchar(max)
-      Timestamp (_timestamp, DateTime) Required
-        Annotations: 
-          Relational:ColumnName: timestamp
-          Relational:ColumnType: datetime
-      Type (_type, string)
-        Annotations: 
-          Relational:ColumnName: clrtype
-          Relational:ColumnType: varchar(1024)
-    Keys: 
-      Id, Version PK
-    Annotations: 
-      Relational:Schema: 
-      Relational:TableName: TracedAccount_DomainEvents
-      RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]
-Annotations: 
-  BaseTypeDiscoveryConvention:DerivedTypes: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.List`1[Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType]]
-  NonNullableConventionState: System.Reflection.NullabilityInfoContext
-  ProductVersion: 8.0.??
-  RelationshipDiscoveryConvention:InverseNavigationCandidates: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.SortedSet`1[System.Type]]".ReplaceLineEndings(), schema.ReplaceLineEndings(), o => o.ThrowOnNoMatch = true));
-#else
             Assert.True(Match(@"Model: 
   EntityType: EfCoreTracedAggregateEntity<TracedAccount, Guid>
     Properties: 
@@ -224,7 +187,6 @@ Annotations:
   InversePropertyAttributeConvention:InverseNavigations: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.SortedSet`1[System.Type]]
   NonNullableConventionState: System.Reflection.NullabilityInfoContext
   ProductVersion: *".ReplaceLineEndings(), schema.ReplaceLineEndings(), o => o.ThrowOnNoMatch = true));
-#endif
         }
 
         [Fact]
