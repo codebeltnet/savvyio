@@ -1,4 +1,4 @@
-Version 5.0.1
+Version: 5.0.1
 Availability:  .NET 10 and .NET 9
  
 # ALM
