@@ -15,6 +15,7 @@ using Savvyio.Messaging;
 using Savvyio.Messaging.Cryptography;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using Xunit;
@@ -161,7 +162,7 @@ namespace Savvyio.Extensions.NATS.Commands
                 {
                     await foreach (var msg in queue.ReceiveAsync().ConfigureAwait(false))
                     {
-                        count1++;
+                        Interlocked.Increment(ref count1);
                         await receivedMessages.Writer.WriteAsync(msg).ConfigureAwait(false);
                         await msg.AcknowledgeAsync().ConfigureAwait(false);
                     }
@@ -175,14 +176,14 @@ namespace Savvyio.Extensions.NATS.Commands
                 {
                     await foreach (var msg in queue.ReceiveAsync().ConfigureAwait(false))
                     {
-                        count2++;
+                        Interlocked.Increment(ref count2);
                         await receivedMessages.Writer.WriteAsync(msg).ConfigureAwait(false);
                         await msg.AcknowledgeAsync().ConfigureAwait(false);
                     }
                 }
             });
 
-            await Task.Delay(200); // wait briefly to ensure subscription setup
+            await Task.Delay(2000); // wait briefly to ensure subscription setup
 
             await queue.SendAsync(messages).ConfigureAwait(false);
 
