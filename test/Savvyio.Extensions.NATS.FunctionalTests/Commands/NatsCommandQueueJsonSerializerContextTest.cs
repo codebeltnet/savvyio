@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Channels;
-using System.Threading.Tasks;
-using Codebelt.Extensions.Xunit;
+﻿using Codebelt.Extensions.Xunit;
 using Codebelt.Extensions.Xunit.Hosting;
 using Cuemon;
 using Cuemon.Extensions;
@@ -16,6 +13,10 @@ using Savvyio.Extensions.NATS.Assets;
 using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging;
 using Savvyio.Messaging.Cryptography;
+using System;
+using System.Linq;
+using System.Threading.Channels;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Savvyio.Extensions.NATS.Commands
@@ -35,9 +36,9 @@ namespace Savvyio.Extensions.NATS.Commands
                 services.AddMessageQueue<NatsCommandQueue, ICommand>().AddConfiguredOptions<NatsCommandQueueOptions>(o =>
                 {
                     o.AutoAcknowledge = true;
-                    o.Subject = Generate.RandomString(10);
-                    o.StreamName = "queue1";
-                    o.ConsumerName = "client1";
+                    o.Subject = Guid.NewGuid().ToString();
+                    o.StreamName = Guid.NewGuid().ToString();
+                    o.ConsumerName = Guid.NewGuid().ToString();
                 });
             });
 
@@ -85,9 +86,9 @@ namespace Savvyio.Extensions.NATS.Commands
                 services.AddMessageQueue<NatsCommandQueue, ICommand>().AddConfiguredOptions<NatsCommandQueueOptions>(o =>
                 {
                     o.AutoAcknowledge = true;
-                    o.Subject = Generate.RandomString(10);
-                    o.StreamName = "streamSigned";
-                    o.ConsumerName = "clientSigned";
+                    o.Subject = Guid.NewGuid().ToString();
+                    o.StreamName = Guid.NewGuid().ToString();
+                    o.ConsumerName = Guid.NewGuid().ToString();
                 });
             });
 
@@ -135,9 +136,9 @@ namespace Savvyio.Extensions.NATS.Commands
                 services.AddMarshaller<JsonMarshaller>();
                 services.AddMessageQueue<NatsCommandQueue, ICommand>().AddConfiguredOptions<NatsCommandQueueOptions>(o =>
                 {
-                    o.StreamName = "stream2";
-                    o.ConsumerName = "client2";
-                    o.Subject = Generate.RandomString(10);
+                    o.StreamName = Guid.NewGuid().ToString();
+                    o.ConsumerName = Guid.NewGuid().ToString();
+                    o.Subject = Guid.NewGuid().ToString();
                 });
             });
 
@@ -181,12 +182,19 @@ namespace Savvyio.Extensions.NATS.Commands
                 }
             });
 
-
             await Task.Delay(200); // wait briefly to ensure subscription setup
 
             await queue.SendAsync(messages).ConfigureAwait(false);
 
-            await Task.Delay(750);
+            // Wait for all messages to be received with a timeout
+            var timeout = TimeSpan.FromSeconds(10);
+            var start = DateTime.UtcNow;
+            while ((count1 + count2) < messages.Count && (DateTime.UtcNow - start) < timeout)
+            {
+                await Task.Delay(10);
+            }
+
+            Assert.Equal(messages.Count, count1 + count2);
 
             TestOutput.WriteLine(count1.ToString());
             TestOutput.WriteLine(count2.ToString());
