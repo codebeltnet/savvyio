@@ -1,12 +1,7 @@
-name: Savvy I/O Pipeline
+name: Savvy I/O CI Pipeline
 on:
   pull_request:
     branches: [main]
-    paths-ignore:
-      - .codecov/**
-      - .docfx/**
-      - .nuget/**
-      - '**/*.md'
   workflow_dispatch:
     inputs:
       configuration:
@@ -74,7 +69,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, windows-2022]
+        os: [ubuntu-24.04, windows-2025, ubuntu-24.04-arm, windows-11-arm]
         configuration: [Debug, Release]
         project: ${{ fromJson(needs.prepare_test.outputs.json) }}
     uses: codebeltnet/jobs-dotnet-test/.github/workflows/default.yml@v3
@@ -92,7 +87,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, windows-2022]
+        os: [ubuntu-24.04, windows-2025]
         configuration: [Release]
         project: [ test/**/Savvyio.FunctionalTests.csproj, test/**/Savvyio.Extensions.SimpleQueueService.FunctionalTests.csproj, test/**/Savvyio.Extensions.QueueStorage.FunctionalTests.csproj ]
     runs-on: ${{ matrix.os }}
