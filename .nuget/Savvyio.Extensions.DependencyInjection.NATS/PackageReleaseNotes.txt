@@ -1,3 +1,9 @@
+Version: 5.0.1
+Availability: .NET 10 and .NET 9
+ 
+# ALM
+- CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
+ 
 Version: 5.0.0
 Availability: .NET 10 and .NET 9
  
@@ -39,3 +45,4 @@ Availability: .NET 9 and .NET 8
 - ADDED NatsEventBus{TMarker} class in the Savvyio.Extensions.DependencyInjection.NATS.EventDriven namespace that provides a default implementation of the NatsMessage class for messages holding an IIntegrationEvent implementation
 - ADDED NatsEventBusOptions{TMarker} class in the Savvyio.Extensions.DependencyInjection.NATS.EventDriven namespace that provides configuration options for NatsEventBus{TMarker}
 - ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.NATS namespace that consist of extension methods for the IServiceCollection interface: AddNatsCommandQueue, AddNatsEventBus
+

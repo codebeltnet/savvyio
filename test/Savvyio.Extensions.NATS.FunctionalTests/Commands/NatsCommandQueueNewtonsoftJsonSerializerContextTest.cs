@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Channels;
-using System.Threading.Tasks;
-using Codebelt.Extensions.Xunit;
+﻿using Codebelt.Extensions.Xunit;
 using Codebelt.Extensions.Xunit.Hosting;
 using Cuemon;
 using Cuemon.Extensions;
@@ -16,6 +13,11 @@ using Savvyio.Extensions.NATS.Assets;
 using Savvyio.Extensions.Newtonsoft.Json;
 using Savvyio.Messaging;
 using Savvyio.Messaging.Cryptography;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Channels;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Savvyio.Extensions.NATS.Commands
@@ -35,9 +37,9 @@ namespace Savvyio.Extensions.NATS.Commands
                 services.AddMessageQueue<NatsCommandQueue, ICommand>().AddConfiguredOptions<NatsCommandQueueOptions>(o =>
                 {
                     o.AutoAcknowledge = true;
-                    o.Subject = "queue2";
-                    o.StreamName = "stream";
-                    o.ConsumerName = "client";
+                    o.Subject = Guid.NewGuid().ToString();
+                    o.StreamName = Guid.NewGuid().ToString();
+                    o.ConsumerName = Guid.NewGuid().ToString();
                 });
             });
 
@@ -85,9 +87,9 @@ namespace Savvyio.Extensions.NATS.Commands
                 services.AddMessageQueue<NatsCommandQueue, ICommand>().AddConfiguredOptions<NatsCommandQueueOptions>(o =>
                 {
                     o.AutoAcknowledge = true;
-                    o.Subject = Generate.RandomString(10);
-                    o.StreamName = Generate.RandomString(10);
-                    o.ConsumerName = Generate.RandomString(10);
+                    o.Subject = Guid.NewGuid().ToString();
+                    o.StreamName = Guid.NewGuid().ToString();
+                    o.ConsumerName = Guid.NewGuid().ToString();
                 });
             });
 
@@ -135,9 +137,9 @@ namespace Savvyio.Extensions.NATS.Commands
                 services.AddMarshaller<NewtonsoftJsonMarshaller>();
                 services.AddMessageQueue<NatsCommandQueue, ICommand>().AddConfiguredOptions<NatsCommandQueueOptions>(o =>
                 {
-                    o.StreamName = "stream";
-                    o.ConsumerName = "client";
-                    o.Subject = Generate.RandomString(10);
+                    o.StreamName = Guid.NewGuid().ToString();
+                    o.ConsumerName = Guid.NewGuid().ToString();
+                    o.Subject = Guid.NewGuid().ToString();
                 });
             });
 
@@ -152,26 +154,51 @@ namespace Savvyio.Extensions.NATS.Commands
             }).ToList();
 
             var receivedMessages = Channel.CreateUnbounded<IMessage<ICommand>>();
-            
-            var count = 0;
+
+            var count1 = 0;
             Task.Run<Task>(async () =>
             {
-                while (count < messages.Count) 
+                while (count1 < messages.Count)
                 {
                     await foreach (var msg in queue.ReceiveAsync().ConfigureAwait(false))
                     {
-                        count++;
+                        Interlocked.Increment(ref count1);
                         await receivedMessages.Writer.WriteAsync(msg).ConfigureAwait(false);
                         await msg.AcknowledgeAsync().ConfigureAwait(false);
                     }
                 }
             });
 
-            await Task.Delay(200); // wait briefly to ensure subscription setup
+            var count2 = 0;
+            Task.Run<Task>(async () =>
+            {
+                while (count2 < messages.Count)
+                {
+                    await foreach (var msg in queue.ReceiveAsync().ConfigureAwait(false))
+                    {
+                        Interlocked.Increment(ref count2);
+                        await receivedMessages.Writer.WriteAsync(msg).ConfigureAwait(false);
+                        await msg.AcknowledgeAsync().ConfigureAwait(false);
+                    }
+                }
+            });
+
+            await Task.Delay(2000); // wait briefly to ensure subscription setup
 
             await queue.SendAsync(messages).ConfigureAwait(false);
 
-            await Task.Delay(750);
+            // Wait for all messages to be received with a timeout
+            var timeout = TimeSpan.FromSeconds(10);
+            var start = DateTime.UtcNow;
+            while ((count1 + count2) < messages.Count && (DateTime.UtcNow - start) < timeout)
+            {
+                await Task.Delay(10);
+            }
+
+            Assert.Equal(messages.Count, count1 + count2);
+
+            TestOutput.WriteLine(count1.ToString());
+            TestOutput.WriteLine(count2.ToString());
 
             receivedMessages.Writer.Complete(); // mark channel write is complete
 
