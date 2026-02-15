@@ -2,7 +2,7 @@
 
 # Savvy I/O
 
-![License](https://img.shields.io/github/license/codebeltnet/savvyio) ![Build Status](https://github.com/codebeltnet/savvyio/actions/workflows/pipelines.yml/badge.svg?branch=main) [![codecov](https://codecov.io/gh/codebeltnet/savvyio/graph/badge.svg?token=3U45KRDGK6)](https://codecov.io/gh/codebeltnet/savvyio) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=savvyio&metric=coverage)](https://sonarcloud.io/dashboard?id=savvyio) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](.github/CODE_OF_CONDUCT.md) [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/codebeltnet/savvyio/badge)](https://scorecard.dev/viewer/?uri=github.com/codebeltnet/savvyio)
+![License](https://img.shields.io/github/license/codebeltnet/savvyio) ![Build Status](https://github.com/codebeltnet/savvyio/actions/workflows/ci-pipeline.yml/badge.svg?branch=main) [![codecov](https://codecov.io/gh/codebeltnet/savvyio/graph/badge.svg?token=3U45KRDGK6)](https://codecov.io/gh/codebeltnet/savvyio) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=savvyio&metric=coverage)](https://sonarcloud.io/dashboard?id=savvyio) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](.github/CODE_OF_CONDUCT.md) [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/codebeltnet/savvyio/badge)](https://scorecard.dev/viewer/?uri=github.com/codebeltnet/savvyio)
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=savvyio&metric=alert_status)](https://sonarcloud.io/dashboard?id=savvyio) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=savvyio&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=savvyio) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=savvyio&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=savvyio) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=savvyio&metric=security_rating)](https://sonarcloud.io/dashboard?id=savvyio)
 
@@ -12,7 +12,7 @@
 
 ## ℹ️ About
 
-An open-source project (MIT license) that provides a SOLID and clean .NET class library for writing DDD, CQRS and Event Sourcing applications for .NET 9 (STS) and .NET 8 (LTS).
+An open-source project (MIT license) that provides a SOLID and clean .NET class library for writing DDD, CQRS and Event Sourcing applications.
 
 Your versatile DDD, CQRS and Event Sourcing companion for modern development with `.NET 9` and `.NET 10`.
 

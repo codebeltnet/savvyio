@@ -1,6 +1,6 @@
 services:
   localstack:
-    image: localstack/localstack:4.12.0
+    image: localstack/localstack:4.13.1
     environment:
       - SERVICES=sns,sqs
       - DEBUG=0
