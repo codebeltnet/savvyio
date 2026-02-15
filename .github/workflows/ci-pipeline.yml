@@ -45,11 +45,14 @@ jobs:
     name: call-build
     strategy:
       matrix:
+        arch: [X64, ARM64]
         configuration: [Debug, Release]
     uses: codebeltnet/jobs-dotnet-build/.github/workflows/default.yml@v3
     with:
+      runs-on: ${{ matrix.arch == 'ARM64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
       configuration: ${{ matrix.configuration }}
       strong-name-key-filename: savvyio.snk
+      upload-build-artifact-name: build-${{ matrix.configuration }}-${{ matrix.arch }}
     secrets: inherit
 
   pack:
@@ -62,24 +65,45 @@ jobs:
     with:
       configuration: ${{ matrix.configuration }}
       version: ${{ needs.build.outputs.version }}
+      download-build-artifact-pattern: build-${{ matrix.configuration }}-X64
 
-  test:
-    name: call-test
+  test_linux:
+    name: call-test-linux
     needs: [build, prepare_test]
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, windows-2025, ubuntu-24.04-arm, windows-11-arm]
+        arch: [X64, ARM64]
         configuration: [Debug, Release]
         project: ${{ fromJson(needs.prepare_test.outputs.json) }}
     uses: codebeltnet/jobs-dotnet-test/.github/workflows/default.yml@v3
     with:
-      runs-on: ${{ matrix.os }}
+      runs-on: ${{ matrix.arch == 'ARM64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
       configuration: ${{ matrix.configuration }}
       projects: ${{ matrix.project }}
       build-switches: -p:SkipSignAssembly=true
       restore: true
       build: true # needed for xunitv3
+      download-pattern: build-${{ matrix.configuration }}-${{ matrix.arch }}
+
+  test_windows:
+    name: call-test-windows
+    needs: [build, prepare_test]
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [X64, ARM64]
+        configuration: [Debug, Release]
+        project: ${{ fromJson(needs.prepare_test.outputs.json) }}
+    uses: codebeltnet/jobs-dotnet-test/.github/workflows/default.yml@v3
+    with:
+      runs-on: ${{ matrix.arch == 'ARM64' && 'windows-11-arm' || 'windows-2025' }}
+      configuration: ${{ matrix.configuration }}
+      projects: ${{ matrix.project }}
+      build-switches: -p:SkipSignAssembly=true
+      restore: true
+      build: true # needed for xunitv3
+      download-pattern: build-${{ matrix.configuration }}-${{ matrix.arch }}
 
   integration_test:
     name: ⚗️ Integration Test - Azure and AWS
@@ -190,7 +214,7 @@ jobs:
 
   sonarcloud:
     name: call-sonarcloud
-    needs: [build, test, integration_test, integration_test_rabbitmq, integration_test_nats]
+    needs: [build, test_linux, test_windows, integration_test, integration_test_rabbitmq, integration_test_nats]
     uses: codebeltnet/jobs-sonarcloud/.github/workflows/default.yml@v3
     with:
       organization: geekle
@@ -200,7 +224,7 @@ jobs:
 
   codecov:
     name: call-codecov
-    needs: [build, test, integration_test, integration_test_rabbitmq, integration_test_nats]
+    needs: [build, test_linux, test_windows, integration_test, integration_test_rabbitmq, integration_test_nats]
     uses: codebeltnet/jobs-codecov/.github/workflows/default.yml@v1
     with:
       repository: codebeltnet/savvyio
@@ -208,7 +232,7 @@ jobs:
           
   codeql:
     name: call-codeql
-    needs: [build, test, integration_test, integration_test_rabbitmq, integration_test_nats]
+    needs: [build, test_linux, test_windows, integration_test, integration_test_rabbitmq, integration_test_nats]
     uses: codebeltnet/jobs-codeql/.github/workflows/default.yml@v3
     permissions:
       security-events: write
@@ -216,7 +240,7 @@ jobs:
   deploy:
     if: github.event_name != 'pull_request'
     name: call-nuget
-    needs: [build, pack, test, integration_test, integration_test_rabbitmq, integration_test_nats, sonarcloud, codecov, codeql]
+    needs: [build, pack, test_linux, test_windows, integration_test, integration_test_rabbitmq, integration_test_nats, sonarcloud, codecov, codeql]
     uses: codebeltnet/jobs-nuget-push/.github/workflows/default.yml@v2
     with:
       version: ${{ needs.build.outputs.version }}
