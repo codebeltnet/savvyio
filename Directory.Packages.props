@@ -11,7 +11,7 @@
     <PackageVersion Include="Azure.Storage.Queues" Version="12.25.0" />
     <PackageVersion Include="Codebelt.Extensions.Newtonsoft.Json" Version="10.0.2" />
     <PackageVersion Include="Codebelt.Extensions.Xunit.App" Version="11.0.5" />
-    <PackageVersion Include="Codebelt.Extensions.YamlDotNet" Version="10.0.2" />
+    <PackageVersion Include="Codebelt.Extensions.YamlDotNet" Version="10.0.3" />
     <PackageVersion Include="Cuemon.Extensions.Collections.Generic" Version="10.2.1" />
     <PackageVersion Include="Cuemon.Extensions.Core" Version="10.2.1" />
     <PackageVersion Include="Cuemon.Extensions.DependencyInjection" Version="10.2.1" />
