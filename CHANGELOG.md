@@ -4,6 +4,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [5.0.4] - 2026-02-28
+
+This is a service update that focuses on package dependencies.
+
+> [!IMPORTANT]
+> `Azure.Identity` now depends on `Microsoft.Extensions.Configuration.Abstractions` and `Microsoft.Extensions.Hosting.Abstractions` **v10.x**. If you use **Central Package Management** (`Directory.Packages.props`) or otherwise pin `Microsoft.Extensions.*` to an older major version, the upgrade may trigger restore/build failures (e.g., package downgrade/version conflict). Ensure your centrally managed `Microsoft.Extensions.*` versions are compatible before updating.
+
 ## [5.0.3] - 2026-02-21
 
 This is a service update that focuses on package dependencies.
