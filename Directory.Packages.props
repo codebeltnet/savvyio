@@ -4,8 +4,8 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AWSSDK.SQS" Version="4.0.2.14" />
-    <PackageVersion Include="AWSSDK.SimpleNotificationService" Version="4.0.2.16" />
+    <PackageVersion Include="AWSSDK.SQS" Version="4.0.2.15" />
+    <PackageVersion Include="AWSSDK.SimpleNotificationService" Version="4.0.2.17" />
     <PackageVersion Include="Azure.Identity" Version="1.17.1" />
     <PackageVersion Include="Azure.Messaging.EventGrid" Version="5.0.0" />
     <PackageVersion Include="Azure.Storage.Queues" Version="12.25.0" />
@@ -28,7 +28,7 @@
     <PackageVersion Include="NATS.Client.Core" Version="2.7.2" />
     <PackageVersion Include="NATS.Client.JetStream" Version="2.7.2" />
     <PackageVersion Include="NATS.Client.Simplified" Version="2.7.2" />
-    <PackageVersion Include="RabbitMQ.Client" Version="7.2.0" />
+    <PackageVersion Include="RabbitMQ.Client" Version="7.2.1" />
     <PackageVersion Include="System.Text.RegularExpressions" Version="4.3.1" />
     <PackageVersion Include="Xunit.v3.Priority" Version="1.1.18" />
     <PackageVersion Include="coverlet.collector" Version="8.0.0" />
