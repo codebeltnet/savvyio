@@ -6,7 +6,6 @@
   <ItemGroup>
     <PackageVersion Include="AWSSDK.SQS" Version="4.0.2.15" />
     <PackageVersion Include="AWSSDK.SimpleNotificationService" Version="4.0.2.17" />
-    <PackageVersion Include="Azure.Identity" Version="1.17.1" />
     <PackageVersion Include="Azure.Messaging.EventGrid" Version="5.0.0" />
     <PackageVersion Include="Azure.Storage.Queues" Version="12.25.0" />
     <PackageVersion Include="Codebelt.Extensions.Newtonsoft.Json" Version="10.1.0" />
@@ -43,11 +42,13 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.13" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.13" />
     <PackageVersion Include="System.Linq.Async" Version="7.0.0" />
+    <PackageVersion Include="Azure.Identity" Version="1.17.1" />
   </ItemGroup>
   <ItemGroup Condition="$(TargetFramework.StartsWith('net10'))">
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.3" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.3" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.3" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.3" />
+    <PackageVersion Include="Azure.Identity" Version="1.18.0" />
   </ItemGroup>
 </Project>
