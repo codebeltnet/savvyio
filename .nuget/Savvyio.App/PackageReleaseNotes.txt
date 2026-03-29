@@ -1,24 +1,30 @@
+Version: 5.0.5
+Availability: .NET 10 and .NET 9
+
+# ALM
+- CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
+
 Version: 5.0.4
 Availability: .NET 10 and .NET 9
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 5.0.3
 Availability: .NET 10 and .NET 9
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 5.0.2
 Availability: .NET 10 and .NET 9
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 5.0.1
 Availability: .NET 10 and .NET 9
- 
+
 # References
 - Savvyio
 - Savvyio.Commands
@@ -49,10 +55,10 @@ Availability: .NET 10 and .NET 9
 - Savvyio.Extensions.Text.Json
 - Savvyio.Messaging
 - Savvyio.Queries
- 
+
 Version: 5.0.0
 Availability: .NET 10 and .NET 9
- 
+
 # References
 - Savvyio
 - Savvyio.Commands
@@ -83,10 +89,10 @@ Availability: .NET 10 and .NET 9
 - Savvyio.Extensions.Text.Json
 - Savvyio.Messaging
 - Savvyio.Queries
- 
+
 Version: 4.4.2
 Availability: .NET 9 and .NET 8
- 
+
 # References
 - Savvyio
 - Savvyio.Commands
@@ -117,10 +123,10 @@ Availability: .NET 9 and .NET 8
 - Savvyio.Extensions.Text.Json
 - Savvyio.Messaging
 - Savvyio.Queries
- 
+
 Version: 4.4.1
 Availability: .NET 9 and .NET 8
- 
+
 # References
 - Savvyio
 - Savvyio.Commands
@@ -151,10 +157,10 @@ Availability: .NET 9 and .NET 8
 - Savvyio.Extensions.Text.Json
 - Savvyio.Messaging
 - Savvyio.Queries
- 
+
 Version: 4.4.0
 Availability: .NET 9 and .NET 8
- 
+
 # References
 - Savvyio
 - Savvyio.Commands
@@ -185,10 +191,10 @@ Availability: .NET 9 and .NET 8
 - Savvyio.Extensions.Text.Json
 - Savvyio.Messaging
 - Savvyio.Queries
- 
+
 Version: 4.3.0
 Availability: .NET 9 and .NET 8
- 
+
 # References
 - Savvyio
 - Savvyio.Commands
@@ -219,10 +225,10 @@ Availability: .NET 9 and .NET 8
 - Savvyio.Extensions.Text.Json
 - Savvyio.Messaging
 - Savvyio.Queries
- 
+
 Version: 4.2.0
 Availability: .NET 9 and .NET 8
- 
+
 # References
 - Savvyio
 - Savvyio.Commands
@@ -253,10 +259,10 @@ Availability: .NET 9 and .NET 8
 - Savvyio.Extensions.Text.Json
 - Savvyio.Messaging
 - Savvyio.Queries
- 
+
 Version: 4.1.1
 Availability: .NET 9 and .NET 8
- 
+
 # References
 - Savvyio
 - Savvyio.Commands
@@ -285,10 +291,10 @@ Availability: .NET 9 and .NET 8
 - Savvyio.Extensions.Text.Json
 - Savvyio.Messaging
 - Savvyio.Queries
- 
+
 Version: 4.1.0
 Availability: .NET 9 and .NET 8
- 
+
 # References
 - Savvyio
 - Savvyio.Commands
@@ -317,10 +323,10 @@ Availability: .NET 9 and .NET 8
 - Savvyio.Extensions.Text.Json
 - Savvyio.Messaging
 - Savvyio.Queries
- 
+
 Version: 4.0.3
 Availability: .NET 9 and .NET 8
- 
+
 # References
 - Savvyio
 - Savvyio.Commands
@@ -347,10 +353,10 @@ Availability: .NET 9 and .NET 8
 - Savvyio.Extensions.Text.Json
 - Savvyio.Messaging
 - Savvyio.Queries
- 
+
 Version: 4.0.2
 Availability: .NET 9 and .NET 8
- 
+
 # References
 - Savvyio
 - Savvyio.Commands
@@ -377,10 +383,10 @@ Availability: .NET 9 and .NET 8
 - Savvyio.Extensions.Text.Json
 - Savvyio.Messaging
 - Savvyio.Queries
- 
+
 Version: 4.0.1
 Availability: .NET 9 and .NET 8
- 
+
 # References
 - Savvyio
 - Savvyio.Commands
@@ -407,10 +413,10 @@ Availability: .NET 9 and .NET 8
 - Savvyio.Extensions.Text.Json
 - Savvyio.Messaging
 - Savvyio.Queries
- 
+
 Version: 4.0.0
 Availability: .NET 9 and .NET 8
- 
+
 # References
 - Savvyio
 - Savvyio.Commands
@@ -437,4 +443,4 @@ Availability: .NET 9 and .NET 8
 - Savvyio.Extensions.Text.Json
 - Savvyio.Messaging
 - Savvyio.Queries
- 
+

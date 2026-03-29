@@ -53,6 +53,7 @@ SOURCE_PACKAGE_MAP: Dict[str, List[str]] = {
     "swashbuckle-aspnetcore": ["Codebelt.Extensions.Swashbuckle"],
     "savvyio": ["Savvyio."],
     "shared-kernel": ["Codebelt.SharedKernel"],
+    "carter": ["Codebelt.Extensions.Carter"],
 }
 
 

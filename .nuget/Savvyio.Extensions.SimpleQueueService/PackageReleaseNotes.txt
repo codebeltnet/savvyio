@@ -1,135 +1,141 @@
+Version: 5.0.5
+Availability: .NET 10 and .NET 9
+
+# ALM
+- CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
+
 Version: 5.0.4
 Availability: .NET 10 and .NET 9
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 5.0.3
 Availability: .NET 10 and .NET 9
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 5.0.2
 Availability: .NET 10 and .NET 9
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 5.0.1
 Availability: .NET 10 and .NET 9
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 5.0.0
 Availability: .NET 10 and .NET 9
- 
+
 # ALM
 - ADDED Support for TFM .NET 10 (LTS)
 - REMOVED Support for TFM .NET 8 (LTS)
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 4.4.2
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 4.4.1
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 4.4.0
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 # Improvements
 - CHANGED AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace so it now implements the IHealthCheckProvider{IAmazonSQS} interface
 - CHANGED AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace so it now implements the IHealthCheckProvider{IAmazonSimpleNotificationService} interface
- 
+
 Version: 4.3.0
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 4.2.0
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 4.1.1
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 4.1.0
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 4.0.3
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 # Bug Fixes
 - FIXED AmazonMessage{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to work with AWS SDK V4 and later, due to collections defaults to null instead of empty collections (https://docs.aws.amazon.com/sdk-for-net/v4/developer-guide/net-dg-v4.html#net-dg-v4-collections)
- 
+
 # Improvements
 - CHANGED AmazonMessageReceiveOptions class in the Savvyio.Extensions.SimpleQueueService namespace to include a new property, VisibilityTimeout, that is used to set the visibility timeout for messages when receiving them from AWS SQS
 - CHANGED AmazonMessageOptions class in the Savvyio.Extensions.SimpleQueueService namespace to include two new properties, MaxVisibilityTimeoutInSeconds and DefaultVisibilityTimeoutInSeconds, that are used to get the maximum and default visibility timeout for messages when receiving them from AWS SQS
- 
+
 Version: 4.0.2
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies to latest and greatest with respect to TFMs
- 
+
 Version: 4.0.1
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies to latest and greatest with respect to TFMs
- 
+
 Version: 4.0.0
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - REMOVED Support for TFM .NET 6 (LTS)
 - CHANGED Dependencies to latest and greatest with respect to TFMs
- 
+
 Version: 3.0.0
 Availability: .NET 8 and .NET 6
- 
+
 # ALM
 - CHANGED Dependencies to latest and greatest with respect to TFMs
- 
+
 Version: 2.2.0
 Availability: .NET 8, .NET 7 and .NET 6
- 
+
 # ALM
 - CHANGED Dependencies to latest and greatest with respect to TFMs
- 
+
 Version: 2.1.0
 Availability: .NET 8, .NET 7 and .NET 6
- 
+
 # ALM
 - CHANGED Dependencies to latest and greatest with respect to TFMs
- 
+
 # New Features
 - EXTENDED AmazonMessageOptions class in the Savvyio.Extensions.SimpleQueueService namespace with a new read-only property, ClientConfigurations, that can be set using the ConfigureClient method
 - ADDED ClientConfigExtensions class in the Savvyio.Extensions.SimpleQueueService namespace that consist of extension methods for the ClientConfig class: IsValid, SimpleQueueService and SimpleNotificationService
- 
+
 # Improvements
 - CHANGED AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace to use the ClientConfigurations property when configured; otherwise the Endpoint property is used as it has previously (both properties are part of AmazonMessageOptions)
 - CHANGED AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace to use the ClientConfigurations property when configured; otherwise the Endpoint property is used as it has previously (both properties are part of AmazonMessageOptions)
@@ -137,21 +143,21 @@ Availability: .NET 8, .NET 7 and .NET 6
 - CHANGED AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace to store the full type name of the actual IMessage{T} implementation instead of the enclosing type of the payload data
 - CHANGED AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace to store the full type name of the actual IMessage{T} implementation instead of the enclosing type of the payload data
 - CHANGED AmazonMessage{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to use the full type name of the actual IMessage{T} implementation instead of the enclosing type of the payload data glued together with MakeGenericType on IMessage{T}
- 
+
 Version: 2.0.0
 Availability: .NET 8, .NET 7 and .NET 6
- 
+
 # ALM
 - CHANGED Dependencies to latest and greatest with respect to TFMs
- 
+
 # Breaking Changes
 - CHANGED AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace to use AmazonCommandQueueOptions instead of IOptions{AmazonCommandQueueOptions} on the constructor
 - CHANGED AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.Commands namespace to use AmazonEventBusOptions instead of IOptions{AmazonEventBusOptions} on the constructor
 - CHANGED AmazonBus{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to use AmazonMessageOptions instead of Action{AmazonMessageOptions} on the constructor
- 
+
 # New Features
 - ADDED AmazonMessageReceiveOptions class in the Savvyio.Extensions.SimpleQueueService namespace that provides options that is related to receive operations on AWS SQS
- 
+
 # Improvements
 - CHANGED AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace to include an IMarshaller interface in the constructor that is used when converting ICommand implementations to messages
 - CHANGED AmazonEventBus class in the Savvyio.Extensions.SimpleQueueService.EventDriven namespace to include an IMarshaller interface in the constructor that is used when converting IIntegrationEvent implementations to messages
@@ -159,10 +165,10 @@ Availability: .NET 8, .NET 7 and .NET 6
 - CHANGED AmazonMessage{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to include an IMarshaller interface in the constructor that is used when converting models to messages
 - CHANGED AmazonQueue{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace to include an IMarshaller interface in the constructor that is used when converting models to messages
 - CHANGED AmazonMessageOptions class in the Savvyio.Extensions.SimpleQueueService namespace to include a ReceiveContext property as well as two constants (both of type Int32); MaxNumberOfMessages and MaxPollingWaitTimeInSeconds
- 
+
 Version: 1.1.0
 Availability: .NET 7.0, .NET 6.0
- 
+
 # New Features
 - ADDED AmazonCommandQueue class in the Savvyio.Extensions.SimpleQueueService.Commands namespace that specifies options that provides a default implementation of the AmazonQueue{TRequest} class tailored for messages holding an ICommand implementation
 - ADDED AmazonCommandQueueOptions class in the Savvyio.Extensions.SimpleQueueService.Commands namespace that specifies options that is related to AWS SQS
@@ -173,4 +179,4 @@ Availability: .NET 7.0, .NET 6.0
 - ADDED AmazonMessageOptions class in the Savvyio.Extensions.SimpleQueueService namespace that specifies options that is related to AWS SQS and AWS SNS
 - ADDED AmazonQueue{TRequest} class in the Savvyio.Extensions.SimpleQueueService namespace that represents the base class from which all implementations in need of queue capabilities should derive
 - ADDED AmazonResourceNameOptions class in the Savvyio.Extensions.SimpleQueueService namespace that specifies options that is related to Amazon Resource Name (ARN)
- 
+
