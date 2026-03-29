@@ -1,159 +1,159 @@
 Version: 5.0.5
 Availability: .NET 10 and .NET 9
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 5.0.4
 Availability: .NET 10 and .NET 9
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 5.0.3
 Availability: .NET 10 and .NET 9
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 5.0.2
 Availability: .NET 10 and .NET 9
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 5.0.1
 Availability: .NET 10 and .NET 9
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 5.0.0
 Availability: .NET 10 and .NET 9
- 
+
 # ALM
 - ADDED Support for TFM .NET 10 (LTS)
 - REMOVED Support for TFM .NET 8 (LTS)
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 4.4.2
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 4.4.1
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 4.4.0
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 4.3.0
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 4.2.0
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 4.1.1
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 4.1.0
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 4.0.3
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
- 
+
 Version: 4.0.2
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies to latest and greatest with respect to TFMs
- 
+
 Version: 4.0.1
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - CHANGED Dependencies to latest and greatest with respect to TFMs
- 
+
 Version: 4.0.0
 Availability: .NET 9 and .NET 8
- 
+
 # ALM
 - REMOVED Support for TFM .NET 6 (LTS)
 - CHANGED Dependencies to latest and greatest with respect to TFMs
- 
+
 # New Features
 - EXTENDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace with a new extension method for the IServiceCollection interface: AddHandlerServicesDescriptor
 - ADDED ServiceProviderExtensions class in the Savvyio.Extensions.DependencyInjection namespace that consist of extension methods for the IServiceCollection interface: WriteHandlerDiscoveriesToLog{TCategoryName}
- 
+
 # Improvements
 - CHANGED AddDataStore{TService, T, TOptions} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Data namespace to use a default lifetime of Singleton
 - CHANGED AddDataSource{TService} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace to use a default lifetime of Singleton
- 
+
 Version: 3.0.0
 Availability: .NET 8 and .NET 6
- 
+
 # ALM
 - CHANGED Dependencies to latest and greatest with respect to TFMs
- 
+
 # Breaking Changes
 - RENAMED ConfigureTriple{TOptions} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace to: AddConfiguredOptions{TOptions}
- 
+
 # New Features
 - EXTENDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Domain namespace with a new extension method for the IServiceCollection interface: AddUnitOfWork{TService}
- 
+
 # Improvements
 - CHANGED AddDataStore{TService, T} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Data namespace to use a default lifetime of Scoped
 - CHANGED AddDataStore{TService, T, TOptions} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Data namespace to use a default lifetime of Scoped
 - CHANGED AddRepository{TService, TEntity, TKey} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Domain namespace to use a default lifetime of Scoped
 - CHANGED AddMarshaller{TService} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace to use a default lifetime of Singleton
 - CHANGED AddDataSource{TService} extension method on the ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace to use a default lifetime of Scoped
- 
+
 Version: 2.2.0
 Availability: .NET 8, .NET 7 and .NET 6
- 
+
 # ALM
 - CHANGED Dependencies to latest and greatest with respect to TFMs
- 
+
 Version: 2.1.0
 Availability: .NET 8, .NET 7 and .NET 6
- 
+
 # ALM
 - CHANGED Dependencies to latest and greatest with respect to TFMs
- 
+
 Version: 2.0.0
 Availability: .NET 8, .NET 7 and .NET 6
- 
+
 # ALM
 - CHANGED Dependencies to latest and greatest with respect to TFMs
- 
+
 # New Features
 - EXTENDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection namespace with new extension methods for the IServiceCollection interface: AddMarshaller{TService} and ConfigureTriple{TOptions}
- 
+
 Version: 1.1.0
 Availability: .NET 7.0, .NET 6.0
- 
+
 # New Features
 - ADDED IPointToPointChannel{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a bus that is used for interacting with other subsystems (out-process/inter-application) to do something (e.g., change the state)
 - ADDED IPublisher{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a publisher/sender channel for interacting with other subsystems (out-process/inter-application) to be notified (e.g., made aware of something that has happened)
@@ -162,10 +162,10 @@ Availability: .NET 7.0, .NET 6.0
 - ADDED ISender{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a producer/sender channel used for interacting with other subsystems (out-process/inter-application) to do something (e.g., change the state)
 - ADDED ISubscriber{TRequest, TMarker} interface in the Savvyio.Extensions.DependencyInjection.Messaging namespace that defines a generic way to support multiple implementations of a subscriber/receiver channel used by subsystems to subscribe to messages (typically events) to be made aware of something that has happened
 - ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Messaging namespace that consist of extension methods for the IServiceCollection interface: AddMessageQueue, AddMessageBus
- 
+
 Version: 1.0.0
 Availability: .NET 7.0, .NET 6.0
- 
+
 # New Features
 - ADDED IDataSource interface in the Savvyio.Extensions.DependencyInjection namespace that defines a generic way to support multiple implementations that does the actual I/O communication with a source of data
 - ADDED SavvyioDependencyInjectionOptions class in the Savvyio.Extensions.DependencyInjection namespace that specifies options that is related to setting up Savvy I/O services
@@ -186,4 +186,4 @@ Availability: .NET 7.0, .NET 6.0
 - ADDED IUnitOfWork interface in the Savvyio.Extensions.DependencyInjection.Domain namespace that defines a generic way to support multiple implementations that bundles transactions from multiple IPersistentRepository{TEntity,TKey} calls into a single unit
 - ADDED IWritableRepository interface in the Savvyio.Extensions.DependencyInjection.Domain namespace that defines a generic way to support multiple implementations of writable repositories (CrUd)
 - ADDED ServiceCollectionExtensions class in the Savvyio.Extensions.DependencyInjection.Domain namespace that consist of extension methods for the IServiceCollection interface: AddRepository
- 
+
