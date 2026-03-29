@@ -6,7 +6,14 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 
 ## [5.0.5] - 2026-03-25
 
-This is a service update that focuses on package dependencies.
+This is a patch release focused on dependency upgrades across all target frameworks, a build tooling improvement for NuGet package release notes, and test environment refinements.
+
+### Changed
+
+- Package dependencies bumped across all target frameworks: AWSSDK.SQS and AWSSDK.SimpleNotificationService, NATS.Client.* to 2.7.3, Microsoft.EntityFrameworkCore to 9.0.14 / 10.0.5, Microsoft.Extensions.Logging.Abstractions to 9.0.14 / 10.0.5, Azure.Identity to 1.19.0, Dapper.StrongName to 2.1.72, Microsoft.Data.Sqlite to 10.0.5, Microsoft.NET.Test.Sdk to 18.3.0, and coverlet to 8.0.1,
+- `Directory.Build.targets` now reads `PackageReleaseNotes.txt` using `File.ReadAllText` instead of the MSBuild `ReadLinesFromFile` task, preserving newlines correctly in NuGet package metadata,
+- Test environments split into per-TFM Docker configurations (`Docker-Ubuntu (net9)` and `Docker-Ubuntu (net10)`) using dedicated `codebeltnet/ubuntu-testrunner` images,
+- DocFX build image updated from 2.78.4 to 2.78.5.
 
 ## [5.0.4] - 2026-02-28
 
@@ -979,3 +986,27 @@ Noticeable highlights:
 - QueryHandler class in the Savvyio.Queries namespace that defines a generic and consistent way of handling Query objects that implements the IQuery interface
 - SavvyioOptionsExtensions class in the Savvyio.Queries namespace that consist of extension methods for the SavvyioOptions class: AddQueryHandler, AddQueryDispatcher
 
+[Unreleased]: https://github.com/codebeltnet/savvyio/compare/v5.0.5...HEAD
+[5.0.5]: https://github.com/codebeltnet/savvyio/compare/v5.0.4...v5.0.5
+[5.0.4]: https://github.com/codebeltnet/savvyio/compare/v5.0.3...v5.0.4
+[5.0.3]: https://github.com/codebeltnet/savvyio/compare/v5.0.2...v5.0.3
+[5.0.2]: https://github.com/codebeltnet/savvyio/compare/v5.0.1...v5.0.2
+[5.0.1]: https://github.com/codebeltnet/savvyio/compare/v5.0.0...v5.0.1
+[5.0.0]: https://github.com/codebeltnet/savvyio/compare/v4.4.2...v5.0.0
+[4.4.2]: https://github.com/codebeltnet/savvyio/compare/v4.4.1...v4.4.2
+[4.4.1]: https://github.com/codebeltnet/savvyio/compare/v4.4.0...v4.4.1
+[4.4.0]: https://github.com/codebeltnet/savvyio/compare/v4.3.0...v4.4.0
+[4.3.0]: https://github.com/codebeltnet/savvyio/compare/v4.2.0...v4.3.0
+[4.2.0]: https://github.com/codebeltnet/savvyio/compare/v4.1.1...v4.2.0
+[4.1.1]: https://github.com/codebeltnet/savvyio/compare/v4.1.0...v4.1.1
+[4.1.0]: https://github.com/codebeltnet/savvyio/compare/v4.0.3...v4.1.0
+[4.0.3]: https://github.com/codebeltnet/savvyio/compare/v4.0.2...v4.0.3
+[4.0.2]: https://github.com/codebeltnet/savvyio/compare/v4.0.1...v4.0.2
+[4.0.1]: https://github.com/codebeltnet/savvyio/compare/v4.0.0...v4.0.1
+[4.0.0]: https://github.com/codebeltnet/savvyio/compare/v3.0.0...v4.0.0
+[3.0.0]: https://github.com/codebeltnet/savvyio/compare/2.2.0...v3.0.0
+[2.2.0]: https://github.com/codebeltnet/savvyio/compare/2.1.0...2.2.0
+[2.1.0]: https://github.com/codebeltnet/savvyio/compare/2.0.0...2.1.0
+[2.0.0]: https://github.com/codebeltnet/savvyio/compare/1.1.0...2.0.0
+[1.1.0]: https://github.com/codebeltnet/savvyio/compare/1.0.0...1.1.0
+[1.0.0]: https://github.com/codebeltnet/savvyio/releases/tag/1.0.0
