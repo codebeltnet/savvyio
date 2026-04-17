@@ -17,6 +17,28 @@ permissions:
   contents: read
 
 jobs:
+  init:
+    name: initialize
+    runs-on: ubuntu-24.04
+    outputs:
+      run-privileged-jobs: ${{ steps.vars.outputs.run-privileged-jobs }}
+      strong-name-key-filename: ${{ steps.vars.outputs.strong-name-key-filename }}
+      build-switches: ${{ steps.vars.outputs.build-switches }}
+    steps:
+      - id: vars
+        name: calculate workflow variables
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.event.pull_request.head.repo.full_name }}" != "${{ github.repository }}" ]]; then
+            echo "run-privileged-jobs=false" >> "$GITHUB_OUTPUT"
+            echo "strong-name-key-filename=" >> "$GITHUB_OUTPUT"
+            echo "build-switches=-p:SkipSignAssembly=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run-privileged-jobs=true" >> "$GITHUB_OUTPUT"
+            echo "strong-name-key-filename=savvyio.snk" >> "$GITHUB_OUTPUT"
+            echo "build-switches=" >> "$GITHUB_OUTPUT"
+          fi
+
   prepare_test:
     name: 📜 Prepare Test
     runs-on: ubuntu-24.04
@@ -43,6 +65,7 @@ jobs:
 
   build:
     name: call-build
+    needs: [init]
     strategy:
       matrix:
         arch: [X64, ARM64]
@@ -51,7 +74,8 @@ jobs:
     with:
       runs-on: ${{ matrix.arch == 'ARM64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
       configuration: ${{ matrix.configuration }}
-      strong-name-key-filename: savvyio.snk
+      strong-name-key-filename: ${{ needs.init.outputs.strong-name-key-filename }}
+      build-switches: ${{ needs.init.outputs.build-switches }}
       upload-build-artifact-name: build-${{ matrix.configuration }}-${{ matrix.arch }}
     secrets: inherit
 
@@ -106,8 +130,9 @@ jobs:
       download-pattern: build-${{ matrix.configuration }}-${{ matrix.arch }}
 
   integration_test:
+    if: ${{ needs.init.outputs.run-privileged-jobs == 'true' }}
     name: ⚗️ Integration Test - Azure and AWS
-    needs: [build]
+    needs: [init, build]
     strategy:
       fail-fast: false
       matrix:
@@ -213,8 +238,9 @@ jobs:
           docker rm nats
 
   sonarcloud:
+    if: ${{ needs.init.outputs.run-privileged-jobs == 'true' }}
     name: call-sonarcloud
-    needs: [build, test_linux, test_windows, integration_test, integration_test_rabbitmq, integration_test_nats]
+    needs: [init, build, test_linux, test_windows, integration_test, integration_test_rabbitmq, integration_test_nats]
     uses: codebeltnet/jobs-sonarcloud/.github/workflows/default.yml@v3
     with:
       organization: geekle
@@ -223,16 +249,18 @@ jobs:
     secrets: inherit
 
   codecov:
+    if: ${{ needs.init.outputs.run-privileged-jobs == 'true' }}
     name: call-codecov
-    needs: [build, test_linux, test_windows, integration_test, integration_test_rabbitmq, integration_test_nats]
+    needs: [init, build, test_linux, test_windows, integration_test, integration_test_rabbitmq, integration_test_nats]
     uses: codebeltnet/jobs-codecov/.github/workflows/default.yml@v1
     with:
       repository: codebeltnet/savvyio
     secrets: inherit
           
   codeql:
+    if: ${{ needs.init.outputs.run-privileged-jobs == 'true' }}
     name: call-codeql
-    needs: [build, test_linux, test_windows, integration_test, integration_test_rabbitmq, integration_test_nats]
+    needs: [init, build, test_linux, test_windows, integration_test, integration_test_rabbitmq, integration_test_nats]
     uses: codebeltnet/jobs-codeql/.github/workflows/default.yml@v3
     permissions:
       security-events: write
@@ -241,7 +269,7 @@ jobs:
     if: github.event_name != 'pull_request'
     name: call-nuget
     needs: [build, pack, test_linux, test_windows, integration_test, integration_test_rabbitmq, integration_test_nats, sonarcloud, codecov, codeql]
-    uses: codebeltnet/jobs-nuget-push/.github/workflows/default.yml@v2
+    uses: codebeltnet/jobs-nuget-push/.github/workflows/default.yml@v3
     with:
       version: ${{ needs.build.outputs.version }}
       environment: Production
