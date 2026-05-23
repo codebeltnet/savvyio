@@ -994,7 +994,9 @@ Noticeable highlights:
 - QueryHandler class in the Savvyio.Queries namespace that defines a generic and consistent way of handling Query objects that implements the IQuery interface
 - SavvyioOptionsExtensions class in the Savvyio.Queries namespace that consist of extension methods for the SavvyioOptions class: AddQueryHandler, AddQueryDispatcher
 
-[Unreleased]: https://github.com/codebeltnet/savvyio/compare/v5.0.5...HEAD
+[Unreleased]: https://github.com/codebeltnet/savvyio/compare/v5.0.7...HEAD
+[5.0.7]: https://github.com/codebeltnet/savvyio/compare/v5.0.6...v5.0.7
+[5.0.6]: https://github.com/codebeltnet/savvyio/compare/v5.0.5...v5.0.6
 [5.0.5]: https://github.com/codebeltnet/savvyio/compare/v5.0.4...v5.0.5
 [5.0.4]: https://github.com/codebeltnet/savvyio/compare/v5.0.3...v5.0.4
 [5.0.3]: https://github.com/codebeltnet/savvyio/compare/v5.0.2...v5.0.3
