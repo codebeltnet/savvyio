@@ -29,7 +29,7 @@ namespace Savvyio.Extensions.RabbitMQ.Commands
         ///     </item>
         ///     <item>
         ///         <term><see cref="Durable"/></term>
-        ///         <description><c>false</c></description>
+        ///         <description><c>true</c></description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="Exclusive"/></term>
@@ -43,6 +43,7 @@ namespace Savvyio.Extensions.RabbitMQ.Commands
         /// </remarks>
         public RabbitMqCommandQueueOptions()
         {
+            Durable = true;
         }
 
         /// <summary>
