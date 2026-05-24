@@ -17,6 +17,8 @@ namespace Savvyio.Extensions.SimpleQueueService
 
             Assert.Equal(10, sut.NumberOfMessagesToTakePerRequest);
             Assert.Equal(TimeSpan.FromSeconds(AmazonMessageOptions.MaxPollingWaitTimeInSeconds), sut.PollingTimeout);
+            Assert.Equal(TimeSpan.FromSeconds(AmazonMessageOptions.DefaultVisibilityTimeoutInSeconds), sut.VisibilityTimeout);
+            Assert.True(sut.AssumeMessageProcessed);
             Assert.True(sut.RemoveProcessedMessages);
             Assert.False(sut.UseApproximateNumberOfMessages);
         }

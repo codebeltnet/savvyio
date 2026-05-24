@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Codebelt.Extensions.Xunit;
 using Microsoft.EntityFrameworkCore;
@@ -127,6 +128,52 @@ namespace Savvyio.Extensions.EFCore
                 s => Assert.Equal("Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker: Added --> Unchanged", s),
                 s => Assert.Equal("Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker: Unchanged --> Modified", s),
                 s => Assert.Equal("Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker: Modified --> Unchanged", s));
+        }
+
+        [Fact]
+        public async Task EfCoreRepository_ShouldGetEntityById()
+        {
+            var entity = new Account(Guid.NewGuid(), "Test", "test@unit.test");
+            var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
+            {
+                ContextConfigurator = b => b.UseInMemoryDatabase("Dummy_" + Guid.NewGuid()),
+                ModelConstructor = mb => mb.AddAccount()
+            });
+            var sut2 = new EfCoreRepository<Account, long>(sut1);
+
+            sut2.Add(entity);
+            await sut1.SaveChangesAsync();
+
+            var sut3 = await sut2.GetByIdAsync(entity.Id);
+            var sut4 = await sut2.GetByIdAsync(long.MaxValue);
+
+            Assert.Equal(entity.Id, sut3.Id);
+            Assert.Null(sut4);
+        }
+
+        [Fact]
+        public async Task EfCoreRepository_ShouldAddAndRemoveRangeOfEntities()
+        {
+            var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
+            {
+                ContextConfigurator = b => b.UseInMemoryDatabase("Dummy_" + Guid.NewGuid()),
+                ModelConstructor = mb => mb.AddAccount()
+            });
+            var sut2 = new EfCoreRepository<Account, long>(sut1);
+            var entities = new[]
+            {
+                new Account(Guid.NewGuid(), "Test1", "test1@unit.test"),
+                new Account(Guid.NewGuid(), "Test2", "test2@unit.test")
+            };
+
+            sut2.AddRange(entities);
+            await sut1.SaveChangesAsync();
+            Assert.Equal(2, (await sut2.FindAllAsync()).Count());
+
+            sut2.RemoveRange(entities);
+            await sut1.SaveChangesAsync();
+
+            Assert.Empty(await sut2.FindAllAsync());
         }
     }
 }

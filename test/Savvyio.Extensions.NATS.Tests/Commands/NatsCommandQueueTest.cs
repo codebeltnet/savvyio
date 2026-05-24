@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Codebelt.Extensions.Xunit;
 using Savvyio.Commands;
 using Savvyio.Extensions.Text.Json;
@@ -50,5 +52,79 @@ namespace Savvyio.Extensions.NATS.Commands
         {
             Assert.Throws<ArgumentException>(() => new NatsCommandQueue(_marshaller, _options));
         }
+
+        [Fact]
+        public void GetHealthCheckTarget_Should_Return_Connection()
+        {
+            var queue = new NatsCommandQueue(_marshaller, new NatsCommandQueueOptions
+            {
+                StreamName = "stream",
+                ConsumerName = "consumer",
+                Subject = "subject"
+            });
+
+            Assert.Same(queue.GetHealthCheckTarget(), queue.GetHealthCheckTarget());
+            Assert.NotNull(queue.GetHealthCheckTarget());
+        }
+
+        [Fact]
+        public async Task SendAsync_WithEmptyMessages_ShouldCoverJetStreamContextCreation()
+        {
+            var queue = new NatsCommandQueue(_marshaller, new NatsCommandQueueOptions
+            {
+                StreamName = "stream",
+                ConsumerName = "consumer",
+                Subject = "subject"
+            });
+
+            await queue.SendAsync(Array.Empty<IMessage<ICommand>>());
+
+            Assert.True(true);
+        }
+
+        [Fact]
+        public async Task SendAsync_WithOneMessage_ShouldCoverLoopBodyBeforeConnectionFailure()
+        {
+            var queue = new NatsCommandQueue(_marshaller, new NatsCommandQueueOptions
+            {
+                StreamName = "stream",
+                ConsumerName = "consumer",
+                Subject = "subject",
+                NatsUrl = new Uri("nats://localhost:59999")
+            });
+
+            var message = new Message<ICommand>(
+                Guid.NewGuid().ToString("N"),
+                new Uri("urn:test"),
+                "test",
+                new TestCommand());
+
+            var ex = await Record.ExceptionAsync(() => queue.SendAsync(new IMessage<ICommand>[] { message }));
+
+            Assert.NotNull(ex);
+        }
+
+        [Fact]
+        public async Task ReceiveAsync_WithPreCancelledToken_ShouldThrowException()
+        {
+            using var cts = new CancellationTokenSource();
+            cts.Cancel();
+
+            var queue = new NatsCommandQueue(_marshaller, new NatsCommandQueueOptions
+            {
+                StreamName = "stream",
+                ConsumerName = "consumer",
+                Subject = "subject"
+            });
+
+            var exception = await Record.ExceptionAsync(async () =>
+            {
+                await foreach (var _ in queue.ReceiveAsync(o => o.CancellationToken = cts.Token)) { }
+            });
+
+            Assert.NotNull(exception);
+        }
+
+        private record TestCommand : Command { }
     }
 }

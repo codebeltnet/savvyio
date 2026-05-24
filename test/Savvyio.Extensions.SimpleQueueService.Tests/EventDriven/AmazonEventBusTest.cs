@@ -79,5 +79,29 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
             Assert.NotNull(sns);
             Assert.IsAssignableFrom<IAmazonSimpleNotificationService>(sns);
         }
+
+        [Fact]
+        public void GetHealthCheckTarget_Should_Use_Configured_Client_When_Available()
+        {
+            var marshaller = new JsonMarshaller();
+            var options = new AmazonEventBusOptions
+            {
+                Credentials = new BasicAWSCredentials("key", "secret"),
+                Endpoint = RegionEndpoint.EUWest1,
+                SourceQueue = new Uri("https://sqs.eu-west-1.amazonaws.com/123456789012/MyQueue")
+            };
+            options.ConfigureClient(config =>
+            {
+                config.ServiceURL = "http://localhost:4566";
+                config.AuthenticationRegion = RegionEndpoint.EUWest1.SystemName;
+            });
+
+            var sut = new AmazonEventBus(marshaller, options);
+
+            var sns = sut.GetHealthCheckTarget();
+
+            Assert.Equal("http://localhost:4566/", sns.Config.ServiceURL);
+            Assert.Equal(RegionEndpoint.EUWest1.SystemName, sns.Config.AuthenticationRegion);
+        }
     }
 }

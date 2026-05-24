@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Codebelt.Extensions.Xunit;
 using Savvyio.EventDriven;
 using Savvyio.Extensions.NATS.Commands;
@@ -51,5 +53,56 @@ namespace Savvyio.Extensions.NATS.EventDriven
         {
             Assert.Throws<ArgumentException>(() => new NatsEventBus(_marshaller, _options));
         }
+
+        [Fact]
+        public void GetHealthCheckTarget_Should_Return_Connection()
+        {
+            var bus = new NatsEventBus(_marshaller, new NatsEventBusOptions
+            {
+                Subject = "subject"
+            });
+
+            Assert.Same(bus.GetHealthCheckTarget(), bus.GetHealthCheckTarget());
+            Assert.NotNull(bus.GetHealthCheckTarget());
+        }
+
+        [Fact]
+        public async Task PublishAsync_WithPreCancelledToken_ShouldThrowOperationCanceledException()
+        {
+            using var cts = new CancellationTokenSource();
+            cts.Cancel();
+
+            var bus = new NatsEventBus(_marshaller, new NatsEventBusOptions { Subject = "subject" });
+            var message = new Message<IIntegrationEvent>(
+                Guid.NewGuid().ToString("N"),
+                new Uri("urn:test"),
+                "test.event",
+                new TestIntegrationEvent());
+
+            var ex = await Record.ExceptionAsync(
+                () => bus.PublishAsync(message, o => o.CancellationToken = cts.Token));
+
+            Assert.NotNull(ex);
+            Assert.IsAssignableFrom<OperationCanceledException>(ex);
+        }
+
+        [Fact]
+        public async Task SubscribeAsync_WithPreCancelledToken_ShouldThrowOperationCanceledException()
+        {
+            using var cts = new CancellationTokenSource();
+            cts.Cancel();
+
+            var bus = new NatsEventBus(_marshaller, new NatsEventBusOptions { Subject = "subject" });
+
+            var ex = await Record.ExceptionAsync(
+                () => bus.SubscribeAsync(
+                    (msg, ct) => Task.CompletedTask,
+                    o => o.CancellationToken = cts.Token));
+
+            Assert.NotNull(ex);
+            Assert.IsAssignableFrom<OperationCanceledException>(ex);
+        }
+
+        private record TestIntegrationEvent : IntegrationEvent { }
     }
 }

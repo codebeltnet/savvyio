@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Amazon.Runtime;
 using Amazon.SQS;
-using Amazon.SQS.Model;
 using Codebelt.Extensions.Xunit;
-using Cuemon.Extensions;
-using Cuemon.Extensions.Reflection;
-using Moq;
 using Savvyio.Commands;
 using Savvyio.Extensions.SimpleQueueService.Commands;
 using Savvyio.Extensions.Text.Json;
@@ -30,7 +27,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
             _marshaller = new JsonMarshaller();
             _options = new AmazonCommandQueueOptions
             {
-                Credentials = new Mock<Amazon.Runtime.AWSCredentials>().Object,
+                Credentials = new AnonymousAWSCredentials(),
                 Endpoint = Amazon.RegionEndpoint.USEast1,
                 SourceQueue = new Uri("https://sqs.us-east-1.amazonaws.com/123456789012/MyQueue")
             };
@@ -85,6 +82,29 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
 
             Assert.NotNull(sqs);
             Assert.IsAssignableFrom<IAmazonSQS>(sqs);
+        }
+
+        [Fact]
+        public void GetHealthCheckTarget_Should_Use_Configured_Client_When_Available()
+        {
+            var options = new AmazonCommandQueueOptions
+            {
+                Credentials = new AnonymousAWSCredentials(),
+                Endpoint = Amazon.RegionEndpoint.USEast1,
+                SourceQueue = new Uri("https://sqs.us-east-1.amazonaws.com/123456789012/MyQueue")
+            };
+            options.ConfigureClient(config =>
+            {
+                config.ServiceURL = "http://localhost:4566";
+                config.AuthenticationRegion = Amazon.RegionEndpoint.USEast1.SystemName;
+            });
+
+            var sut = new AmazonCommandQueue(_marshaller, options);
+
+            var sqs = sut.GetHealthCheckTarget();
+
+            Assert.Equal("http://localhost:4566/", sqs.Config.ServiceURL);
+            Assert.Equal(Amazon.RegionEndpoint.USEast1.SystemName, sqs.Config.AuthenticationRegion);
         }
     }
 }
