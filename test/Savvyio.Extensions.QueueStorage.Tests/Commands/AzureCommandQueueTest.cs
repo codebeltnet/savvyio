@@ -1,29 +1,26 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Azure;
+using Azure.Identity;
+using Azure.Storage;
 using Azure.Storage.Queues;
 using Codebelt.Extensions.Xunit;
-using Moq;
-using Moq.Protected;
 using Savvyio.Commands;
-using Savvyio.Extensions.QueueStorage.Commands;
+using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging;
 using Xunit;
 
 namespace Savvyio.Extensions.QueueStorage.Commands
 {
-    /// <summary>
-    /// Unit tests for <see cref="AzureCommandQueue"/>.
-    /// </summary>
     public class AzureCommandQueueTest : Test
     {
-        private readonly Mock<IMarshaller> _marshallerMock;
+        private readonly IMarshaller _marshaller;
         private readonly AzureQueueOptions _options;
 
         public AzureCommandQueueTest(ITestOutputHelper output) : base(output)
         {
-            _marshallerMock = new Mock<IMarshaller>(MockBehavior.Strict);
+            _marshaller = JsonMarshaller.Default;
             _options = new AzureQueueOptions { QueueName = "test-queue", StorageAccountName = "test-account" };
         }
 
@@ -36,57 +33,70 @@ namespace Savvyio.Extensions.QueueStorage.Commands
         [Fact]
         public void Constructor_ShouldThrowArgumentNullException_WhenOptionsIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new AzureCommandQueue(_marshallerMock.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new AzureCommandQueue(_marshaller, null));
+        }
+
+        [Fact]
+        public void Constructor_ShouldThrowArgumentException_WhenOptionsAreInvalid()
+        {
+            Assert.Throws<ArgumentException>(() => new AzureCommandQueue(_marshaller, new AzureQueueOptions { Credential = null }));
         }
 
         [Fact]
         public void Constructor_ShouldCreateInstance_WhenArgumentsAreValid()
         {
-            var queue = new AzureCommandQueue(_marshallerMock.Object, _options);
+            var queue = new AzureCommandQueue(_marshaller, _options);
             Assert.NotNull(queue);
         }
 
         [Fact]
-        public async Task SendAsync_ShouldReturnTask()
+        public async Task SendAsync_ShouldThrowArgumentNullException_WhenMessagesAreNull()
         {
-            // Arrange
-            var queue = new AzureCommandQueue(_marshallerMock.Object, _options);
-            var messages = new List<IMessage<ICommand>>();
+            var queue = new AzureCommandQueue(_marshaller, _options);
 
-            // Act
-            var task = queue.SendAsync(messages);
-
-            // Assert
-            Assert.NotNull(task);
-            await task; // Ensure it completes without exception
+            await Assert.ThrowsAsync<ArgumentNullException>(() => queue.SendAsync(null));
         }
 
         [Fact]
         public void ReceiveAsync_ShouldReturnAsyncEnumerable()
         {
-            // Arrange
-            var queue = new AzureCommandQueue(_marshallerMock.Object, _options);
+            var queue = new AzureCommandQueue(_marshaller, _options);
 
-            // Act
             var result = queue.ReceiveAsync();
 
-            // Assert
             Assert.NotNull(result);
             Assert.IsAssignableFrom<IAsyncEnumerable<IMessage<ICommand>>>(result);
         }
 
         [Fact]
-        public void GetHealthCheckTarget_ShouldReturnQueueServiceClient()
+        public void GetHealthCheckTarget_ShouldReturnQueueServiceClient_ForConnectionString()
         {
-            // Arrange
-            var queue = new AzureCommandQueue(_marshallerMock.Object, _options);
+            var queue = new AzureCommandQueue(_marshaller, new AzureQueueOptions
+            {
+                ConnectionString = "UseDevelopmentStorage=true",
+                QueueName = "testqueue"
+            });
 
-            // Act
             var result = queue.GetHealthCheckTarget();
 
-            // Assert
             Assert.NotNull(result);
             Assert.IsType<QueueServiceClient>(result);
+            Assert.StartsWith("http://127.0.0.1:10001/devstoreaccount1", result.Uri.AbsoluteUri, StringComparison.OrdinalIgnoreCase);
+        }
+
+        [Fact]
+        public void GetHealthCheckTarget_ShouldReturnQueueServiceClient_ForStorageSharedKeyCredential()
+        {
+            var queue = new AzureCommandQueue(_marshaller, new AzureQueueOptions
+            {
+                StorageAccountName = "testaccount",
+                QueueName = "testqueue",
+                StorageKeyCredential = new StorageSharedKeyCredential("testaccount", Convert.ToBase64String(new byte[32]))
+            });
+
+            var result = queue.GetHealthCheckTarget();
+
+            Assert.Equal(new Uri("https://testaccount.queue.core.windows.net/testqueue"), result.Uri);
         }
     }
 }

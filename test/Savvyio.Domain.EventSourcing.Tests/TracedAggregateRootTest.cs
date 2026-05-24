@@ -9,6 +9,7 @@ using Savvyio.Assets.Domain;
 using Savvyio.Assets.Domain.Events;
 using Savvyio.Assets.Domain.EventSourcing;
 using Savvyio.Assets.Domain.Handlers;
+using Savvyio.Domain;
 using Savvyio.Extensions.DependencyInjection;
 using Savvyio.Extensions.DependencyInjection.Domain.EventSourcing;
 using Savvyio.Extensions.DependencyInjection.EFCore;
@@ -18,7 +19,9 @@ using Savvyio.Extensions.EFCore;
 using Savvyio.Extensions.EFCore.Domain.EventSourcing;
 using Savvyio.Extensions.Newtonsoft.Json;
 using Savvyio.Extensions.Text.Json;
+using Savvyio.Handlers;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -213,6 +216,91 @@ Annotations:
             Assert.Equal(expectedVersion, sut.Version);
             Assert.Equal(newName, sut.FullName);
             Assert.Equal(newEmail, sut.EmailAddress);
+        }
+
+        [Fact]
+        public void EfCoreTracedAggregateEntity_ShouldExposeExplicitInterfaceMembers()
+        {
+            var id = Guid.NewGuid();
+            var providerId = new PlatformProviderId(Guid.NewGuid());
+            var fullName = new FullName("Test", "User");
+            var emailAddress = new EmailAddress("test@unit.test");
+            var ta = new TracedAccount(id, providerId, fullName, emailAddress);
+            var domainEvent = ta.Events.First();
+            var marshaller = new JsonMarshaller();
+
+            var entity = new EfCoreTracedAggregateEntity<TracedAccount, Guid>(ta, domainEvent, marshaller);
+
+            var metadata = ((IMetadata)entity).Metadata;
+            var events = ((IAggregateRoot<ITracedDomainEvent>)entity).Events;
+            ((IAggregateRoot<ITracedDomainEvent>)entity).RemoveAllEvents(); // no-op
+
+            Assert.NotNull(metadata);
+            Assert.Single(events);
+            Assert.Single(((IAggregateRoot<ITracedDomainEvent>)entity).Events); // RemoveAllEvents is no-op
+        }
+
+        [Fact]
+        public async Task EfCoreTracedAggregateRepository_AddRange_ShouldPersistMultipleAggregates()
+        {
+            var sc = new ServiceCollection();
+            var dbName = "Dummy_AddRange_" + Generate.RandomString(10);
+            sc.AddSavvyIO(o => o.AddDomainEventDispatcher().AddDomainEventHandler<AccountDomainEventHandler>());
+            sc.AddMarshaller<JsonMarshaller>();
+            sc.AddEfCoreAggregateDataSource<JsonMarshaller>(o =>
+            {
+                o.ContextConfigurator = b => b.UseInMemoryDatabase(dbName).EnableSensitiveDataLogging().EnableDetailedErrors();
+                o.ModelConstructor = mb => mb.AddEventSourcing<TracedAccount, Guid>(eo => eo.TableName = $"{nameof(TracedAccount)}_DomainEvents");
+            });
+            sc.AddEfCoreTracedAggregateRepository<TracedAccount, Guid, JsonMarshaller>();
+            sc.AddScoped<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
+
+            var sp = sc.BuildServiceProvider();
+            var ds = sp.GetRequiredService<IEfCoreDataSource<JsonMarshaller>>() as IEfCoreDataSource;
+            var sut4 = sp.GetRequiredService<ITracedAggregateRepository<TracedAccount, Guid, JsonMarshaller>>() as ITracedAggregateRepository<TracedAccount, Guid>;
+
+            var id1 = Guid.NewGuid();
+            var id2 = Guid.NewGuid();
+            var providerId = Guid.NewGuid();
+
+            var ta1 = new TracedAccount(id1, providerId, "Name1", "email1@test.com");
+            var ta2 = new TracedAccount(id2, providerId, "Name2", "email2@test.com");
+
+            sut4.AddRange([ta1, ta2]);
+            await ds.SaveChangesAsync();
+
+            var result1 = await sut4.GetByIdAsync(id1);
+            var result2 = await sut4.GetByIdAsync(id2);
+
+            Assert.Equal(id1, result1.Id);
+            Assert.Equal("Name1", result1.FullName);
+            Assert.Equal(id2, result2.Id);
+            Assert.Equal("Name2", result2.FullName);
+        }
+
+        [Fact]
+        public async Task EfCoreTracedAggregateRepository_GetByIdAsync_ShouldThrowMissingMethodException_WhenEntityLacksRehydrationConstructor()
+        {
+            var sc = new ServiceCollection();
+            var dbName = "Dummy_NoCtor_" + Generate.RandomString(10);
+            sc.AddSavvyIO(o => o.AddDomainEventDispatcher());
+            sc.AddMarshaller<JsonMarshaller>();
+            sc.AddEfCoreAggregateDataSource<JsonMarshaller>(o =>
+            {
+                o.ContextConfigurator = b => b.UseInMemoryDatabase(dbName);
+                o.ModelConstructor = mb => mb.AddEventSourcing<NoCtorTracedAccount, Guid>(eo => eo.TableName = "NoCtorTracedAccount_DomainEvents");
+            });
+            sc.AddEfCoreTracedAggregateRepository<NoCtorTracedAccount, Guid, JsonMarshaller>();
+
+            var sp = sc.BuildServiceProvider();
+            var sut = sp.GetRequiredService<ITracedAggregateRepository<NoCtorTracedAccount, Guid, JsonMarshaller>>() as ITracedAggregateRepository<NoCtorTracedAccount, Guid>;
+
+            await Assert.ThrowsAsync<MissingMethodException>(() => sut.GetByIdAsync(Guid.NewGuid()));
+        }
+
+        private class NoCtorTracedAccount : TracedAggregateRoot<Guid>
+        {
+            protected override void RegisterDelegates(IFireForgetRegistry<ITracedDomainEvent> handler) { }
         }
     }
 }

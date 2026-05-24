@@ -42,7 +42,7 @@ namespace Savvyio.Extensions.QueueStorage.EventDriven
         }
 
         [Fact]
-        public void Ctor_Should_Use_Correct_Credential()
+        public void Ctor_Should_Use_Token_Credential()
         {
             var marshaller = new JsonMarshaller();
             var queueOptions = new AzureQueueOptions
@@ -55,6 +55,26 @@ namespace Savvyio.Extensions.QueueStorage.EventDriven
             {
                 TopicEndpoint = new Uri("https://test.topic"),
                 Credential = new Mock<TokenCredential>().Object
+            };
+
+            var bus = new AzureEventBus(marshaller, queueOptions, eventBusOptions);
+            Assert.NotNull(bus);
+        }
+
+        [Fact]
+        public void Ctor_Should_Use_Sas_And_Key_Credentials()
+        {
+            var marshaller = new JsonMarshaller();
+            var queueOptions = new AzureQueueOptions
+            {
+                StorageAccountName = "testaccount",
+                QueueName = "testqueue",
+                SasCredential = new AzureSasCredential("sig")
+            };
+            var eventBusOptions = new AzureEventBusOptions
+            {
+                TopicEndpoint = new Uri("https://test.topic"),
+                KeyCredential = new AzureKeyCredential("key")
             };
 
             var bus = new AzureEventBus(marshaller, queueOptions, eventBusOptions);

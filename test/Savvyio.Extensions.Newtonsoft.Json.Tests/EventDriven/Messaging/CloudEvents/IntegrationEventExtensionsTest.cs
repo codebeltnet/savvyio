@@ -95,5 +95,26 @@ namespace Savvyio.Extensions.Newtonsoft.Json.EventDriven.Messaging.CloudEvents
                            }
                            """.ReplaceLineEndings(), jsonString);
         }
+
+        [Fact]
+        public void ToMessage_ToCloudEvent_ShouldSerializeAndDeserialize_ExtensionAttributes_UsingInterface()
+        {
+            var utc = DateTime.Parse("2023-11-16T23:24:17.8414532Z", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
+            var sut1 = new MemberCreated("Jane Doe", "jd@office.com").SetEventId("69bccf3b1117425397c5ed9ed757bb0f").SetTimestamp(utc);
+            var sut2 = sut1.ToMessage("https://fancy.api/members".ToUri(), nameof(MemberCreated), o =>
+            {
+                o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
+                o.Time = utc;
+            }).ToCloudEvent();
+            sut2["tenant"] = "acme";
+            sut2["sequence"] = 42;
+
+            var json = NewtonsoftJsonMarshaller.Default.Serialize(sut2);
+            var sut3 = NewtonsoftJsonMarshaller.Default.Deserialize<ICloudEvent<MemberCreated>>(json);
+
+            Assert.Equal("acme", sut3["tenant"]);
+            Assert.Equal(42L, sut3["sequence"]);
+            Assert.Equivalent(sut2.Data, sut3.Data, true);
+        }
     }
 }

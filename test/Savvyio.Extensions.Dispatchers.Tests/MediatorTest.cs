@@ -77,6 +77,7 @@ namespace Savvyio.Extensions.Dispatchers
                 services.AddHandlerServicesDescriptor();
                 services.AddSingleton<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
                 services.AddSingleton<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
+                services.AddSingleton<ITestStore<string>, InMemoryTestStore<string>>();
             });
             using var scope = test.Host.Services.CreateScope();
             var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
@@ -119,6 +120,7 @@ namespace Savvyio.Extensions.Dispatchers
                 services.AddHandlerServicesDescriptor();
                 services.AddSingleton<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
                 services.AddSingleton<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
+                services.AddSingleton<ITestStore<string>, InMemoryTestStore<string>>();
             });
             var scope = test.Host.Services.CreateScope();
             var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
@@ -153,6 +155,7 @@ namespace Savvyio.Extensions.Dispatchers
                 services.AddHandlerServicesDescriptor();
                 services.AddSingleton<ITestStore<IDomainEvent>, InMemoryTestStore<IDomainEvent>>();
                 services.AddSingleton<ITestStore<IIntegrationEvent>, InMemoryTestStore<IIntegrationEvent>>();
+                services.AddSingleton<ITestStore<string>, InMemoryTestStore<string>>();
             });
             using var scope = test.Host.Services.CreateScope();
             var mediator = scope.ServiceProvider.GetRequiredService<IQueryDispatcher>();

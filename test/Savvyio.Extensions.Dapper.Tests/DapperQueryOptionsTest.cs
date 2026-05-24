@@ -4,6 +4,7 @@ using System.Threading;
 using Cuemon.Extensions;
 using Codebelt.Extensions.Xunit;
 using Dapper;
+using Microsoft.Data.Sqlite;
 using Xunit;
 
 namespace Savvyio.Extensions.Dapper
@@ -35,6 +36,36 @@ namespace Savvyio.Extensions.Dapper
             Assert.Equal(sut.Parameters, cd.Parameters);
             Assert.Equal(sut.Transaction, cd.Transaction);
 
+        }
+
+        [Fact]
+        public void DapperOptions_ShouldPreserveCustomValuesInImplicitConversion()
+        {
+            using var connection = new SqliteConnection("Data Source=:memory:");
+            connection.Open();
+            using var transaction = connection.BeginTransaction();
+            using var cts = new CancellationTokenSource();
+            var parameters = new { Id = 42 };
+            var sut = new DapperQueryOptions
+            {
+                CommandText = "SELECT 1",
+                CommandFlags = CommandFlags.NoCache,
+                CommandTimeout = TimeSpan.FromSeconds(12),
+                CommandType = CommandType.StoredProcedure,
+                Parameters = parameters,
+                Transaction = transaction,
+                CancellationToken = cts.Token
+            };
+
+            var cd = (CommandDefinition)sut;
+
+            Assert.Equal("SELECT 1", cd.CommandText);
+            Assert.Equal(CommandFlags.NoCache, cd.Flags);
+            Assert.Equal(12, cd.CommandTimeout);
+            Assert.Equal(CommandType.StoredProcedure, cd.CommandType);
+            Assert.Equal(parameters, cd.Parameters);
+            Assert.Equal(transaction, cd.Transaction);
+            Assert.Equal(cts.Token, cd.CancellationToken);
         }
     }
 }
