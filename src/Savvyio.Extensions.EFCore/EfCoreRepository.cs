@@ -62,7 +62,7 @@ namespace Savvyio.Extensions.EFCore
         public virtual Task<TEntity> GetByIdAsync(TKey id, Action<AsyncOptions> setup = null)
         {
             var options = setup.Configure();
-            return Set.FindAsync(new[] { id }, options.CancellationToken).AsTask();
+            return Set.FindAsync(new object[] { id }, options.CancellationToken).AsTask();
         }
 
         /// <summary>
