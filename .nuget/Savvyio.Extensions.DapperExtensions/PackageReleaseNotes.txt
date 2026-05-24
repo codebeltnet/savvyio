@@ -2,7 +2,7 @@ Version: 5.0.7
 Availability: .NET 10 and .NET 9
 
 # ALM
-- CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
+- CHANGED DapperExtensions.StrongNameReference upgraded to 1.11.0; Dapper.StrongName upgraded to 2.1.79; all other dependencies upgraded to latest compatible versions
 
 Version: 5.0.6
 Availability: .NET 10 and .NET 9
