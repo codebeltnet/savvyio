@@ -4,9 +4,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
-## [5.0.7] - 2026-05-23
+## [5.0.7] - 2026-05-24
 
-This is a service update that focuses on package dependencies.
+This is a patch release focused on Azure.Identity compatibility across target frameworks, RabbitMQ queue durability correction, comprehensive test coverage expansion across multiple extensions, and dependency updates including LocalStack, NATS.Client, and Microsoft utility packages.
+
+### Added
+
+- Comprehensive test coverage across EventDriven, Extensions.Dapper, Extensions.DependencyInjection, Extensions.Dispatchers, Extensions.Newtonsoft.Json, Extensions.QueueStorage, Extensions.RabbitMQ, Extensions.Text.Json, and Domain.EventSourcing modules,
+- RabbitMqCommandQueue and RabbitMqEventBus integration tests with detailed command and event messaging scenarios,
+- NATS extension tests including NatsCommandQueue and NatsEventBus coverage,
+- Amazon SQS/SNS extension tests with AmazonMessage and related queue/bus scenarios,
+- EFCore DomainEventDispatcher extension tests and related data store/repository coverage,
+- DateTime and DateTimeOffset converter tests for Text.Json serialization,
+- Converter tests for Newtonsoft.Json including ValueObjectConverter and AggregateRootConverter.
+
+### Changed
+
+- Azure.Identity version targeting: 1.17.2 for net9, 1.21.0 for net10 to resolve transitive dependency conflicts introduced in v5.0.4,
+- RabbitMqCommandQueueOptions now defaults Durable to true (was false) to comply with RabbitMQ 4.x deprecation of transient_nonexcl_queues,
+- LocalStack Docker image upgraded from 4.13.1 to 4.14.0 for integration testing,
+- NATS.Client versions bumped to latest,
+- Microsoft testing and logging packages updated to latest minor versions,
+- DocFX build environment nginx updated from 1.30.0 to 1.31.0,
+- Codebelt and Cuemon utility libraries updated to latest compatible versions.
+
+### Fixed
+
+- RabbitMQ command queue configuration no longer produces deprecated transient_nonexcl_queues when using default options,
+- GetByIdAsync method now correctly uses object array for id parameter to match API contract.
+
+### Removed
+
+- NuGet prompt file (`.github/prompts/nuget.prompt.md`) used for package release notes generation.
 
 ## [5.0.6] - 2026-04-18
 
