@@ -4,9 +4,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
-## [5.0.7] - 2026-05-25
+## [5.0.7] - 2026-05-26
 
-This is a patch release focused on Azure.Identity compatibility across target frameworks, RabbitMQ queue durability correction, comprehensive test coverage expansion across multiple extensions, dependency updates including LocalStack, NATS.Client, and Microsoft utility packages, and test reliability hardening for distributed mediator scenarios.
+This is a patch release focused on Azure.Identity compatibility across target frameworks, RabbitMQ queue durability correction, comprehensive test coverage expansion across multiple extensions, testability improvements with protected virtual methods and constructors for extensibility, dependency updates including LocalStack, NATS.Client, and Microsoft utility packages, and test reliability hardening for distributed mediator scenarios.
 
 ### Added
 
@@ -16,7 +16,8 @@ This is a patch release focused on Azure.Identity compatibility across target fr
 - Amazon SQS/SNS extension tests with AmazonMessage and related queue/bus scenarios,
 - EFCore DomainEventDispatcher extension tests and related data store/repository coverage,
 - DateTime and DateTimeOffset converter tests for Text.Json serialization,
-- Converter tests for Newtonsoft.Json including ValueObjectConverter and AggregateRootConverter.
+- Converter tests for Newtonsoft.Json including ValueObjectConverter and AggregateRootConverter,
+- AssemblyContext unit tests covering current domain assembly filtering and custom filter callbacks.
 
 ### Changed
 
@@ -27,7 +28,10 @@ This is a patch release focused on Azure.Identity compatibility across target fr
 - Microsoft testing and logging packages updated to latest minor versions,
 - DocFX build environment nginx updated from 1.30.0 to 1.31.0,
 - Codebelt and Cuemon utility libraries updated to latest compatible versions,
-- AWS CLI Docker image updated to version 2.34.53.
+- AWS CLI Docker image updated to version 2.34.53,
+- NatsCommandQueue and NatsEventBus now expose protected virtual methods (PublishMessageAsync, CreateConsumerAsync, CreateJetStreamContext, FetchMessagesAsync, SubscribeMessagesAsync) and ReceivedNatsMessage inner classes for improved testability and extensibility,
+- AzureQueue<TRequest> and AzureEventBus now expose protected constructors accepting injected Azure SDK clients for testability without hitting real endpoints,
+- AmazonMessage<TRequest>, AmazonCommandQueue, and AmazonEventBus now expose protected virtual factory methods (CreateSimpleQueueServiceClient, CreateSimpleNotificationServiceClient) for improved testability and reduced credential/endpoint branching duplication.
 
 ### Fixed
 
