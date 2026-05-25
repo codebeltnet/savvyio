@@ -21,7 +21,7 @@ This is a patch release focused on Azure.Identity compatibility across target fr
 
 ### Changed
 
-- Azure.Identity version targeting: 1.17.2 for net9, 1.21.0 for net10 to resolve transitive dependency conflicts introduced in v5.0.4,
+- Azure.Identity consolidated to 1.21.0 for all target frameworks (previously split as 1.17.2 for net9, 1.21.0 for net10) to resolve transitive dependency conflicts introduced in v5.0.4,
 - RabbitMqCommandQueueOptions now defaults Durable to true (was false) to comply with RabbitMQ 4.x deprecation of transient_nonexcl_queues,
 - LocalStack Docker image upgraded from 4.13.1 to 4.14.0 for integration testing,
 - NATS.Client versions bumped to latest,
