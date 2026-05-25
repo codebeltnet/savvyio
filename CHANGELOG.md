@@ -4,9 +4,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
-## [5.0.7] - 2026-05-24
+## [5.0.7] - 2026-05-25
 
-This is a patch release focused on Azure.Identity compatibility across target frameworks, RabbitMQ queue durability correction, comprehensive test coverage expansion across multiple extensions, and dependency updates including LocalStack, NATS.Client, and Microsoft utility packages.
+This is a patch release focused on Azure.Identity compatibility across target frameworks, RabbitMQ queue durability correction, comprehensive test coverage expansion across multiple extensions, dependency updates including LocalStack, NATS.Client, and Microsoft utility packages, and test reliability hardening for distributed mediator scenarios.
 
 ### Added
 
@@ -26,12 +26,14 @@ This is a patch release focused on Azure.Identity compatibility across target fr
 - NATS.Client versions bumped to latest,
 - Microsoft testing and logging packages updated to latest minor versions,
 - DocFX build environment nginx updated from 1.30.0 to 1.31.0,
-- Codebelt and Cuemon utility libraries updated to latest compatible versions.
+- Codebelt and Cuemon utility libraries updated to latest compatible versions,
+- AWS CLI Docker image updated to version 2.34.53.
 
 ### Fixed
 
 - RabbitMQ command queue configuration no longer produces deprecated transient_nonexcl_queues when using default options,
-- GetByIdAsync method now correctly uses object array for id parameter to match API contract.
+- GetByIdAsync method now correctly uses object array for id parameter to match API contract,
+- DistributedMediatorTest now uses unique email addresses and enhanced retry logic with configurable visibility timeouts to improve test reliability in parallel and cross-platform environments.
 
 ### Removed
 
