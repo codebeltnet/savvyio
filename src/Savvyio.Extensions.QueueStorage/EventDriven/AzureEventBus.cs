@@ -3,6 +3,7 @@ using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.Messaging.EventGrid;
+using Azure.Storage.Queues;
 using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
@@ -36,13 +37,7 @@ namespace Savvyio.Extensions.QueueStorage.EventDriven
         /// <param name="marshaller">The <see cref="IMarshaller"/> to use for serializing and deserializing <see cref="IIntegrationEvent"/> implementations to messages.</param>
         /// <param name="azureQueueOptions">The <see cref="AzureQueueOptions"/> for configuring <see cref="AzureQueue{TRequest}"/>.</param>
         /// <param name="azureEventBusOptions">The <see cref="AzureEventBusOptions"/> used to configure this instance.</param>
-        public AzureEventBus(IMarshaller marshaller, AzureQueueOptions azureQueueOptions, AzureEventBusOptions azureEventBusOptions) : base(marshaller, azureQueueOptions, receiveMessageFormatter: (rawMessage, serializer) =>
-        {
-            var json = rawMessage.MessageText;
-            var jsonStream = json.FromBase64().ToStream();
-            var type = JsonNode.Parse(jsonStream.ToEncodedString(o => o.LeaveOpen = true))!.Root[CloudEventTypeExtensionAttribute]!.GetValue<string>();
-            return serializer.Deserialize(jsonStream, Type.GetType(type)!) as IMessage<IIntegrationEvent>;
-        })
+        public AzureEventBus(IMarshaller marshaller, AzureQueueOptions azureQueueOptions, AzureEventBusOptions azureEventBusOptions) : base(marshaller, azureQueueOptions, receiveMessageFormatter: FormatCloudEventQueueMessage)
         {
             Validator.ThrowIfInvalidOptions(azureEventBusOptions);
 
@@ -61,6 +56,24 @@ namespace Savvyio.Extensions.QueueStorage.EventDriven
                 _client = new EventGridPublisherClient(azureEventBusOptions.TopicEndpoint, azureEventBusOptions.KeyCredential, azureEventBusOptions.Settings);
             }
 
+            _options = azureEventBusOptions;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AzureEventBus"/> class with testable Azure clients.
+        /// </summary>
+        /// <param name="marshaller">The <see cref="IMarshaller"/> to use for serializing and deserializing <see cref="IIntegrationEvent"/> implementations to messages.</param>
+        /// <param name="azureQueueOptions">The <see cref="AzureQueueOptions"/> for configuring <see cref="AzureQueue{TRequest}"/>.</param>
+        /// <param name="azureEventBusOptions">The <see cref="AzureEventBusOptions"/> used to configure this instance.</param>
+        /// <param name="queueServiceClient">The queue service client to use.</param>
+        /// <param name="queueClient">The queue client to use.</param>
+        /// <param name="eventGridClient">The event grid publisher client to use.</param>
+        protected AzureEventBus(IMarshaller marshaller, AzureQueueOptions azureQueueOptions, AzureEventBusOptions azureEventBusOptions, QueueServiceClient queueServiceClient, QueueClient queueClient, EventGridPublisherClient eventGridClient) : base(marshaller, azureQueueOptions, queueServiceClient, queueClient, receiveMessageFormatter: FormatCloudEventQueueMessage)
+        {
+            Validator.ThrowIfInvalidOptions(azureEventBusOptions);
+
+            _marshaller = marshaller;
+            _client = eventGridClient;
             _options = azureEventBusOptions;
         }
 
@@ -136,6 +149,14 @@ namespace Savvyio.Extensions.QueueStorage.EventDriven
         public Uri GetHealthCheckTarget()
         {
             return new Uri(_options.TopicEndpoint, "/api/health");
+        }
+
+        private static IMessage<IIntegrationEvent> FormatCloudEventQueueMessage(Azure.Storage.Queues.Models.QueueMessage rawMessage, IMarshaller serializer)
+        {
+            var json = rawMessage.MessageText;
+            var jsonStream = json.FromBase64().ToStream();
+            var type = JsonNode.Parse(jsonStream.ToEncodedString(o => o.LeaveOpen = true))!.Root[CloudEventTypeExtensionAttribute]!.GetValue<string>();
+            return serializer.Deserialize(jsonStream, Type.GetType(type)!) as IMessage<IIntegrationEvent>;
         }
     }
 }

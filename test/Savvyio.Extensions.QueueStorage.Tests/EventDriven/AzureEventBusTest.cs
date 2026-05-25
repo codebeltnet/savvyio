@@ -8,8 +8,12 @@ using System.Threading.Tasks;
 using Azure;
 using Azure.Core;
 using Azure.Messaging.EventGrid;
+using Azure.Storage.Queues;
+using Azure.Storage.Queues.Models;
 using Codebelt.Extensions.Xunit;
 using Cuemon.Extensions;
+using Cuemon.Extensions.IO;
+using Cuemon.Extensions.Reflection;
 using Cuemon.Threading;
 using Moq;
 using Savvyio.EventDriven;
@@ -102,7 +106,7 @@ namespace Savvyio.Extensions.QueueStorage.EventDriven
             var bus = CreateSut(marshaller: marshaller);
             SetPrivateClient(bus, eventGridClient.Object);
 
-            var message = new Message<IIntegrationEvent>("id", "https://source".ToUri(), "type", new DummyIntegrationEvent(), DateTime.UtcNow);
+            var message = new Message<DummyIntegrationEvent>("id", "https://source".ToUri(), "type", new DummyIntegrationEvent(), DateTime.UtcNow);
 
             await bus.PublishAsync(message);
 
@@ -139,9 +143,8 @@ namespace Savvyio.Extensions.QueueStorage.EventDriven
         }
 
         // Dummy event for test
-        private class DummyIntegrationEvent : IIntegrationEvent
+        private record DummyIntegrationEvent : IntegrationEvent
         {
-            public IMetadataDictionary Metadata { get; }
         }
 
         // Helper test double for ISignedMessage<IIntegrationEvent>
@@ -177,6 +180,33 @@ namespace Savvyio.Extensions.QueueStorage.EventDriven
             Assert.Equal(new Uri("https://test.topic/api/health"), uri);
         }
 
+        [Fact]
+        public async Task SubscribeAsync_ShouldReceiveQueuedCloudEventsAndInvokeHandler()
+        {
+            var marshaller = new JsonMarshaller();
+            var message = new Message<DummyIntegrationEvent>("id", "https://source".ToUri(), "type", new DummyIntegrationEvent(), DateTime.UtcNow);
+            var cloudEvent = message.ToCloudEvent();
+            cloudEvent.Add(AzureEventBus.CloudEventTypeExtensionAttribute, message.GetType().ToFullNameIncludingAssemblyName());
+            var raw = QueuesModelFactory.QueueMessage("message-id", "pop-receipt", marshaller.Serialize(cloudEvent).ToEncodedString().ToByteArray().ToBase64String(), 1, DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddDays(1), DateTimeOffset.UtcNow);
+            var queueClient = new Mock<QueueClient>();
+            queueClient.SetupSequence(c => c.ReceiveMessagesAsync(It.IsAny<int?>(), It.IsAny<TimeSpan?>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(Response.FromValue(new[] { raw }, Mock.Of<Response>()))
+                .ReturnsAsync(Response.FromValue(Array.Empty<QueueMessage>(), Mock.Of<Response>()));
+            queueClient.Setup(c => c.DeleteMessageAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(Mock.Of<Response>());
+            var bus = new TestableAzureEventBus(marshaller, queueClient.Object);
+            IMessage<IIntegrationEvent> received = null;
+
+            await bus.SubscribeAsync((msg, _) =>
+            {
+                received = msg;
+                return Task.CompletedTask;
+            });
+
+            Assert.NotNull(received);
+            Assert.Equal(message.Id, received.Id);
+        }
+
         // --- Helpers ---
 
         private AzureEventBus CreateSut(
@@ -203,6 +233,22 @@ namespace Savvyio.Extensions.QueueStorage.EventDriven
         {
             var field = typeof(AzureEventBus).GetField("_client", BindingFlags.Instance | BindingFlags.NonPublic);
             field.SetValue(bus, client);
+        }
+
+        private sealed class TestableAzureEventBus : AzureEventBus
+        {
+            public TestableAzureEventBus(IMarshaller marshaller, QueueClient queueClient) : base(marshaller, new AzureQueueOptions
+            {
+                StorageAccountName = "testaccount",
+                QueueName = "testqueue",
+                Credential = new Mock<TokenCredential>().Object
+            }, new AzureEventBusOptions
+            {
+                TopicEndpoint = new Uri("https://test.topic"),
+                Credential = new Mock<TokenCredential>().Object
+            }, Mock.Of<QueueServiceClient>(), queueClient, Mock.Of<EventGridPublisherClient>())
+            {
+            }
         }
 
     }
