@@ -1,0 +1,54 @@
+# syntax=docker/dockerfile:1.7
+
+ARG DOTNET_VERSION=10.0
+ARG UBUNTU_FLAVOR=noble
+
+FROM --platform=$TARGETPLATFORM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-${UBUNTU_FLAVOR}
+
+ARG DOTNET_VERSION
+
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 \
+    DOTNET_NOLOGO=1 \
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 \
+    NUGET_XMLDOC_MODE=skip \
+    CI=false
+
+WORKDIR /work
+
+# The .NET 10 SDK can build net9.0, but it does not include the net9.0 runtime.
+# Your local test projects target both net10.0 and net9.0 when CI != true.
+RUN if [ "${DOTNET_VERSION}" = "10.0" ]; then \
+        apt-get update \
+        && apt-get install -y --no-install-recommends curl ca-certificates git \
+        && curl -fsSL https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh \
+        && chmod +x /tmp/dotnet-install.sh \
+        && /tmp/dotnet-install.sh --channel 9.0 --runtime dotnet --install-dir /usr/share/dotnet \
+        && rm -rf /tmp/dotnet-install.sh /var/lib/apt/lists/*; \
+    else \
+        apt-get update \
+        && apt-get install -y --no-install-recommends ca-certificates git \
+        && rm -rf /var/lib/apt/lists/*; \
+    fi
+
+COPY . .
+
+ENTRYPOINT ["/bin/bash", "-lc"]
+
+CMD [ "\
+  set -euo pipefail; \
+  project=\"${TEST_PROJECT:-Savvyio.slnx}\"; \
+  configuration=\"${CONFIGURATION:-Debug}\"; \
+  framework=\"${TEST_FRAMEWORK:-}\"; \
+  filter=\"${TEST_FILTER:-}\"; \
+  echo \"Architecture: $(uname -m)\"; \
+  echo \"Project:       $project\"; \
+  echo \"Configuration: $configuration\"; \
+  echo \"Framework:     ${framework:-all}\"; \
+  dotnet --info; \
+  dotnet restore \"$project\"; \
+  args=(dotnet test \"$project\" --no-restore --configuration \"$configuration\" -p:SkipSignAssembly=true --logger \"console;verbosity=normal\"); \
+  if [ -n \"$framework\" ]; then args+=(--framework \"$framework\"); fi; \
+  if [ -n \"$filter\" ]; then args+=(--filter \"$filter\"); fi; \
+  printf 'Command: '; printf '%q ' \"${args[@]}\"; echo; \
+  \"${args[@]}\" \
+" ]

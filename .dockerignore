@@ -1,0 +1,14 @@
+# Build artefacts — rebuilt inside the container
+**/bin/
+**/obj/
+
+# Version control
+.git
+.github
+
+# IDE state
+.vs
+**/*.user
+
+# Previous test results
+TestResults/
