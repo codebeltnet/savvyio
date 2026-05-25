@@ -89,7 +89,7 @@ namespace Savvyio.Domain.EventSourcing
                     sc.AddMarshaller<NewtonsoftJsonMarshaller>();
                     sc.AddEfCoreAggregateDataSource<NewtonsoftJsonMarshaller>(o =>
                     {
-                        o.ContextConfigurator = b => b.UseInMemoryDatabase(dbName).EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
+                        o.ContextConfigurator = b => b.UseInMemoryDatabase(dbName).EnableSensitiveDataLogging().EnableDetailedErrors().EnableServiceProviderCaching(false).LogTo(Console.WriteLine, LogLevel.Trace);
                         o.ModelConstructor = mb =>
                         {
                             mb.AddEventSourcing<TracedAccount, Guid>(eo => eo.TableName = $"{nameof(TracedAccount)}_DomainEvents");
@@ -103,7 +103,7 @@ namespace Savvyio.Domain.EventSourcing
                     sc.AddMarshaller<JsonMarshaller>();
                     sc.AddEfCoreAggregateDataSource<JsonMarshaller>(o =>
                     {
-                        o.ContextConfigurator = b => b.UseInMemoryDatabase(dbName).EnableSensitiveDataLogging().EnableDetailedErrors().LogTo(Console.WriteLine, LogLevel.Trace);
+                        o.ContextConfigurator = b => b.UseInMemoryDatabase(dbName).EnableSensitiveDataLogging().EnableDetailedErrors().EnableServiceProviderCaching(false).LogTo(Console.WriteLine, LogLevel.Trace);
                         o.ModelConstructor = mb =>
                         {
                             mb.AddEventSourcing<TracedAccount, Guid>(eo => eo.TableName = $"{nameof(TracedAccount)}_DomainEvents");
