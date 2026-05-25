@@ -129,6 +129,25 @@ jobs:
       build: true # needed for xunitv3
       download-pattern: build-${{ matrix.configuration }}-${{ matrix.arch }}
 
+  test_mac:
+    name: call-test-mac
+    needs: [build, prepare_test]
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [X64, ARM64]
+        configuration: [Debug, Release]
+        project: ${{ fromJson(needs.prepare_test.outputs.json) }}
+    uses: codebeltnet/jobs-dotnet-test/.github/workflows/default.yml@v3
+    with:
+      runs-on: ${{ matrix.arch == 'ARM64' && 'macos-26' || 'macos-26-intel' }}
+      configuration: ${{ matrix.configuration }}
+      projects: ${{ matrix.project }}
+      build-switches: -p:SkipSignAssembly=true
+      restore: true
+      build: true # needed for xunitv3
+      download-pattern: build-${{ matrix.configuration }}-${{ matrix.arch }}
+
   integration_test:
     if: ${{ needs.init.outputs.run-privileged-jobs == 'true' }}
     name: ⚗️ Integration Test - Azure and AWS
