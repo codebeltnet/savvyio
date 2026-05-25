@@ -51,9 +51,10 @@ namespace Savvyio.Extensions.NATS.Commands
         /// <returns>A <see cref="Task"/> that represents the asynchronous operation.</returns>
         public async Task SendAsync(IEnumerable<IMessage<ICommand>> messages, Action<AsyncOptions> setup = null)
         {
+            var context = CreateJetStreamContext();
             foreach (var message in messages)
             {
-                await PublishMessageAsync(_options.Subject, (await Marshaller.Serialize(message).ToByteArrayAsync().ConfigureAwait(false)).ToBase64String(), new NatsHeaders()
+                await PublishMessageAsync(context, _options.Subject, (await Marshaller.Serialize(message).ToByteArrayAsync().ConfigureAwait(false)).ToBase64String(), new NatsHeaders()
                 {
                     { "type", message.GetType().ToFullNameIncludingAssemblyName() }
                 }).ConfigureAwait(false);
@@ -119,13 +120,14 @@ namespace Savvyio.Extensions.NATS.Commands
         /// <summary>
         /// Publishes a serialized message to NATS JetStream.
         /// </summary>
+        /// <param name="context">The JetStream context to use for publishing.</param>
         /// <param name="subject">The subject to publish to.</param>
         /// <param name="message">The serialized message payload.</param>
         /// <param name="headers">The message headers.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        protected virtual async Task PublishMessageAsync(string subject, string message, NatsHeaders headers)
+        protected virtual async Task PublishMessageAsync(INatsJSContext context, string subject, string message, NatsHeaders headers)
         {
-            await CreateJetStreamContext().PublishAsync(subject, message, headers: headers).ConfigureAwait(false);
+            await context.PublishAsync(subject, message, headers: headers).ConfigureAwait(false);
         }
 
         /// <summary>

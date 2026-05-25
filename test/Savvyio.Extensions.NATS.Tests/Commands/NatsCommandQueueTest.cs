@@ -268,7 +268,7 @@ namespace Savvyio.Extensions.NATS.Commands
 
             public int AcknowledgedCount { get; private set; }
 
-            protected override Task PublishMessageAsync(string subject, string message, NatsHeaders headers)
+            protected override Task PublishMessageAsync(INatsJSContext context, string subject, string message, NatsHeaders headers)
             {
                 PublishedSubject = subject;
                 PublishedMessage = message;
