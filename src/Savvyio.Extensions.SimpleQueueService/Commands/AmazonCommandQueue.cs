@@ -55,9 +55,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
             var tasks = new List<Task>();
             while (batches.HasPartitions)
             {
-                var sqs = Options.ClientConfigurations.IsValid()
-                    ? new AmazonSQSClient(Options.Credentials, Options.ClientConfigurations.SimpleQueueService())
-                    : new AmazonSQSClient(Options.Credentials, Options.Endpoint);
+                var sqs = CreateSimpleQueueServiceClient();
 
                 var batchRequest = new SendMessageBatchRequest
                 {
@@ -102,10 +100,7 @@ namespace Savvyio.Extensions.SimpleQueueService.Commands
         /// <returns>An <see cref="IAmazonSQS"/> client instance used to probe the health status of the queue service.</returns>
         public IAmazonSQS GetHealthCheckTarget()
         {
-            var sqs = Options.ClientConfigurations.IsValid()
-                ? new AmazonSQSClient(Options.Credentials, Options.ClientConfigurations.SimpleQueueService())
-                : new AmazonSQSClient(Options.Credentials, Options.Endpoint);
-            return sqs;
+            return CreateSimpleQueueServiceClient();
         }
     }
 }
