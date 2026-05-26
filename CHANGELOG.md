@@ -4,6 +4,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [Unreleased]
+
+This is a patch release focused on consolidating the internal `AssemblyContext` reflection utility into the upstream `Cuemon.Reflection` package and tightening the CI pipeline structure.
+
+> [!TIP]
+> The `Savvyio.Reflection.AssemblyContext` class has been removed from the `Savvyio.Core` assembly. Consumers referencing it directly must migrate to `Cuemon.Reflection.AssemblyContext` and replace the `CurrentDomainAssemblies` property with the `GetCurrentDomainAssemblies()` method.
+
+### Changed
+
+- `SavvyioOptionsExtensions` in `Savvyio.Extensions.Dispatchers` now calls `Cuemon.Reflection.AssemblyContext.GetCurrentDomainAssemblies()` to replace the removed `Savvyio.Reflection.AssemblyContext.CurrentDomainAssemblies` property,
+- `MessageConverter` in `Savvyio.Extensions.Newtonsoft.Json` updated to use `Cuemon.Reflection.AssemblyContext.GetCurrentDomainAssemblies()`,
+- `MessageConverter` in `Savvyio.Extensions.Text.Json` updated to use `Cuemon.Reflection.AssemblyContext.GetCurrentDomainAssemblies()`,
+- LocalStack Docker image bumped from `4.14.0` to `2026.05.0` in `Dockerfile.localstack` and `docker-compose.yml`,
+- CI pipeline now supports an opt-in `run_mac_tests` workflow dispatch boolean (default `false`) to run the macOS test matrix on demand rather than always,
+- macOS test job (`test_mac`) is now guarded by the `run-mac-tests` output and requires `init` as an explicit dependency,
+- New `test_qualitygate` job centralises evaluation of all test results (Linux, Windows, macOS, integration, RabbitMQ, NATS) using `require_success` and `require_success_or_skip` helper functions,
+- `sonarcloud`, `codecov`, `codeql`, and `deploy` jobs now depend on `test_qualitygate` instead of enumerating each individual test job.
+
+### Removed
+
+- `AssemblyContext` class from the `Savvyio.Core` assembly (`Savvyio.Reflection` namespace); functionality is consolidated into `Cuemon.Reflection.AssemblyContext`,
+- `AssemblyContextTest` unit tests removed alongside the deleted class.
+
 ## [5.0.7] - 2026-05-26
 
 This is a patch release focused on Azure.Identity compatibility across target frameworks, RabbitMQ queue durability correction, comprehensive test coverage expansion across multiple extensions, testability improvements with protected virtual methods and constructors for extensibility, dependency updates including LocalStack, NATS.Client, and Microsoft utility packages, and test reliability hardening for distributed mediator scenarios.

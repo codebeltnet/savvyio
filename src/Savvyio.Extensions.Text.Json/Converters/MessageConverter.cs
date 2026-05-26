@@ -6,13 +6,13 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Reflection;
+using Cuemon.Reflection;
 using Cuemon.Extensions.Text.Json;
 using Savvyio.EventDriven;
 using Savvyio.EventDriven.Messaging.CloudEvents;
 using Savvyio.EventDriven.Messaging.CloudEvents.Cryptography;
 using Savvyio.Messaging;
 using Savvyio.Messaging.Cryptography;
-using Savvyio.Reflection;
 
 namespace Savvyio.Extensions.Text.Json.Converters
 {
@@ -22,7 +22,7 @@ namespace Savvyio.Extensions.Text.Json.Converters
     /// <seealso cref="JsonConverter" />
     public class MessageConverter : JsonConverterFactory
     {
-        internal static readonly Lazy<IList<TypeInfo>> CloudEventTypes = new(() => AssemblyContext.CurrentDomainAssemblies.SelectMany(a => a.DefinedTypes.Where(ti => ti.HasInterfaces(typeof(ICloudEvent<>)) &&
+        internal static readonly Lazy<IList<TypeInfo>> CloudEventTypes = new(() => AssemblyContext.GetCurrentDomainAssemblies().SelectMany(a => a.DefinedTypes.Where(ti => ti.HasInterfaces(typeof(ICloudEvent<>)) &&
                                                                                                                                                                       ti is { IsAbstract: false, IsInterface: false })).ToList());
 
         /// <summary>
