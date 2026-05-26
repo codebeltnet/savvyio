@@ -129,6 +129,25 @@ jobs:
       build: true # needed for xunitv3
       download-pattern: build-${{ matrix.configuration }}-${{ matrix.arch }}
 
+  test_mac:
+    name: call-test-mac
+    needs: [build, prepare_test]
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [X64, ARM64]
+        configuration: [Debug, Release]
+        project: ${{ fromJson(needs.prepare_test.outputs.json) }}
+    uses: codebeltnet/jobs-dotnet-test/.github/workflows/default.yml@v3
+    with:
+      runs-on: ${{ matrix.arch == 'ARM64' && 'macos-26' || 'macos-26-intel' }}
+      configuration: ${{ matrix.configuration }}
+      projects: ${{ matrix.project }}
+      build-switches: -p:SkipSignAssembly=true
+      restore: true
+      build: true # needed for xunitv3
+      download-pattern: build-${{ matrix.configuration }}-${{ matrix.arch }}
+
   integration_test:
     if: ${{ needs.init.outputs.run-privileged-jobs == 'true' }}
     name: ⚗️ Integration Test - Azure and AWS
@@ -240,7 +259,7 @@ jobs:
   sonarcloud:
     if: ${{ needs.init.outputs.run-privileged-jobs == 'true' }}
     name: call-sonarcloud
-    needs: [init, build, test_linux, test_windows, integration_test, integration_test_rabbitmq, integration_test_nats]
+    needs: [init, build, test_linux, test_windows, test_mac, integration_test, integration_test_rabbitmq, integration_test_nats]
     uses: codebeltnet/jobs-sonarcloud/.github/workflows/default.yml@v3
     with:
       organization: geekle
@@ -251,7 +270,7 @@ jobs:
   codecov:
     if: ${{ needs.init.outputs.run-privileged-jobs == 'true' }}
     name: call-codecov
-    needs: [init, build, test_linux, test_windows, integration_test, integration_test_rabbitmq, integration_test_nats]
+    needs: [init, build, test_linux, test_windows, test_mac, integration_test, integration_test_rabbitmq, integration_test_nats]
     uses: codebeltnet/jobs-codecov/.github/workflows/default.yml@v1
     with:
       repository: codebeltnet/savvyio
@@ -260,7 +279,7 @@ jobs:
   codeql:
     if: ${{ needs.init.outputs.run-privileged-jobs == 'true' }}
     name: call-codeql
-    needs: [init, build, test_linux, test_windows, integration_test, integration_test_rabbitmq, integration_test_nats]
+    needs: [init, build, test_linux, test_windows, test_mac, integration_test, integration_test_rabbitmq, integration_test_nats]
     uses: codebeltnet/jobs-codeql/.github/workflows/default.yml@v3
     permissions:
       security-events: write
@@ -268,7 +287,7 @@ jobs:
   deploy:
     if: github.event_name != 'pull_request'
     name: call-nuget
-    needs: [build, pack, test_linux, test_windows, integration_test, integration_test_rabbitmq, integration_test_nats, sonarcloud, codecov, codeql]
+    needs: [build, pack, test_linux, test_windows, test_mac, integration_test, integration_test_rabbitmq, integration_test_nats, sonarcloud, codecov, codeql]
     uses: codebeltnet/jobs-nuget-push/.github/workflows/default.yml@v3
     with:
       version: ${{ needs.build.outputs.version }}

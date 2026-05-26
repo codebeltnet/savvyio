@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Codebelt.Extensions.Xunit;
 using Microsoft.EntityFrameworkCore;
@@ -92,6 +93,45 @@ namespace Savvyio.Extensions.EFCore
 
             Assert.NotEqual(name, sut3.FullName);
             Assert.Equal(newName, sut4.FullName);
+        }
+
+        [Fact]
+        public async Task EfCoreDataStore_ShouldGetObjectById()
+        {
+            var id = Guid.NewGuid();
+            var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
+            {
+                ContextConfigurator = b => b.UseInMemoryDatabase("Dummy_" + Guid.NewGuid()),
+                ModelConstructor = mb => mb.AddAccount()
+            });
+            var sut2 = new EfCoreDataStore<Account>(sut1);
+            var dto = new Account(id, "Test", "test@unit.test");
+
+            await sut2.CreateAsync(dto);
+
+            var sut3 = await sut2.GetByIdAsync(dto.Id);
+            var sut4 = await sut2.GetByIdAsync(long.MaxValue);
+
+            Assert.Equal(dto.Id, sut3.Id);
+            Assert.Null(sut4);
+        }
+
+        [Fact]
+        public async Task EfCoreDataStore_ShouldReturnAllObjectsWhenPredicateIsMissing()
+        {
+            var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
+            {
+                ContextConfigurator = b => b.UseInMemoryDatabase("Dummy_" + Guid.NewGuid()),
+                ModelConstructor = mb => mb.AddAccount()
+            });
+            var sut2 = new EfCoreDataStore<Account>(sut1);
+
+            await sut2.CreateAsync(new Account(Guid.NewGuid(), "Test1", "test1@unit.test"));
+            await sut2.CreateAsync(new Account(Guid.NewGuid(), "Test2", "test2@unit.test"));
+
+            var sut3 = await sut2.FindAllAsync();
+
+            Assert.Equal(2, sut3.Count());
         }
     }
 }

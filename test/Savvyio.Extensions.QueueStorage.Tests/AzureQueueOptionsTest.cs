@@ -1,5 +1,7 @@
 ﻿using System;
+using Azure;
 using Azure.Identity;
+using Azure.Storage;
 using Codebelt.Extensions.Xunit;
 using Cuemon;
 using Savvyio.Extensions.QueueStorage.Commands;
@@ -102,19 +104,47 @@ namespace Savvyio.Extensions.QueueStorage
         }
 
         [Fact]
+        public void Credential_Setters_Should_Be_Mutually_Exclusive()
+        {
+            var sut = new AzureQueueOptions
+            {
+                SasCredential = new AzureSasCredential("sig")
+            };
+
+            Assert.NotNull(sut.SasCredential);
+            Assert.Null(sut.Credential);
+            Assert.Null(sut.StorageKeyCredential);
+
+            sut.StorageKeyCredential = new StorageSharedKeyCredential("account", Convert.ToBase64String(new byte[32]));
+            Assert.NotNull(sut.StorageKeyCredential);
+            Assert.Null(sut.Credential);
+            Assert.Null(sut.SasCredential);
+
+            sut.Credential = new DefaultAzureCredential();
+            Assert.NotNull(sut.Credential);
+            Assert.Null(sut.SasCredential);
+            Assert.Null(sut.StorageKeyCredential);
+        }
+
+        [Fact]
         public void PostConfigureClient_ShouldInvokeCallback()
         {
             var callbackInvoked = false;
-            var client = new AzureCommandQueue(JsonMarshaller.Default, new AzureQueueOptions()
+            var options = new AzureQueueOptions()
             {
                 ConnectionString = "UseDevelopmentStorage=true",
                 QueueName = "testqueue"
-            }.PostConfigureClient(c =>
+            };
+
+            var returned = options.PostConfigureClient(c =>
             {
                 callbackInvoked = true;
-                Assert.Equal(c.Name, "testqueue");
-            }));
+                Assert.Equal("testqueue", c.Name);
+            });
 
+            _ = new AzureCommandQueue(JsonMarshaller.Default, options);
+
+            Assert.Same(options, returned);
             Assert.True(callbackInvoked);
         }
     }

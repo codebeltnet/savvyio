@@ -4,6 +4,45 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [5.0.7] - 2026-05-26
+
+This is a patch release focused on Azure.Identity compatibility across target frameworks, RabbitMQ queue durability correction, comprehensive test coverage expansion across multiple extensions, testability improvements with protected virtual methods and constructors for extensibility, dependency updates including LocalStack, NATS.Client, and Microsoft utility packages, and test reliability hardening for distributed mediator scenarios.
+
+### Added
+
+- Comprehensive test coverage across EventDriven, Extensions.Dapper, Extensions.DependencyInjection, Extensions.Dispatchers, Extensions.Newtonsoft.Json, Extensions.QueueStorage, Extensions.RabbitMQ, Extensions.Text.Json, and Domain.EventSourcing modules,
+- RabbitMqCommandQueue and RabbitMqEventBus integration tests with detailed command and event messaging scenarios,
+- NATS extension tests including NatsCommandQueue and NatsEventBus coverage,
+- Amazon SQS/SNS extension tests with AmazonMessage and related queue/bus scenarios,
+- EFCore DomainEventDispatcher extension tests and related data store/repository coverage,
+- DateTime and DateTimeOffset converter tests for Text.Json serialization,
+- Converter tests for Newtonsoft.Json including ValueObjectConverter and AggregateRootConverter,
+- AssemblyContext unit tests covering current domain assembly filtering and custom filter callbacks.
+
+### Changed
+
+- Azure.Identity consolidated to 1.21.0 for all target frameworks (previously split as 1.17.2 for net9, 1.21.0 for net10) to resolve transitive dependency conflicts introduced in v5.0.4,
+- RabbitMqCommandQueueOptions now defaults Durable to true (was false) to comply with RabbitMQ 4.x deprecation of transient_nonexcl_queues,
+- LocalStack Docker image upgraded from 4.13.1 to 4.14.0 for integration testing,
+- NATS.Client versions bumped to latest,
+- Microsoft testing and logging packages updated to latest minor versions,
+- DocFX build environment nginx updated from 1.30.0 to 1.31.0,
+- Codebelt and Cuemon utility libraries updated to latest compatible versions,
+- AWS CLI Docker image updated to version 2.34.53,
+- NatsCommandQueue and NatsEventBus now expose protected virtual methods (PublishMessageAsync, CreateConsumerAsync, CreateJetStreamContext, FetchMessagesAsync, SubscribeMessagesAsync) and ReceivedNatsMessage inner classes for improved testability and extensibility,
+- AzureQueue<TRequest> and AzureEventBus now expose protected constructors accepting injected Azure SDK clients for testability without hitting real endpoints,
+- AmazonMessage<TRequest>, AmazonCommandQueue, and AmazonEventBus now expose protected virtual factory methods (CreateSimpleQueueServiceClient, CreateSimpleNotificationServiceClient) for improved testability and reduced credential/endpoint branching duplication.
+
+### Fixed
+
+- RabbitMQ command queue configuration no longer produces deprecated transient_nonexcl_queues when using default options,
+- GetByIdAsync method now correctly uses object array for id parameter to match API contract,
+- DistributedMediatorTest now uses unique email addresses and enhanced retry logic with configurable visibility timeouts to improve test reliability in parallel and cross-platform environments.
+
+### Removed
+
+- NuGet prompt file (`.github/prompts/nuget.prompt.md`) used for package release notes generation.
+
 ## [5.0.6] - 2026-04-18
 
 This is a service update that focuses on package dependencies.
@@ -990,7 +1029,9 @@ Noticeable highlights:
 - QueryHandler class in the Savvyio.Queries namespace that defines a generic and consistent way of handling Query objects that implements the IQuery interface
 - SavvyioOptionsExtensions class in the Savvyio.Queries namespace that consist of extension methods for the SavvyioOptions class: AddQueryHandler, AddQueryDispatcher
 
-[Unreleased]: https://github.com/codebeltnet/savvyio/compare/v5.0.5...HEAD
+[Unreleased]: https://github.com/codebeltnet/savvyio/compare/v5.0.7...HEAD
+[5.0.7]: https://github.com/codebeltnet/savvyio/compare/v5.0.6...v5.0.7
+[5.0.6]: https://github.com/codebeltnet/savvyio/compare/v5.0.5...v5.0.6
 [5.0.5]: https://github.com/codebeltnet/savvyio/compare/v5.0.4...v5.0.5
 [5.0.4]: https://github.com/codebeltnet/savvyio/compare/v5.0.3...v5.0.4
 [5.0.3]: https://github.com/codebeltnet/savvyio/compare/v5.0.2...v5.0.3

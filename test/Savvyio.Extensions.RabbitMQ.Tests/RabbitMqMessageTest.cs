@@ -1,8 +1,7 @@
 using Codebelt.Extensions.Xunit;
-using Cuemon.Reflection;
 using Moq;
 using RabbitMQ.Client;
-using Savvyio.Extensions.RabbitMQ;
+using Savvyio.Extensions.Text.Json;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,28 +11,33 @@ namespace Savvyio.Extensions.RabbitMQ
 {
     public class RabbitMqMessageTest : Test
     {
-        public RabbitMqMessageTest(ITestOutputHelper output) : base(output) { }
-
-        private class TestRabbitMqMessage : RabbitMqMessage
+        public RabbitMqMessageTest(ITestOutputHelper output) : base(output)
         {
-            public TestRabbitMqMessage(IMarshaller marshaller, RabbitMqMessageOptions options)
-                : base(marshaller, options) { }
+        }
 
-            public async Task CallEnsureConnectivityAsync(CancellationToken ct = default) =>
-                await EnsureConnectivityAsync(ct);
+        private sealed class TestRabbitMqMessage : RabbitMqMessage
+        {
+            public TestRabbitMqMessage(IMarshaller marshaller, RabbitMqMessageOptions options) : base(marshaller, options)
+            {
+            }
 
-            public async ValueTask CallOnDisposeManagedResourcesAsync() =>
-                await OnDisposeManagedResourcesAsync();
+            public Task CallEnsureConnectivityAsync(CancellationToken ct = default) => EnsureConnectivityAsync(ct);
 
-            public void SetConnection(IConnection connection) =>
+            public ValueTask CallOnDisposeManagedResourcesAsync() => OnDisposeManagedResourcesAsync();
+
+            public void SetConnection(IConnection connection)
+            {
                 typeof(RabbitMqMessage)
-                    .GetProperty("RabbitMqConnection", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                    .GetProperty("RabbitMqConnection", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
                     .SetValue(this, connection);
+            }
 
-            public void SetChannel(IChannel channel) =>
+            public void SetChannel(IChannel channel)
+            {
                 typeof(RabbitMqMessage)
-                    .GetProperty("RabbitMqChannel", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                    .GetProperty("RabbitMqChannel", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
                     .SetValue(this, channel);
+            }
         }
 
         [Fact]
@@ -46,83 +50,61 @@ namespace Savvyio.Extensions.RabbitMQ
         [Fact]
         public void Constructor_Throws_WhenOptionsIsNull()
         {
-            var marshaller = new Mock<IMarshaller>().Object;
-            Assert.Throws<ArgumentNullException>(() => new TestRabbitMqMessage(marshaller, null));
+            Assert.Throws<ArgumentNullException>(() => new TestRabbitMqMessage(JsonMarshaller.Default, null));
         }
 
         [Fact]
         public void Constructor_SetsProperties()
         {
-            var marshaller = new Mock<IMarshaller>().Object;
             var options = new RabbitMqMessageOptions { AmqpUrl = new Uri("amqp://localhost:5672") };
-            var sut = new TestRabbitMqMessage(marshaller, options);
+            var sut = new TestRabbitMqMessage(JsonMarshaller.Default, options);
 
             Assert.NotNull(sut);
-            Assert.NotNull(typeof(RabbitMqMessage).GetProperty("Marshaller", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(sut));
-            Assert.NotNull(typeof(RabbitMqMessage).GetProperty("RabbitMqFactory", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(sut));
+            Assert.NotNull(typeof(RabbitMqMessage).GetProperty("Marshaller", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!.GetValue(sut));
+            Assert.NotNull(typeof(RabbitMqMessage).GetProperty("RabbitMqFactory", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!.GetValue(sut));
         }
 
         [Fact]
         public async Task EnsureConnectivityAsync_InitializesConnectionAndChannel_Once()
         {
-            var marshaller = new Mock<IMarshaller>().Object;
             var options = new RabbitMqMessageOptions { AmqpUrl = new Uri("amqp://localhost:5672") };
-
             var connectionMock = new Mock<IConnection>();
             var channelMock = new Mock<IChannel>();
-            connectionMock
-                .Setup(c => c.CreateChannelAsync(It.IsAny<CreateChannelOptions?>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(channelMock.Object);
+            connectionMock.Setup(c => c.CreateChannelAsync(It.IsAny<CreateChannelOptions?>(), It.IsAny<CancellationToken>())).ReturnsAsync(channelMock.Object);
 
             var factoryMock = new Mock<IConnectionFactory>();
-            factoryMock.Setup(f => f.CreateConnectionAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(connectionMock.Object);
+            factoryMock.Setup(f => f.CreateConnectionAsync(It.IsAny<CancellationToken>())).ReturnsAsync(connectionMock.Object);
 
-            var sut = new TestRabbitMqMessage(marshaller, options);
+            var sut = new TestRabbitMqMessage(JsonMarshaller.Default, options);
             typeof(RabbitMqMessage)
-                .GetProperty("RabbitMqFactory", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                .GetProperty("RabbitMqFactory", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
                 .SetValue(sut, factoryMock.Object);
 
             await sut.CallEnsureConnectivityAsync();
-
-            var conn = typeof(RabbitMqMessage)
-                .GetProperty("RabbitMqConnection", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .GetValue(sut);
-            var chan = typeof(RabbitMqMessage)
-                .GetProperty("RabbitMqChannel", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .GetValue(sut);
-
-            Assert.Same(connectionMock.Object, conn);
-            Assert.Same(channelMock.Object, chan);
-
-            // Call again to ensure it does not re-initialize
             await sut.CallEnsureConnectivityAsync();
+
+            Assert.Same(connectionMock.Object, typeof(RabbitMqMessage).GetProperty("RabbitMqConnection", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!.GetValue(sut));
+            Assert.Same(channelMock.Object, typeof(RabbitMqMessage).GetProperty("RabbitMqChannel", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!.GetValue(sut));
             factoryMock.Verify(f => f.CreateConnectionAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
         public async Task EnsureConnectivityAsync_IsThreadSafe_WhenCalledConcurrently()
         {
-            var marshaller = new Mock<IMarshaller>().Object;
             var options = new RabbitMqMessageOptions { AmqpUrl = new Uri("amqp://localhost:5672") };
-
             var connectionMock = new Mock<IConnection>();
             var channelMock = new Mock<IChannel>();
-            connectionMock.Setup(c => c.CreateChannelAsync(It.IsAny<CreateChannelOptions?>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(channelMock.Object);
+            connectionMock.Setup(c => c.CreateChannelAsync(It.IsAny<CreateChannelOptions?>(), It.IsAny<CancellationToken>())).ReturnsAsync(channelMock.Object);
 
             var factoryMock = new Mock<IConnectionFactory>();
-            factoryMock.Setup(f => f.CreateConnectionAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(connectionMock.Object);
+            factoryMock.Setup(f => f.CreateConnectionAsync(It.IsAny<CancellationToken>())).ReturnsAsync(connectionMock.Object);
 
-            var sut = new TestRabbitMqMessage(marshaller, options);
+            var sut = new TestRabbitMqMessage(JsonMarshaller.Default, options);
             typeof(RabbitMqMessage)
-                .GetProperty("RabbitMqFactory", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                .GetProperty("RabbitMqFactory", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
                 .SetValue(sut, factoryMock.Object);
 
-            await Task.WhenAll(
-                sut.CallEnsureConnectivityAsync(),
-                sut.CallEnsureConnectivityAsync());
+            await Task.WhenAll(sut.CallEnsureConnectivityAsync(), sut.CallEnsureConnectivityAsync());
 
             factoryMock.Verify(f => f.CreateConnectionAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
@@ -130,16 +112,13 @@ namespace Savvyio.Extensions.RabbitMQ
         [Fact]
         public async Task OnDisposeManagedResourcesAsync_DisposesChannelAndConnection()
         {
-            var marshaller = new Mock<IMarshaller>().Object;
-            var options = new RabbitMqMessageOptions();
-
             var channelMock = new Mock<IChannel>();
             channelMock.Setup(c => c.DisposeAsync()).Returns(ValueTask.CompletedTask).Verifiable();
 
             var connectionMock = new Mock<IConnection>();
             connectionMock.Setup(c => c.DisposeAsync()).Returns(ValueTask.CompletedTask).Verifiable();
 
-            var sut = new TestRabbitMqMessage(marshaller, options);
+            var sut = new TestRabbitMqMessage(JsonMarshaller.Default, new RabbitMqMessageOptions());
             sut.SetChannel(channelMock.Object);
             sut.SetConnection(connectionMock.Object);
 
@@ -152,11 +131,8 @@ namespace Savvyio.Extensions.RabbitMQ
         [Fact]
         public async Task GetHealthCheckTargetAsync_ReturnsExistingConnection_IfInitialized()
         {
-            var marshaller = new Mock<IMarshaller>().Object;
-            var options = new RabbitMqMessageOptions();
-
             var connectionMock = new Mock<IConnection>().Object;
-            var sut = new TestRabbitMqMessage(marshaller, options);
+            var sut = new TestRabbitMqMessage(JsonMarshaller.Default, new RabbitMqMessageOptions());
             sut.SetConnection(connectionMock);
 
             var result = await sut.GetHealthCheckTargetAsync();
@@ -167,19 +143,14 @@ namespace Savvyio.Extensions.RabbitMQ
         [Fact]
         public async Task GetHealthCheckTargetAsync_CreatesConnection_IfNotInitialized()
         {
-            var marshaller = new Mock<IMarshaller>().Object;
-            var options = new RabbitMqMessageOptions();
-
             var connectionMock = new Mock<IConnection>().Object;
             var factoryMock = new Mock<IConnectionFactory>();
-            factoryMock.Setup(f => f.CreateConnectionAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(connectionMock);
+            factoryMock.Setup(f => f.CreateConnectionAsync(It.IsAny<CancellationToken>())).ReturnsAsync(connectionMock);
 
-            var sut = new TestRabbitMqMessage(marshaller, options);
+            var sut = new TestRabbitMqMessage(JsonMarshaller.Default, new RabbitMqMessageOptions());
             typeof(RabbitMqMessage)
-                .GetProperty("RabbitMqFactory", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                .GetProperty("RabbitMqFactory", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
                 .SetValue(sut, factoryMock.Object);
-
 
             var result = await sut.GetHealthCheckTargetAsync();
 

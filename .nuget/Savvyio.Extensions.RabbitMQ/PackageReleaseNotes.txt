@@ -1,3 +1,12 @@
+Version: 5.0.7
+Availability: .NET 10 and .NET 9
+
+# ALM
+- CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
+
+# Improvements
+- CHANGED RabbitMqCommandQueueOptions now defaults Durable to true (was false) to comply with RabbitMQ 4.x deprecation of transient_nonexcl_queues; consumers requiring transient behavior can opt-out explicitly
+
 Version: 5.0.6
 Availability: .NET 10 and .NET 9
 

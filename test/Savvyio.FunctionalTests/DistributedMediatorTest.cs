@@ -33,6 +33,7 @@ using Savvyio.Messaging;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.v3.Priority;
@@ -43,6 +44,7 @@ namespace Savvyio
     public class DistributedMediatorTest : Test
     {
         private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+        private static readonly string UniqueId = $"{Guid.NewGuid():N}";
 
         public DistributedMediatorTest()
         {
@@ -67,7 +69,7 @@ namespace Savvyio
             var correlationId = Guid.NewGuid().ToString("N");
             var platformProviderId = Guid.NewGuid();
             var fullName = "Michael Amazortensen";
-            var emailAddress = IsLinux ? "linux@aws.dev" : "windows@aws.dev";
+            var emailAddress = IsLinux ? $"linux-{UniqueId}@aws.dev" : $"windows-{UniqueId}@aws.dev";
 
             var createAccount = new CreateAccount(platformProviderId, fullName, emailAddress).SetCorrelationId(correlationId);
 
@@ -103,6 +105,8 @@ namespace Savvyio
                     o.Credentials = new BasicAWSCredentials(context.Configuration["AWS:IAM:AccessKey"], context.Configuration["AWS:IAM:SecretKey"]);
                     o.Endpoint = RegionEndpoint.EUWest1;
                     o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{context.Configuration["AWS:CallerIdentity"]}/distribute-mediator-test");
+                    o.ReceiveContext.AssumeMessageProcessed = false;
+                    o.ReceiveContext.VisibilityTimeout = TimeSpan.FromSeconds(5);
                 });
 
                 services.AddAmazonEventBus(o =>
@@ -125,16 +129,29 @@ namespace Savvyio
 
             var commandQueue = scope.ServiceProvider.GetRequiredService<IPointToPointChannel<ICommand>>();
             var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-            var createAccountMessage = await commandQueue.ReceiveAsync().SingleOrDefaultAsync().ConfigureAwait(false);
 
-            Assert.IsType<CreateAccount>(createAccountMessage.Data);
+            IMessage<ICommand> createAccountMessage = null;
+            var cmdDeadline = DateTime.UtcNow.AddSeconds(90);
+            while (createAccountMessage == null && DateTime.UtcNow < cmdDeadline)
+            {
+                await foreach (var msg in commandQueue.ReceiveAsync())
+                {
+                    if (msg.Data is CreateAccount ca && ca.EmailAddress.Contains(UniqueId))
+                    {
+                        await msg.AcknowledgeAsync().ConfigureAwait(false);
+                        createAccountMessage = msg;
+                    }
+                }
+            }
 
-            await mediator.CommitAsync(createAccountMessage.Data);
+            Assert.NotNull(createAccountMessage);
+            var receivedCommand = Assert.IsType<CreateAccount>(createAccountMessage.Data);
+
+            await mediator.CommitAsync(receivedCommand);
 
             var accounts = scope.ServiceProvider.GetRequiredService<IPersistentRepository<Account, long, Account>>();
 
-            var expectedEmailAddress = IsLinux ? "linux@aws.dev" : "windows@aws.dev";
-            var entity = await accounts.FindAllAsync(account => account.EmailAddress == expectedEmailAddress).SingleOrDefaultAsync();
+            var entity = await accounts.FindAllAsync(account => account.EmailAddress == receivedCommand.EmailAddress).SingleOrDefaultAsync();
 
             var dao = await mediator.QueryAsync(new GetAccount(entity.Id)).ConfigureAwait(false);
 
@@ -157,6 +174,8 @@ namespace Savvyio
                     o.Credentials = new BasicAWSCredentials(context.Configuration["AWS:IAM:AccessKey"], context.Configuration["AWS:IAM:SecretKey"]);
                     o.Endpoint = RegionEndpoint.EUWest1;
                     o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{context.Configuration["AWS:CallerIdentity"]}/distribute-mediator-test.fifo");
+                    o.ReceiveContext.AssumeMessageProcessed = false;
+                    o.ReceiveContext.VisibilityTimeout = TimeSpan.FromSeconds(5);
                 });
 
                 AmazonResourceNameOptions.DefaultAccountId = context.Configuration["AWS:CallerIdentity"];
@@ -164,12 +183,24 @@ namespace Savvyio
             var eventBus = test.Host.Services.GetRequiredService<IPublishSubscribeChannel<IIntegrationEvent>>();
 
             var invocationCount = 0;
-            await eventBus.SubscribeAsync((message, token) =>
+            var deadline = DateTime.UtcNow.AddSeconds(90);
+            while (invocationCount == 0 && DateTime.UtcNow < deadline)
             {
-                invocationCount++;
-                Assert.IsType<AccountCreated>(message.Data);
-                return Task.CompletedTask;
-            }).ConfigureAwait(false);
+                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+                await eventBus.SubscribeAsync(async (message, token) =>
+                {
+                    if (message.Data is AccountCreated ac && ac.EmailAddress.Contains(UniqueId))
+                    {
+                        invocationCount++;
+                        await message.AcknowledgeAsync().ConfigureAwait(false);
+                        cts.Cancel();
+                    }
+                }, o =>
+                {
+                    o.CancellationToken = cts.Token;
+                    o.ThrowIfCancellationWasRequested = false;
+                }).ConfigureAwait(false);
+            }
             Assert.Equal(1, invocationCount);
         }
     }

@@ -1,3 +1,12 @@
+Version: 5.0.7
+Availability: .NET 10 and .NET 9
+
+# ALM
+- CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)
+
+# Bug Fixes
+- FIXED EfCoreRepository.GetByIdAsync now correctly uses object array for id parameter to match Entity Framework Core API contract
+
 Version: 5.0.6
 Availability: .NET 10 and .NET 9
 

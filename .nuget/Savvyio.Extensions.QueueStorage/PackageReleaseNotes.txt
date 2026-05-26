@@ -1,3 +1,12 @@
+Version: 5.0.7
+Availability: .NET 10 and .NET 9
+
+# ALM
+- CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs); Azure.Identity now uses TFM-specific versions (1.17.2 for .NET 9, 1.21.0 for .NET 10) to resolve transitive dependency conflicts
+
+# Improvements
+- EXTENDED AzureQueue<TRequest> and AzureEventBus with protected constructors accepting injected Azure SDK clients (QueueServiceClient, QueueClient, EventGridPublisherClient) for improved testability without hitting real endpoints
+
 Version: 5.0.6
 Availability: .NET 10 and .NET 9
 

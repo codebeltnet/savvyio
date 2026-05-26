@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using Amazon;
 using Amazon.Runtime;
 using Amazon.SimpleNotificationService;
@@ -118,6 +119,36 @@ namespace Savvyio.Extensions.SimpleQueueService
             Assert.Equal("eu-west-1", sut1.ClientConfigurations.SimpleQueueService().AuthenticationRegion);
             Assert.Equal(sut1.ClientConfigurations.SimpleQueueService().ServiceURL, sut1.ClientConfigurations.SimpleNotificationService().ServiceURL);
             Assert.Equal(sut1.ClientConfigurations.SimpleQueueService().AuthenticationRegion, sut1.ClientConfigurations.SimpleNotificationService().AuthenticationRegion);
+        }
+
+        [Fact]
+        public void ConfigureClient_Should_Throw_When_Setup_Is_Null()
+        {
+            var sut = new AmazonMessageOptions();
+
+            Assert.Throws<ArgumentNullException>(() => sut.ConfigureClient(null));
+        }
+
+        [Fact]
+        public void ValidateOptions_ThrowsInvalidOperationException_WhenClientConfigurationsAreInvalid()
+        {
+            var sut1 = new AmazonMessageOptions
+            {
+                Credentials = new AnonymousAWSCredentials(),
+                Endpoint = RegionEndpoint.EUWest1,
+                SourceQueue = new Uri("urn:null")
+            };
+
+            typeof(AmazonMessageOptions)
+                .GetProperty(nameof(AmazonMessageOptions.ClientConfigurations), BindingFlags.Instance | BindingFlags.Public)!
+                .SetValue(sut1, new ClientConfig[] { new AmazonSQSConfig() });
+
+            var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
+            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
+
+            Assert.Equal($"Operation is not valid due to the current state of the object. (Expression '{nameof(AmazonMessageOptions.ClientConfigurations)}.Length > 0 && ({nameof(AmazonMessageOptions.ClientConfigurations)}.Length != 2 || !({nameof(AmazonMessageOptions.ClientConfigurations)}[0] is AmazonSQSConfig && {nameof(AmazonMessageOptions.ClientConfigurations)}[1] is AmazonSimpleNotificationServiceConfig))')", sut2.Message);
+            Assert.Equal($"{nameof(AmazonMessageOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
+            Assert.IsType<InvalidOperationException>(sut3.InnerException);
         }
     }
 }

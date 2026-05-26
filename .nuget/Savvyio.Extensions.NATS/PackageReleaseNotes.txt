@@ -1,3 +1,12 @@
+Version: 5.0.7
+Availability: .NET 10 and .NET 9
+
+# ALM
+- CHANGED NATS.Client libraries upgraded to 2.8.0 for improved stability and compatibility; all other dependencies upgraded to latest compatible versions
+
+# Improvements
+- EXTENDED NatsCommandQueue and NatsEventBus with protected virtual methods (PublishMessageAsync, CreateConsumerAsync, CreateJetStreamContext, FetchMessagesAsync, SubscribeMessagesAsync) and ReceivedNatsMessage inner classes for improved testability and extensibility
+
 Version: 5.0.6
 Availability: .NET 10 and .NET 9
 

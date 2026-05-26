@@ -1,10 +1,15 @@
 ﻿using System;
+using Codebelt.Extensions.Xunit;
 using Xunit;
 
 namespace Savvyio.Extensions.RabbitMQ
 {
-    public class RabbitMqMessageOptionsTest
+    public class RabbitMqMessageOptionsTest : Test
     {
+        public RabbitMqMessageOptionsTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         [Fact]
         public void Constructor_Should_Set_Default_AmqpUrl()
         {
@@ -13,6 +18,17 @@ namespace Savvyio.Extensions.RabbitMQ
             Assert.NotNull(options.AmqpUrl);
             Assert.False(options.Persistent);
             Assert.Equal(new Uri("amqp://localhost:5672"), options.AmqpUrl);
+        }
+
+        [Fact]
+        public void Persistent_Should_Be_Settable()
+        {
+            var options = new RabbitMqMessageOptions
+            {
+                Persistent = true
+            };
+
+            Assert.True(options.Persistent);
         }
 
         [Fact]

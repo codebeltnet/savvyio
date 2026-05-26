@@ -71,9 +71,7 @@ namespace Savvyio.Extensions.SimpleQueueService
         /// <returns>A task that represents the asynchronous operation. The task result contains a sequence of <see cref="IMessage{T}"/> whose generic type argument is <see cref="IRequest"/>.</returns>
         protected virtual async IAsyncEnumerable<IMessage<TRequest>> RetrieveMessagesAsync([EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            var sqs = Options.ClientConfigurations.IsValid()
-                ? new AmazonSQSClient(Options.Credentials, Options.ClientConfigurations.SimpleQueueService())
-                : new AmazonSQSClient(Options.Credentials, Options.Endpoint);
+            var sqs = CreateSimpleQueueServiceClient();
 
             if (Options.ReceiveContext.UseApproximateNumberOfMessages)
             {
@@ -175,6 +173,17 @@ namespace Savvyio.Extensions.SimpleQueueService
                 }))
             };
             await sqs.DeleteMessageBatchAsync(batchRequest, cancellationToken).ConfigureAwait(false); // cost 1 request with deletion of up to 10 messages
+        }
+
+        /// <summary>
+        /// Creates the AWS SQS client used by send and receive operations.
+        /// </summary>
+        /// <returns>An <see cref="IAmazonSQS"/> client configured from <see cref="Options"/>.</returns>
+        protected virtual IAmazonSQS CreateSimpleQueueServiceClient()
+        {
+            return Options.ClientConfigurations.IsValid()
+                ? new AmazonSQSClient(Options.Credentials, Options.ClientConfigurations.SimpleQueueService())
+                : new AmazonSQSClient(Options.Credentials, Options.Endpoint);
         }
     }
 }

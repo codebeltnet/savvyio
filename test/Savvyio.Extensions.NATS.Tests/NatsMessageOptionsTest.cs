@@ -1,5 +1,6 @@
 ﻿    using System;
 using Codebelt.Extensions.Xunit;
+using Cuemon;
 using Xunit;
 
 namespace Savvyio.Extensions.NATS
@@ -43,6 +44,17 @@ namespace Savvyio.Extensions.NATS
             var options = new NatsMessageOptions { Subject = "foo" };
             var ex = Record.Exception(() => options.ValidateOptions());
             Assert.Null(ex);
+        }
+
+        [Fact]
+        public void Validator_Should_Wrap_Invalid_Options()
+        {
+            var options = new NatsMessageOptions();
+
+            var exception = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(options));
+
+            Assert.Equal($"{nameof(NatsMessageOptions)} are not in a valid state. (Parameter '{nameof(options)}')", exception.Message);
+            Assert.IsType<InvalidOperationException>(exception.InnerException);
         }
     }
 }

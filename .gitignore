@@ -240,3 +240,7 @@ ModelManifest.xml
 .ionide
 /test/Savvyio.Extensions.SimpleQueueService.Tests/appsettings.json
 /test/Savvyio.FunctionalTests/appsettings.json
+
+# Bot workspace (local-only AI agent ideation, PRDs, and agentic loop state)
+.bot/*
+!.bot/README.md

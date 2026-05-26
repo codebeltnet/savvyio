@@ -44,5 +44,19 @@ namespace Savvyio.EventDriven
                 });
             Assert.True(sut.Metadata.Count == 3, "sut.Metadata.Count == 3");
         }
+
+        [Fact]
+        public void IntegrationEvent_AccountCreated_ShouldExposeMetadataThroughExtensions()
+        {
+            var eventId = Guid.NewGuid().ToString("N");
+            var timestamp = DateTime.UtcNow;
+            var sut = new AccountCreated(100, "Michael Mortensen", "root@gimlichael.dev")
+                .SetEventId(eventId)
+                .SetTimestamp(timestamp);
+
+            Assert.Equal(eventId, sut.GetEventId());
+            Assert.Equal(timestamp, sut.GetTimestamp());
+            Assert.Equal(sut.GetType().ToFullNameIncludingAssemblyName(), sut.GetMemberType());
+        }
     }
 }

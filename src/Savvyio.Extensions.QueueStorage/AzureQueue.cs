@@ -46,6 +46,41 @@ namespace Savvyio.Extensions.QueueStorage
         };
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="AzureQueue{TRequest}"/> class with testable Azure Storage Queue clients.
+        /// </summary>
+        /// <param name="marshaller">The marshaller used for serializing and deserializing messages.</param>
+        /// <param name="options">The <see cref="AzureQueueOptions"/> used to configure this instance.</param>
+        /// <param name="serviceClient">The queue service client to use.</param>
+        /// <param name="client">The queue client to use.</param>
+        /// <param name="sendMessageFormatter">The function delegate to format messages for sending. If null, a default formatter is used.</param>
+        /// <param name="receiveMessageFormatter">The function delegate to format messages for receiving. If null, a default formatter is used.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="marshaller"/> cannot be null - or -
+        /// <paramref name="options"/> cannot be null - or -
+        /// <paramref name="serviceClient"/> cannot be null - or -
+        /// <paramref name="client"/> cannot be null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="options"/> are not in a valid state.
+        /// </exception>
+        protected AzureQueue(IMarshaller marshaller, AzureQueueOptions options, QueueServiceClient serviceClient, QueueClient client, Func<IMessage<TRequest>, IMarshaller, string> sendMessageFormatter = null, Func<QueueMessage, IMarshaller, IMessage<TRequest>> receiveMessageFormatter = null)
+        {
+            Validator.ThrowIfNull(marshaller);
+            Validator.ThrowIfInvalidOptions(options);
+            Validator.ThrowIfNull(serviceClient);
+            Validator.ThrowIfNull(client);
+
+            _marshaller = marshaller;
+            _options = options;
+            _serviceClient = serviceClient;
+            _client = client;
+            _sendMessageFormatter = sendMessageFormatter ?? _sendMessageFormatter;
+            _receiveMessageFormatter = receiveMessageFormatter ?? _receiveMessageFormatter;
+
+            options.SetConfiguredClient(_client);
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AzureQueue{TRequest}"/> class.
         /// </summary>
         /// <param name="marshaller">The marshaller used for serializing and deserializing messages.</param>

@@ -1,10 +1,15 @@
 ﻿using System;
+using Codebelt.Extensions.Xunit;
 using Xunit;
 
 namespace Savvyio.Extensions.RabbitMQ.Commands
 {
-    public class RabbitMqCommandQueueOptionsTest
+    public class RabbitMqCommandQueueOptionsTest : Test
     {
+        public RabbitMqCommandQueueOptionsTest(ITestOutputHelper output) : base(output)
+        {
+        }
+
         [Fact]
         public void Constructor_Should_Set_Defaults()
         {
@@ -12,10 +17,10 @@ namespace Savvyio.Extensions.RabbitMQ.Commands
 
             Assert.Null(options.QueueName);
             Assert.False(options.AutoAcknowledge);
-            Assert.False(options.Durable);
+            Assert.True(options.Durable);
             Assert.False(options.Exclusive);
             Assert.False(options.AutoDelete);
-            Assert.NotNull(options.AmqpUrl); // Inherited from RabbitMqMessageOptions
+            Assert.NotNull(options.AmqpUrl);
         }
 
         [Fact]
@@ -26,6 +31,18 @@ namespace Savvyio.Extensions.RabbitMQ.Commands
             Assert.Throws<InvalidOperationException>(() => options.ValidateOptions());
 
             options.QueueName = "";
+            Assert.Throws<InvalidOperationException>(() => options.ValidateOptions());
+        }
+
+        [Fact]
+        public void ValidateOptions_Should_Also_Throw_When_AmqpUrl_Is_Null()
+        {
+            var options = new RabbitMqCommandQueueOptions
+            {
+                QueueName = "test-queue",
+                AmqpUrl = null
+            };
+
             Assert.Throws<InvalidOperationException>(() => options.ValidateOptions());
         }
 

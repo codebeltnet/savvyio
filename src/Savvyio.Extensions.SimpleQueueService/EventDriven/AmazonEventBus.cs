@@ -46,9 +46,7 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         public override async Task PublishAsync(IMessage<IIntegrationEvent> @event, Action<AsyncOptions> setup = null)
         {
             var options = setup.Configure();
-            var sns = Options.ClientConfigurations.IsValid()
-                ? new AmazonSimpleNotificationServiceClient(Options.Credentials, Options.ClientConfigurations.SimpleNotificationService())
-                : new AmazonSimpleNotificationServiceClient(Options.Credentials, Options.Endpoint);
+            var sns = CreateSimpleNotificationServiceClient();
             var request = new PublishRequest
             {
                 TopicArn = @event.Source,
@@ -111,10 +109,18 @@ namespace Savvyio.Extensions.SimpleQueueService.EventDriven
         /// <returns>An <see cref="IAmazonSimpleNotificationService"/> client instance used to probe the health status of the notification service.</returns>
         public IAmazonSimpleNotificationService GetHealthCheckTarget()
         {
-            var sns = Options.ClientConfigurations.IsValid()
+            return CreateSimpleNotificationServiceClient();
+        }
+
+        /// <summary>
+        /// Creates the AWS SNS client used by publish operations.
+        /// </summary>
+        /// <returns>An <see cref="IAmazonSimpleNotificationService"/> client configured from <see cref="AmazonMessage{TRequest}.Options"/>.</returns>
+        protected virtual IAmazonSimpleNotificationService CreateSimpleNotificationServiceClient()
+        {
+            return Options.ClientConfigurations.IsValid()
                 ? new AmazonSimpleNotificationServiceClient(Options.Credentials, Options.ClientConfigurations.SimpleNotificationService())
                 : new AmazonSimpleNotificationServiceClient(Options.Credentials, Options.Endpoint);
-            return sns;
         }
     }
 }

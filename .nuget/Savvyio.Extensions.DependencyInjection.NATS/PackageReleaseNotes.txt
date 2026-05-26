@@ -1,3 +1,9 @@
+Version: 5.0.7
+Availability: .NET 10 and .NET 9
+
+# ALM
+- CHANGED NATS.Client libraries upgraded to 2.8.0 for improved stability and compatibility; all other dependencies upgraded to latest compatible versions
+
 Version: 5.0.6
 Availability: .NET 10 and .NET 9
 
