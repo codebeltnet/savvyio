@@ -1,5 +1,5 @@
 # Use the LocalStack base image
-FROM localstack/localstack:4.14.0
+FROM localstack/localstack:2026.05.0
 
 # Expose the port for LocalStack
 EXPOSE 4566
