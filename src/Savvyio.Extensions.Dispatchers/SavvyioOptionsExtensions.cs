@@ -1,11 +1,11 @@
-﻿using Savvyio.Commands;
+using Cuemon.Reflection;
+using Savvyio.Commands;
 using Savvyio.Dispatchers;
 using Savvyio.Domain;
 using Savvyio.EventDriven;
 using Savvyio.Queries;
 using System.Linq;
 using System.Reflection;
-using Savvyio.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace Savvyio.Extensions
@@ -43,7 +43,7 @@ namespace Savvyio.Extensions
         {
             if (bruteAssemblyScanning)
             {
-                options.AddDispatchers(AssemblyContext.CurrentDomainAssemblies.ToArray());
+                options.AddDispatchers(AssemblyContext.GetCurrentDomainAssemblies().ToArray());
             }
             else
             {
@@ -63,7 +63,7 @@ namespace Savvyio.Extensions
         {
             if (bruteAssemblyScanning)
             {
-                options.AddHandlers(AssemblyContext.CurrentDomainAssemblies.ToArray());
+                options.AddHandlers(AssemblyContext.GetCurrentDomainAssemblies().ToArray());
             }
             else
             {
