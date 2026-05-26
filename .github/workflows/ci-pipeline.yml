@@ -320,7 +320,7 @@ jobs:
           require_success "integration_test_nats" "$INTEGRATION_TEST_NATS_RESULT"
 
   sonarcloud:
-    if: ${{ needs.init.outputs.run-privileged-jobs == 'true' }}
+    if: ${{always() && needs.init.outputs.run-privileged-jobs == 'true' && needs.build.result == 'success' && needs.test_qualitygate.result == 'success'}}
     name: call-sonarcloud
     needs: [init, build, test_qualitygate]
     uses: codebeltnet/jobs-sonarcloud/.github/workflows/default.yml@v3
@@ -331,7 +331,7 @@ jobs:
     secrets: inherit
 
   codecov:
-    if: ${{ needs.init.outputs.run-privileged-jobs == 'true' }}
+    if: ${{always() && needs.init.outputs.run-privileged-jobs == 'true' && needs.build.result == 'success' && needs.test_qualitygate.result == 'success'}}
     name: call-codecov
     needs: [init, build, test_qualitygate]
     uses: codebeltnet/jobs-codecov/.github/workflows/default.yml@v1
@@ -340,7 +340,7 @@ jobs:
     secrets: inherit
           
   codeql:
-    if: ${{ needs.init.outputs.run-privileged-jobs == 'true' }}
+    if: ${{always() && needs.init.outputs.run-privileged-jobs == 'true' && needs.build.result == 'success' && needs.test_qualitygate.result == 'success'}}
     name: call-codeql
     needs: [init, build, test_qualitygate]
     uses: codebeltnet/jobs-codeql/.github/workflows/default.yml@v3
