@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [5.0.8] - 2026-06-06
+
+This is a service update that focuses on package dependencies.
+
 ## [5.0.7] - 2026-05-26
 
 This is a patch release focused on Azure.Identity compatibility across target frameworks, RabbitMQ queue durability correction, comprehensive test coverage expansion across multiple extensions, testability improvements with protected virtual methods and constructors for extensibility, dependency updates including LocalStack, NATS.Client, and Microsoft utility packages, and test reliability hardening for distributed mediator scenarios.
