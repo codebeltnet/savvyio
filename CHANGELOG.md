@@ -4,9 +4,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
-## [5.0.9] - 2026-06-30
+## [5.0.9] - 2026-07-01
 
-This is a service update that focuses on package dependencies.
+This is a patch release focused on API documentation expansion with comprehensive namespace and type examples, DocFX infrastructure restructuring, clear documentation maintenance standards for agents, and multiple NuGet package updates to latest stable versions.
+
+### Added
+
+- Comprehensive API namespace documentation with usage examples, entry points, and Extension Members tables guiding developers to key factories and DI registration methods,
+- Per-type DocFX overwrite pages for all public API types (enums, structs, records, classes, static extensions) with realistic, copy/paste-ready code examples sourced from unit and functional tests,
+- Detailed DocFX documentation maintenance standards in AGENTS.md covering namespace/type page structure, example requirements, availability documentation, verification workflows, and quality gates.
+
+### Changed
+
+- DocFX build system restructured to separate namespace overwrite files (`api/namespaces/**/*.md`) and type overwrite files (`api/types/**/*.md`) in distinct build.overwrite sections, preventing Markdown files from being processed as conceptual content,
+- NGINX version updated to 1.31.2 for docs publishing container,
+- AWSSDK.SQS and AWSSDK.SimpleNotificationService upgraded from 4.0.3.1 to 4.0.100,
+- Azure.Storage.Queues upgraded from 12.27.0 to 12.27.1,
+- Microsoft.Data.Sqlite upgraded from 10.0.8 to 10.0.9,
+- Microsoft.Extensions.Logging.Abstractions upgraded from 10.0.8 to 10.0.9,
+- Microsoft.NET.Test.Sdk upgraded from 18.6.0 to 18.7.0,
+- NATS.Client packages (Core, JetStream, Simplified) upgraded from 2.8.1 to 2.8.2,
+- EntityFrameworkCore packages for net9 upgraded from 9.0.16 to 9.0.17,
+- EntityFrameworkCore packages for net10 upgraded from 10.0.8 to 10.0.9.
+
+### Fixed
+
+- CI deploy job condition now properly handles skipped optional jobs (such as disabled macOS matrix runs) by using `always()` guard and explicitly checking success status of all upstream jobs to ensure deployment only runs when all required jobs succeed.
 
 ## [5.0.8] - 2026-06-06
 
@@ -1037,7 +1060,9 @@ Noticeable highlights:
 - QueryHandler class in the Savvyio.Queries namespace that defines a generic and consistent way of handling Query objects that implements the IQuery interface
 - SavvyioOptionsExtensions class in the Savvyio.Queries namespace that consist of extension methods for the SavvyioOptions class: AddQueryHandler, AddQueryDispatcher
 
-[Unreleased]: https://github.com/codebeltnet/savvyio/compare/v5.0.7...HEAD
+[Unreleased]: https://github.com/codebeltnet/savvyio/compare/v5.0.9...HEAD
+[5.0.9]: https://github.com/codebeltnet/savvyio/compare/v5.0.8...v5.0.9
+[5.0.8]: https://github.com/codebeltnet/savvyio/compare/v5.0.7...v5.0.8
 [5.0.7]: https://github.com/codebeltnet/savvyio/compare/v5.0.6...v5.0.7
 [5.0.6]: https://github.com/codebeltnet/savvyio/compare/v5.0.5...v5.0.6
 [5.0.5]: https://github.com/codebeltnet/savvyio/compare/v5.0.4...v5.0.5
