@@ -73,11 +73,12 @@
       {
         "files": [
           "api/**/*.yml",
-          "api/**/*.md",
           "toc.yml",
           "*.md"
         ],
         "exclude": [
+          "api/namespaces/**",
+          "api/types/**",
           "bin/**",
           "obj/**"
         ]
@@ -115,7 +116,16 @@
     "overwrite": [
       {
         "files": [
-          "api/namespaces/**.md"
+          "api/namespaces/**/*.md"
+        ],
+        "exclude": [
+          "obj/**",
+          "wwwroot/**"
+        ]
+      },
+      {
+        "files": [
+          "api/types/**/*.md"
         ],
         "exclude": [
           "obj/**",
