@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [5.0.10] - 2026-07-22
+
+This is a service update that focuses on package dependencies.
+
 ## [5.0.9] - 2026-07-01
 
 This is a patch release focused on API documentation expansion with comprehensive namespace and type examples, DocFX infrastructure restructuring, clear documentation maintenance standards for agents, and multiple NuGet package updates to latest stable versions.
