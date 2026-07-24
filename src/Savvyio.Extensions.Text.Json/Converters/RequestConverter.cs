@@ -53,7 +53,7 @@ namespace Savvyio.Extensions.Text.Json.Converters
                         else
                         {
                             var field = property.IsAutoProperty()
-                                ? typeToConvert.GetAllFields().SingleOrDefault(fi => fi.Name.StartsWith($"<{property.Name}>"))
+                                ? typeToConvert.GetAllFields().SingleOrDefault(fi => fi.Name.StartsWith($"<{property.Name}>", StringComparison.Ordinal))
                                 : typeToConvert.GetAllFields().SingleOrDefault(fi => fi.Name.Equals($"_{property.Name}>", StringComparison.OrdinalIgnoreCase));
                             if (field != null)
                             {

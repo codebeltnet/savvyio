@@ -95,13 +95,13 @@ namespace Savvyio
         public bool IsReadOnly => _dictionary.IsReadOnly;
 
         /// <summary>
-        /// Gets an <see cref="T:System.Collections.Generic.ICollection`1" /> containing the keys of the <see cref="MetadataDictionary" />.
+        /// Gets an <see cref="ICollection{T}" /> containing the keys of the <see cref="MetadataDictionary" />.
         /// </summary>
         /// <value>A <see cref="Dictionary{TKey,TValue}.KeyCollection"/> containing the keys in the <see cref="MetadataDictionary"/>.</value>
         public ICollection<string> Keys => _dictionary.Keys;
 
         /// <summary>
-        /// Gets an <see cref="T:System.Collections.Generic.ICollection`1" /> containing the values in the <see cref="MetadataDictionary" />.
+        /// Gets an <see cref="ICollection{T}" /> containing the values in the <see cref="MetadataDictionary" />.
         /// </summary>
         /// <value>A <see cref="Dictionary{TKey,TValue}.ValueCollection"/> containing the values in the <see cref="MetadataDictionary"/>.</value>
         public ICollection<object> Values => _dictionary.Values;
@@ -137,7 +137,7 @@ namespace Savvyio
         /// <summary>
         /// Copies the elements of the <see cref="MetadataDictionary" /> to an array of type <see cref="KeyValuePair{TKey,TValue}"/>, starting at the specified array index.
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="MetadataDictionary" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
+        /// <param name="array">The one-dimensional <see cref="Array" /> that is the destination of the elements copied from <see cref="MetadataDictionary" />. The <see cref="Array" /> must have zero-based indexing.</param>
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         public void CopyTo(KeyValuePair<string, object>[] array, int arrayIndex)
         {
@@ -207,7 +207,7 @@ namespace Savvyio
         /// <summary>
         /// Returns an enumerator that iterates through a collection.
         /// </summary>
-        /// <returns>An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.</returns>
+        /// <returns>An <see cref="IEnumerator" /> object that can be used to iterate through the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable)_dictionary).GetEnumerator();

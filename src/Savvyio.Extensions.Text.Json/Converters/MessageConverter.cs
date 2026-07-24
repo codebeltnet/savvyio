@@ -61,7 +61,7 @@ namespace Savvyio.Extensions.Text.Json.Converters
         }
     }
 
-    internal class MessageConverter<T> : JsonConverter<IMessage<T>> where T : IRequest
+    internal sealed class MessageConverter<T> : JsonConverter<IMessage<T>> where T : IRequest
     {
         public MessageConverter()
         {
@@ -109,13 +109,13 @@ namespace Savvyio.Extensions.Text.Json.Converters
                     var specVersionKey = options.PropertyNamingPolicy.ConvertName(nameof(ICloudEvent<IIntegrationEvent>.Specversion));
 
                     var requestType = typeToConvert.GetGenericArguments()[0];
-                    var cloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.CloudEvent"));
+                    var cloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.CloudEvent", StringComparison.Ordinal));
                     var specVersion = document.RootElement.GetProperty(specVersionKey).GetString();
                     var cloudEvent = Activator.CreateInstance(cloudEventType.MakeGenericType(requestType), [message, specVersion]) as IMessage<T>;
 
                     if (typeToConvert.HasInterfaces(typeof(ISignedCloudEvent<>)))
                     {
-                        var signedCloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.Cryptography.SignedCloudEvent"));
+                        var signedCloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.Cryptography.SignedCloudEvent", StringComparison.Ordinal));
                         var signature = document.RootElement.GetProperty(signatureKey).GetString();
 
                         return Activator.CreateInstance(signedCloudEventType.MakeGenericType(requestType), [cloudEvent, signature]) as IMessage<T>;

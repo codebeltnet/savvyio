@@ -1,7 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Runtime;
@@ -27,7 +29,7 @@ namespace Savvyio
     public class HandlerServicesDescriptor : IHandlerServicesDescriptor
     {
         private List<HandlerDiscoveryModel> _models;
-        private readonly object _locker = new();
+        private readonly Lock _locker = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HandlerServicesDescriptor"/> class.
@@ -59,16 +61,16 @@ namespace Savvyio
                 foreach (var assembly in model.Assemblies)
                 {
                     builder.AppendLine();
-                    builder.AppendLine($"Assembly: {assembly.Name}");
-                    builder.AppendLine($"Namespace: {assembly.Namespace}");
+                    builder.AppendLine(CultureInfo.InvariantCulture, $"Assembly: {assembly.Name}");
+                    builder.AppendLine(CultureInfo.InvariantCulture, $"Namespace: {assembly.Namespace}");
                     builder.AppendLine();
 
                     foreach (var implementation in assembly.Implementations)
                     {
-                        builder.AppendLine($"<{implementation.Name}>");
+                        builder.AppendLine(CultureInfo.InvariantCulture, $"<{implementation.Name}>");
                         foreach (var @delegate in implementation.Delegates)
                         {
-                            builder.AppendLine($"\t*{@delegate.Type} --> &{@delegate.Handler}");
+                            builder.AppendLine(CultureInfo.InvariantCulture, $"\t*{@delegate.Type} --> &{@delegate.Handler}");
                         }
                         builder.AppendLine();
                     }

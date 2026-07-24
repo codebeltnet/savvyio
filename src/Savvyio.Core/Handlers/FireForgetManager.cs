@@ -6,7 +6,7 @@ using Cuemon;
 
 namespace Savvyio.Handlers
 {
-    internal class FireForgetManager<TRequest> : IFireForgetRegistry<TRequest>, IFireForgetActivator<TRequest>
+    internal sealed class FireForgetManager<TRequest> : IFireForgetRegistry<TRequest>, IFireForgetActivator<TRequest>
     {
         private readonly ConcurrentDictionary<Type, Action<TRequest>> _handlers = new();
         private readonly ConcurrentDictionary<Type, Func<TRequest, CancellationToken, Task>> _asyncHandlers = new();

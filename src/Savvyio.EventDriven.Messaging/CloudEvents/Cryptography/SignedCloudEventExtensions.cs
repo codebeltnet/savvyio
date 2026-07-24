@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cuemon;
 using Savvyio.Messaging;
 using Savvyio.Messaging.Cryptography;
@@ -35,7 +35,7 @@ namespace Savvyio.EventDriven.Messaging.CloudEvents.Cryptography
             Validator.ThrowIfNull(marshaller);
             Validator.ThrowIfInvalidConfigurator(setup, out _);
             var baseCloudEvent = (cloudEvent.Clone(() => new CloudEvent<T>(cloudEvent, cloudEvent.Specversion)) as ICloudEvent<T>).SignCloudEvent(marshaller, setup);
-            if (!cloudEvent.Signature.Equals(baseCloudEvent.Signature))
+            if (!cloudEvent.Signature.Equals(baseCloudEvent.Signature, StringComparison.Ordinal))
             {
                 throw new ArgumentOutOfRangeException(nameof(cloudEvent), cloudEvent.Signature, "The signature of the cloud event does not match the cryptographically calculated value. Either you are using an incorrect secret and/or algorithm or the message has been tampered with.");
             }
