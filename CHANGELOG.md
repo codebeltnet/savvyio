@@ -4,15 +4,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
-## [5.0.10] - 2026-07-24
+## [5.0.10] - 2026-07-26
 
-This is a patch release focused on dependency updates, code analysis hardening, .NET 9 modernization, and code style enforcement.
+This is a patch release focused on dependency updates, code analysis hardening, .NET 9 modernization, code style enforcement, and test coverage expansion.
 
 ### Added
 
 - SQLitePCLRaw.bundle_e_sqlite3 package to resolve transitive security warnings in test projects,
 - Code analysis enforcement in build pipeline with latest analyzer level and recommended mode,
-- `.editorconfig` configuration for consistent code style and formatting rules across the codebase.
+- `.editorconfig` configuration for consistent code style and formatting rules across the codebase,
+- Comprehensive tests for Text.Json converters (MessageConverter, RequestConverter),
+- Extended Newtonsoft.Json RequestConverter tests with writable properties coverage.
 
 ### Changed
 
@@ -20,7 +22,8 @@ This is a patch release focused on dependency updates, code analysis hardening, 
 - NGINX base image for DocFX container (1.31.2-alpine → 1.31-alpine),
 - Core platform code modernized for .NET 9: replaced object locks with System.Threading.Lock, added CultureInfo.InvariantCulture to culture-aware StringBuilder and string operations, optimized Enumerable.Any() checks to Count > 0 on known collection types,
 - Roslyn analyzer suppressions added for CA1711, CA1725, CA1848, and CA1873 with justifications,
-- XML documentation examples corrected in Copilot instructions to use proper see cref and c tag formats.
+- XML documentation examples corrected in Copilot instructions to use proper see cref and c tag formats,
+- HandlerServicesDescriptor and converter helper methods extracted for improved code organization and maintainability.
 
 ## [5.0.9] - 2026-07-01
 
@@ -1078,7 +1081,6 @@ Noticeable highlights:
 - QueryHandler class in the Savvyio.Queries namespace that defines a generic and consistent way of handling Query objects that implements the IQuery interface
 - SavvyioOptionsExtensions class in the Savvyio.Queries namespace that consist of extension methods for the SavvyioOptions class: AddQueryHandler, AddQueryDispatcher
 
-[Unreleased]: https://github.com/codebeltnet/savvyio/compare/v5.0.10...HEAD
 [5.0.10]: https://github.com/codebeltnet/savvyio/compare/v5.0.9...v5.0.10
 [5.0.9]: https://github.com/codebeltnet/savvyio/compare/v5.0.8...v5.0.9
 [5.0.8]: https://github.com/codebeltnet/savvyio/compare/v5.0.7...v5.0.8
