@@ -85,53 +85,15 @@ namespace Savvyio.Extensions.Text.Json.Converters
                 var memberType = typeToConvert.GenericTypeArguments[0];
                 var time = document.RootElement.GetProperty(timeKey).GetDateTimeOffset().UtcDateTime;
                 var data = (T)document.RootElement.GetProperty(dataKey).Deserialize(memberType!, options);
-                if (data is IMetadata) // for unknown reasons, Microsoft does not use the custom converter for IMetadataDictionary here; have to fiddle extra around as seen below .. for the record; this just works with Newtonsoft!
-                {
-                    var md = document.RootElement.GetProperty(dataKey).GetProperty(metadataKey).Deserialize<IMetadataDictionary>(options);
-                    var property = memberType.GetAllProperties().SingleOrDefault(pi => pi.Name == nameof(IMetadata.Metadata));
-                    if (property != null)
-                    {
-                        if (property.CanWrite)
-                        {
-                            property.SetValue(data, md);
-                        }
-                        else
-                        {
-                            memberType.GetAllFields().SingleOrDefault(fi => fi.Name.Contains(nameof(IMetadata.Metadata)))?.SetValue(data, md);
-                        }
-                    }
-                }
+
+                ApplyMetadata(data, memberType, document.RootElement.GetProperty(dataKey), metadataKey, options);
 
                 var message = new Message<T>(id, source, type, data, time);
 
                 if (typeToConvert.HasInterfaces(typeof(ICloudEvent<>)))
                 {
-                    var specVersionKey = options.PropertyNamingPolicy.ConvertName(nameof(ICloudEvent<IIntegrationEvent>.Specversion));
-
-                    var requestType = typeToConvert.GetGenericArguments()[0];
-                    var cloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.CloudEvent", StringComparison.Ordinal));
-                    var specVersion = document.RootElement.GetProperty(specVersionKey).GetString();
-                    var cloudEvent = Activator.CreateInstance(cloudEventType.MakeGenericType(requestType), [message, specVersion]) as IMessage<T>;
-
-                    if (typeToConvert.HasInterfaces(typeof(ISignedCloudEvent<>)))
-                    {
-                        var signedCloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.Cryptography.SignedCloudEvent", StringComparison.Ordinal));
-                        var signature = document.RootElement.GetProperty(signatureKey).GetString();
-
-                        return Activator.CreateInstance(signedCloudEventType.MakeGenericType(requestType), [cloudEvent, signature]) as IMessage<T>;
-                    }
-
-                    var reservedKeys = new[] { idKey, sourceKey, timeKey, typeKey, dataKey, metadataKey, signatureKey, specVersionKey };
-
-                    if (cloudEvent is IDictionary<string, object> dictionary)
-                    {
-                        foreach (var property in document.RootElement.EnumerateObject().Where(jp => !reservedKeys.Contains(jp.Name)))
-                        {
-                            dictionary.Add(property.Name, property.Value.Deserialize(property.Value.GetType(), options));
-                        }
-                    }
-
-                    return cloudEvent;
+                    var reservedKeys = new[] { idKey, sourceKey, timeKey, typeKey, dataKey, metadataKey, signatureKey };
+                    return CreateCloudEvent(typeToConvert, message, document.RootElement, signatureKey, reservedKeys, options);
                 }
 
                 if (typeToConvert.HasInterfaces(typeof(ISignedMessage<>)))
@@ -141,6 +103,55 @@ namespace Savvyio.Extensions.Text.Json.Converters
                 }
 
                 return message;
+            }
+        }
+
+        // for unknown reasons, Microsoft does not use the custom converter for IMetadataDictionary here; have to fiddle extra around as seen below .. for the record; this just works with Newtonsoft!
+        private static void ApplyMetadata(T data, Type memberType, JsonElement dataElement, string metadataKey, JsonSerializerOptions options)
+        {
+            if (data is not IMetadata) { return; }
+
+            var md = dataElement.GetProperty(metadataKey).Deserialize<IMetadataDictionary>(options);
+            var property = memberType.GetAllProperties().SingleOrDefault(pi => pi.Name == nameof(IMetadata.Metadata));
+            if (property == null) { return; }
+
+            if (property.CanWrite)
+            {
+                property.SetValue(data, md);
+            }
+            else
+            {
+                memberType.GetAllFields().SingleOrDefault(fi => fi.Name.Contains(nameof(IMetadata.Metadata)))?.SetValue(data, md);
+            }
+        }
+
+        private static IMessage<T> CreateCloudEvent(Type typeToConvert, Message<T> message, JsonElement root, string signatureKey, string[] reservedKeys, JsonSerializerOptions options)
+        {
+            var specVersionKey = options.PropertyNamingPolicy!.ConvertName(nameof(ICloudEvent<IIntegrationEvent>.Specversion));
+            var requestType = typeToConvert.GetGenericArguments()[0];
+            var cloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.CloudEvent", StringComparison.Ordinal));
+            var specVersion = root.GetProperty(specVersionKey).GetString();
+            var cloudEvent = Activator.CreateInstance(cloudEventType.MakeGenericType(requestType), [message, specVersion]) as IMessage<T>;
+
+            if (typeToConvert.HasInterfaces(typeof(ISignedCloudEvent<>)))
+            {
+                var signedCloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.Cryptography.SignedCloudEvent", StringComparison.Ordinal));
+                var signature = root.GetProperty(signatureKey).GetString();
+
+                return Activator.CreateInstance(signedCloudEventType.MakeGenericType(requestType), [cloudEvent, signature]) as IMessage<T>;
+            }
+
+            AddExtensionAttributes(cloudEvent, root, [.. reservedKeys, specVersionKey], options);
+            return cloudEvent;
+        }
+
+        private static void AddExtensionAttributes(IMessage<T> cloudEvent, JsonElement root, string[] reservedKeys, JsonSerializerOptions options)
+        {
+            if (cloudEvent is not IDictionary<string, object> dictionary) { return; }
+
+            foreach (var property in root.EnumerateObject().Where(jp => !reservedKeys.Contains(jp.Name)))
+            {
+                dictionary.Add(property.Name, property.Value.Deserialize(property.Value.GetType(), options));
             }
         }
 

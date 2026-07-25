@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using Cuemon.Extensions.Reflection;
 using Newtonsoft.Json;
@@ -64,28 +65,30 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
                 if (document.Root[jProperty.Name] != null)
                 {
                     var value = serializer.Deserialize(document.Root[jProperty.Name].CreateReader(), property.PropertyType);
-                    if (property.CanWrite)
-                    {
-                        property.SetValue(instance, value);
-                    }
-                    else
-                    {
-                        var field = property.IsAutoProperty()
-                            ? objectType.GetAllFields().SingleOrDefault(fi => fi.Name.StartsWith($"<{property.Name}>", StringComparison.Ordinal))
-                            : objectType.GetAllFields().SingleOrDefault(fi => fi.Name.Equals($"_{property.Name}>", StringComparison.OrdinalIgnoreCase));
-                        if (field != null)
-                        {
-                            field.SetValue(instance, value);
-                        }
-                        else
-                        {
-                            throw new NotSupportedException($"This deserializer only supports rehydration of {nameof(IRequest)} implementations that either use auto-properties or have a naming convention that makes it possible to tie non-writable properties with the backing field equivalent.");
-                        }
-                    }
+                    SetPropertyOrField(instance, objectType, property, value);
                 }
             }
             return instance as IRequest;
 
+        }
+
+        private static void SetPropertyOrField(object instance, Type objectType, PropertyInfo property, object value)
+        {
+            if (property.CanWrite)
+            {
+                property.SetValue(instance, value);
+                return;
+            }
+
+            var field = property.IsAutoProperty()
+                ? objectType.GetAllFields().SingleOrDefault(fi => fi.Name.StartsWith($"<{property.Name}>", StringComparison.Ordinal))
+                : objectType.GetAllFields().SingleOrDefault(fi => fi.Name.Equals($"_{property.Name}>", StringComparison.OrdinalIgnoreCase));
+            if (field == null)
+            {
+                throw new NotSupportedException($"This deserializer only supports rehydration of {nameof(IRequest)} implementations that either use auto-properties or have a naming convention that makes it possible to tie non-writable properties with the backing field equivalent.");
+            }
+
+            field.SetValue(instance, value);
         }
 
         /// <summary>

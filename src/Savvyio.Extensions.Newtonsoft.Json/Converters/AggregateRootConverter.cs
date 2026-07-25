@@ -69,69 +69,86 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
             var properties = objectType.GetRuntimePropertiesExceptOf<AggregateRoot<TKey>>().Where(pi => pi.CanRead).ToList();
             if (idProperty != null) { properties.Insert(0, idProperty); }
 
-            var propertyData = new List<DataPair>();
-            if (reader.TokenType == JsonToken.StartObject)
-            {
-                var depth = reader.Depth;
-                while (reader.Read())
-                {
-                    switch (reader.TokenType)
-                    {
-                        case JsonToken.PropertyName:
-                            var propertyName = (string)reader.Value;
-                            var matchingProperty = properties.FirstOrDefault(pi => pi.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase));
-                            if (matchingProperty != null)
-                            {
-                                reader.Read();
-                                if (matchingProperty.PropertyType.HasTypes(typeof(SingleValueObject<>)))
-                                {
-                                    propertyData.Add(new DataPair(matchingProperty.Name, serializer.Deserialize(reader, matchingProperty.PropertyType), matchingProperty.PropertyType));
-                                }
-                                else
-                                {
-                                    propertyData.Add(new DataPair(matchingProperty.Name, ParserFactory.FromObject().Parse(reader.Value?.ToString(), matchingProperty.PropertyType, o => o.FormatProvider = _options.FormatProvider) ?? serializer.Deserialize(reader, matchingProperty.PropertyType), matchingProperty.PropertyType));
-                                }
-                            }
-                            break;
-                    }
+            var propertyData = ReadPropertyData(reader, properties, serializer);
 
-                    if (reader.Depth == depth && reader.TokenType == JsonToken.EndObject) { break; }
-                }
-            }
-
-
-            var ctors = objectType.GetConstructors(_options.Flags).ToList();
-            if (ctors.Count > 0)
-            {
-                var matchingCtor = ctors.SingleOrDefault(info =>
-                {
-                    var paramters = info.GetParameters().ToList();
-                    return paramters.Count == propertyData.Count && paramters.Select(pi => pi.ParameterType).SequenceEqual(propertyData.Select(pair => pair.Type));
-                });
-
-                if (matchingCtor != null)
-                {
-                    return matchingCtor.Invoke(propertyData.Select(pair => pair.Value).ToArray()) as AggregateRoot<TKey>;
-                }
-                else
-                {
-                    var defaultCtor = ctors.SingleOrDefault(ci => ci.GetParameters().Length == 0);
-                    if (defaultCtor != null)
-                    {
-                        var ar = defaultCtor.Invoke(Array.Empty<object>()) as AggregateRoot<TKey>;
-                        foreach (var property in properties)
-                        {
-                            if (property.CanWrite)
-                            {
-                                property.SetValue(ar, propertyData.SingleOrDefault(pair => pair.Name.Equals(property.Name, StringComparison.OrdinalIgnoreCase))?.Value);
-                            }
-                        }
-                        return ar;
-                    }
-                }
-            }
+            var result = CreateAggregateRoot(objectType, properties, propertyData);
+            if (result != null) { return result; }
 
             throw ExceptionInsights.Embed(new InvalidOperationException($"Unable to deserialize {objectType.FullName}; consider adding a custom converter for this type."), MethodBase.GetCurrentMethod(), Arguments.ToArray(reader, objectType, existingValue, hasExistingValue, serializer));
+        }
+
+        private List<DataPair> ReadPropertyData(JsonReader reader, List<PropertyInfo> properties, JsonSerializer serializer)
+        {
+            var propertyData = new List<DataPair>();
+            if (reader.TokenType != JsonToken.StartObject) { return propertyData; }
+
+            var depth = reader.Depth;
+            while (reader.Read())
+            {
+                switch (reader.TokenType)
+                {
+                    case JsonToken.PropertyName:
+                        var propertyName = (string)reader.Value;
+                        var matchingProperty = properties.FirstOrDefault(pi => pi.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase));
+                        if (matchingProperty != null)
+                        {
+                            reader.Read();
+                            propertyData.Add(ReadDataPair(reader, matchingProperty, serializer));
+                        }
+                        break;
+                }
+
+                if (reader.Depth == depth && reader.TokenType == JsonToken.EndObject) { break; }
+            }
+
+            return propertyData;
+        }
+
+        private DataPair ReadDataPair(JsonReader reader, PropertyInfo matchingProperty, JsonSerializer serializer)
+        {
+            if (matchingProperty.PropertyType.HasTypes(typeof(SingleValueObject<>)))
+            {
+                return new DataPair(matchingProperty.Name, serializer.Deserialize(reader, matchingProperty.PropertyType), matchingProperty.PropertyType);
+            }
+
+            return new DataPair(matchingProperty.Name, ParserFactory.FromObject().Parse(reader.Value?.ToString(), matchingProperty.PropertyType, o => o.FormatProvider = _options.FormatProvider) ?? serializer.Deserialize(reader, matchingProperty.PropertyType), matchingProperty.PropertyType);
+        }
+
+        private AggregateRoot<TKey> CreateAggregateRoot(Type objectType, List<PropertyInfo> properties, List<DataPair> propertyData)
+        {
+            var ctors = objectType.GetConstructors(_options.Flags).ToList();
+            if (ctors.Count == 0) { return null; }
+
+            var matchingCtor = ctors.SingleOrDefault(info => MatchesConstructor(info, propertyData));
+            if (matchingCtor != null)
+            {
+                return matchingCtor.Invoke(propertyData.Select(pair => pair.Value).ToArray()) as AggregateRoot<TKey>;
+            }
+
+            var defaultCtor = ctors.SingleOrDefault(ci => ci.GetParameters().Length == 0);
+            if (defaultCtor == null) { return null; }
+
+            return PopulateDefaultConstructed(defaultCtor, properties, propertyData);
+        }
+
+        private static bool MatchesConstructor(ConstructorInfo info, List<DataPair> propertyData)
+        {
+            var paramters = info.GetParameters().ToList();
+            return paramters.Count == propertyData.Count && paramters.Select(pi => pi.ParameterType).SequenceEqual(propertyData.Select(pair => pair.Type));
+        }
+
+        private static AggregateRoot<TKey> PopulateDefaultConstructed(ConstructorInfo defaultCtor, List<PropertyInfo> properties, List<DataPair> propertyData)
+        {
+            var ar = defaultCtor.Invoke(Array.Empty<object>()) as AggregateRoot<TKey>;
+            foreach (var property in properties)
+            {
+                if (property.CanWrite)
+                {
+                    property.SetValue(ar, propertyData.SingleOrDefault(pair => pair.Name.Equals(property.Name, StringComparison.OrdinalIgnoreCase))?.Value);
+                }
+            }
+
+            return ar;
         }
     }
 }

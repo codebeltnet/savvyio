@@ -55,30 +55,40 @@ namespace Savvyio
             var builder = new StringBuilder();
             foreach (var model in GenerateHandlerDiscoveries())
             {
-                var discovery = $"Discovered {model.ImplementationsCount} {model.AbstractionType} implementation{(model.ImplementationsCount > 1 ? "s" : "")} covering a total of {model.DelegatesCount} {model.DelegateType} method{(model.DelegatesCount > 1 ? "s" : "")}";
+                var discovery = FormatDiscoveryHeader(model);
                 builder.Append(discovery);
                 builder.AppendLine();
                 foreach (var assembly in model.Assemblies)
                 {
-                    builder.AppendLine();
-                    builder.AppendLine(CultureInfo.InvariantCulture, $"Assembly: {assembly.Name}");
-                    builder.AppendLine(CultureInfo.InvariantCulture, $"Namespace: {assembly.Namespace}");
-                    builder.AppendLine();
-
-                    foreach (var implementation in assembly.Implementations)
-                    {
-                        builder.AppendLine(CultureInfo.InvariantCulture, $"<{implementation.Name}>");
-                        foreach (var @delegate in implementation.Delegates)
-                        {
-                            builder.AppendLine(CultureInfo.InvariantCulture, $"\t*{@delegate.Type} --> &{@delegate.Handler}");
-                        }
-                        builder.AppendLine();
-                    }
+                    AppendAssembly(builder, assembly);
                 }
                 builder.AppendLine(Generate.FixedString('-', discovery.Length.Max(discovery.Length.Max(discovery.Length))));
                 builder.AppendLine();
             }
             return builder.ToString().TrimEnd();
+        }
+
+        private static string FormatDiscoveryHeader(HandlerDiscoveryModel model)
+        {
+            return $"Discovered {model.ImplementationsCount} {model.AbstractionType} implementation{(model.ImplementationsCount > 1 ? "s" : "")} covering a total of {model.DelegatesCount} {model.DelegateType} method{(model.DelegatesCount > 1 ? "s" : "")}";
+        }
+
+        private static void AppendAssembly(StringBuilder builder, HandlerServiceAssemblyModel assembly)
+        {
+            builder.AppendLine();
+            builder.AppendLine(CultureInfo.InvariantCulture, $"Assembly: {assembly.Name}");
+            builder.AppendLine(CultureInfo.InvariantCulture, $"Namespace: {assembly.Namespace}");
+            builder.AppendLine();
+
+            foreach (var implementation in assembly.Implementations)
+            {
+                builder.AppendLine(CultureInfo.InvariantCulture, $"<{implementation.Name}>");
+                foreach (var @delegate in implementation.Delegates)
+                {
+                    builder.AppendLine(CultureInfo.InvariantCulture, $"\t*{@delegate.Type} --> &{@delegate.Handler}");
+                }
+                builder.AppendLine();
+            }
         }
 
         /// <summary>
@@ -87,30 +97,32 @@ namespace Savvyio
         /// <returns>A collection of <see cref="HandlerDiscoveryModel" /> representing the handler discoveries.</returns>
         public IEnumerable<HandlerDiscoveryModel> GenerateHandlerDiscoveries()
         {
-            if (_models == null)
+            if (_models != null) { return _models; }
+
+            lock (_locker)
             {
-                lock (_locker)
+                _models ??= BuildHandlerDiscoveries();
+            }
+            return _models;
+        }
+
+        private List<HandlerDiscoveryModel> BuildHandlerDiscoveries()
+        {
+            var models = new List<HandlerDiscoveryModel>();
+            foreach (var serviceType in ServiceTypes)
+            {
+                var serviceRequestType = serviceType.GetInterface("IHandler`1")?.GenericTypeArguments.Single();
+                if (serviceRequestType == null) { continue; }
+                foreach (var discoveredServicesGroup in DiscoveredServices)
                 {
-                    if (_models == null)
+                    var model = new HandlerDiscoveryModel(serviceType, serviceRequestType, discoveredServicesGroup);
+                    if (model.ImplementationsCount > 0)
                     {
-                        _models = new List<HandlerDiscoveryModel>();
-                        foreach (var serviceType in ServiceTypes)
-                        {
-                            var serviceRequestType = serviceType.GetInterface("IHandler`1")?.GenericTypeArguments.Single();
-                            if (serviceRequestType == null) { continue; }
-                            foreach (var discoveredServicesGroup in DiscoveredServices)
-                            {
-                                var model = new HandlerDiscoveryModel(serviceType, serviceRequestType, discoveredServicesGroup);
-                                if (model.ImplementationsCount > 0)
-                                {
-                                    _models.Add(model);
-                                }
-                            }
-                        }
+                        models.Add(model);
                     }
                 }
             }
-            return _models;
+            return models;
         }
     }
 }
