@@ -4,7 +4,7 @@ using Cuemon;
 
 namespace Savvyio.Messaging
 {
-    internal class MessageAsyncEnumerator<T> : IAsyncEnumerator<IMessage<T>> where T : IRequest
+    internal sealed class MessageAsyncEnumerator<T> : IAsyncEnumerator<IMessage<T>> where T : IRequest
     {
         private readonly IAsyncEnumerator<IMessage<T>> _source;
         private readonly MessageAsyncEnumerableOptions<T> _options;

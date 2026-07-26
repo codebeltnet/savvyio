@@ -73,7 +73,7 @@ namespace Savvyio.Extensions.SimpleQueueService
         {
             Validator.ThrowIfInvalidState(Partition.IsNullOrWhiteSpace());
             Validator.ThrowIfInvalidState(Region.IsNullOrWhiteSpace());
-            Validator.ThrowIfInvalidState(AccountId.IsNullOrWhiteSpace() || AccountId.Length != 12 || !AccountId.IsNumeric(NumberStyles.Integer));
+            Validator.ThrowIfInvalidState(AccountId.IsNullOrWhiteSpace() || AccountId.Length != 12 || !AccountId.IsNumeric(NumberStyles.Integer, CultureInfo.InvariantCulture));
         }
     }
 }

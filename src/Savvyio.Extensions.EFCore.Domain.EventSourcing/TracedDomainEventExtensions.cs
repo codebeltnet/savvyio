@@ -13,7 +13,7 @@ namespace Savvyio.Extensions.EFCore.Domain.EventSourcing
         /// </summary>
         /// <param name="domainEvent">The domain event to convert.</param>
         /// <param name="marshaller">The <see cref="IMarshaller"/> that is used when converting <see cref="ITracedDomainEvent"/> into an array of bytes.</param>
-        /// <returns>A <see cref="T:byte[]"/> that is equivalent to <paramref name="domainEvent"/>.</returns>
+        /// <returns>A <c>byte[]</c> that is equivalent to <paramref name="domainEvent"/>.</returns>
         public static byte[] ToByteArray(this ITracedDomainEvent domainEvent, IMarshaller marshaller)
         {
             var bytes = marshaller.Serialize(domainEvent, typeof(ITracedDomainEvent)).ToByteArray();

@@ -63,7 +63,7 @@ namespace Savvyio.Domain.EventSourcing
         /// <summary>
         /// Adds an event to the Aggregate.
         /// </summary>
-        /// <param name="e">The event to be added to the end of <see cref="P:Savvyio.Domain.Aggregate`2.Events" />.</param>
+        /// <param name="e">The event to be added to the end of <see cref="Aggregate{TKey,ITracedDomainEvent}.Events"/>.</param>
         protected sealed override void AddEvent(ITracedDomainEvent e)
         {
             ApplyChange(e);

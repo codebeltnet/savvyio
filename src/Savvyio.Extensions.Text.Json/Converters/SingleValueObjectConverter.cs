@@ -52,7 +52,7 @@ namespace Savvyio.Extensions.Text.Json.Converters
         }
     }
 
-    internal class SingleValueObjectConverter<T> : JsonConverter<SingleValueObject<T>>
+    internal sealed class SingleValueObjectConverter<T> : JsonConverter<SingleValueObject<T>>
     {
         public SingleValueObjectConverter()
         {

@@ -6,7 +6,7 @@ using Cuemon;
 
 namespace Savvyio.Handlers
 {
-    internal class RequestReplyManager<TModel> : IRequestReplyRegistry<TModel>, IRequestReplyActivator<TModel>
+    internal sealed class RequestReplyManager<TModel> : IRequestReplyRegistry<TModel>, IRequestReplyActivator<TModel>
     {
         private readonly ConcurrentDictionary<Type, Func<TModel, object>> _handlers = new();
         private readonly ConcurrentDictionary<Type, Func<TModel, CancellationToken, Task<object>>> _asyncHandlers = new();

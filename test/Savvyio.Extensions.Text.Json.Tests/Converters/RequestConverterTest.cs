@@ -1,12 +1,11 @@
 using System;
-using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Codebelt.Extensions.Xunit;
-using Newtonsoft.Json;
-using Savvyio;
 using Savvyio.Assets.Commands;
 using Xunit;
 
-namespace Savvyio.Extensions.Newtonsoft.Json.Converters
+namespace Savvyio.Extensions.Text.Json.Converters
 {
     public class RequestConverterTest : Test
     {
@@ -15,31 +14,18 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
         }
 
         [Fact]
-        public void RequestConverter_ShouldExposeReadOnlyCapabilities()
+        public void RequestConverter_ShouldConvertOnlyRequests()
         {
             var sut = new RequestConverter();
 
-            Assert.False(sut.CanWrite);
             Assert.True(sut.CanConvert(typeof(CreateMemberCommand)));
             Assert.False(sut.CanConvert(typeof(string)));
         }
 
         [Fact]
-        public void RequestConverter_ShouldThrowWhenWritingJson()
-        {
-            var sut = new RequestConverter();
-            using var writer = new JsonTextWriter(new StringWriter());
-
-            Assert.Throws<NotImplementedException>(() => sut.WriteJson(writer, new CreateMemberCommand("Jane Doe", 21, "jd@office.com"), JsonSerializer.CreateDefault()));
-        }
-
-        [Fact]
         public void RequestConverter_ShouldRehydrateAutoPropertyRequests()
         {
-            var settings = new JsonSerializerSettings();
-            settings.Converters.Add(new RequestConverter());
-
-            var sut = JsonConvert.DeserializeObject<CreateMemberCommand>("{\"name\":\"Jane Doe\",\"age\":21,\"emailAddress\":\"jd@office.com\"}", settings);
+            var sut = JsonSerializer.Deserialize<CreateMemberCommand>("{\"name\":\"Jane Doe\",\"age\":21,\"emailAddress\":\"jd@office.com\"}", CreateOptions());
 
             Assert.NotNull(sut);
             Assert.Equal("Jane Doe", sut.Name);
@@ -50,10 +36,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
         [Fact]
         public void RequestConverter_ShouldRehydrateWritableProperties()
         {
-            var settings = new JsonSerializerSettings();
-            settings.Converters.Add(new RequestConverter());
-
-            var sut = JsonConvert.DeserializeObject<WritableRequest>("{\"name\":\"Jane Doe\"}", settings);
+            var sut = JsonSerializer.Deserialize<WritableRequest>("{\"name\":\"Jane Doe\"}", CreateOptions());
 
             Assert.NotNull(sut);
             Assert.Equal("Jane Doe", sut.Name);
@@ -62,12 +45,33 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
         [Fact]
         public void RequestConverter_ShouldFailWhenNoSupportedBackingFieldExists()
         {
-            var settings = new JsonSerializerSettings();
-            settings.Converters.Add(new RequestConverter());
-
-            var ex = Assert.Throws<NotSupportedException>(() => JsonConvert.DeserializeObject<UnsupportedRequest>("{\"name\":\"Jane Doe\"}", settings));
+            var ex = Assert.Throws<NotSupportedException>(() => JsonSerializer.Deserialize<UnsupportedRequest>("{\"name\":\"Jane Doe\"}", CreateOptions()));
 
             Assert.StartsWith("This deserializer only supports rehydration", ex.Message);
+        }
+
+        [Fact]
+        public void RequestConverter_ShouldRoundtripThroughWrite()
+        {
+            var options = CreateOptions();
+            var json = JsonSerializer.Serialize<IRequest>(new WritableRequest { Name = "Jane Doe" }, options);
+
+            TestOutput.WriteLine(json);
+
+            var sut = JsonSerializer.Deserialize<WritableRequest>(json, options);
+
+            Assert.NotNull(sut);
+            Assert.Equal("Jane Doe", sut.Name);
+        }
+
+        private static JsonSerializerOptions CreateOptions()
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+            options.Converters.Add(new RequestConverter());
+            return options;
         }
 
         private sealed class WritableRequest : IRequest

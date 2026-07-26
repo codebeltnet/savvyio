@@ -26,10 +26,10 @@ namespace Savvyio.Extensions.EFCore
         /// The base implementation does nothing.
         /// </para>
         /// <para>
-        /// In situations where an instance of <see cref="T:Microsoft.EntityFrameworkCore.DbContextOptions" /> may or may not have been passed
-        /// to the constructor, you can use <see cref="P:Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.IsConfigured" /> to determine if
+        /// In situations where an instance of <see cref="DbContextOptions" /> may or may not have been passed
+        /// to the constructor, you can use <see cref="DbContextOptionsBuilder.IsConfigured" /> to determine if
         /// the options have already been set, and skip some or all of the logic in
-        /// <see cref="M:Microsoft.EntityFrameworkCore.DbContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)" />.
+        /// <see cref="DbContext.OnConfiguring(DbContextOptionsBuilder)" />.
         /// </para>
         /// </summary>
         /// <param name="optionsBuilder">A builder used to create or modify options for this context. Databases (and other extensions)
@@ -44,10 +44,10 @@ namespace Savvyio.Extensions.EFCore
 
         /// <summary>
         /// Override this method to set defaults and configure conventions before they run. This method is invoked before
-        /// <see cref="M:Microsoft.EntityFrameworkCore.DbContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)" />.
+        /// <see cref="DbContext.OnModelCreating(ModelBuilder)" />.
         /// </summary>
         /// <param name="configurationBuilder">The builder being used to set defaults and configure conventions that will be used to build the model for this context.</param>
-        /// <remarks>If a model is explicitly set on the options for this context (via <see cref="M:Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.UseModel(Microsoft.EntityFrameworkCore.Metadata.IModel)" />)
+        /// <remarks>If a model is explicitly set on the options for this context (via <see cref="DbContextOptionsBuilder.UseModel(Microsoft.EntityFrameworkCore.Metadata.IModel)" />)
         /// then this method will not be run.</remarks>
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
         {
@@ -57,14 +57,14 @@ namespace Savvyio.Extensions.EFCore
 
         /// <summary>
         /// Override this method to further configure the model that was discovered by convention from the entity types
-        /// exposed in <see cref="T:Microsoft.EntityFrameworkCore.DbSet`1" /> properties on your derived context. The resulting model may be cached
+        /// exposed in <see cref="DbSet{TEntity}" /> properties on your derived context. The resulting model may be cached
         /// and re-used for subsequent instances of your derived context.
         /// </summary>
         /// <param name="modelBuilder">The builder being used to construct the model for this context. Databases (and other extensions) typically
         /// define extension methods on this object that allow you to configure aspects of the model that are specific
         /// to a given database.</param>
         /// <remarks><para>
-        /// If a model is explicitly set on the options for this context (via <see cref="M:Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.UseModel(Microsoft.EntityFrameworkCore.Metadata.IModel)" />)
+        /// If a model is explicitly set on the options for this context (via <see cref="DbContextOptionsBuilder.UseModel(Microsoft.EntityFrameworkCore.Metadata.IModel)" />)
         /// then this method will not be run.
         /// </para>
         /// <para>

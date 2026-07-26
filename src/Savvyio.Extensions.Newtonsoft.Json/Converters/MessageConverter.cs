@@ -27,7 +27,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
         /// <summary>
         /// Writes the JSON representation of the object.
         /// </summary>
-        /// <param name="writer">The <see cref="T:Newtonsoft.Json.JsonWriter" /> to write to.</param>
+        /// <param name="writer">The <see cref="JsonWriter" /> to write to.</param>
         /// <param name="value">The value.</param>
         /// <param name="serializer">The calling serializer.</param>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -47,7 +47,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
         /// <summary>
         /// Reads the JSON representation of the object.
         /// </summary>
-        /// <param name="reader">The <see cref="T:Newtonsoft.Json.JsonReader" /> to read from.</param>
+        /// <param name="reader">The <see cref="JsonReader" /> to read from.</param>
         /// <param name="objectType">Type of the object.</param>
         /// <param name="existingValue">The existing value of object being read.</param>
         /// <param name="serializer">The calling serializer.</param>
@@ -76,7 +76,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
         }
     }
 
-    internal class MessageConverter<T> : JsonConverter<IMessage<T>> where T : IRequest
+    internal sealed class MessageConverter<T> : JsonConverter<IMessage<T>> where T : IRequest
     {
         public MessageConverter()
         {
@@ -147,13 +147,13 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters
                 var specVersionKey = serializer.ResolvePropertyKeyByConvention(nameof(ICloudEvent<IIntegrationEvent>.Specversion));
 
                 var requestType = objectType.GetGenericArguments()[0];
-                var cloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.CloudEvent"));
+                var cloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.CloudEvent", StringComparison.Ordinal));
                 var specVersion = document.Root[specVersionKey]!.Value<string>();
                 var cloudEvent = Activator.CreateInstance(cloudEventType.MakeGenericType(requestType), [message, specVersion]) as IMessage<T>;
 
                 if (objectType.HasInterfaces(typeof(ISignedCloudEvent<>)))
                 {
-                    var signedCloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.Cryptography.SignedCloudEvent"));
+                    var signedCloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.Cryptography.SignedCloudEvent", StringComparison.Ordinal));
                     var signature = document.Root[signatureKey]!.Value<string>();
 
                     return Activator.CreateInstance(signedCloudEventType.MakeGenericType(requestType), [cloudEvent, signature]) as IMessage<T>;

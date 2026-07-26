@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cuemon;
 
 namespace Savvyio.Messaging.Cryptography
@@ -32,7 +32,7 @@ namespace Savvyio.Messaging.Cryptography
             Validator.ThrowIfNull(marshaller);
             Validator.ThrowIfInvalidConfigurator(setup, out _);
             var baseMessage = message.Clone().Sign(marshaller, setup);
-            if (!message.Signature.Equals(baseMessage.Signature))
+            if (!message.Signature.Equals(baseMessage.Signature, StringComparison.Ordinal))
             {
                 throw new ArgumentOutOfRangeException(nameof(message), message.Signature, "The signature of the message does not match the cryptographically calculated value. Either you are using an incorrect secret and/or algorithm or the message has been tampered with.");
             }
