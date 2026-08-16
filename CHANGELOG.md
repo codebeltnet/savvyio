@@ -6,7 +6,12 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 
 ## [5.0.11] - 2026-08-16
 
-This is a service update that focuses on package dependencies.
+This is a patch release focused on dependency updates to latest stable versions and Docker test environment consolidation.
+
+### Changed
+
+- Dependency versions bumped to latest stable releases: AWSSDK.SQS and AWSSDK.SimpleNotificationService (4.0.100.6 → 4.0.100.8), Codebelt.Extensions.Newtonsoft.Json (10.1.6 → 10.1.7), Codebelt.Extensions.Xunit.App (11.1.2 → 11.2.1), Cuemon extension packages (10.5.5 → 10.7.0), Microsoft.Data.Sqlite (10.0.10 → 10.0.11), SQLitePCLRaw.bundle_e_sqlite3 (3.0.4 → 3.0.5), Microsoft.Extensions.Logging.Abstractions (10.0.10 → 10.0.11), Microsoft.NET.Test.Sdk (18.8.1 → 18.9.0), NATS.Client packages (3.0.1 → 3.1.0), RabbitMQ.Client (7.2.1 → 7.2.2), EntityFrameworkCore packages for net9 (9.0.18 → 9.0.19), EntityFrameworkCore packages for net10 (10.0.10 → 10.0.11),
+- Docker test environments consolidated from separate net9 and net10 configurations into a single unified image (codebeltnet/ubuntu-testrunner:8-9-10-11) supporting testing across multiple .NET versions with consistent runtime.
 
 ## [5.0.10] - 2026-07-26
 
@@ -1085,6 +1090,7 @@ Noticeable highlights:
 - QueryHandler class in the Savvyio.Queries namespace that defines a generic and consistent way of handling Query objects that implements the IQuery interface
 - SavvyioOptionsExtensions class in the Savvyio.Queries namespace that consist of extension methods for the SavvyioOptions class: AddQueryHandler, AddQueryDispatcher
 
+[5.0.11]: https://github.com/codebeltnet/savvyio/compare/v5.0.10...v5.0.11
 [5.0.10]: https://github.com/codebeltnet/savvyio/compare/v5.0.9...v5.0.10
 [5.0.9]: https://github.com/codebeltnet/savvyio/compare/v5.0.8...v5.0.9
 [5.0.8]: https://github.com/codebeltnet/savvyio/compare/v5.0.7...v5.0.8
