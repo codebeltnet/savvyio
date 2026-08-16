@@ -7,15 +7,9 @@
       "wslDistribution": "Ubuntu-24.04"
     },
     {
-      "name": "Docker (net9)",
+      "name": "Docker-Ubuntu",
       "type": "docker",
-      "dockerImage": "mcr.microsoft.com/dotnet/sdk:9.0",
-      "dockerArgs": "-e AWS__CallerIdentity -e AWS__IAM__AccessKey -e AWS__IAM__SecretKey"
-    },
-    {
-      "name": "Docker (net10)",
-      "type": "docker",
-      "dockerImage": "mcr.microsoft.com/dotnet/sdk:10.0",
+      "dockerImage": "codebeltnet/ubuntu-testrunner:8-9-10-11",
       "dockerArgs": "-e AWS__CallerIdentity -e AWS__IAM__AccessKey -e AWS__IAM__SecretKey"
     }
   ]
