@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [5.0.12] - 2026-09-12
+
+This is a service update that focuses on package dependencies.
+
 ## [5.0.11] - 2026-08-16
 
 This is a patch release focused on dependency updates to latest stable versions and Docker test environment consolidation.
