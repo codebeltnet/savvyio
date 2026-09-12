@@ -88,6 +88,38 @@ Provides a convenient set of default API additions for building complete DDD, CQ
 |:--|:-:|:-:|:-:|
 | <font size="2">[Savvyio.App](https://www.nuget.org/packages/Savvyio.App/)</font> | ![vNext](https://img.shields.io/nuget/vpre/Savvyio.App?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Savvyio.App?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Savvyio.App?color=blueviolet&logo=nuget) |
 
+## Local NATS and RabbitMQ testing
+
+Start the repository's pinned NATS and RabbitMQ test dependencies from PowerShell:
+
+```powershell
+docker compose up --detach --wait nats rabbitmq
+```
+
+Verify that NATS is accepting JetStream traffic and RabbitMQ is ready:
+
+```powershell
+Invoke-RestMethod 'http://localhost:8222/healthz?js-enabled-only=true'
+docker compose exec rabbitmq rabbitmq-diagnostics -q check_running
+docker compose exec rabbitmq rabbitmq-diagnostics -q check_port_connectivity
+```
+
+Run the functional tests from the host:
+
+```powershell
+dotnet test test/Savvyio.Extensions.NATS.FunctionalTests/Savvyio.Extensions.NATS.FunctionalTests.csproj --configuration Release -p:SkipSignAssembly=true
+dotnet test test/Savvyio.Extensions.RabbitMQ.FunctionalTests/Savvyio.Extensions.RabbitMQ.FunctionalTests.csproj --configuration Release -p:SkipSignAssembly=true
+```
+
+For Visual Studio's `Docker-Ubuntu` test environment, start the same Compose services first and then select that test environment in Test Explorer. Compose creates the named `savvyio-test` bridge network. The repository's `testenvironments.json` attaches the test-runner container to that network and supplies the NATS, RabbitMQ AMQP, and RabbitMQ management endpoints by service name; `localhost` inside a container refers to the test-runner container itself and cannot reach the broker containers.
+
+Stop and remove the test dependencies when finished:
+
+```powershell
+docker compose stop nats rabbitmq
+docker compose rm --force nats rabbitmq
+```
+
 ## Contributing to Savvy I/O
 
 A big welcome and thank you for considering contributing to Savvy I/O open source project!
