@@ -1,4 +1,5 @@
-﻿using System.Linq;
+using System;
+using System.Linq;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using Codebelt.Extensions.Xunit;
@@ -34,10 +35,14 @@ namespace Savvyio.Extensions.NATS.EventDriven
             var managed = HostTestFactory.Create(services =>
             {
                 services.AddMarshaller<JsonMarshaller>();
-                services.AddMessageBus<NatsEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<NatsEventBusOptions>(o => o.Subject = Generate.RandomString(10));
+                services.AddMessageBus<ObservableNatsEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<NatsEventBusOptions>(o =>
+                {
+                    o.NatsUrl = NatsTestEnvironment.Url;
+                    o.Subject = Generate.RandomString(10);
+                });
             });
 
-            var bus = managed.Host.Services.GetRequiredService<NatsEventBus>();
+            var bus = managed.Host.Services.GetRequiredService<ObservableNatsEventBus>();
             var marshaller = managed.Host.Services.GetRequiredService<IMarshaller>();
 
             var member = new MemberCreated("John Doe", "jd@outlook.com");
@@ -47,7 +52,7 @@ namespace Savvyio.Extensions.NATS.EventDriven
 
             TestOutput.WriteLine(marshaller.Serialize(urn).ToEncodedString());
             TestOutput.WriteLine(marshaller.Serialize(message).ToEncodedString());
-            
+
             var handlerInvocations = 0;
             Task.Run<Task>(async () =>
             {
@@ -58,15 +63,11 @@ namespace Savvyio.Extensions.NATS.EventDriven
                 }).ConfigureAwait(false);
             });
 
-            await Task.Delay(200); // wait briefly to ensure subscription setup
+            await bus.WaitUntilSubscribedAsync();
 
             await bus.PublishAsync(message).ConfigureAwait(false);
-            
-            await Task.Delay(200);
 
-            receivedMessages.Writer.Complete(); // mark channel write is complete
-            
-            var received = await receivedMessages.Reader.ReadAsync();
+            var received = await receivedMessages.Reader.ReadAsync().AsTask().WaitAsync(TimeSpan.FromSeconds(10));
 
             Assert.Equal(1, handlerInvocations);
             Assert.Equivalent(message.Data, received.Data);
@@ -82,10 +83,14 @@ namespace Savvyio.Extensions.NATS.EventDriven
             var managed = HostTestFactory.Create(services =>
             {
                 services.AddMarshaller<JsonMarshaller>();
-                services.AddMessageBus<NatsEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<NatsEventBusOptions>(o => o.Subject = Generate.RandomString(10));
+                services.AddMessageBus<ObservableNatsEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<NatsEventBusOptions>(o =>
+                {
+                    o.NatsUrl = NatsTestEnvironment.Url;
+                    o.Subject = Generate.RandomString(10);
+                });
             });
 
-            var bus = managed.Host.Services.GetRequiredService<NatsEventBus>();
+            var bus = managed.Host.Services.GetRequiredService<ObservableNatsEventBus>();
             var marshaller = managed.Host.Services.GetRequiredService<IMarshaller>();
 
             var member = new MemberCreated("John Doe", "jd@outlook.com");
@@ -106,15 +111,11 @@ namespace Savvyio.Extensions.NATS.EventDriven
                 }).ConfigureAwait(false);
             });
 
-            await Task.Delay(200); // wait briefly to ensure subscription setup
+            await bus.WaitUntilSubscribedAsync();
 
             await bus.PublishAsync(message).ConfigureAwait(false);
-            
-            await Task.Delay(200);
 
-            receivedMessages.Writer.Complete(); // mark channel write is complete
-            
-            var received = await receivedMessages.Reader.ReadAsync() as ISignedMessage<IIntegrationEvent>;
+            var received = await receivedMessages.Reader.ReadAsync().AsTask().WaitAsync(TimeSpan.FromSeconds(10)) as ISignedMessage<IIntegrationEvent>;
             received?.CheckSignature(marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
 
             Assert.Equal(1, handlerInvocations);
@@ -132,10 +133,14 @@ namespace Savvyio.Extensions.NATS.EventDriven
             var managed = HostTestFactory.Create(services =>
             {
                 services.AddMarshaller<JsonMarshaller>();
-                services.AddMessageBus<NatsEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<NatsEventBusOptions>(o => o.Subject = Generate.RandomString(10));
+                services.AddMessageBus<ObservableNatsEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<NatsEventBusOptions>(o =>
+                {
+                    o.NatsUrl = NatsTestEnvironment.Url;
+                    o.Subject = Generate.RandomString(10);
+                });
             });
 
-            var bus = managed.Host.Services.GetRequiredService<NatsEventBus>();
+            var bus = managed.Host.Services.GetRequiredService<ObservableNatsEventBus>();
             var marshaller = managed.Host.Services.GetRequiredService<IMarshaller>();
 
             var member = new MemberCreated("John Doe", "jd@outlook.com");
@@ -156,15 +161,11 @@ namespace Savvyio.Extensions.NATS.EventDriven
                 }).ConfigureAwait(false);
             });
 
-            await Task.Delay(200); // wait briefly to ensure subscription setup
-            
+            await bus.WaitUntilSubscribedAsync();
+
             await bus.PublishAsync(message);
 
-            await Task.Delay(200);
-
-            receivedMessages.Writer.Complete(); // mark channel write is complete
-            
-            var received = await receivedMessages.Reader.ReadAsync() as ICloudEvent<IIntegrationEvent>;
+            var received = await receivedMessages.Reader.ReadAsync().AsTask().WaitAsync(TimeSpan.FromSeconds(10)) as ICloudEvent<IIntegrationEvent>;
 
             Assert.Equal(1, handlerInvocations);
             Assert.Equivalent(message.Data, received.Data);
@@ -181,10 +182,14 @@ namespace Savvyio.Extensions.NATS.EventDriven
             var managed = HostTestFactory.Create(services =>
             {
                 services.AddMarshaller<JsonMarshaller>();
-                services.AddMessageBus<NatsEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<NatsEventBusOptions>(o => o.Subject = Generate.RandomString(10));
+                services.AddMessageBus<ObservableNatsEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<NatsEventBusOptions>(o =>
+                {
+                    o.NatsUrl = NatsTestEnvironment.Url;
+                    o.Subject = Generate.RandomString(10);
+                });
             });
 
-            var bus = managed.Host.Services.GetRequiredService<NatsEventBus>();
+            var bus = managed.Host.Services.GetRequiredService<ObservableNatsEventBus>();
             var marshaller = managed.Host.Services.GetRequiredService<IMarshaller>();
 
             var member = new MemberCreated("John Doe", "jd@outlook.com");
@@ -205,15 +210,11 @@ namespace Savvyio.Extensions.NATS.EventDriven
                 }).ConfigureAwait(false);
             });
 
-            await Task.Delay(200); // wait briefly to ensure subscription setup
+            await bus.WaitUntilSubscribedAsync();
 
             await bus.PublishAsync(message);
 
-            await Task.Delay(200);
-
-            receivedMessages.Writer.Complete(); // mark channel write is complete
-            
-            var received = await receivedMessages.Reader.ReadAsync() as ISignedCloudEvent<IIntegrationEvent>;
+            var received = await receivedMessages.Reader.ReadAsync().AsTask().WaitAsync(TimeSpan.FromSeconds(10)) as ISignedCloudEvent<IIntegrationEvent>;
 
             Assert.Equal(1, handlerInvocations);
             Assert.Equivalent(message.Data, received.Data);
@@ -231,10 +232,14 @@ namespace Savvyio.Extensions.NATS.EventDriven
             var managed = HostTestFactory.Create(services =>
             {
                 services.AddMarshaller<JsonMarshaller>();
-                services.AddMessageBus<NatsEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<NatsEventBusOptions>(o => o.Subject = Generate.RandomString(10));
+                services.AddMessageBus<ObservableNatsEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<NatsEventBusOptions>(o =>
+                {
+                    o.NatsUrl = NatsTestEnvironment.Url;
+                    o.Subject = Generate.RandomString(10);
+                });
             });
 
-            var bus = managed.Host.Services.GetRequiredService<NatsEventBus>();
+            var bus = managed.Host.Services.GetRequiredService<ObservableNatsEventBus>();
             var marshaller = managed.Host.Services.GetRequiredService<IMarshaller>();
 
             var messages = Generate.RangeOf(100, _ =>
@@ -265,20 +270,18 @@ namespace Savvyio.Extensions.NATS.EventDriven
                 }).ConfigureAwait(false);
             });
 
-            await Task.Delay(200); // wait briefly to ensure subscription setup
+            await bus.WaitUntilSubscribedAsync();
 
             await ParallelFactory.ForEachAsync(messages, (message, token) =>
             {
                 return bus.PublishAsync(message, o => o.CancellationToken = token);
             }).ConfigureAwait(false);
 
-            await Task.Delay(750);
-
-            receivedMessages1.Writer.Complete(); // mark channel write is complete
-            receivedMessages2.Writer.Complete(); // mark channel write is complete
-
-            var received1 = await receivedMessages1.Reader.ReadAllAsync().ToListAsync();
-            var received2 = await receivedMessages2.Reader.ReadAllAsync().ToListAsync();
+            var received1Task = MessageTestHelper.ReadAsync(receivedMessages1.Reader, messages.Count);
+            var received2Task = MessageTestHelper.ReadAsync(receivedMessages2.Reader, messages.Count);
+            await Task.WhenAll(received1Task, received2Task);
+            var received1 = await received1Task;
+            var received2 = await received2Task;
 
             TestOutput.WriteLine(received1.Count.ToString());
             TestOutput.WriteLines(received1.Take(10).Select(m => marshaller.Serialize(m).ToEncodedString()));

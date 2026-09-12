@@ -1,4 +1,4 @@
-﻿using Codebelt.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Codebelt.Extensions.Xunit.Hosting;
 using Cuemon;
 using Cuemon.Extensions;
@@ -34,8 +34,9 @@ namespace Savvyio.Extensions.NATS.Commands
             var managed = HostTestFactory.Create(services =>
             {
                 services.AddMarshaller<NewtonsoftJsonMarshaller>();
-                services.AddMessageQueue<NatsCommandQueue, ICommand>().AddConfiguredOptions<NatsCommandQueueOptions>(o =>
+                services.AddMessageQueue<ObservableNatsCommandQueue, ICommand>().AddConfiguredOptions<NatsCommandQueueOptions>(o =>
                 {
+                    o.NatsUrl = NatsTestEnvironment.Url;
                     o.AutoAcknowledge = true;
                     o.Subject = Guid.NewGuid().ToString();
                     o.StreamName = Guid.NewGuid().ToString();
@@ -43,7 +44,7 @@ namespace Savvyio.Extensions.NATS.Commands
                 });
             });
 
-            var queue = managed.Host.Services.GetRequiredService<NatsCommandQueue>();
+            var queue = managed.Host.Services.GetRequiredService<ObservableNatsCommandQueue>();
             var marshaller = managed.Host.Services.GetRequiredService<IMarshaller>();
 
             var member = new CreateMemberCommand("John Doe", 44, "jd@outlook.com");
@@ -61,15 +62,11 @@ namespace Savvyio.Extensions.NATS.Commands
                 }
             });
 
-            await Task.Delay(200); // wait briefly to ensure subscription setup
+            await queue.WaitUntilConsumerReadyAsync();
 
             await queue.SendAsync(message.Yield()).ConfigureAwait(false);
 
-            await Task.Delay(200);
-
-            receivedMessages.Writer.Complete(); // mark channel write is complete
-
-            var received = await receivedMessages.Reader.ReadAsync();
+            var received = await receivedMessages.Reader.ReadAsync().AsTask().WaitAsync(TimeSpan.FromSeconds(10));
 
             Assert.Equivalent(message.Data, received.Data);
             Assert.Equivalent(message.Time, received.Time);
@@ -84,8 +81,9 @@ namespace Savvyio.Extensions.NATS.Commands
             var managed = HostTestFactory.Create(services =>
             {
                 services.AddMarshaller<NewtonsoftJsonMarshaller>();
-                services.AddMessageQueue<NatsCommandQueue, ICommand>().AddConfiguredOptions<NatsCommandQueueOptions>(o =>
+                services.AddMessageQueue<ObservableNatsCommandQueue, ICommand>().AddConfiguredOptions<NatsCommandQueueOptions>(o =>
                 {
+                    o.NatsUrl = NatsTestEnvironment.Url;
                     o.AutoAcknowledge = true;
                     o.Subject = Guid.NewGuid().ToString();
                     o.StreamName = Guid.NewGuid().ToString();
@@ -93,7 +91,7 @@ namespace Savvyio.Extensions.NATS.Commands
                 });
             });
 
-            var queue = managed.Host.Services.GetRequiredService<NatsCommandQueue>();
+            var queue = managed.Host.Services.GetRequiredService<ObservableNatsCommandQueue>();
             var marshaller = managed.Host.Services.GetRequiredService<IMarshaller>();
 
             var member = new CreateMemberCommand("John Doe", 44, "jd@outlook.com");
@@ -111,15 +109,11 @@ namespace Savvyio.Extensions.NATS.Commands
                 }
             });
 
-            await Task.Delay(200); // wait briefly to ensure subscription setup
+            await queue.WaitUntilConsumerReadyAsync();
 
             await queue.SendAsync(message.Yield()).ConfigureAwait(false);
 
-            await Task.Delay(200);
-
-            receivedMessages.Writer.Complete(); // mark channel write is complete
-
-            var received = (await receivedMessages.Reader.ReadAsync()) as ISignedMessage<ICommand>;
+            var received = (await receivedMessages.Reader.ReadAsync().AsTask().WaitAsync(TimeSpan.FromSeconds(10))) as ISignedMessage<ICommand>;
             received?.CheckSignature(marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
 
             Assert.Equivalent(message.Data, received.Data);
@@ -135,15 +129,16 @@ namespace Savvyio.Extensions.NATS.Commands
             var managed = HostTestFactory.Create(services =>
             {
                 services.AddMarshaller<NewtonsoftJsonMarshaller>();
-                services.AddMessageQueue<NatsCommandQueue, ICommand>().AddConfiguredOptions<NatsCommandQueueOptions>(o =>
+                services.AddMessageQueue<ObservableNatsCommandQueue, ICommand>().AddConfiguredOptions<NatsCommandQueueOptions>(o =>
                 {
+                    o.NatsUrl = NatsTestEnvironment.Url;
                     o.StreamName = Guid.NewGuid().ToString();
                     o.ConsumerName = Guid.NewGuid().ToString();
                     o.Subject = Guid.NewGuid().ToString();
                 });
             });
 
-            var queue = managed.Host.Services.GetRequiredService<NatsCommandQueue>();
+            var queue = managed.Host.Services.GetRequiredService<ObservableNatsCommandQueue>();
             var marshaller = managed.Host.Services.GetRequiredService<IMarshaller>();
 
             var messages = Generate.RangeOf(100, i =>
@@ -183,26 +178,16 @@ namespace Savvyio.Extensions.NATS.Commands
                 }
             });
 
-            await Task.Delay(2000); // wait briefly to ensure subscription setup
+            await queue.WaitUntilConsumerReadyAsync();
 
             await queue.SendAsync(messages).ConfigureAwait(false);
 
-            // Wait for all messages to be received with a timeout
-            var timeout = TimeSpan.FromSeconds(10);
-            var start = DateTime.UtcNow;
-            while ((count1 + count2) < messages.Count && (DateTime.UtcNow - start) < timeout)
-            {
-                await Task.Delay(10);
-            }
+            var received = await MessageTestHelper.ReadAsync(receivedMessages.Reader, messages.Count);
 
             Assert.Equal(messages.Count, count1 + count2);
 
             TestOutput.WriteLine(count1.ToString());
             TestOutput.WriteLine(count2.ToString());
-
-            receivedMessages.Writer.Complete(); // mark channel write is complete
-
-            var received = await receivedMessages.Reader.ReadAllAsync().ToListAsync();
 
             TestOutput.WriteLine(received.Count.ToString());
             TestOutput.WriteLines(received.Take(10));

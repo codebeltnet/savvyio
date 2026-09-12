@@ -1,4 +1,5 @@
-﻿using System.Linq;
+using System;
+using System.Linq;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using Codebelt.Extensions.Xunit;
@@ -32,7 +33,11 @@ namespace Savvyio.Extensions.RabbitMQ.Commands
             var managed = HostTestFactory.Create(services =>
             {
                 services.AddMarshaller<NewtonsoftJsonMarshaller>();
-                services.AddMessageQueue<RabbitMqCommandQueue, ICommand>().AddConfiguredOptions<RabbitMqCommandQueueOptions>(o => o.QueueName = Generate.RandomString(10));
+                services.AddMessageQueue<RabbitMqCommandQueue, ICommand>().AddConfiguredOptions<RabbitMqCommandQueueOptions>(o =>
+                {
+                    o.AmqpUrl = RabbitMqTestEnvironment.Url;
+                    o.QueueName = Generate.RandomString(10);
+                });
             });
 
             var queue = managed.Host.Services.GetRequiredService<RabbitMqCommandQueue>();
@@ -53,15 +58,11 @@ namespace Savvyio.Extensions.RabbitMQ.Commands
                 }
             });
 
-            await Task.Delay(200); // wait briefly to ensure subscription setup
+            await RabbitMqTestEnvironment.WaitForCommandSubscriptionAsync(managed.Host.Services);
 
             await queue.SendAsync(message.Yield()).ConfigureAwait(false);
 
-            await Task.Delay(200);
-
-            receivedMessages.Writer.Complete(); // mark channel write is complete
-
-            var received = await receivedMessages.Reader.ReadAsync();
+            var received = await receivedMessages.Reader.ReadAsync().AsTask().WaitAsync(TimeSpan.FromSeconds(10));
 
             Assert.Equivalent(message.Data, received.Data);
             Assert.Equivalent(message.Time, received.Time);
@@ -76,7 +77,11 @@ namespace Savvyio.Extensions.RabbitMQ.Commands
             var managed = HostTestFactory.Create(services =>
             {
                 services.AddMarshaller<NewtonsoftJsonMarshaller>();
-                services.AddMessageQueue<RabbitMqCommandQueue, ICommand>().AddConfiguredOptions<RabbitMqCommandQueueOptions>(o => o.QueueName = Generate.RandomString(10));
+                services.AddMessageQueue<RabbitMqCommandQueue, ICommand>().AddConfiguredOptions<RabbitMqCommandQueueOptions>(o =>
+                {
+                    o.AmqpUrl = RabbitMqTestEnvironment.Url;
+                    o.QueueName = Generate.RandomString(10);
+                });
             });
 
             var queue = managed.Host.Services.GetRequiredService<RabbitMqCommandQueue>();
@@ -97,15 +102,11 @@ namespace Savvyio.Extensions.RabbitMQ.Commands
                 }
             });
 
-            await Task.Delay(200); // wait briefly to ensure subscription setup
+            await RabbitMqTestEnvironment.WaitForCommandSubscriptionAsync(managed.Host.Services);
 
             await queue.SendAsync(message.Yield()).ConfigureAwait(false);
 
-            await Task.Delay(200);
-
-            receivedMessages.Writer.Complete(); // mark channel write is complete
-
-            var received = (await receivedMessages.Reader.ReadAsync()) as ISignedMessage<ICommand>;
+            var received = (await receivedMessages.Reader.ReadAsync().AsTask().WaitAsync(TimeSpan.FromSeconds(10))) as ISignedMessage<ICommand>;
             received?.CheckSignature(marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
 
             Assert.Equivalent(message.Data, received.Data);
@@ -121,7 +122,11 @@ namespace Savvyio.Extensions.RabbitMQ.Commands
             var managed = HostTestFactory.Create(services =>
             {
                 services.AddMarshaller<NewtonsoftJsonMarshaller>();
-                services.AddMessageQueue<RabbitMqCommandQueue, ICommand>().AddConfiguredOptions<RabbitMqCommandQueueOptions>(o => o.QueueName = Generate.RandomString(10));
+                services.AddMessageQueue<RabbitMqCommandQueue, ICommand>().AddConfiguredOptions<RabbitMqCommandQueueOptions>(o =>
+                {
+                    o.AmqpUrl = RabbitMqTestEnvironment.Url;
+                    o.QueueName = Generate.RandomString(10);
+                });
             });
 
             var queue = managed.Host.Services.GetRequiredService<RabbitMqCommandQueue>();
@@ -135,7 +140,7 @@ namespace Savvyio.Extensions.RabbitMQ.Commands
             }).ToList();
 
             var receivedMessages = Channel.CreateUnbounded<IMessage<ICommand>>();
-            
+
             Task.Run<Task>(async () =>
             {
                 await foreach (var msg in queue.ReceiveAsync().ConfigureAwait(false))
@@ -144,15 +149,11 @@ namespace Savvyio.Extensions.RabbitMQ.Commands
                 }
             });
 
-            await Task.Delay(200); // wait briefly to ensure subscription setup
+            await RabbitMqTestEnvironment.WaitForCommandSubscriptionAsync(managed.Host.Services);
 
             await queue.SendAsync(messages).ConfigureAwait(false);
 
-            await Task.Delay(750);
-
-            receivedMessages.Writer.Complete(); // mark channel write is complete
-
-            var received = await receivedMessages.Reader.ReadAllAsync().ToListAsync();
+            var received = await MessageTestHelper.ReadAsync(receivedMessages.Reader, messages.Count);
 
             TestOutput.WriteLine(received.Count.ToString());
             TestOutput.WriteLines(received.Take(10));
