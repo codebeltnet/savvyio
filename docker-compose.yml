@@ -1,4 +1,22 @@
 services:
+  nats:
+    image: nats:2.14.5@sha256:026a66a4497c6d7d3eed741781770099c48c755bf3a55b6950d76dd210596eb3
+    command: ["--js", "--http_port", "8222"]
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+
+  rabbitmq:
+    image: rabbitmq:4.3.4-management@sha256:eb5295d083325da5929a5ade766684d4019ffd2bce8bc7e43d6f9a05cafc8646
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmq-diagnostics -q check_running && rabbitmq-diagnostics -q check_port_connectivity"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
   localstack:
     image: localstack/localstack:4.14.0
     environment:
@@ -49,3 +67,7 @@ services:
         aws sns subscribe --topic-arn arn:aws:sns:eu-west-1:000000000000:newtonsoft-member-events-one.fifo --protocol sqs --notification-endpoint arn:aws:sqs:eu-west-1:000000000000:newtonsoft-savvyio-events.fifo --attributes RawMessageDelivery=true
         aws sns subscribe --topic-arn arn:aws:sns:eu-west-1:000000000000:newtonsoft-member-events-many.fifo --protocol sqs --notification-endpoint arn:aws:sqs:eu-west-1:000000000000:newtonsoft-savvyio-events.fifo --attributes RawMessageDelivery=true
       "
+
+networks:
+  default:
+    name: savvyio-test

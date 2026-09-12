@@ -10,7 +10,7 @@
       "name": "Docker-Ubuntu",
       "type": "docker",
       "dockerImage": "codebeltnet/ubuntu-testrunner:8-9-10-11",
-      "dockerArgs": "-e AWS__CallerIdentity -e AWS__IAM__AccessKey -e AWS__IAM__SecretKey"
+      "dockerArgs": "--network savvyio-test -e AWS__CallerIdentity -e AWS__IAM__AccessKey -e AWS__IAM__SecretKey -e SAVVYIO_NATS_URL=nats://nats:4222 -e SAVVYIO_RABBITMQ_URL=amqp://rabbitmq:5672 -e SAVVYIO_RABBITMQ_MANAGEMENT_URL=http://rabbitmq:15672"
     }
   ]
 }
