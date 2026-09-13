@@ -270,7 +270,7 @@ namespace Savvyio.Extensions.NATS.EventDriven
                 }).ConfigureAwait(false);
             });
 
-            await bus.WaitUntilSubscribedAsync();
+            await bus.WaitUntilSubscribedAsync(2);
 
             await ParallelFactory.ForEachAsync(messages, (message, token) =>
             {
