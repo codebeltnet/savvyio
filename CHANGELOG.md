@@ -18,10 +18,17 @@ This is a patch release focused on test infrastructure enhancements for NATS and
 ### Changed
 
 - NATS and RabbitMQ functional test suites updated with new test helper utilities and observable implementations for improved state capture and test verification,
-- Package dependencies updated to latest stable versions: Codebelt.Extensions.Xunit.App (11.2.1 → 12.0.1), xunit.v3 packages (3.2.2 → 4.0.0), MinVer (7.0.0 → 8.0.0), NATS.Client packages (3.1.0 → 3.2.0), Dapper.StrongName (2.1.79 → 2.1.86), Microsoft.NET.Test.Sdk (18.9.0 → 18.10.0), EntityFrameworkCore packages (net9: 9.0.19 → 9.0.20, net10: 10.0.11 → 10.0.12), and other dependencies,
-- Build configuration updated: test projects now use Microsoft.Testing.Extensions.CodeCoverage instead of coverlet.msbuild and coverlet.collector for code coverage collection,
+- Package dependencies updated to latest stable versions: AWSSDK.SQS and AWSSDK.SimpleNotificationService (4.0.100.8 → 4.0.100.13), Codebelt.Extensions.Newtonsoft.Json (10.1.7 → 10.1.8), Codebelt.Extensions.Xunit.App (11.2.1 → 12.0.1), Codebelt.Extensions.YamlDotNet (10.1.6 → 10.1.8), Cuemon extension packages (10.7.0 → 10.7.1), Dapper.StrongName (2.1.79 → 2.1.86), Microsoft.Data.Sqlite (10.0.11 → 10.0.12), Microsoft.Extensions.Logging.Abstractions (10.0.11 → 10.0.12), Microsoft.NET.Test.Sdk (18.9.0 → 18.10.0), MinVer (7.0.0 → 8.0.0), NATS.Client packages (3.1.0 → 3.2.0), xunit.v3 and xunit.v3.runner.console (3.2.2 → 4.0.1), xunit.runner.visualstudio (3.1.5 → 4.0.0), EntityFrameworkCore packages (net9: 9.0.19 → 9.0.20, net10: 10.0.11 → 10.0.12),
+- Build configuration updated: test projects now use Microsoft.Testing.Extensions.CodeCoverage (18.11.2) instead of coverlet.msbuild and coverlet.collector for code coverage collection,
 - CI pipeline enhanced with separate integration_test_rabbitmq and integration_test_nats jobs supporting JetStream (NATS) and management plugins (RabbitMQ),
-- CONTRIBUTING.md restructured with Codebelt .NET library integration context, repository shape overview, build and test execution procedures, and supported test environment specifications (WSL-Ubuntu, Docker-Ubuntu).
+- CONTRIBUTING.md restructured with Codebelt .NET library integration context, repository shape overview, build and test execution procedures, and supported test environment specifications (WSL-Ubuntu, Docker-Ubuntu),
+- xUnit v3 test ordering API updated: TestCaseOrderer replaced with TestMethodOrderer and PriorityOrderer replaced with PriorityMethodOrderer across all test classes.
+
+### Fixed
+
+- NATS subscription readiness improved to properly handle multiple concurrent subscriptions, ensuring WaitUntilSubscribedAsync completes after all subscriptions are ready,
+- NATS and RabbitMQ port bindings restricted to loopback address for enhanced security and isolation during local testing,
+- RabbitMQ CI startup verification improved with retry loop using rabbitmq-diagnostics health checks instead of unreliable await_startup command.
 
 ### Removed
 
