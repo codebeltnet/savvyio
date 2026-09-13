@@ -14,7 +14,7 @@ using Xunit.v3.Priority;
 
 namespace Savvyio.EventDriven.Messaging
 {
-    [TestCaseOrderer(typeof(PriorityOrderer))]
+    [TestMethodOrderer(typeof(PriorityMethodOrderer))]
     public class InMemoryEventBusTest : Test
     {
         private static readonly InMemoryEventBus Bus = new();

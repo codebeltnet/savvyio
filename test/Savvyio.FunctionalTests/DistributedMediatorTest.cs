@@ -40,7 +40,7 @@ using Xunit.v3.Priority;
 
 namespace Savvyio
 {
-    [TestCaseOrderer(typeof(PriorityOrderer))]
+    [TestMethodOrderer(typeof(PriorityMethodOrderer))]
     public class DistributedMediatorTest : Test
     {
         private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);

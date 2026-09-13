@@ -65,6 +65,9 @@ jobs:
         with:
           pattern: |
             test/**/*.csproj
+            !test/**/Savvyio.Assets.Dapper.Tests.csproj
+            !test/**/Savvyio.Assets.EfCore.Tests.csproj
+            !test/**/Savvyio.Assets.Tests.csproj
             !test/**/Savvyio.FunctionalTests.csproj
             !test/**/Savvyio.Extensions.SimpleQueueService.FunctionalTests.csproj
             !test/**/Savvyio.Extensions.QueueStorage.FunctionalTests.csproj
@@ -265,7 +268,21 @@ jobs:
 
       - name: Spin up RabbitMQ test dependency
         run: |
-          docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:management
+          set -euo pipefail
+
+          docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4.3.4-management@sha256:eb5295d083325da5929a5ade766684d4019ffd2bce8bc7e43d6f9a05cafc8646
+
+          # The CLI can fail before the Erlang node exists, so retry until the broker is ready.
+          if ! timeout 60s bash -c '
+            until docker exec --user rabbitmq rabbitmq rabbitmq-diagnostics -q check_running &&
+                  docker exec --user rabbitmq rabbitmq rabbitmq-diagnostics -q check_port_connectivity; do
+              sleep 2
+            done
+          '; then
+            docker logs rabbitmq || true
+            docker exec --user rabbitmq rabbitmq rabbitmq-diagnostics status || true
+            exit 1
+          fi
 
       - name: Test with Release build
         uses: codebeltnet/dotnet-test@v4
@@ -276,9 +293,12 @@ jobs:
           build: true # needed for xunitv3
 
       - name: Stop RabbitMQ
+        if: ${{ always() }}
         run: |
-          docker stop rabbitmq
-          docker rm rabbitmq
+          if docker inspect rabbitmq >/dev/null 2>&1; then
+            docker logs rabbitmq
+            docker rm --force rabbitmq
+          fi
 
   integration_test_nats:
     name: ⚗️ Integration Test - NATS
@@ -297,7 +317,17 @@ jobs:
 
       - name: Spin up NATS test dependency
         run: |
-          docker run -d --name nats -p 4222:4222 nats:latest --js
+          docker run -d --name nats -p 4222:4222 -p 8222:8222 nats:2.14.5@sha256:026a66a4497c6d7d3eed741781770099c48c755bf3a55b6950d76dd210596eb3 --js --http_port 8222
+
+          for attempt in {1..60}; do
+            if curl --fail --silent --show-error "http://127.0.0.1:8222/healthz?js-enabled-only=true"; then
+              exit 0
+            fi
+            sleep 1
+          done
+
+          docker logs nats
+          exit 1
 
       - name: Test with Release build
         uses: codebeltnet/dotnet-test@v4
@@ -308,9 +338,12 @@ jobs:
           build: true # needed for xunitv3
 
       - name: Stop NATS
+        if: ${{ always() }}
         run: |
-          docker stop nats
-          docker rm nats
+          if docker inspect nats >/dev/null 2>&1; then
+            docker logs nats
+            docker rm --force nats
+          fi
 
   sonarcloud:
     if: ${{ always() && needs.init.outputs.run-privileged-jobs == 'true' && needs.build.result == 'success' && needs.test_qualitygate.result == 'success' && needs.integration_test.result == 'success' && needs.integration_test_rabbitmq.result == 'success' && needs.integration_test_nats.result == 'success' }}

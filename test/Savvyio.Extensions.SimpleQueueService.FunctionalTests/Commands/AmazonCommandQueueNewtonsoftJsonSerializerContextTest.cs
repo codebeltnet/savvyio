@@ -27,7 +27,7 @@ using Xunit.v3.Priority;
 
 namespace Savvyio.Extensions.SimpleQueueService.Commands
 {
-    [TestCaseOrderer(typeof(PriorityOrderer))]
+    [TestMethodOrderer(typeof(PriorityMethodOrderer))]
     public class AmazonCommandQueueNewtonsoftJsonSerializerContextTest : HostTest<ManagedHostFixture>
     {
         private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);

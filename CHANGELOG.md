@@ -4,6 +4,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [5.0.12] - 2026-09-13
+
+This is a patch release focused on test infrastructure enhancements for NATS and RabbitMQ messaging extensions, dependency updates to latest stable versions, and improved contributor documentation.
+
+### Added
+
+- Test helper utilities for NATS and RabbitMQ functional tests: MessageTestHelper for channel-based message reading with timeout support, NatsTestEnvironment and RabbitMqTestEnvironment for environment detection and port configuration,
+- Observable NatsCommandQueue and NatsEventBus implementations for test state capture and verification without coupling to test framework specifics,
+- CI pipeline integration test jobs for NATS and RabbitMQ with Docker service startup, health checks, and structured test execution,
+- Local NATS and RabbitMQ testing documentation in README.md with Docker Compose service startup, health verification, functional test execution steps, and cleanup procedures for developers.
+
+### Changed
+
+- NATS and RabbitMQ functional test suites updated with new test helper utilities and observable implementations for improved state capture and test verification,
+- Package dependencies updated to latest stable versions: AWSSDK.SQS and AWSSDK.SimpleNotificationService (4.0.100.8 → 4.0.100.13), Codebelt.Extensions.Newtonsoft.Json (10.1.7 → 10.1.8), Codebelt.Extensions.Xunit.App (11.2.1 → 12.0.1), Codebelt.Extensions.YamlDotNet (10.1.6 → 10.1.8), Cuemon extension packages (10.7.0 → 10.7.1), Dapper.StrongName (2.1.79 → 2.1.86), Microsoft.Data.Sqlite (10.0.11 → 10.0.12), Microsoft.Extensions.Logging.Abstractions (10.0.11 → 10.0.12), Microsoft.NET.Test.Sdk (18.9.0 → 18.10.0), MinVer (7.0.0 → 8.0.0), NATS.Client packages (3.1.0 → 3.2.0), xunit.v3 and xunit.v3.runner.console (3.2.2 → 4.0.1), xunit.runner.visualstudio (3.1.5 → 4.0.0), EntityFrameworkCore packages (net9: 9.0.19 → 9.0.20, net10: 10.0.11 → 10.0.12),
+- Build configuration updated: test projects now use Microsoft.Testing.Extensions.CodeCoverage (18.11.2) instead of coverlet.msbuild and coverlet.collector for code coverage collection,
+- CI pipeline enhanced with separate integration_test_rabbitmq and integration_test_nats jobs supporting JetStream (NATS) and management plugins (RabbitMQ),
+- CONTRIBUTING.md restructured with Codebelt .NET library integration context, repository shape overview, build and test execution procedures, and supported test environment specifications (WSL-Ubuntu, Docker-Ubuntu),
+- xUnit v3 test ordering API updated: TestCaseOrderer replaced with TestMethodOrderer and PriorityOrderer replaced with PriorityMethodOrderer across all test classes.
+
+### Fixed
+
+- NATS subscription readiness improved to properly handle multiple concurrent subscriptions, ensuring WaitUntilSubscribedAsync completes after all subscriptions are ready,
+- NATS and RabbitMQ port bindings restricted to loopback address for enhanced security and isolation during local testing,
+- RabbitMQ CI startup verification improved with retry loop using rabbitmq-diagnostics health checks instead of unreliable await_startup command.
+
+### Removed
+
+- Removed `coverlet.collector` and `coverlet.msbuild` from test project dependencies.
+
 ## [5.0.11] - 2026-08-16
 
 This is a patch release focused on dependency updates to latest stable versions and Docker test environment consolidation.
@@ -1090,6 +1120,7 @@ Noticeable highlights:
 - QueryHandler class in the Savvyio.Queries namespace that defines a generic and consistent way of handling Query objects that implements the IQuery interface
 - SavvyioOptionsExtensions class in the Savvyio.Queries namespace that consist of extension methods for the SavvyioOptions class: AddQueryHandler, AddQueryDispatcher
 
+[5.0.12]: https://github.com/codebeltnet/savvyio/compare/v5.0.11...v5.0.12
 [5.0.11]: https://github.com/codebeltnet/savvyio/compare/v5.0.10...v5.0.11
 [5.0.10]: https://github.com/codebeltnet/savvyio/compare/v5.0.9...v5.0.10
 [5.0.9]: https://github.com/codebeltnet/savvyio/compare/v5.0.8...v5.0.9

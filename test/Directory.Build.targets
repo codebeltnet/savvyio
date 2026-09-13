@@ -1,0 +1,7 @@
+<Project>
+
+  <ItemGroup Condition="'$(IsTestProject)' == 'true' AND @(PackageReference->AnyHaveMetadataValue('Identity', 'Xunit.v3.Priority'))">
+    <Compile Include="$(MSBuildThisFileDirectory)Shared\PriorityMethodOrderer.cs" Link="PriorityMethodOrderer.cs" />
+  </ItemGroup>
+
+</Project>

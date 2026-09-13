@@ -1,4 +1,4 @@
-﻿using Codebelt.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Codebelt.Extensions.Xunit.Hosting;
 using Cuemon;
 using Cuemon.Extensions;
@@ -15,6 +15,7 @@ using Savvyio.Extensions.Newtonsoft.Json;
 using Savvyio.Extensions.RabbitMQ.Assets;
 using Savvyio.Messaging;
 using Savvyio.Messaging.Cryptography;
+using System;
 using System.Linq;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace Savvyio.Extensions.RabbitMQ.EventDriven
 {
     public class RabbitMqEventBusNewtonsoftJsonSerializerContextTest : Test
     {
-         public RabbitMqEventBusNewtonsoftJsonSerializerContextTest(ITestOutputHelper output) : base(output)
+        public RabbitMqEventBusNewtonsoftJsonSerializerContextTest(ITestOutputHelper output) : base(output)
         {
         }
 
@@ -34,7 +35,11 @@ namespace Savvyio.Extensions.RabbitMQ.EventDriven
             var managed = HostTestFactory.Create(services =>
             {
                 services.AddMarshaller<NewtonsoftJsonMarshaller>();
-                services.AddMessageBus<RabbitMqEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<RabbitMqEventBusOptions>(o => o.ExchangeName = Generate.RandomString(10));
+                services.AddMessageBus<RabbitMqEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<RabbitMqEventBusOptions>(o =>
+                {
+                    o.AmqpUrl = RabbitMqTestEnvironment.Url;
+                    o.ExchangeName = Generate.RandomString(10);
+                });
             });
 
             var bus = managed.Host.Services.GetRequiredService<RabbitMqEventBus>();
@@ -47,7 +52,7 @@ namespace Savvyio.Extensions.RabbitMQ.EventDriven
 
             TestOutput.WriteLine(marshaller.Serialize(urn).ToEncodedString());
             TestOutput.WriteLine(marshaller.Serialize(message).ToEncodedString());
-            
+
             var handlerInvocations = 0;
             Task.Run<Task>(async () =>
             {
@@ -58,15 +63,11 @@ namespace Savvyio.Extensions.RabbitMQ.EventDriven
                 }).ConfigureAwait(false);
             });
 
-            await Task.Delay(200); // wait briefly to ensure subscription setup
+            await RabbitMqTestEnvironment.WaitForEventSubscriptionAsync(managed.Host.Services);
 
             await bus.PublishAsync(message).ConfigureAwait(false);
-            
-            await Task.Delay(200);
 
-            receivedMessages.Writer.Complete(); // mark channel write is complete
-            
-            var received = await receivedMessages.Reader.ReadAsync();
+            var received = await receivedMessages.Reader.ReadAsync().AsTask().WaitAsync(TimeSpan.FromSeconds(10));
 
             Assert.Equal(1, handlerInvocations);
             Assert.Equivalent(message.Data, received.Data);
@@ -82,7 +83,11 @@ namespace Savvyio.Extensions.RabbitMQ.EventDriven
             var managed = HostTestFactory.Create(services =>
             {
                 services.AddMarshaller<NewtonsoftJsonMarshaller>();
-                services.AddMessageBus<RabbitMqEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<RabbitMqEventBusOptions>(o => o.ExchangeName = Generate.RandomString(10));
+                services.AddMessageBus<RabbitMqEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<RabbitMqEventBusOptions>(o =>
+                {
+                    o.AmqpUrl = RabbitMqTestEnvironment.Url;
+                    o.ExchangeName = Generate.RandomString(10);
+                });
             });
 
             var bus = managed.Host.Services.GetRequiredService<RabbitMqEventBus>();
@@ -106,15 +111,11 @@ namespace Savvyio.Extensions.RabbitMQ.EventDriven
                 }).ConfigureAwait(false);
             });
 
-            await Task.Delay(200); // wait briefly to ensure subscription setup
+            await RabbitMqTestEnvironment.WaitForEventSubscriptionAsync(managed.Host.Services);
 
             await bus.PublishAsync(message).ConfigureAwait(false);
-            
-            await Task.Delay(200);
 
-            receivedMessages.Writer.Complete(); // mark channel write is complete
-            
-            var received = await receivedMessages.Reader.ReadAsync() as ISignedMessage<IIntegrationEvent>;
+            var received = await receivedMessages.Reader.ReadAsync().AsTask().WaitAsync(TimeSpan.FromSeconds(10)) as ISignedMessage<IIntegrationEvent>;
             received?.CheckSignature(marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
 
             Assert.Equal(1, handlerInvocations);
@@ -132,7 +133,11 @@ namespace Savvyio.Extensions.RabbitMQ.EventDriven
             var managed = HostTestFactory.Create(services =>
             {
                 services.AddMarshaller<NewtonsoftJsonMarshaller>();
-                services.AddMessageBus<RabbitMqEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<RabbitMqEventBusOptions>(o => o.ExchangeName = Generate.RandomString(10));
+                services.AddMessageBus<RabbitMqEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<RabbitMqEventBusOptions>(o =>
+                {
+                    o.AmqpUrl = RabbitMqTestEnvironment.Url;
+                    o.ExchangeName = Generate.RandomString(10);
+                });
             });
 
             var bus = managed.Host.Services.GetRequiredService<RabbitMqEventBus>();
@@ -156,15 +161,11 @@ namespace Savvyio.Extensions.RabbitMQ.EventDriven
                 }).ConfigureAwait(false);
             });
 
-            await Task.Delay(200); // wait briefly to ensure subscription setup
-            
+            await RabbitMqTestEnvironment.WaitForEventSubscriptionAsync(managed.Host.Services);
+
             await bus.PublishAsync(message);
 
-            await Task.Delay(200);
-
-            receivedMessages.Writer.Complete(); // mark channel write is complete
-            
-            var received = await receivedMessages.Reader.ReadAsync() as ICloudEvent<IIntegrationEvent>;
+            var received = await receivedMessages.Reader.ReadAsync().AsTask().WaitAsync(TimeSpan.FromSeconds(10)) as ICloudEvent<IIntegrationEvent>;
 
             Assert.Equal(1, handlerInvocations);
             Assert.Equivalent(message.Data, received.Data);
@@ -181,7 +182,11 @@ namespace Savvyio.Extensions.RabbitMQ.EventDriven
             var managed = HostTestFactory.Create(services =>
             {
                 services.AddMarshaller<NewtonsoftJsonMarshaller>();
-                services.AddMessageBus<RabbitMqEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<RabbitMqEventBusOptions>(o => o.ExchangeName = Generate.RandomString(10));
+                services.AddMessageBus<RabbitMqEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<RabbitMqEventBusOptions>(o =>
+                {
+                    o.AmqpUrl = RabbitMqTestEnvironment.Url;
+                    o.ExchangeName = Generate.RandomString(10);
+                });
             });
 
             var bus = managed.Host.Services.GetRequiredService<RabbitMqEventBus>();
@@ -205,15 +210,11 @@ namespace Savvyio.Extensions.RabbitMQ.EventDriven
                 }).ConfigureAwait(false);
             });
 
-            await Task.Delay(200); // wait briefly to ensure subscription setup
+            await RabbitMqTestEnvironment.WaitForEventSubscriptionAsync(managed.Host.Services);
 
             await bus.PublishAsync(message);
 
-            await Task.Delay(200);
-
-            receivedMessages.Writer.Complete(); // mark channel write is complete
-            
-            var received = await receivedMessages.Reader.ReadAsync() as ISignedCloudEvent<IIntegrationEvent>;
+            var received = await receivedMessages.Reader.ReadAsync().AsTask().WaitAsync(TimeSpan.FromSeconds(10)) as ISignedCloudEvent<IIntegrationEvent>;
 
             Assert.Equal(1, handlerInvocations);
             Assert.Equivalent(message.Data, received.Data);
@@ -231,7 +232,11 @@ namespace Savvyio.Extensions.RabbitMQ.EventDriven
             var managed = HostTestFactory.Create(services =>
             {
                 services.AddMarshaller<NewtonsoftJsonMarshaller>();
-                services.AddMessageBus<RabbitMqEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<RabbitMqEventBusOptions>(o => o.ExchangeName = Generate.RandomString(10));
+                services.AddMessageBus<RabbitMqEventBus, IIntegrationEvent>(o => o.Lifetime = ServiceLifetime.Singleton).AddConfiguredOptions<RabbitMqEventBusOptions>(o =>
+                {
+                    o.AmqpUrl = RabbitMqTestEnvironment.Url;
+                    o.ExchangeName = Generate.RandomString(10);
+                });
             });
 
             var bus = managed.Host.Services.GetRequiredService<RabbitMqEventBus>();
@@ -265,20 +270,18 @@ namespace Savvyio.Extensions.RabbitMQ.EventDriven
                 }).ConfigureAwait(false);
             });
 
-            await Task.Delay(200); // wait briefly to ensure subscription setup
+            await RabbitMqTestEnvironment.WaitForEventSubscriptionAsync(managed.Host.Services);
 
             await ParallelFactory.ForEachAsync(messages, (message, token) =>
             {
                 return bus.PublishAsync(message, o => o.CancellationToken = token);
             }).ConfigureAwait(false);
 
-            await Task.Delay(750);
-
-            receivedMessages1.Writer.Complete(); // mark channel write is complete
-            receivedMessages2.Writer.Complete(); // mark channel write is complete
-
-            var received1 = await receivedMessages1.Reader.ReadAllAsync().ToListAsync();
-            var received2 = await receivedMessages2.Reader.ReadAllAsync().ToListAsync();
+            var received1Task = MessageTestHelper.ReadAsync(receivedMessages1.Reader, messages.Count);
+            var received2Task = MessageTestHelper.ReadAsync(receivedMessages2.Reader, messages.Count);
+            await Task.WhenAll(received1Task, received2Task);
+            var received1 = await received1Task;
+            var received2 = await received2Task;
 
             TestOutput.WriteLine(received1.Count.ToString());
             TestOutput.WriteLines(received1.Take(10));

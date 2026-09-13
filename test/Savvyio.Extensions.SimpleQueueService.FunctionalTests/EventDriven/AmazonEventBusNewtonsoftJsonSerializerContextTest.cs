@@ -26,7 +26,7 @@ using Xunit.v3.Priority;
 
 namespace Savvyio.Extensions.SimpleQueueService.EventDriven
 {
-    [TestCaseOrderer(typeof(PriorityOrderer))]
+    [TestMethodOrderer(typeof(PriorityMethodOrderer))]
     public class AmazonEventBusNewtonsoftJsonSerializerContextTest : HostTest<ManagedHostFixture>
     {
         private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
