@@ -16,7 +16,7 @@ using Xunit.v3.Priority;
 
 namespace Savvyio.Extensions.Text.Json.Commands.Messaging
 {
-    [TestCaseOrderer(typeof(PriorityOrderer))]
+    [TestMethodOrderer(typeof(PriorityMethodOrderer))]
     public class InMemoryCommandQueueTest : Test
     {
         private static readonly InMemoryCommandQueue Queue = new();

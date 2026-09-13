@@ -30,7 +30,7 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace Savvyio
 {
-    [TestCaseOrderer(typeof(PriorityOrderer))]
+    [TestMethodOrderer(typeof(PriorityMethodOrderer))]
     public class MediatorTest : HostTest<ManagedHostFixture>
     {
         private IServiceProvider _provider;

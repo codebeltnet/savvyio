@@ -28,7 +28,7 @@ using Xunit.v3.Priority;
 
 namespace Savvyio.Extensions.QueueStorage.Commands
 {
-    [TestCaseOrderer(typeof(PriorityOrderer))]
+    [TestMethodOrderer(typeof(PriorityMethodOrderer))]
     public class AzureCommandQueueJsonSerializerContextTest : HostTest<ManagedHostFixture>
     {
         private static readonly string Platform = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux" : "windows";

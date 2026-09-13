@@ -30,7 +30,7 @@ using Xunit.v3.Priority;
 
 namespace Savvyio.Extensions.QueueStorage.EventDriven
 {
-    [TestCaseOrderer(typeof(PriorityOrderer))]
+    [TestMethodOrderer(typeof(PriorityMethodOrderer))]
     public class AzureEventBusJsonSerializerContextTest : HostTest<ManagedHostFixture>
     {
         private static readonly string Platform = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux" : "win";
