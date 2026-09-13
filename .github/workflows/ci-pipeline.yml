@@ -272,15 +272,17 @@ jobs:
 
           docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4.3.4-management@sha256:eb5295d083325da5929a5ade766684d4019ffd2bce8bc7e43d6f9a05cafc8646
 
-          if ! timeout 60s docker exec --user rabbitmq rabbitmq rabbitmqctl await_startup; then
+          # The CLI can fail before the Erlang node exists, so retry until the broker is ready.
+          if ! timeout 60s bash -c '
+            until docker exec --user rabbitmq rabbitmq rabbitmq-diagnostics -q check_running &&
+                  docker exec --user rabbitmq rabbitmq rabbitmq-diagnostics -q check_port_connectivity; do
+              sleep 2
+            done
+          '; then
             docker logs rabbitmq || true
             docker exec --user rabbitmq rabbitmq rabbitmq-diagnostics status || true
             exit 1
           fi
-
-          docker exec --user rabbitmq rabbitmq rabbitmq-diagnostics -q check_running
-          docker exec --user rabbitmq rabbitmq rabbitmq-diagnostics -q check_port_connectivity
-
 
       - name: Test with Release build
         uses: codebeltnet/dotnet-test@v4
