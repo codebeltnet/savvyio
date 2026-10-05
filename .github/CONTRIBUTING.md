@@ -36,7 +36,7 @@ Run tests one project at a time so a failing or hanging project is attributable.
 $testProjects = Get-ChildItem test -Filter *.csproj -Recurse
 $testProjects = $testProjects | Where-Object { $_.BaseName -notin @('Savvyio.Assets.Dapper.Tests', 'Savvyio.Assets.EfCore.Tests', 'Savvyio.Assets.Tests', 'Savvyio.Extensions.NATS.FunctionalTests', 'Savvyio.Extensions.QueueStorage.FunctionalTests', 'Savvyio.Extensions.RabbitMQ.FunctionalTests', 'Savvyio.Extensions.SimpleQueueService.FunctionalTests', 'Savvyio.FunctionalTests') }
 foreach ($project in $testProjects) {
-    dotnet test $project.FullName --configuration Release --no-restore
+    dotnet test --project $project.FullName --configuration Release --no-restore
 }
 ```
 
@@ -56,8 +56,7 @@ docker compose up -d
 docker compose down
 ```
 
-The normal CI test matrix excludes these eight projects:
-
+The normal CI test matrix excludes these integration-dependent projects:
 - `Savvyio.Assets.Dapper.Tests`
 - `Savvyio.Assets.EfCore.Tests`
 - `Savvyio.Assets.Tests`
