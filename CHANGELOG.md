@@ -4,6 +4,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [5.0.13] - TBD
+
+This is a patch release focused on DocFX publishing pipeline hardening, contributor test guidance corrections, and expanded test coverage for configured options, discovery, and JSON converters.
+
+### Added
+
+- Configured options verification across dependency injection extensions with shared assertions covering direct, Microsoft Options, and callback consumption forms,
+- Automatic dispatcher, handler, and assembly context discovery coverage including duplicate-free results, ordinal filtering, transitive traversal, and caching semantics,
+- JSON message converter coverage across Newtonsoft.Json and Text.Json including null writer guards and concrete CloudEvent resolution excluding abstract candidates.
+
+### Changed
+
+- DocFX publishing pipeline hardened with reliable restore and error handling, dhi.io nginx serving with dedicated config and lean build context, separate member pages, ms-style template, mobile navigation, corrected GitHub link, and sitemap for docs.savvyio.net,
+- Contributor test guidance corrected to dotnet test --project syntax with integration-dependent exclusion wording.
+
 ## [5.0.12] - 2026-09-13
 
 This is a patch release focused on test infrastructure enhancements for NATS and RabbitMQ messaging extensions, dependency updates to latest stable versions, and improved contributor documentation.
@@ -1120,6 +1135,7 @@ Noticeable highlights:
 - QueryHandler class in the Savvyio.Queries namespace that defines a generic and consistent way of handling Query objects that implements the IQuery interface
 - SavvyioOptionsExtensions class in the Savvyio.Queries namespace that consist of extension methods for the SavvyioOptions class: AddQueryHandler, AddQueryDispatcher
 
+[5.0.13]: https://github.com/codebeltnet/savvyio/compare/v5.0.12...v5.0.13
 [5.0.12]: https://github.com/codebeltnet/savvyio/compare/v5.0.11...v5.0.12
 [5.0.11]: https://github.com/codebeltnet/savvyio/compare/v5.0.10...v5.0.11
 [5.0.10]: https://github.com/codebeltnet/savvyio/compare/v5.0.9...v5.0.10
