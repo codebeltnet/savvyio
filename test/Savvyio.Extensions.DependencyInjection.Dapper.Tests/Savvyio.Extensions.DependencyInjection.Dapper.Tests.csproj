@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Savvyio.Assets.Tests\Savvyio.Assets.Tests.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="..\Shared\ConfiguredOptionsAssertions.cs" Link="ConfiguredOptionsAssertions.cs" />
+  </ItemGroup>
+
 </Project>

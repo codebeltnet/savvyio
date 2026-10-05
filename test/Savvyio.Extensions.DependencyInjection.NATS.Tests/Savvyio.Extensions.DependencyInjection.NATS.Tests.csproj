@@ -9,4 +9,8 @@
     <ProjectReference Include="..\..\src\Savvyio.Extensions.Text.Json\Savvyio.Extensions.Text.Json.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="..\Shared\ConfiguredOptionsAssertions.cs" Link="ConfiguredOptionsAssertions.cs" />
+  </ItemGroup>
+
 </Project>

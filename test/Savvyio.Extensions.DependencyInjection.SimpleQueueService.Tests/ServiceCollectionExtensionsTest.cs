@@ -39,6 +39,7 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
             sut1.AddMarshaller<NewtonsoftJsonMarshaller>();
             sut1.AddAmazonCommandQueue(awsSetup);
             var sut2 = sut1.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<AmazonCommandQueueOptions>(sut2);
 
             Assert.IsType<AmazonCommandQueue>(sut2.GetRequiredService<IPointToPointChannel<ICommand>>());
             Assert.IsType<AmazonCommandQueue>(sut2.GetRequiredService<ISender<ICommand>>());
@@ -72,6 +73,7 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
             sut1.AddMarshaller<JsonMarshaller>();
             sut1.AddAmazonCommandQueue(awsSetup);
             var sut2 = sut1.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<AmazonCommandQueueOptions<QueueMarker>>(sut2);
 
             Assert.IsType<AmazonCommandQueue<QueueMarker>>(sut2.GetRequiredService<IPointToPointChannel<ICommand, QueueMarker>>());
             Assert.IsType<AmazonCommandQueue<QueueMarker>>(sut2.GetRequiredService<ISender<ICommand, QueueMarker>>());
@@ -105,6 +107,7 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
             sut1.AddMarshaller<NewtonsoftJsonMarshaller>();
             sut1.AddAmazonEventBus(awsSetup);
             var sut2 = sut1.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<AmazonEventBusOptions>(sut2);
 
             Assert.IsType<AmazonEventBus>(sut2.GetRequiredService<IPublishSubscribeChannel<IIntegrationEvent>>());
             Assert.IsType<AmazonEventBus>(sut2.GetRequiredService<IPublisher<IIntegrationEvent>>());
@@ -138,6 +141,7 @@ namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService
             sut1.AddMarshaller<JsonMarshaller>();
             sut1.AddAmazonEventBus(awsSetup);
             var sut2 = sut1.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<AmazonEventBusOptions<BusMarker>>(sut2);
 
             Assert.IsType<AmazonEventBus<BusMarker>>(sut2.GetRequiredService<IPublishSubscribeChannel<IIntegrationEvent, BusMarker>>());
             Assert.IsType<AmazonEventBus<BusMarker>>(sut2.GetRequiredService<IPublisher<IIntegrationEvent, BusMarker>>());

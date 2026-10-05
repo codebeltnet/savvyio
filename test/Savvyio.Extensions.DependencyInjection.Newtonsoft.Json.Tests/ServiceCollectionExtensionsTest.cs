@@ -34,6 +34,7 @@ namespace Savvyio.Extensions.DependencyInjection.Newtonsoft.Json.Tests
 
             // Assert
             var provider = services.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<NewtonsoftJsonFormatterOptions>(provider);
             var marshaller = provider.GetService<NewtonsoftJsonMarshaller>();
             Assert.NotNull(marshaller);
 
@@ -59,6 +60,7 @@ namespace Savvyio.Extensions.DependencyInjection.Newtonsoft.Json.Tests
 
             // Assert
             var provider = services.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<NewtonsoftJsonFormatterOptions>(provider);
             var options = provider.GetService<NewtonsoftJsonFormatterOptions>();
             Assert.NotNull(options);
             Assert.True(called);

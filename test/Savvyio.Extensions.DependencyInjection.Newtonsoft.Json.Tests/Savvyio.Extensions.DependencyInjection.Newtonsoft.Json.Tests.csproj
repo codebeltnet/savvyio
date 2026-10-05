@@ -8,4 +8,8 @@
     <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.Newtonsoft.Json\Savvyio.Extensions.DependencyInjection.Newtonsoft.Json.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="..\Shared\ConfiguredOptionsAssertions.cs" Link="ConfiguredOptionsAssertions.cs" />
+  </ItemGroup>
+
 </Project>

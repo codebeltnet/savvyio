@@ -25,6 +25,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
             var sut1 = new ServiceCollection();
             sut1.AddEfCoreDataSource(o => o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(AnotherDbMarker)));
             var sut2 = sut1.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<Savvyio.Extensions.EFCore.EfCoreDataSourceOptions>(sut2);
 
             Assert.IsType<EfCoreDataSource>(sut2.GetRequiredService<IEfCoreDataSource>());
             Assert.IsType<EfCoreDataSource>(sut2.GetRequiredService<IDataSource>());
@@ -38,6 +39,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
             var sut1 = new ServiceCollection();
             sut1.AddEfCoreDataSource<DbMarker>(o => o.ContextConfigurator = b => b.UseInMemoryDatabase("fake"));
             var sut2 = sut1.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<Savvyio.Extensions.DependencyInjection.EFCore.EfCoreDataSourceOptions<DbMarker>>(sut2);
 
             Assert.IsType<EfCoreDataSource<DbMarker>>(sut2.GetRequiredService<IEfCoreDataSource<DbMarker>>());
             Assert.IsType<EfCoreDataSource<DbMarker>>(sut2.GetRequiredService<IDataSource<DbMarker>>());
@@ -53,6 +55,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
             sut1.AddEfCoreRepository<Account, long>();
             sut1.AddEfCoreRepository<PlatformProvider, Guid>();
             var sut2 = sut1.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<Savvyio.Extensions.EFCore.EfCoreDataSourceOptions>(sut2);
 
             Assert.IsType<EfCoreRepository<Account, long>>(sut2.GetRequiredService<IPersistentRepository<Account, long>>());
             Assert.IsType<EfCoreRepository<PlatformProvider, Guid>>(sut2.GetRequiredService<IPersistentRepository<PlatformProvider, Guid>>());
@@ -69,6 +72,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
             sut1.AddEfCoreRepository<Account, long, AnotherDbMarker>();
             sut1.AddEfCoreRepository<PlatformProvider, Guid, AnotherDbMarker>();
             var sut2 = sut1.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<Savvyio.Extensions.DependencyInjection.EFCore.EfCoreDataSourceOptions<DbMarker>>(sut2);
 
             Assert.IsType<EfCoreRepository<Account, long, DbMarker>>(sut2.GetRequiredService<IPersistentRepository<Account, long, DbMarker>>());
             Assert.IsType<EfCoreRepository<PlatformProvider, Guid, DbMarker>>(sut2.GetRequiredService<IPersistentRepository<PlatformProvider, Guid, DbMarker>>());
@@ -86,6 +90,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
             sut1.AddEfCoreDataStore<Account>();
             sut1.AddEfCoreDataStore<PlatformProvider>();
             var sut2 = sut1.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<Savvyio.Extensions.EFCore.EfCoreDataSourceOptions>(sut2);
 
             TestOutput.WriteLine(sut2.GetRequiredService<IPersistentDataStore<Account, EfCoreQueryOptions<Account>>>().GetType().FullName);
 
@@ -104,6 +109,7 @@ namespace Savvyio.Extensions.DependencyInjection.EFCore
             sut1.AddEfCoreDataStore<Account, AnotherDbMarker>();
             sut1.AddEfCoreDataStore<PlatformProvider, AnotherDbMarker>();
             var sut2 = sut1.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<Savvyio.Extensions.DependencyInjection.EFCore.EfCoreDataSourceOptions<DbMarker>>(sut2);
 
             Assert.IsType<EfCoreDataStore<Account, DbMarker>>(sut2.GetRequiredService<IPersistentDataStore<Account, EfCoreQueryOptions<Account>, DbMarker>>());
             Assert.IsType<EfCoreDataStore<PlatformProvider, DbMarker>>(sut2.GetRequiredService<IPersistentDataStore<PlatformProvider, EfCoreQueryOptions<PlatformProvider>, DbMarker>>());
