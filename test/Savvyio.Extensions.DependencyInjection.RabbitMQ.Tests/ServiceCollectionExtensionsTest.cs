@@ -35,6 +35,7 @@ namespace Savvyio.Extensions.DependencyInjection.RabbitMQ
             sut1.AddMarshaller<NewtonsoftJsonMarshaller>();
             sut1.AddRabbitMqCommandQueue(rabbitMqSetup);
             var sut2 = sut1.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<RabbitMqCommandQueueOptions>(sut2);
 
             Assert.IsType<RabbitMqCommandQueue>(sut2.GetRequiredService<IPointToPointChannel<ICommand>>());
             Assert.IsType<RabbitMqCommandQueue>(sut2.GetRequiredService<ISender<ICommand>>());
@@ -66,6 +67,7 @@ namespace Savvyio.Extensions.DependencyInjection.RabbitMQ
             sut1.AddMarshaller<JsonMarshaller>();
             sut1.AddRabbitMqCommandQueue(rabbitMqSetup);
             var sut2 = sut1.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<RabbitMqCommandQueueOptions<QueueMarker>>(sut2);
 
             Assert.IsType<RabbitMqCommandQueue<QueueMarker>>(sut2.GetRequiredService<IPointToPointChannel<ICommand, QueueMarker>>());
             Assert.IsType<RabbitMqCommandQueue<QueueMarker>>(sut2.GetRequiredService<ISender<ICommand, QueueMarker>>());
@@ -97,6 +99,7 @@ namespace Savvyio.Extensions.DependencyInjection.RabbitMQ
             sut1.AddMarshaller<NewtonsoftJsonMarshaller>();
             sut1.AddRabbitMqEventBus(rabbitMqSetup);
             var sut2 = sut1.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<RabbitMqEventBusOptions>(sut2);
 
             Assert.IsType<RabbitMqEventBus>(sut2.GetRequiredService<IPublishSubscribeChannel<IIntegrationEvent>>());
             Assert.IsType<RabbitMqEventBus>(sut2.GetRequiredService<IPublisher<IIntegrationEvent>>());
@@ -128,6 +131,7 @@ namespace Savvyio.Extensions.DependencyInjection.RabbitMQ
             sut1.AddMarshaller<JsonMarshaller>();
             sut1.AddRabbitMqEventBus(rabbitMqSetup);
             var sut2 = sut1.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<RabbitMqEventBusOptions<BusMarker>>(sut2);
 
             Assert.IsType<RabbitMqEventBus<BusMarker>>(sut2.GetRequiredService<IPublishSubscribeChannel<IIntegrationEvent, BusMarker>>());
             Assert.IsType<RabbitMqEventBus<BusMarker>>(sut2.GetRequiredService<IPublisher<IIntegrationEvent, BusMarker>>());

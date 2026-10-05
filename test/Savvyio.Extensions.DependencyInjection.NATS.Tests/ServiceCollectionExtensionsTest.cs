@@ -40,6 +40,7 @@ namespace Savvyio.Extensions.DependencyInjection.NATS
             // Assert
             Assert.True(natsSetupCalled);
             var provider = services.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<NatsCommandQueueOptions>(provider);
             var queue = provider.GetService<NatsCommandQueue>();
             
             
@@ -70,6 +71,7 @@ namespace Savvyio.Extensions.DependencyInjection.NATS
             // Assert
             Assert.True(natsSetupCalled);
             var provider = services.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<NatsCommandQueueOptions<QueueMarker>>(provider);
             var queue = provider.GetService<NatsCommandQueue<QueueMarker>>();
 
             Assert.IsType<NatsCommandQueue<QueueMarker>>(provider.GetRequiredService<IPointToPointChannel<ICommand, QueueMarker>>());
@@ -97,6 +99,7 @@ namespace Savvyio.Extensions.DependencyInjection.NATS
             // Assert
             Assert.True(natsSetupCalled);
             var provider = services.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<NatsEventBusOptions>(provider);
             var bus = provider.GetService<NatsEventBus>();
 
             Assert.IsType<NatsEventBus>(provider.GetRequiredService<IPublishSubscribeChannel<IIntegrationEvent>>());
@@ -124,6 +127,7 @@ namespace Savvyio.Extensions.DependencyInjection.NATS
             // Assert
             Assert.True(natsSetupCalled);
             var provider = services.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<NatsEventBusOptions<BusMarker>>(provider);
             var bus = provider.GetService<NatsEventBus<BusMarker>>();
 
             Assert.IsType<NatsEventBus<BusMarker>>(provider.GetRequiredService<IPublishSubscribeChannel<IIntegrationEvent, BusMarker>>());

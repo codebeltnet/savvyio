@@ -40,6 +40,7 @@ namespace Savvyio.Extensions.DependencyInjection.QueueStorage
             services.AddMarshaller<NewtonsoftJsonMarshaller>();
             services.AddAzureCommandQueue(azureSetup);
             var provider = services.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<AzureQueueOptions>(provider);
 
             Assert.IsType<CoreCommands.AzureCommandQueue>(provider.GetRequiredService<IPointToPointChannel<ICommand>>());
             Assert.IsType<CoreCommands.AzureCommandQueue>(provider.GetRequiredService<ISender<ICommand>>());
@@ -73,6 +74,7 @@ namespace Savvyio.Extensions.DependencyInjection.QueueStorage
             services.AddMarshaller<JsonMarshaller>();
             services.AddAzureCommandQueue(azureSetup);
             var provider = services.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<AzureQueueOptions<QueueMarker>>(provider);
 
             Assert.IsType<DICommands.AzureCommandQueue<QueueMarker>>(provider.GetRequiredService<IPointToPointChannel<ICommand, QueueMarker>>());
             Assert.IsType<DICommands.AzureCommandQueue<QueueMarker>>(provider.GetRequiredService<ISender<ICommand, QueueMarker>>());
@@ -111,6 +113,8 @@ namespace Savvyio.Extensions.DependencyInjection.QueueStorage
             services.AddMarshaller<NewtonsoftJsonMarshaller>();
             services.AddAzureEventBus(azureQueueSetup, azureEventBusSetup);
             var provider = services.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<AzureQueueOptions>(provider);
+            ConfiguredOptionsAssertions.Verify<CoreEvent.AzureEventBusOptions>(provider);
 
             Assert.IsType<CoreEvent.AzureEventBus>(provider.GetRequiredService<IPublishSubscribeChannel<IIntegrationEvent>>());
             Assert.IsType<CoreEvent.AzureEventBus>(provider.GetRequiredService<IPublisher<IIntegrationEvent>>());
@@ -158,6 +162,8 @@ namespace Savvyio.Extensions.DependencyInjection.QueueStorage
             services.AddMarshaller<JsonMarshaller>();
             services.AddAzureEventBus(azureQueueSetup, azureEventBusSetup);
             var provider = services.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<AzureQueueOptions<BusMarker>>(provider);
+            ConfiguredOptionsAssertions.Verify<DIEvent.AzureEventBusOptions<BusMarker>>(provider);
 
             Assert.IsType<DIEvent.AzureEventBus<BusMarker>>(provider.GetRequiredService<IPublishSubscribeChannel<IIntegrationEvent, BusMarker>>());
             Assert.IsType<DIEvent.AzureEventBus<BusMarker>>(provider.GetRequiredService<IPublisher<IIntegrationEvent, BusMarker>>());

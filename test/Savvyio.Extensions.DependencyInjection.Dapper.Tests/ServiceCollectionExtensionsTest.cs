@@ -19,6 +19,7 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
             var sut1 = new ServiceCollection();
             sut1.AddDapperDataSource(o => o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:"));
             var sut2 = sut1.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<Savvyio.Extensions.Dapper.DapperDataSourceOptions>(sut2);
 
             Assert.IsType<DapperDataSource>(sut2.GetRequiredService<IDapperDataSource>());
             Assert.IsType<DapperDataSource>(sut2.GetRequiredService<IDataSource>());
@@ -31,6 +32,7 @@ namespace Savvyio.Extensions.DependencyInjection.Dapper
             var sut1 = new ServiceCollection();
             sut1.AddDapperDataSource<DbMarker>(o => o.ConnectionFactory = () => new SqliteConnection("Data Source=:memory:"));
             var sut2 = sut1.BuildServiceProvider();
+            ConfiguredOptionsAssertions.Verify<DapperDataSourceOptions<DbMarker>>(sut2);
 
             Assert.IsType<DapperDataSource<DbMarker>>(sut2.GetRequiredService<IDapperDataSource<DbMarker>>());
             Assert.IsType<DapperDataSource<DbMarker>>(sut2.GetRequiredService<IDataSource<DbMarker>>());
