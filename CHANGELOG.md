@@ -4,9 +4,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
-## [5.0.14] - 2026-10-17
+## [5.0.14] - 2026-10-18
 
-This is a service update that focuses on package dependencies.
+This is a patch release updating shared dependencies and Entity Framework Core, the documentation sitemap, and repository agent guidance.
+
+### Changed
+
+- Updated "Microsoft.Testing.Extensions.HangDump" from 2.4.1 to 2.5.1,
+- Updated "Microsoft.Extensions.Logging.Abstractions" from 10.0.12 to 10.0.13 to satisfy the updated test-host dependency,
+- Updated "Codebelt.Extensions.Newtonsoft.Json" from 10.1.8 to 10.1.9,
+- Updated "Codebelt.Extensions.Xunit.App" from 12.0.1 to 12.0.2,
+- Updated "Codebelt.Extensions.YamlDotNet" from 10.1.8 to 10.1.9,
+- Updated "Cuemon.Extensions.Collections.Generic" from 10.7.1 to 10.8.1,
+- Updated "Cuemon.Extensions.Core" from 10.7.1 to 10.8.1,
+- Updated "Cuemon.Extensions.DependencyInjection" from 10.7.1 to 10.8.1,
+- Updated "Cuemon.Extensions.IO" from 10.7.1 to 10.8.1,
+- Updated "Cuemon.Extensions.Reflection" from 10.7.1 to 10.8.1,
+- Updated "Cuemon.Extensions.Text.Json" from 10.7.1 to 10.8.1,
+- Updated "Cuemon.Security.Cryptography" from 10.7.1 to 10.8.1,
+- Updated "Microsoft.EntityFrameworkCore" from 9.0.20 to 9.0.21 under $(TargetFramework.StartsWith('net9')),
+- Updated "Microsoft.EntityFrameworkCore.InMemory" from 9.0.20 to 9.0.21 under $(TargetFramework.StartsWith('net9')),
+- Updated "Microsoft.EntityFrameworkCore.Relational" from 9.0.20 to 9.0.21 under $(TargetFramework.StartsWith('net9')),
+- Updated "Microsoft.EntityFrameworkCore" from 10.0.12 to 10.0.13 under $(TargetFramework.StartsWith('net10')),
+- Updated "Microsoft.EntityFrameworkCore.InMemory" from 10.0.12 to 10.0.13 under $(TargetFramework.StartsWith('net10')),
+- Updated "Microsoft.EntityFrameworkCore.Relational" from 10.0.12 to 10.0.13 under $(TargetFramework.StartsWith('net10')),
+- Changed the documentation sitemap base URL from https://docs.savvyio.net/ to https://savvyio.codebelt.net/,
+- Consolidated the full test, benchmark, and XML documentation guidance from .github/copilot-instructions.md into AGENTS.md with explicit path scopes, and updated guidance references.
 
 ## [5.0.13] - TBD
 
@@ -1139,6 +1162,7 @@ Noticeable highlights:
 - QueryHandler class in the Savvyio.Queries namespace that defines a generic and consistent way of handling Query objects that implements the IQuery interface
 - SavvyioOptionsExtensions class in the Savvyio.Queries namespace that consist of extension methods for the SavvyioOptions class: AddQueryHandler, AddQueryDispatcher
 
+[5.0.14]: https://github.com/codebeltnet/savvyio/compare/v5.0.12...v5.0.14
 [5.0.13]: https://github.com/codebeltnet/savvyio/compare/v5.0.12...v5.0.13
 [5.0.12]: https://github.com/codebeltnet/savvyio/compare/v5.0.11...v5.0.12
 [5.0.11]: https://github.com/codebeltnet/savvyio/compare/v5.0.10...v5.0.11
