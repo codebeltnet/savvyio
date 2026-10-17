@@ -4,36 +4,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
-## [5.0.14] - 2026-10-18
+## [5.0.13] - 2026-10-18
 
-This is a patch release updating shared dependencies and Entity Framework Core, the documentation sitemap, and repository agent guidance.
-
-### Changed
-
-- Updated "Microsoft.Testing.Extensions.HangDump" from 2.4.1 to 2.5.1,
-- Updated "Microsoft.Extensions.Logging.Abstractions" from 10.0.12 to 10.0.13 to satisfy the updated test-host dependency,
-- Updated "Codebelt.Extensions.Newtonsoft.Json" from 10.1.8 to 10.1.9,
-- Updated "Codebelt.Extensions.Xunit.App" from 12.0.1 to 12.0.2,
-- Updated "Codebelt.Extensions.YamlDotNet" from 10.1.8 to 10.1.9,
-- Updated "Cuemon.Extensions.Collections.Generic" from 10.7.1 to 10.8.1,
-- Updated "Cuemon.Extensions.Core" from 10.7.1 to 10.8.1,
-- Updated "Cuemon.Extensions.DependencyInjection" from 10.7.1 to 10.8.1,
-- Updated "Cuemon.Extensions.IO" from 10.7.1 to 10.8.1,
-- Updated "Cuemon.Extensions.Reflection" from 10.7.1 to 10.8.1,
-- Updated "Cuemon.Extensions.Text.Json" from 10.7.1 to 10.8.1,
-- Updated "Cuemon.Security.Cryptography" from 10.7.1 to 10.8.1,
-- Updated "Microsoft.EntityFrameworkCore" from 9.0.20 to 9.0.21 under $(TargetFramework.StartsWith('net9')),
-- Updated "Microsoft.EntityFrameworkCore.InMemory" from 9.0.20 to 9.0.21 under $(TargetFramework.StartsWith('net9')),
-- Updated "Microsoft.EntityFrameworkCore.Relational" from 9.0.20 to 9.0.21 under $(TargetFramework.StartsWith('net9')),
-- Updated "Microsoft.EntityFrameworkCore" from 10.0.12 to 10.0.13 under $(TargetFramework.StartsWith('net10')),
-- Updated "Microsoft.EntityFrameworkCore.InMemory" from 10.0.12 to 10.0.13 under $(TargetFramework.StartsWith('net10')),
-- Updated "Microsoft.EntityFrameworkCore.Relational" from 10.0.12 to 10.0.13 under $(TargetFramework.StartsWith('net10')),
-- Changed the documentation sitemap base URL from https://docs.savvyio.net/ to https://savvyio.codebelt.net/,
-- Consolidated the full test, benchmark, and XML documentation guidance from .github/copilot-instructions.md into AGENTS.md with explicit path scopes, and updated guidance references.
-
-## [5.0.13] - TBD
-
-This is a patch release focused on DocFX publishing pipeline hardening, contributor test guidance corrections, and expanded test coverage for configured options, discovery, and JSON converters.
+This is a patch release focused on DocFX publishing pipeline hardening, expanded test coverage for configured options, discovery, and JSON converters, shared dependency and Entity Framework Core updates, documentation sitemap correction, and consolidated repository agent guidance.
 
 ### Added
 
@@ -44,7 +17,44 @@ This is a patch release focused on DocFX publishing pipeline hardening, contribu
 ### Changed
 
 - DocFX publishing pipeline hardened with reliable restore and error handling, dhi.io nginx serving with dedicated config and lean build context, separate member pages, ms-style template, mobile navigation, corrected GitHub link, and sitemap for docs.savvyio.net,
-- Contributor test guidance corrected to dotnet test --project syntax with integration-dependent exclusion wording.
+- Contributor test guidance corrected to dotnet test --project syntax with integration-dependent exclusion wording,
+- Updated "AWSSDK.SQS" from 4.0.100.13 to 4.0.100.18,
+- Updated "AWSSDK.SimpleNotificationService" from 4.0.100.13 to 4.0.100.19,
+- Updated "Azure.Storage.Queues" from 12.27.1 to 12.28.1,
+- Updated "Codebelt.Extensions.Newtonsoft.Json" from 10.1.8 to 10.1.9,
+- Updated "Codebelt.Extensions.Xunit.App" from 12.0.1 to 12.0.2,
+- Updated "Codebelt.Extensions.YamlDotNet" from 10.1.8 to 10.1.9,
+- Updated "Cuemon.Extensions.Collections.Generic" from 10.7.1 to 10.8.1,
+- Updated "Cuemon.Extensions.Core" from 10.7.1 to 10.8.1,
+- Updated "Cuemon.Extensions.DependencyInjection" from 10.7.1 to 10.8.1,
+- Updated "Cuemon.Extensions.IO" from 10.7.1 to 10.8.1,
+- Updated "Cuemon.Extensions.Reflection" from 10.7.1 to 10.8.1,
+- Updated "Cuemon.Extensions.Text.Json" from 10.7.1 to 10.8.1,
+- Updated "Cuemon.Security.Cryptography" from 10.7.1 to 10.8.1,
+- Updated "Dapper.StrongName" from 2.1.86 to 2.1.89,
+- Updated "Microsoft.Data.Sqlite" from 10.0.12 to 10.0.13,
+- Updated "Microsoft.Extensions.Logging.Abstractions" from 10.0.12 to 10.0.13,
+- Updated "Microsoft.NET.Test.Sdk" from 18.10.0 to 18.11.0,
+- Updated "Microsoft.Testing.Extensions.HangDump" from 2.4.1 to 2.5.1,
+- Updated "Moq" from 4.20.72 to 4.21.0,
+- Updated "NATS.Client.Core" from 3.2.0 to 3.3.1,
+- Updated "NATS.Client.JetStream" from 3.2.0 to 3.3.1,
+- Updated "NATS.Client.Simplified" from 3.2.0 to 3.3.1,
+- Updated "xunit.v3" from 4.0.1 to 4.0.2,
+- Updated "xunit.v3.runner.console" from 4.0.1 to 4.0.2,
+- Updated "xunit.runner.visualstudio" from 4.0.0 to 4.0.1,
+- Updated "Microsoft.EntityFrameworkCore" from 9.0.20 to 9.0.21 under $(TargetFramework.StartsWith('net9')),
+- Updated "Microsoft.EntityFrameworkCore.InMemory" from 9.0.20 to 9.0.21 under $(TargetFramework.StartsWith('net9')),
+- Updated "Microsoft.EntityFrameworkCore.Relational" from 9.0.20 to 9.0.21 under $(TargetFramework.StartsWith('net9')),
+- Updated "Microsoft.EntityFrameworkCore" from 10.0.12 to 10.0.13 under $(TargetFramework.StartsWith('net10')),
+- Updated "Microsoft.EntityFrameworkCore.InMemory" from 10.0.12 to 10.0.13 under $(TargetFramework.StartsWith('net10')),
+- Updated "Microsoft.EntityFrameworkCore.Relational" from 10.0.12 to 10.0.13 under $(TargetFramework.StartsWith('net10')),
+- Changed the documentation sitemap base URL from https://docs.savvyio.net/ to https://savvyio.codebelt.net/,
+- Consolidated the full test, benchmark, and XML documentation guidance into AGENTS.md with explicit path scopes, and updated guidance references in .bot/README.md.
+
+### Removed
+
+- Removed `.github/copilot-instructions.md` after consolidating its guidance into AGENTS.md.
 
 ## [5.0.12] - 2026-09-13
 
@@ -1162,7 +1172,6 @@ Noticeable highlights:
 - QueryHandler class in the Savvyio.Queries namespace that defines a generic and consistent way of handling Query objects that implements the IQuery interface
 - SavvyioOptionsExtensions class in the Savvyio.Queries namespace that consist of extension methods for the SavvyioOptions class: AddQueryHandler, AddQueryDispatcher
 
-[5.0.14]: https://github.com/codebeltnet/savvyio/compare/v5.0.12...v5.0.14
 [5.0.13]: https://github.com/codebeltnet/savvyio/compare/v5.0.12...v5.0.13
 [5.0.12]: https://github.com/codebeltnet/savvyio/compare/v5.0.11...v5.0.12
 [5.0.11]: https://github.com/codebeltnet/savvyio/compare/v5.0.10...v5.0.11
