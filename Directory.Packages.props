@@ -43,11 +43,15 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.21" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.21" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.21" />
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="9.0.21" />
+    <!-- Pin System.Security.Cryptography.Pkcs to fixed version due to vulnerability -->
     <PackageVersion Include="System.Linq.Async" Version="7.0.1" />
   </ItemGroup>
   <ItemGroup Condition="$(TargetFramework.StartsWith('net10'))">
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.13" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.13" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.13" />
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+    <!-- Pin System.Security.Cryptography.Pkcs to fixed version due to vulnerability -->
   </ItemGroup>
 </Project>
