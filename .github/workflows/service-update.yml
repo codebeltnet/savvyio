@@ -31,6 +31,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          fetch-tags: true
 
       - name: Resolve trigger inputs
         id: trigger
@@ -42,13 +43,68 @@ jobs:
 
       - name: Determine new version for this repo
         id: newver
+        shell: bash
         run: |
-          CURRENT=$(grep -oP '(?<=## \[)[\d.]+(?=\])' CHANGELOG.md | head -1)
-          NEW=$(echo "$CURRENT" | awk -F. '{printf "%s.%s.%d", $1, $2, $3+1}')
-          BRANCH="v${NEW}/service-update"
-          echo "current=$CURRENT" >> $GITHUB_OUTPUT
-          echo "new=$NEW"         >> $GITHUB_OUTPUT
-          echo "branch=$BRANCH"   >> $GITHUB_OUTPUT
+          python3 - <<'PY'
+          import os
+          import re
+          import subprocess
+          import sys
+
+          tag_pattern = re.compile(r"^v(\d+)\.(\d+)\.(\d+)$")
+          tags = subprocess.check_output(["git", "tag", "--list"], text=True).splitlines()
+          stable_tags = []
+          for tag in tags:
+              match = tag_pattern.fullmatch(tag)
+              if match:
+                  version = tuple(int(part) for part in match.groups())
+                  stable_tags.append((version, tag))
+
+          if not stable_tags:
+              print("::error::No stable vMAJOR.MINOR.PATCH Git tag was found.")
+              sys.exit(1)
+
+          _, latest_tag = max(stable_tags, key=lambda item: item[0])
+          latest_version = latest_tag[1:]
+          major, minor, patch = (int(part) for part in latest_version.split("."))
+          next_version = f"{major}.{minor}.{patch + 1}"
+
+          with open("CHANGELOG.md", encoding="utf-8") as changelog_file:
+              changelog = changelog_file.read()
+
+          heading = re.search(r"(?m)^## \[(\d+\.\d+\.\d+)\] - ([^\r\n]+)[ \t]*$", changelog)
+          if not heading:
+              print("::error::CHANGELOG.md has no versioned heading to compare with Git tags.")
+              sys.exit(1)
+
+          current_version, current_status = heading.groups()
+          current_status = current_status.strip()
+          if current_status.upper() != "TBD" and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", current_status):
+              print(f"::error::Unsupported CHANGELOG.md version status: {current_status}")
+              sys.exit(1)
+
+          if current_version == next_version and current_status.upper() == "TBD":
+              # Reuse an already pending next release, such as [5.0.13] - TBD.
+              new_version = next_version
+          elif current_version == latest_version and current_status.upper() != "TBD":
+              # The changelog is at the latest released tag; start the next patch release.
+              new_version = next_version
+          else:
+              print(
+                  f"::error::CHANGELOG.md starts at {current_version} ({current_status}), "
+                  f"but the latest stable Git tag is {latest_tag}. Expected either "
+                  f"[{latest_version}] with a release date or [{next_version}] - TBD."
+              )
+              sys.exit(1)
+
+          branch = f"v{new_version}/service-update"
+          print(f"Latest stable Git tag: {latest_tag}")
+          print(f"Latest CHANGELOG.md version: {current_version} ({current_status})")
+          print(f"Service update version: {new_version}")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"current={current_version}\n")
+              output.write(f"new={new_version}\n")
+              output.write(f"branch={branch}\n")
 
       - name: Generate codebelt-aicia token
         id: app-token
@@ -81,14 +137,27 @@ jobs:
           from datetime import date
           new_ver = os.environ['NEW_VERSION']
           today   = date.today().isoformat()
-          entry   = f"## [{new_ver}] - {today}\n\nThis is a service update that focuses on package dependencies.\n\n"
-          with open("CHANGELOG.md") as f:
+          service_note = "This release also includes a service update focused on package dependencies."
+          with open("CHANGELOG.md", encoding="utf-8") as f:
               content = f.read()
-          idx = content.find("## [")
-          content = (content[:idx] + entry + content[idx:]) if idx != -1 else (content + entry)
-          with open("CHANGELOG.md", "w") as f:
+          heading = re.search(r"(?m)^## \[(\d+\.\d+\.\d+)\] - (TBD|\d{4}-\d{2}-\d{2})[ \t]*$", content)
+          if heading and heading.group(1) == new_ver:
+              if heading.group(2) == "TBD":
+                  content = content[:heading.start(2)] + today + content[heading.end(2):]
+                  heading = re.search(r"(?m)^## \[(\d+\.\d+\.\d+)\] - \d{4}-\d{2}-\d{2}[ \t]*$", content)
+              section_end = re.search(r"(?m)^## \[", content[heading.end():])
+              end = heading.end() + section_end.start() if section_end else len(content)
+              if service_note not in content[heading.end():end]:
+                  remainder = content[heading.end():]
+                  content = content[:heading.end()] + "\n\n" + service_note + "\n\n" + remainder.lstrip("\r\n")
+              print(f"Updated existing CHANGELOG entry for v{new_ver}")
+          else:
+              entry = f"## [{new_ver}] - {today}\n\nThis is a service update that focuses on package dependencies.\n\n"
+              idx = content.find("## [")
+              content = (content[:idx] + entry + content[idx:]) if idx != -1 else (content + entry)
+              print(f"Added CHANGELOG entry for v{new_ver}")
+          with open("CHANGELOG.md", "w", encoding="utf-8") as f:
               f.write(content)
-          print(f"CHANGELOG updated for v{new_ver}")
           EOF
         env:
           NEW_VERSION: ${{ steps.newver.outputs.new }}
