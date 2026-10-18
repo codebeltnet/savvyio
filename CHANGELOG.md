@@ -49,7 +49,6 @@ This is a patch release focused on DocFX publishing pipeline hardening, expanded
 - Updated "Microsoft.EntityFrameworkCore" from 10.0.12 to 10.0.13 under $(TargetFramework.StartsWith('net10')),
 - Updated "Microsoft.EntityFrameworkCore.InMemory" from 10.0.12 to 10.0.13 under $(TargetFramework.StartsWith('net10')),
 - Updated "Microsoft.EntityFrameworkCore.Relational" from 10.0.12 to 10.0.13 under $(TargetFramework.StartsWith('net10')),
-- Changed the documentation sitemap base URL from https://docs.savvyio.net/ to https://savvyio.codebelt.net/,
 - Consolidated the full test, benchmark, and XML documentation guidance into AGENTS.md with explicit path scopes, and updated guidance references in .bot/README.md.
 
 ### Removed
