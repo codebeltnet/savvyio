@@ -23,7 +23,7 @@ permissions:
 jobs:
   init:
     name: initialize
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     outputs:
       run-mac-tests: ${{ steps.vars.outputs.run-mac-tests }}
       run-privileged-jobs: ${{ steps.vars.outputs.run-privileged-jobs }}
@@ -50,9 +50,26 @@ jobs:
             echo "build-switches=" >> "$GITHUB_OUTPUT"
           fi
 
+  line_endings:
+    name: 📏 Line Endings
+    runs-on: ubuntu-26.04
+    steps:
+      - name: Checkout
+        uses: codebeltnet/git-checkout@v1
+
+      - name: Require LF line endings for tracked text files
+        shell: bash
+        run: |
+          violations=$(git ls-files --eol | awk '$1 != "i/lf" && $1 != "i/-text" && $1 != "i/none" { print }')
+          if [[ -n "$violations" ]]; then
+            echo "$violations"
+            echo "::error::Tracked text files must use LF line endings (see .editorconfig and .gitattributes)."
+            exit 1
+          fi
+
   prepare_test:
     name: 📜 Prepare Test
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     outputs:
       json: ${{ steps.test-projects.outputs.result }}
     steps:
@@ -87,7 +104,7 @@ jobs:
     uses: codebeltnet/jobs-dotnet-build/.github/workflows/default.yml@v3
     with:
       include-preview: true
-      runs-on: ${{ matrix.arch == 'ARM64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
+      runs-on: ${{ matrix.arch == 'ARM64' && 'ubuntu-26.04-arm' || 'ubuntu-26.04' }}
       configuration: ${{ matrix.configuration }}
       strong-name-key-filename: ${{ needs.init.outputs.strong-name-key-filename }}
       build-switches: ${{ needs.init.outputs.build-switches }}
@@ -119,7 +136,7 @@ jobs:
     uses: codebeltnet/jobs-dotnet-test/.github/workflows/default.yml@v3
     with:
       include-preview: true
-      runs-on: ${{ matrix.arch == 'ARM64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
+      runs-on: ${{ matrix.arch == 'ARM64' && 'ubuntu-26.04-arm' || 'ubuntu-26.04' }}
       configuration: ${{ matrix.configuration }}
       projects: ${{ matrix.project }}
       build-switches: -p:SkipSignAssembly=true
@@ -171,13 +188,14 @@ jobs:
   test_qualitygate:
     if: ${{ always() }}
     name: test-qualitygate
-    needs: [init, test_linux, test_windows, test_mac]
-    runs-on: ubuntu-24.04
+    needs: [init, line_endings, test_linux, test_windows, test_mac]
+    runs-on: ubuntu-26.04
     steps:
       - name: Evaluate test results
         shell: bash
         env:
           RUN_MAC_TESTS: ${{ needs.init.outputs.run-mac-tests }}
+          LINE_ENDINGS_RESULT: ${{ needs.line_endings.result }}
           TEST_LINUX_RESULT: ${{ needs.test_linux.result }}
           TEST_WINDOWS_RESULT: ${{ needs.test_windows.result }}
           TEST_MAC_RESULT: ${{ needs.test_mac.result }}
@@ -208,6 +226,7 @@ jobs:
             fi
           }
 
+          require_success "line_endings" "$LINE_ENDINGS_RESULT"
           require_success "test_linux" "$TEST_LINUX_RESULT"
           require_success "test_windows" "$TEST_WINDOWS_RESULT"
           require_success_or_skip "test_mac" "$RUN_MAC_TESTS" "$TEST_MAC_RESULT"
@@ -219,7 +238,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, windows-2025]
+        os: [ubuntu-26.04, windows-2025]
         configuration: [Release]
         project: [ test/**/Savvyio.FunctionalTests.csproj, test/**/Savvyio.Extensions.SimpleQueueService.FunctionalTests.csproj, test/**/Savvyio.Extensions.QueueStorage.FunctionalTests.csproj ]
     runs-on: ${{ matrix.os }}
@@ -261,7 +280,7 @@ jobs:
   integration_test_rabbitmq:
     name: ⚗️ Integration Test - RabbitMQ
     needs: [build]
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 15
     steps:
       - name: Checkout
@@ -312,7 +331,7 @@ jobs:
   integration_test_nats:
     name: ⚗️ Integration Test - NATS
     needs: [build]
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 15
     steps:
       - name: Checkout
