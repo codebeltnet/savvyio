@@ -86,6 +86,7 @@ jobs:
         configuration: [Debug, Release]
     uses: codebeltnet/jobs-dotnet-build/.github/workflows/default.yml@v3
     with:
+      include-preview: true
       runs-on: ${{ matrix.arch == 'ARM64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
       configuration: ${{ matrix.configuration }}
       strong-name-key-filename: ${{ needs.init.outputs.strong-name-key-filename }}
@@ -101,6 +102,7 @@ jobs:
         configuration: [Debug, Release]
     uses: codebeltnet/jobs-dotnet-pack/.github/workflows/default.yml@v3
     with:
+      include-preview: true
       configuration: ${{ matrix.configuration }}
       version: ${{ needs.build.outputs.version }}
       download-build-artifact-pattern: build-${{ matrix.configuration }}-X64
@@ -116,6 +118,7 @@ jobs:
         project: ${{ fromJson(needs.prepare_test.outputs.json) }}
     uses: codebeltnet/jobs-dotnet-test/.github/workflows/default.yml@v3
     with:
+      include-preview: true
       runs-on: ${{ matrix.arch == 'ARM64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
       configuration: ${{ matrix.configuration }}
       projects: ${{ matrix.project }}
@@ -135,6 +138,7 @@ jobs:
         project: ${{ fromJson(needs.prepare_test.outputs.json) }}
     uses: codebeltnet/jobs-dotnet-test/.github/workflows/default.yml@v3
     with:
+      include-preview: true
       runs-on: ${{ matrix.arch == 'ARM64' && 'windows-11-arm' || 'windows-2025' }}
       configuration: ${{ matrix.configuration }}
       projects: ${{ matrix.project }}
@@ -155,6 +159,7 @@ jobs:
         project: ${{ fromJson(needs.prepare_test.outputs.json) }}
     uses: codebeltnet/jobs-dotnet-test/.github/workflows/default.yml@v3
     with:
+      include-preview: true
       runs-on: ${{ matrix.arch == 'ARM64' && 'macos-26' || 'macos-26-intel' }}
       configuration: ${{ matrix.configuration }}
       projects: ${{ matrix.project }}
@@ -224,6 +229,8 @@ jobs:
       
       - name: Install .NET
         uses: codebeltnet/install-dotnet@v3
+        with:
+          includePreview: true
 
       - name: Install .NET Tool - Report Generator
         uses: codebeltnet/dotnet-tool-install-reportgenerator@v1
@@ -262,6 +269,8 @@ jobs:
 
       - name: Install .NET
         uses: codebeltnet/install-dotnet@v3
+        with:
+          includePreview: true
 
       - name: Install .NET Tool - Report Generator
         uses: codebeltnet/dotnet-tool-install-reportgenerator@v1
@@ -311,6 +320,8 @@ jobs:
 
       - name: Install .NET
         uses: codebeltnet/install-dotnet@v3
+        with:
+          includePreview: true
 
       - name: Install .NET Tool - Report Generator
         uses: codebeltnet/dotnet-tool-install-reportgenerator@v1
@@ -351,6 +362,7 @@ jobs:
     needs: [init, build, test_qualitygate, integration_test, integration_test_rabbitmq, integration_test_nats]
     uses: codebeltnet/jobs-sonarcloud/.github/workflows/default.yml@v3
     with:
+      include-preview: true
       organization: geekle
       projectKey: savvyio
       version: ${{ needs.build.outputs.version }}
@@ -370,6 +382,8 @@ jobs:
     name: call-codeql
     needs: [init, build, test_qualitygate, integration_test, integration_test_rabbitmq, integration_test_nats]
     uses: codebeltnet/jobs-codeql/.github/workflows/default.yml@v3
+    with:
+      include-preview: true
     permissions:
       security-events: write
 
