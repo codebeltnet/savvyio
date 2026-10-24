@@ -1,5 +1,6 @@
 using System;
 using Codebelt.Extensions.Xunit;
+using Cuemon.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

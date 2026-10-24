@@ -13,6 +13,7 @@ using Codebelt.Extensions.Newtonsoft.Json.Formatters;
 using Cuemon.Extensions.Reflection;
 using Codebelt.Extensions.Xunit;
 using Codebelt.Extensions.Xunit.Hosting;
+using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using Savvyio.Commands;

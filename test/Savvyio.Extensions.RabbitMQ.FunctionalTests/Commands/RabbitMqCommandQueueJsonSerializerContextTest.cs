@@ -7,6 +7,7 @@ using Codebelt.Extensions.Xunit.Hosting;
 using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Collections.Generic;
+using Cuemon.Extensions.DependencyInjection;
 using Cuemon.Extensions.IO;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Commands;

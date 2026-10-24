@@ -6,6 +6,7 @@ using Codebelt.Extensions.Xunit;
 using Codebelt.Extensions.Xunit.Hosting;
 using Cuemon;
 using Cuemon.Extensions;
+using Cuemon.Extensions.DependencyInjection;
 using Cuemon.Extensions.IO;
 using Cuemon.Threading;
 using Microsoft.Extensions.DependencyInjection;

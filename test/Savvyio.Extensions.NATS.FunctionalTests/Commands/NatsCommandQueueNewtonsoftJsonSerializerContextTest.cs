@@ -18,6 +18,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using Cuemon.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Savvyio.Extensions.NATS.Commands;

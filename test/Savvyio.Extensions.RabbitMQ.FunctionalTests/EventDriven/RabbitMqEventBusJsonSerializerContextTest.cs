@@ -18,6 +18,7 @@ using System;
 using System.Linq;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using Cuemon.Extensions.DependencyInjection;
 using Cuemon.Extensions.IO;
 using Xunit;
 

@@ -14,6 +14,7 @@ using Cuemon.Extensions.Reflection;
 using Cuemon.Extensions.Text.Json.Formatters;
 using Codebelt.Extensions.Xunit;
 using Codebelt.Extensions.Xunit.Hosting;
+using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Commands;
 using Savvyio.Commands.Messaging;
