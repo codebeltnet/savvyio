@@ -26,6 +26,7 @@ This major release adds .NET 11 support, removes .NET 9 support, and aligns conf
 
 - .NET 9 support. Consumers must target .NET 10 or later,
 - The .NET 9-only System.Linq.Async reference; both supported frameworks provide async LINQ,
+- `Savvyio.Reflection.AssemblyContext`; dispatcher, handler, and message converter discovery now calls `AssemblyContext.GetCurrentDomainAssemblies` from `Cuemon.Reflection`,
 - `Savvyio.Extensions.DependencyInjection.ServiceCollectionExtensions.AddConfiguredOptions`; import `Cuemon.Extensions.DependencyInjection` or update fully qualified calls to use the Cuemon implementation.
 
 ## [5.0.13] - 2026-10-18
