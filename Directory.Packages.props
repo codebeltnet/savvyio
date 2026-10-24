@@ -4,8 +4,8 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AWSSDK.SQS" Version="4.0.100.18" />
-    <PackageVersion Include="AWSSDK.SimpleNotificationService" Version="4.0.100.19" />
+    <PackageVersion Include="AWSSDK.SQS" Version="4.0.100.20" />
+    <PackageVersion Include="AWSSDK.SimpleNotificationService" Version="4.0.100.21" />
     <PackageVersion Include="Azure.Identity" Version="1.21.0" />
     <PackageVersion Include="Azure.Messaging.EventGrid" Version="5.0.0" />
     <PackageVersion Include="Azure.Storage.Queues" Version="12.28.1" />
@@ -20,12 +20,10 @@
     <PackageVersion Include="Cuemon.Extensions.Text.Json" Version="10.8.1" />
     <PackageVersion Include="Cuemon.Security.Cryptography" Version="10.8.1" />
     <PackageVersion Include="Dapper.StrongName" Version="2.1.89" />
-    <PackageVersion Include="DapperExtensions.StrongNameReference" Version="1.11.0" />
-    <PackageVersion Include="Microsoft.Data.Sqlite" Version="10.0.13" />
+    <PackageVersion Include="DapperExtensions.StrongNameReference" Version="1.12.0" />
     <PackageVersion Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.5" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.13" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
-    <PackageVersion Include="Codebelt.Coverlet.MTP" Version="10.1.0" />
+    <PackageVersion Include="Codebelt.Coverlet.MTP" Version="10.1.1" />
     <PackageVersion Include="Microsoft.Testing.Extensions.HangDump" Version="2.5.1" />
     <PackageVersion Include="MinVer" Version="8.0.0" />
     <PackageVersion Include="Moq" Version="4.21.0" />
@@ -39,15 +37,18 @@
     <PackageVersion Include="xunit.v3.runner.console" Version="4.0.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />
   </ItemGroup>
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net9'))">
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.21" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.21" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.21" />
-    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="9.0.21" />
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net11'))">
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="11.0.0-rc.2.26504.105" />
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="11.0.0-rc.2.26504.105" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="11.0.0-rc.2.26504.105" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="11.0.0-rc.2.26504.105" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="11.0.0-rc.2.26504.105" />
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="11.0.0-rc.2.26504.105" />
     <!-- Pin System.Security.Cryptography.Pkcs to fixed version due to vulnerability -->
-    <PackageVersion Include="System.Linq.Async" Version="7.0.1" />
   </ItemGroup>
   <ItemGroup Condition="$(TargetFramework.StartsWith('net10'))">
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.13" />
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="10.0.13" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.13" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.13" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.13" />
