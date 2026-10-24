@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Cuemon.Extensions;
 using Codebelt.Extensions.Newtonsoft.Json;
+using Cuemon.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Savvyio.EventDriven;
@@ -11,7 +12,6 @@ using Savvyio.EventDriven.Messaging.CloudEvents;
 using Savvyio.EventDriven.Messaging.CloudEvents.Cryptography;
 using Savvyio.Messaging;
 using Savvyio.Messaging.Cryptography;
-using Savvyio.Reflection;
 
 namespace Savvyio.Extensions.Newtonsoft.Json.Converters;
 
@@ -21,7 +21,7 @@ namespace Savvyio.Extensions.Newtonsoft.Json.Converters;
 /// <seealso cref="JsonConverter" />
 public class MessageConverter : JsonConverter
 {
-    internal static readonly Lazy<IList<TypeInfo>> CloudEventTypes = new(() => AssemblyContext.CurrentDomainAssemblies.SelectMany(a => a.DefinedTypes.Where(ti => ti.HasInterfaces(typeof(ICloudEvent<>)) &&
+    internal static readonly Lazy<IList<TypeInfo>> CloudEventTypes = new(() => AssemblyContext.GetCurrentDomainAssemblies(o => o.ExcludedAssemblies.Add(typeof(IMessage<>).Assembly)).SelectMany(a => a.DefinedTypes.Where(ti => ti.HasInterfaces(typeof(ICloudEvent<>)) &&
                                                                                                                                                                   ti is { IsAbstract: false, IsInterface: false })).ToList());
 
     /// <summary>
