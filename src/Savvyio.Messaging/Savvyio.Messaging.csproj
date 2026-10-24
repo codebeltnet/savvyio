@@ -5,10 +5,6 @@
     <PackageTags>messaging signed acknowledgeable asyncenumerable asyncenumerator</PackageTags>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
-    <PackageReference Include="System.Linq.Async" />
-  </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Savvyio.Core\Savvyio.Core.csproj" />
   </ItemGroup>
