@@ -6,7 +6,7 @@ This document provides guidance for AI agents working in the Savvy I/O repositor
 
 **Savvy I/O** is an open-source .NET class library (MIT license) providing a SOLID and clean foundation for writing DDD (Domain-Driven Design), CQRS (Command Query Responsibility Segregation), and Event Sourcing applications. It is designed to be intuitive and removes the complexity normally associated with these architectural patterns.
 
-The solution targets .NET 10.0 and .NET 9.0. It comprises:
+The solution targets .NET 11.0 and .NET 10.0. It comprises:
 
 - **Core Libraries** — DDD, CQRS, Commands, Queries, Event-Driven, and Domain Event Sourcing
 - **Data Access Extensions** — Support for Dapper, Entity Framework Core
