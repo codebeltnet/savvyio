@@ -1,11 +1,11 @@
+#nullable enable
 using System;
-using System.Linq;
 using System.Reflection;
 using Codebelt.Extensions.Xunit;
-using Savvyio.Reflection;
+using Savvyio;
 using Xunit;
 
-namespace Savvyio.Reflection;
+namespace Cuemon.Reflection;
 
 public class AssemblyContextTest : Test
 {
@@ -14,171 +14,164 @@ public class AssemblyContextTest : Test
     }
 
     [Fact]
-    public void CurrentDomainAssemblies_ShouldReturnNonEmptyList()
+    public void GetCurrentDomainAssemblies_ShouldReturnNonEmptyList()
     {
-        var assemblies = AssemblyContext.CurrentDomainAssemblies;
+        var assemblies = AssemblyContext.GetCurrentDomainAssemblies();
 
         Assert.NotNull(assemblies);
         Assert.NotEmpty(assemblies);
+        Assert.Contains(typeof(AssemblyContextTest).Assembly, assemblies);
     }
 
     [Fact]
-    public void CurrentDomainAssemblies_ShouldNotContainSavvyioCoreAssembly()
+    public void GetCurrentDomainAssemblies_ShouldExcludeCuemonCoreByDefault()
     {
-        var savvyioCoreAssembly = typeof(AssemblyContext).Assembly;
-
-        Assert.DoesNotContain(savvyioCoreAssembly, AssemblyContext.CurrentDomainAssemblies);
+        Assert.DoesNotContain(typeof(AssemblyContext).Assembly, AssemblyContext.GetCurrentDomainAssemblies());
     }
 
     [Fact]
-    public void CurrentDomainAssemblies_ShouldNotContainSystemOrMicrosoftAssemblies()
+    public void GetCurrentDomainAssemblies_ShouldExcludeSavvyioCore_WhenConfigured()
     {
-        foreach (var assembly in AssemblyContext.CurrentDomainAssemblies)
+        var savvyioCore = typeof(SavvyioOptions).Assembly;
+
+        var assemblies = AssemblyContext.GetCurrentDomainAssemblies(options =>
+        {
+            options.AssemblyFilter = assembly => assembly == savvyioCore;
+            options.ExcludedAssemblies.Add(savvyioCore);
+        });
+
+        Assert.DoesNotContain(savvyioCore, assemblies);
+        Assert.DoesNotContain(typeof(AssemblyContext).Assembly, assemblies);
+    }
+
+    [Fact]
+    public void GetCurrentDomainAssemblies_ShouldNotContainSystemOrMicrosoftAssemblies()
+    {
+        Assert.All(AssemblyContext.GetCurrentDomainAssemblies(), assembly =>
         {
             Assert.False(assembly.FullName?.StartsWith(nameof(System), StringComparison.Ordinal),
                 $"Assembly '{assembly.FullName}' should have been filtered out.");
             Assert.False(assembly.FullName?.StartsWith(nameof(Microsoft), StringComparison.Ordinal),
                 $"Assembly '{assembly.FullName}' should have been filtered out.");
-        }
+        });
     }
 
     [Fact]
-    public void AssemblyFilterCallback_ShouldReturnDefaultNonNullDelegate()
+    public void AssemblyContextOptions_ShouldHaveValidDefaults()
     {
-        var callback = AssemblyContext.AssemblyFilterCallback;
+        var options = new AssemblyContextOptions();
 
-        Assert.NotNull(callback);
+        Assert.True(options.IncludeReferencedAssemblies);
+        Assert.NotNull(options.AssemblyFilter);
+        Assert.NotNull(options.ReferencedAssemblyFilter);
+        Assert.Equal(new[] { typeof(AssemblyContext).Assembly }, options.ExcludedAssemblies);
+        options.ValidateOptions();
     }
 
     [Fact]
-    public void AssemblyFilterCallback_ShouldAcceptCustomDelegate()
+    public void AssemblyFilter_ShouldAcceptCustomDelegate()
     {
-        var original = AssemblyContext.AssemblyFilterCallback;
-        try
+        var options = new AssemblyContextOptions();
+        Func<Assembly, bool> custom = _ => true;
+
+        options.AssemblyFilter = custom;
+
+        Assert.Same(custom, options.AssemblyFilter);
+        options.ValidateOptions();
+    }
+
+    [Fact]
+    public void ReferencedAssemblyFilter_ShouldAcceptCustomDelegate()
+    {
+        var options = new AssemblyContextOptions();
+        Func<AssemblyName, bool> custom = _ => true;
+
+        options.ReferencedAssemblyFilter = custom;
+
+        Assert.Same(custom, options.ReferencedAssemblyFilter);
+        options.ValidateOptions();
+    }
+
+    [Fact]
+    public void AssemblyContextOptions_ShouldKeepConfigurationLocalToEachInstance()
+    {
+        var first = new AssemblyContextOptions
         {
-            Func<Assembly, bool> custom = _ => true;
-            AssemblyContext.AssemblyFilterCallback = custom;
+            AssemblyFilter = _ => false,
+            ReferencedAssemblyFilter = _ => false,
+            IncludeReferencedAssemblies = false
+        };
+        first.ExcludedAssemblies.Clear();
+        var second = new AssemblyContextOptions();
 
-            Assert.Same(custom, AssemblyContext.AssemblyFilterCallback);
-        }
-        finally
+        Assert.NotSame(first.AssemblyFilter, second.AssemblyFilter);
+        Assert.NotSame(first.ReferencedAssemblyFilter, second.ReferencedAssemblyFilter);
+        Assert.True(second.IncludeReferencedAssemblies);
+        Assert.Equal(new[] { typeof(AssemblyContext).Assembly }, second.ExcludedAssemblies);
+    }
+
+    [Theory]
+    [InlineData(nameof(AssemblyContextOptions.AssemblyFilter))]
+    [InlineData(nameof(AssemblyContextOptions.ReferencedAssemblyFilter))]
+    [InlineData(nameof(AssemblyContextOptions.ExcludedAssemblies))]
+    public void ValidateOptions_ShouldRejectNullConfiguration(string propertyName)
+    {
+        var options = new AssemblyContextOptions();
+        typeof(AssemblyContextOptions).GetProperty(propertyName)!.SetValue(options, null);
+
+        var error = Assert.Throws<InvalidOperationException>(options.ValidateOptions);
+
+        Assert.Contains(propertyName, error.Message);
+    }
+
+    [Theory]
+    [InlineData(nameof(AssemblyContextOptions.AssemblyFilter))]
+    [InlineData(nameof(AssemblyContextOptions.ReferencedAssemblyFilter))]
+    [InlineData(nameof(AssemblyContextOptions.ExcludedAssemblies))]
+    public void GetCurrentDomainAssemblies_ShouldRejectInvalidConfiguration(string propertyName)
+    {
+        var error = Assert.Throws<ArgumentException>(() => AssemblyContext.GetCurrentDomainAssemblies(options =>
+            typeof(AssemblyContextOptions).GetProperty(propertyName)!.SetValue(options, null)));
+
+        Assert.Equal("setup", error.ParamName);
+        Assert.Contains(propertyName, Assert.IsType<InvalidOperationException>(error.InnerException).Message);
+    }
+
+    [Fact]
+    public void AssemblyFilter_ShouldIncludeSavvyioAssembly()
+    {
+        Assert.True(new AssemblyContextOptions().AssemblyFilter(typeof(SavvyioOptions).Assembly));
+    }
+
+    [Fact]
+    public void AssemblyFilter_ShouldExcludeSystemAssembly()
+    {
+        Assert.False(new AssemblyContextOptions().AssemblyFilter(typeof(string).Assembly));
+    }
+
+    [Fact]
+    public void ReferencedAssemblyFilter_ShouldIncludeSavvyioAssemblyName()
+    {
+        Assert.True(new AssemblyContextOptions().ReferencedAssemblyFilter(typeof(SavvyioOptions).Assembly.GetName()));
+    }
+
+    [Fact]
+    public void ReferencedAssemblyFilter_ShouldExcludeSystemAssemblyName()
+    {
+        Assert.False(new AssemblyContextOptions().ReferencedAssemblyFilter(typeof(string).Assembly.GetName()));
+    }
+
+    [Fact]
+    public void GetCurrentDomainAssemblies_ShouldIncludeRoot_WhenAllReferencesAreFilteredOut()
+    {
+        var root = typeof(SavvyioOptions).Assembly;
+
+        var assemblies = AssemblyContext.GetCurrentDomainAssemblies(options =>
         {
-            AssemblyContext.AssemblyFilterCallback = original;
-        }
-    }
+            options.AssemblyFilter = assembly => assembly == root;
+            options.ReferencedAssemblyFilter = _ => false;
+        });
 
-    [Fact]
-    public void AssemblyFilterCallback_ShouldThrowArgumentNullException_WhenAssignedNull()
-    {
-        Assert.Throws<ArgumentNullException>(() => AssemblyContext.AssemblyFilterCallback = null);
-    }
-
-    [Fact]
-    public void AssemblyDependenciesCallback_ShouldReturnDefaultNonNullDelegate()
-    {
-        var callback = AssemblyContext.AssemblyDependenciesCallback;
-
-        Assert.NotNull(callback);
-    }
-
-    [Fact]
-    public void AssemblyDependenciesCallback_ShouldAcceptCustomDelegate()
-    {
-        var original = AssemblyContext.AssemblyDependenciesCallback;
-        try
-        {
-            Func<Assembly, System.Collections.Generic.IEnumerable<Assembly>> custom = a => Enumerable.Repeat(a, 1);
-            AssemblyContext.AssemblyDependenciesCallback = custom;
-
-            Assert.Same(custom, AssemblyContext.AssemblyDependenciesCallback);
-        }
-        finally
-        {
-            AssemblyContext.AssemblyDependenciesCallback = original;
-        }
-    }
-
-    [Fact]
-    public void AssemblyDependenciesCallback_ShouldThrowArgumentNullException_WhenAssignedNull()
-    {
-        Assert.Throws<ArgumentNullException>(() => AssemblyContext.AssemblyDependenciesCallback = null);
-    }
-
-    [Fact]
-    public void AssemblyDependenciesFilterCallback_ShouldReturnDefaultNonNullDelegate()
-    {
-        var callback = AssemblyContext.AssemblyDependenciesFilterCallback;
-
-        Assert.NotNull(callback);
-    }
-
-    [Fact]
-    public void AssemblyDependenciesFilterCallback_ShouldAcceptCustomDelegate()
-    {
-        var original = AssemblyContext.AssemblyDependenciesFilterCallback;
-        try
-        {
-            Func<AssemblyName, bool> custom = _ => true;
-            AssemblyContext.AssemblyDependenciesFilterCallback = custom;
-
-            Assert.Same(custom, AssemblyContext.AssemblyDependenciesFilterCallback);
-        }
-        finally
-        {
-            AssemblyContext.AssemblyDependenciesFilterCallback = original;
-        }
-    }
-
-    [Fact]
-    public void AssemblyDependenciesFilterCallback_ShouldThrowArgumentNullException_WhenAssignedNull()
-    {
-        Assert.Throws<ArgumentNullException>(() => AssemblyContext.AssemblyDependenciesFilterCallback = null);
-    }
-
-    [Fact]
-    public void AssemblyFilterCallback_DefaultFilter_ShouldIncludeNonSystemAssembly()
-    {
-        var callback = AssemblyContext.AssemblyFilterCallback;
-        var savvyioAssembly = typeof(AssemblyContext).Assembly;
-
-        Assert.True(callback(savvyioAssembly));
-    }
-
-    [Fact]
-    public void AssemblyFilterCallback_DefaultFilter_ShouldExcludeSystemAssembly()
-    {
-        var callback = AssemblyContext.AssemblyFilterCallback;
-        var systemAssembly = typeof(string).Assembly;
-
-        Assert.False(callback(systemAssembly));
-    }
-
-    [Fact]
-    public void AssemblyDependenciesFilterCallback_DefaultFilter_ShouldIncludeNonSystemAssemblyName()
-    {
-        var callback = AssemblyContext.AssemblyDependenciesFilterCallback;
-        var assemblyName = typeof(AssemblyContext).Assembly.GetName();
-
-        Assert.True(callback(assemblyName));
-    }
-
-    [Fact]
-    public void AssemblyDependenciesFilterCallback_DefaultFilter_ShouldExcludeSystemAssemblyName()
-    {
-        var callback = AssemblyContext.AssemblyDependenciesFilterCallback;
-        var assemblyName = typeof(string).Assembly.GetName();
-
-        Assert.False(callback(assemblyName));
-    }
-
-    [Fact]
-    public void AssemblyDependenciesCallback_DefaultCallback_ShouldYieldAtLeastTheInputAssembly()
-    {
-        var callback = AssemblyContext.AssemblyDependenciesCallback;
-        var assembly = typeof(AssemblyContext).Assembly;
-
-        var result = callback(assembly).ToList();
-
-        Assert.Contains(assembly, result);
+        Assert.Same(root, Assert.Single(assemblies));
     }
 }

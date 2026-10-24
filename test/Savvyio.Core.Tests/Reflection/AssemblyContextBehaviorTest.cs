@@ -1,15 +1,20 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata;
+using System.Reflection.Metadata.Ecma335;
+using System.Reflection.PortableExecutable;
 using System.Runtime.Loader;
 using Codebelt.Extensions.Xunit;
 using Cuemon;
+using Savvyio;
 using Savvyio.Commands;
 using Xunit;
 
-namespace Savvyio.Reflection;
+namespace Cuemon.Reflection;
 
 public class AssemblyContextBehaviorTest : Test
 {
@@ -19,212 +24,304 @@ public class AssemblyContextBehaviorTest : Test
 
     [Theory]
     [InlineData(null, false)]
+    [InlineData("", false)]
     [InlineData("System.Application", false)]
     [InlineData("Microsoft.Application", false)]
     [InlineData("Application.System", true)]
     [InlineData("system.Application", true)]
     [InlineData("microsoft.Application", true)]
-    public void AssemblyFilterCallback_ShouldUseOrdinalPrefixFiltering(string? fullName, bool expected)
+    public void AssemblyFilter_ShouldUseOrdinalPrefixFiltering(string? fullName, bool expected)
     {
-        using var context = new IsolatedAssemblyContext();
-
-        Assert.Equal(expected, context.AssemblyFilter(new ReferencedAssembly(fullName)));
-    }
-
-    [Theory]
-    [InlineData("System.Application", false)]
-    [InlineData("Microsoft.Application", false)]
-    [InlineData("Application.System", true)]
-    [InlineData("system.Application", true)]
-    [InlineData("microsoft.Application", true)]
-    public void AssemblyDependenciesFilterCallback_ShouldUseOrdinalPrefixFiltering(string name, bool expected)
-    {
-        using var context = new IsolatedAssemblyContext();
-
-        Assert.Equal(expected, context.ReferenceFilter(new AssemblyName(name)));
-    }
-
-    [Theory]
-    [InlineData(nameof(AssemblyContext.AssemblyFilterCallback))]
-    [InlineData(nameof(AssemblyContext.AssemblyDependenciesCallback))]
-    [InlineData(nameof(AssemblyContext.AssemblyDependenciesFilterCallback))]
-    public void Callback_ShouldRejectNullAndPreservePreviousDelegate(string propertyName)
-    {
-        using var context = new IsolatedAssemblyContext();
-        var property = context.Type.GetProperty(propertyName)!;
-        var original = property.GetValue(null);
-
-        var error = Assert.Throws<TargetInvocationException>(() => property.SetValue(null, null));
-
-        Assert.Equal("value", Assert.IsType<ArgumentNullException>(error.InnerException).ParamName);
-        Assert.Same(original, property.GetValue(null));
+        Assert.Equal(expected, new AssemblyContextOptions().AssemblyFilter(new ExportedTypesAssembly(fullName)));
     }
 
     [Fact]
-    public void AssemblyDependenciesCallback_ShouldTraverseTransitiveReferences()
+    public void AssemblyFilter_ShouldRejectNullAssembly()
     {
-        using var context = new IsolatedAssemblyContext();
+        Assert.False(new AssemblyContextOptions().AssemblyFilter(null!));
+    }
+
+    [Theory]
+    [InlineData(null, false)]
+    [InlineData("System.Application", false)]
+    [InlineData("Microsoft.Application", false)]
+    [InlineData("Application.System", true)]
+    [InlineData("system.Application", true)]
+    [InlineData("microsoft.Application", true)]
+    public void ReferencedAssemblyFilter_ShouldUseOrdinalPrefixFiltering(string? name, bool expected)
+    {
+        var assemblyName = name is null ? null : new AssemblyName(name);
+
+        Assert.Equal(expected, new AssemblyContextOptions().ReferencedAssemblyFilter(assemblyName!));
+    }
+
+    [Theory]
+    [InlineData(typeof(string), false)]
+    [InlineData(typeof(Microsoft.CSharp.RuntimeBinder.RuntimeBinderException), false)]
+    [InlineData(typeof(SavvyioOptions), true)]
+    public void AssemblyFilter_ShouldInspectExportedRootNamespaces(Type exportedType, bool expected)
+    {
+        var assembly = new ExportedTypesAssembly($"Application.NamespaceFilter.{exportedType.FullName}", () => [exportedType]);
+
+        Assert.Equal(expected, new AssemblyContextOptions().AssemblyFilter(assembly));
+    }
+
+    [Theory]
+    [InlineData(typeof(string), false)]
+    [InlineData(typeof(SavvyioOptions), true)]
+    public void AssemblyFilter_ShouldInspectLoadableTypes_WhenSomeExportedTypesCannotLoad(Type exportedType, bool expected)
+    {
+        var assembly = new ExportedTypesAssembly($"Application.PartialLoad.{exportedType.FullName}", () =>
+            throw new ReflectionTypeLoadException([null, exportedType], [new TypeLoadException()]));
+
+        Assert.Equal(expected, new AssemblyContextOptions().AssemblyFilter(assembly));
+    }
+
+    [Fact]
+    public void AssemblyFilter_ShouldAllowAssembly_WhenExportedTypeScanHasRecoverableFailure()
+    {
+        var assembly = new ExportedTypesAssembly("Application.RecoverableTypeScanFailure", () => throw new NotSupportedException());
+
+        Assert.True(new AssemblyContextOptions().AssemblyFilter(assembly));
+    }
+
+    [Fact]
+    public void AssemblyFilter_ShouldAllowAssembly_WhenExportedTypesAreUnavailable()
+    {
+        var assembly = new ExportedTypesAssembly("Application.UnavailableExportedTypes", () => null!);
+
+        Assert.True(new AssemblyContextOptions().AssemblyFilter(assembly));
+    }
+
+    [Fact]
+    public void GetCurrentDomainAssemblies_ShouldTraverseTransitiveReferences()
+    {
         var root = typeof(Command).Assembly;
-        var core = typeof(AssemblyContext).Assembly;
-        var transitive = typeof(Cuemon.Reflection.AssemblyContext).Assembly;
+        var core = typeof(SavvyioOptions).Assembly;
+        var transitive = typeof(AssemblyContext).Assembly;
         // Commands references Savvyio.Core, which in turn references Cuemon.Core.
         Assert.DoesNotContain(root.GetReferencedAssemblies(), name => name.FullName == transitive.FullName);
 
-        var assemblies = context.Dependencies(root).ToList();
+        var assemblies = AssemblyContext.GetCurrentDomainAssemblies(options =>
+        {
+            options.AssemblyFilter = assembly => assembly == root;
+            options.ExcludedAssemblies.Clear();
+        });
 
-        Assert.Equal(root, assemblies[0]);
-        Assert.Contains(assemblies, assembly => assembly.FullName == core.FullName);
-        Assert.Contains(assemblies, assembly => assembly.FullName == transitive.FullName);
+        Assert.Same(root, assemblies[0]);
+        Assert.Contains(core, assemblies);
+        Assert.Contains(transitive, assemblies);
         Assert.Equal(assemblies.Count, assemblies.Distinct().Count());
         Assert.DoesNotContain(assemblies, assembly => assembly.FullName!.StartsWith("System", StringComparison.Ordinal));
         Assert.DoesNotContain(assemblies, assembly => assembly.FullName!.StartsWith("Microsoft", StringComparison.Ordinal));
     }
 
     [Fact]
-    public void AssemblyDependenciesCallback_ShouldSkipSelfReferencesAndDuplicates()
+    public void GetCurrentDomainAssemblies_ShouldSkipSelfReferencesAndDuplicates()
     {
-        using var context = new IsolatedAssemblyContext();
         var dependency = typeof(Validator).Assembly;
-        var root = new ReferencedAssembly("Application.Root", new AssemblyName("Application.Root"), dependency.GetName(), dependency.GetName());
-        context.ReferenceFilter = name => name.Name is "Application.Root" or "Cuemon.Kernel";
+        var rootName = new AssemblyName("Savvyio.Tests.AssemblyContext.SelfReferences") { Version = new Version(1, 0, 0, 0) };
+        using var fixture = new ReferencedAssemblyFixture(rootName, rootName, dependency.GetName(), dependency.GetName());
+        var root = fixture.Assembly;
+        var inspected = new List<AssemblyName>();
+        Assert.Equal(3, root.GetReferencedAssemblies().Length);
+        Assert.Equal(root.FullName, root.GetReferencedAssemblies()[0].FullName);
 
-        Assert.Equal(new Assembly[] { root, dependency }, context.Dependencies(root));
+        var assemblies = AssemblyContext.GetCurrentDomainAssemblies(options =>
+        {
+            options.AssemblyFilter = assembly => assembly == root;
+            options.ReferencedAssemblyFilter = name =>
+            {
+                inspected.Add(name);
+                return name.FullName == root.FullName || name.FullName == dependency.FullName;
+            };
+        });
+
+        Assert.Equal(new[] { root, dependency }, assemblies);
+        Assert.Equal(root.GetReferencedAssemblies().Concat(dependency.GetReferencedAssemblies()).Select(name => name.FullName),
+            inspected.Select(name => name.FullName));
     }
 
     [Fact]
-    public void AssemblyDependenciesCallback_ShouldContinueAfterUnresolvableReference()
+    public void GetCurrentDomainAssemblies_ShouldContinueAfterUnresolvableReference()
     {
-        using var context = new IsolatedAssemblyContext();
         var dependency = typeof(Validator).Assembly;
-        var root = new ReferencedAssembly("Application.Root", new AssemblyName("Savvyio.Tests.NonexistentDependency.8d9b24a2"), dependency.GetName());
-        context.ReferenceFilter = name => name.Name == "Savvyio.Tests.NonexistentDependency.8d9b24a2" || name.FullName == dependency.FullName;
+        var missing = new AssemblyName("Savvyio.Tests.NonexistentDependency.8d9b24a2");
+        using var fixture = new ReferencedAssemblyFixture(new AssemblyName("Savvyio.Tests.AssemblyContext.MissingReference"), missing, dependency.GetName());
+        var root = fixture.Assembly;
 
-        Assert.Equal(new Assembly[] { root, dependency }, context.Dependencies(root));
+        var assemblies = AssemblyContext.GetCurrentDomainAssemblies(options =>
+        {
+            options.AssemblyFilter = assembly => assembly == root;
+            options.ReferencedAssemblyFilter = name => name.Name == missing.Name || name.FullName == dependency.FullName;
+        });
+
+        Assert.Equal(new[] { root, dependency }, assemblies);
     }
 
     [Fact]
-    public void AssemblyDependenciesCallback_ShouldApplyCustomFilterWithoutFilteringRoot()
+    public void GetCurrentDomainAssemblies_ShouldApplyReferenceFilterWithoutFilteringRoot()
     {
-        using var context = new IsolatedAssemblyContext();
         var root = typeof(Command).Assembly;
         var inspected = new List<AssemblyName>();
-        context.ReferenceFilter = name =>
-        {
-            inspected.Add(name);
-            return false;
-        };
 
-        Assert.Same(root, Assert.Single(context.Dependencies(root)));
+        var assemblies = AssemblyContext.GetCurrentDomainAssemblies(options =>
+        {
+            options.AssemblyFilter = assembly => assembly == root;
+            options.ReferencedAssemblyFilter = name =>
+            {
+                inspected.Add(name);
+                return false;
+            };
+        });
+
+        Assert.Same(root, Assert.Single(assemblies));
         Assert.Equal(root.GetReferencedAssemblies().Select(name => name.FullName), inspected.Select(name => name.FullName));
     }
 
     [Fact]
-    public void CurrentDomainAssemblies_ShouldFilterExpandDeduplicateAndExcludeOwnAssembly()
+    public void GetCurrentDomainAssemblies_ShouldFilterExpandDeduplicateAndExcludeInfrastructureAssemblies()
     {
-        using var context = new IsolatedAssemblyContext();
-        var root = typeof(AssemblyContextBehaviorTest).Assembly;
         var dependency = typeof(Command).Assembly;
+        var savvyioCore = typeof(SavvyioOptions).Assembly;
+        var cuemonCore = typeof(AssemblyContext).Assembly;
+        using var fixture = new ReferencedAssemblyFixture(new AssemblyName("Savvyio.Tests.AssemblyContext.SharedReferences"),
+            dependency.GetName(), dependency.GetName(), savvyioCore.GetName(), cuemonCore.GetName());
+        var root = fixture.Assembly;
         var expanded = new List<Assembly>();
-        context.AssemblyFilter = assembly => assembly == root;
-        context.Dependencies = assembly =>
+
+        var assemblies = AssemblyContext.GetCurrentDomainAssemblies(options =>
         {
-            expanded.Add(assembly);
-            return [assembly, dependency, dependency, context.Type.Assembly];
-        };
+            options.AssemblyFilter = assembly =>
+            {
+                if (assembly != root && assembly != dependency) { return false; }
+                expanded.Add(assembly);
+                return true;
+            };
+            options.ReferencedAssemblyFilter = name => name.FullName == dependency.FullName ||
+                                                      name.FullName == savvyioCore.FullName || name.FullName == cuemonCore.FullName;
+            options.ExcludedAssemblies.Add(savvyioCore);
+        });
 
-        var assemblies = context.CurrentDomainAssemblies;
-
-        Assert.Same(root, Assert.Single(expanded));
-        Assert.Equal(new[] { root, dependency }, assemblies);
+        Assert.Equal(2, expanded.Count);
+        Assert.Contains(root, expanded);
+        Assert.Contains(dependency, expanded);
+        Assert.Equal(2, assemblies.Count);
+        Assert.Contains(root, assemblies);
+        Assert.Contains(dependency, assemblies);
+        Assert.DoesNotContain(savvyioCore, assemblies);
+        Assert.DoesNotContain(cuemonCore, assemblies);
         Assert.Throws<NotSupportedException>(() => ((IList<Assembly>)assemblies).Add(root));
     }
 
     [Fact]
-    public void CurrentDomainAssemblies_ShouldCacheFirstResultDespiteCallbackChanges()
+    public void GetCurrentDomainAssemblies_ShouldSkipTraversal_WhenReferencesAreDisabled()
     {
-        using var context = new IsolatedAssemblyContext();
-        var root = typeof(AssemblyContextBehaviorTest).Assembly;
-        context.AssemblyFilter = assembly => assembly == root;
-        context.Dependencies = assembly => [assembly];
-        var first = context.CurrentDomainAssemblies;
+        var root = typeof(Command).Assembly;
 
-        context.AssemblyFilter = _ => throw new InvalidOperationException("Must not rescan.");
-        context.Dependencies = _ => throw new InvalidOperationException("Must not traverse again.");
-        context.ReferenceFilter = _ => throw new InvalidOperationException("Must not refilter.");
+        var assemblies = AssemblyContext.GetCurrentDomainAssemblies(options =>
+        {
+            options.AssemblyFilter = assembly => assembly == root;
+            options.IncludeReferencedAssemblies = false;
+            options.ReferencedAssemblyFilter = _ => throw new InvalidOperationException("Must not traverse references.");
+        });
 
-        Assert.Same(first, context.CurrentDomainAssemblies);
-        Assert.Same(root, Assert.Single(first));
+        Assert.Same(root, Assert.Single(assemblies));
     }
 
     [Fact]
-    public void CurrentDomainAssemblies_ShouldAllowEmptyResult()
+    public void GetCurrentDomainAssemblies_ShouldUseFreshOptionsAndResultsForEachCall()
     {
-        using var context = new IsolatedAssemblyContext();
-        context.AssemblyFilter = _ => false;
-        context.Dependencies = _ => throw new InvalidOperationException("No assembly passed the filter.");
+        var firstRoot = typeof(Command).Assembly;
+        var secondRoot = typeof(SavvyioOptions).Assembly;
+        var first = AssemblyContext.GetCurrentDomainAssemblies(options =>
+        {
+            options.AssemblyFilter = assembly => assembly == firstRoot;
+            options.IncludeReferencedAssemblies = false;
+            options.ExcludedAssemblies.Add(secondRoot);
+        });
 
-        Assert.Empty(context.CurrentDomainAssemblies);
+        var second = AssemblyContext.GetCurrentDomainAssemblies(options =>
+        {
+            options.AssemblyFilter = assembly => assembly == secondRoot;
+            options.ReferencedAssemblyFilter = _ => false;
+        });
+
+        Assert.NotSame(first, second);
+        Assert.Same(firstRoot, Assert.Single(first));
+        Assert.Same(secondRoot, Assert.Single(second));
     }
 
     [Fact]
-    public void CurrentDomainAssemblies_ShouldCacheCallbackFailure()
+    public void GetCurrentDomainAssemblies_ShouldAllowEmptyResult()
     {
-        using var context = new IsolatedAssemblyContext();
+        var assemblies = AssemblyContext.GetCurrentDomainAssemblies(options =>
+        {
+            options.AssemblyFilter = _ => false;
+            options.ReferencedAssemblyFilter = _ => throw new InvalidOperationException("No assembly passed the filter.");
+        });
+
+        Assert.Empty(assemblies);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void GetCurrentDomainAssemblies_ShouldPropagateFilterFailureWithoutCachingIt(bool failReferenceFilter)
+    {
+        var root = typeof(Command).Assembly;
         var expected = new InvalidOperationException("Assembly filter failed.");
-        context.AssemblyFilter = _ => throw expected;
 
-        var first = Assert.Throws<TargetInvocationException>(() => context.CurrentDomainAssemblies);
-        context.AssemblyFilter = _ => false;
-        var second = Assert.Throws<TargetInvocationException>(() => context.CurrentDomainAssemblies);
+        var error = Assert.Throws<InvalidOperationException>(() => AssemblyContext.GetCurrentDomainAssemblies(options =>
+        {
+            options.AssemblyFilter = assembly => failReferenceFilter ? assembly == root : throw expected;
+            options.ReferencedAssemblyFilter = _ => throw expected;
+        }));
+        var next = AssemblyContext.GetCurrentDomainAssemblies(options =>
+        {
+            options.AssemblyFilter = assembly => assembly == root;
+            options.IncludeReferencedAssemblies = false;
+        });
 
-        Assert.Same(expected, first.InnerException);
-        Assert.Same(expected, second.InnerException);
+        Assert.Same(expected, error);
+        Assert.Same(root, Assert.Single(next));
     }
 
-    private sealed class ReferencedAssembly(string? fullName, params AssemblyName[] references) : Assembly
+    private sealed class ExportedTypesAssembly(string? fullName, Func<Type[]>? exportedTypes = null) : Assembly
     {
         public override string? FullName => fullName;
 
-        public override AssemblyName[] GetReferencedAssemblies() => references;
+        public override Type[] GetExportedTypes() => exportedTypes is null ? [typeof(SavvyioOptions)] : exportedTypes();
     }
 
-    // A separate load context gives each test fresh static callbacks and Lazy state.
-    // This avoids resetting private fields or changing the application's global scan.
-    private sealed class IsolatedAssemblyContext : IDisposable
+    // Real in-memory metadata lets the public scanner traverse self, duplicate and missing
+    // references without invoking private helpers or altering global configuration.
+    private sealed class ReferencedAssemblyFixture : IDisposable
     {
         private readonly AssemblyLoadContext _loadContext = new(null, isCollectible: true);
 
-        public IsolatedAssemblyContext()
+        public ReferencedAssemblyFixture(AssemblyName name, params AssemblyName[] references)
         {
-            Type = _loadContext.LoadFromAssemblyPath(typeof(AssemblyContext).Assembly.Location)
-                .GetType(typeof(AssemblyContext).FullName!, throwOnError: true)!;
+            var metadata = new MetadataBuilder();
+            metadata.AddModule(0, metadata.GetOrAddString(name.Name!), default, default, default);
+            metadata.AddAssembly(metadata.GetOrAddString(name.Name!), name.Version ?? new Version(1, 0, 0, 0),
+                default, default, default, default);
+            metadata.AddTypeDefinition(TypeAttributes.NotPublic, default, metadata.GetOrAddString("<Module>"),
+                default, MetadataTokens.FieldDefinitionHandle(1), MetadataTokens.MethodDefinitionHandle(1));
+            foreach (var reference in references)
+            {
+                metadata.AddAssemblyReference(metadata.GetOrAddString(reference.Name!), reference.Version ?? new Version(1, 0, 0, 0),
+                    metadata.GetOrAddString(reference.CultureName ?? ""), metadata.GetOrAddBlob(reference.GetPublicKeyToken() ?? []),
+                    default, default);
+            }
+            var image = new BlobBuilder();
+            new ManagedPEBuilder(new PEHeaderBuilder(imageCharacteristics: Characteristics.Dll),
+                new MetadataRootBuilder(metadata), new BlobBuilder()).Serialize(image);
+            using var stream = new MemoryStream(image.ToArray());
+            Assembly = _loadContext.LoadFromStream(stream);
         }
 
-        public Type Type { get; }
-
-        public Func<Assembly, bool> AssemblyFilter
-        {
-            get => Get<Func<Assembly, bool>>(nameof(AssemblyContext.AssemblyFilterCallback));
-            set => Set(nameof(AssemblyContext.AssemblyFilterCallback), value);
-        }
-
-        public Func<Assembly, IEnumerable<Assembly>> Dependencies
-        {
-            get => Get<Func<Assembly, IEnumerable<Assembly>>>(nameof(AssemblyContext.AssemblyDependenciesCallback));
-            set => Set(nameof(AssemblyContext.AssemblyDependenciesCallback), value);
-        }
-
-        public Func<AssemblyName, bool> ReferenceFilter
-        {
-            get => Get<Func<AssemblyName, bool>>(nameof(AssemblyContext.AssemblyDependenciesFilterCallback));
-            set => Set(nameof(AssemblyContext.AssemblyDependenciesFilterCallback), value);
-        }
-
-        public IReadOnlyList<Assembly> CurrentDomainAssemblies => Get<IReadOnlyList<Assembly>>(nameof(AssemblyContext.CurrentDomainAssemblies));
-
-        private T Get<T>(string name) => (T)Type.GetProperty(name)!.GetValue(null)!;
-
-        private void Set(string name, object value) => Type.GetProperty(name)!.SetValue(null, value);
+        public Assembly Assembly { get; }
 
         public void Dispose() => _loadContext.Unload();
     }
