@@ -5,7 +5,7 @@ This repository is part of the Codebelt .NET library estate. The instructions be
 ## Before you start
 
 - Read the repository `README.md` and open an issue before starting a non-trivial feature or behavioral change.
-- Use an installed .NET SDK that can build the target frameworks listed below. This repository currently targets: **net10.0, net9.0**.
+- Use an installed .NET SDK that can build the target frameworks listed below. This repository currently targets: **net11.0, net10.0**. 
 - The solution is `Savvyio.slnx`. Central package versions are maintained in `Directory.Packages.props`.
 - The shared build behavior is in `Directory.Build.props` and `Directory.Build.targets`; repository-specific TFMs, package references and metadata remain local to this library.
 
@@ -40,7 +40,7 @@ foreach ($project in $testProjects) {
 }
 ```
 
-The CI test plan currently runs **28** project(s) and excludes **8** project(s). The workflow also has an optional macOS test job.
+The CI test plan currently runs **28** project(s) and excludes **8** project(s). The workflow also has an optional macOS test job. CI tests the newest supported framework (net11.0); local runs cover both net11.0 and net10.0. Run cloud integration projects one framework at a time with `--framework` because their queues are shared across targets.
 
 ## Integration and infrastructure
 

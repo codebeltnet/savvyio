@@ -4,6 +4,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [6.0.0] - 2026-11-10
+
+### Added
+
+- .NET 11 support alongside .NET 10 across packages and tests, with matching .NET 11 Entity Framework Core, SQLite, logging abstractions, and cryptography dependencies for net11.0.
+
+### Changed
+
+- CI provisions preview SDKs and tests .NET 11, preserving the single-target CI policy; local tests cover both supported targets; the local test container uses the .NET 11 SDK with the .NET 10 runtime and Microsoft Testing Platform arguments.
+- Updated Codebelt.Coverlet.MTP from 10.1.0 to 10.1.1.
+- Updated framework availability in contributor guidance, package READMEs, and DocFX includes; retained .NET 10 for DocFX metadata generation.
+- Service-update automation preserves pending major/minor release versions and uses the modern framework availability fallback.
+- Set the MinVer minimum major/minor to 6.0 for the breaking framework baseline change; release versions remain Git-tag derived.
+
+### Removed
+
+- .NET 9 support. Consumers must target .NET 10 or later.
+- The .NET 9-only System.Linq.Async reference; both supported frameworks provide async LINQ.
+
 ## [5.0.13] - 2026-10-18
 
 This is a patch release focused on DocFX publishing pipeline hardening, expanded test coverage for configured options, discovery, and JSON converters, shared dependency and Entity Framework Core updates, documentation sitemap correction, and consolidated repository agent guidance.
