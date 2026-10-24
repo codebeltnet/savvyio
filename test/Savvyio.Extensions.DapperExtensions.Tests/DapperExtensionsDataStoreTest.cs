@@ -8,107 +8,106 @@ using Savvyio.Assets.Queries;
 using Savvyio.Extensions.Dapper;
 using Xunit;
 
-namespace Savvyio.Extensions.DapperExtensions
+namespace Savvyio.Extensions.DapperExtensions;
+
+public class DapperExtensionsDataStoreTest : Test
 {
-    public class DapperExtensionsDataStoreTest : Test
+    public DapperExtensionsDataStoreTest(ITestOutputHelper output) : base(output)
     {
-        public DapperExtensionsDataStoreTest(ITestOutputHelper output) : base(output)
+        DapperAsyncExtensions.SqlDialect = new SqliteDialect();
+    }
+
+    [Fact]
+    public async Task DataStore_ShouldCreateObject()
+    {
+        var name = "Test";
+        var email = "test@unit.test";
+
+        var options = new DapperDataSourceOptions()
         {
-            DapperAsyncExtensions.SqlDialect = new SqliteDialect();
-        }
+            ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable()
+        };
 
-        [Fact]
-        public async Task DataStore_ShouldCreateObject()
+        var sut1 = new DapperDataSource(options);
+
+        var sut2 = new DapperExtensionsDataStore<AccountProjection>(sut1);
+        await sut2.CreateAsync(new AccountProjection(name, email));
+
+        var sut3 = await sut2.GetByIdAsync(1);
+
+        sut2.Dispose();
+
+        Assert.True(sut1.Disposed, "sut1.Disposed");
+        Assert.True(sut2.Disposed, "sut2.Disposed");
+        Assert.Equal(name, sut3.FullName);
+        Assert.Equal(email, sut3.EmailAddress);
+    }
+
+    [Fact]
+    public async Task DataStore_ShouldRemoveObject()
+    {
+        var name = "Test";
+        var email = "test@unit.test";
+        var dto = new AccountProjection(name, email);
+
+        var sut1 = new DapperDataSource(new DapperDataSourceOptions()
         {
-            var name = "Test";
-            var email = "test@unit.test";
+            ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable()
+        });
 
-            var options = new DapperDataSourceOptions()
-            {
-                ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable()
-            };
+        var sut2 = new DapperExtensionsDataStore<AccountProjection>(sut1);
+        await sut2.CreateAsync(dto);
 
-            var sut1 = new DapperDataSource(options);
+        var sut3 = await sut2.GetByIdAsync(1);
 
-            var sut2 = new DapperExtensionsDataStore<AccountProjection>(sut1);
-            await sut2.CreateAsync(new AccountProjection(name, email));
+        await sut2.DeleteAsync(sut3);
 
-            var sut3 = await sut2.GetByIdAsync(1);
+        var sut4 = await sut2.FindAllAsync();
 
-            sut2.Dispose();
+        var sut5 = await sut2.GetByIdAsync(1);
 
-            Assert.True(sut1.Disposed, "sut1.Disposed");
-            Assert.True(sut2.Disposed, "sut2.Disposed");
-            Assert.Equal(name, sut3.FullName);
-            Assert.Equal(email, sut3.EmailAddress);
-        }
+        sut2.Dispose();
 
-        [Fact]
-        public async Task DataStore_ShouldRemoveObject()
+        Assert.True(sut1.Disposed, "sut1.Disposed");
+        Assert.True(sut2.Disposed, "sut2.Disposed");
+        Assert.NotNull(sut3);
+        Assert.Empty(sut4);
+        Assert.Null(sut5);
+    }
+
+    [Fact]
+    public async Task DataStore_ShouldUpdateObject()
+    {
+        var name = "Test";
+        var newName = "Unit Test";
+        var email = "test@unit.test";
+        var dto = new AccountProjection(name, email);
+
+        var sut1 = new DapperDataSource(new DapperDataSourceOptions()
         {
-            var name = "Test";
-            var email = "test@unit.test";
-            var dto = new AccountProjection(name, email);
+            ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable()
+        });
 
-            var sut1 = new DapperDataSource(new DapperDataSourceOptions()
-            {
-                ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable()
-            });
+        var sut2 = new DapperExtensionsDataStore<AccountProjection>(sut1);
+        await sut2.CreateAsync(dto);
 
-            var sut2 = new DapperExtensionsDataStore<AccountProjection>(sut1);
-            await sut2.CreateAsync(dto);
+        var sut3 = await sut2.GetByIdAsync(1);
 
-            var sut3 = await sut2.GetByIdAsync(1);
+        sut3.FullName = newName;
 
-            await sut2.DeleteAsync(sut3);
+        await sut2.UpdateAsync(sut3);
 
-            var sut4 = await sut2.FindAllAsync();
-
-            var sut5 = await sut2.GetByIdAsync(1);
-
-            sut2.Dispose();
-
-            Assert.True(sut1.Disposed, "sut1.Disposed");
-            Assert.True(sut2.Disposed, "sut2.Disposed");
-            Assert.NotNull(sut3);
-            Assert.Empty(sut4);
-            Assert.Null(sut5);
-        }
-
-        [Fact]
-        public async Task DataStore_ShouldUpdateObject()
+        var sut4 = await sut2.FindAllAsync(o =>
         {
-            var name = "Test";
-            var newName = "Unit Test";
-            var email = "test@unit.test";
-            var dto = new AccountProjection(name, email);
+            o.Predicate = a => a.Id;
+            o.Value = sut3.Id;
+        }).SingleOrDefaultAsync();
 
-            var sut1 = new DapperDataSource(new DapperDataSourceOptions()
-            {
-                ConnectionFactory = () => new SqliteConnection("Data Source=:memory:").SetDefaults().AddAccountTable()
-            });
+        sut2.Dispose();
 
-            var sut2 = new DapperExtensionsDataStore<AccountProjection>(sut1);
-            await sut2.CreateAsync(dto);
-
-            var sut3 = await sut2.GetByIdAsync(1);
-
-            sut3.FullName = newName;
-
-            await sut2.UpdateAsync(sut3);
-
-            var sut4 = await sut2.FindAllAsync(o =>
-            {
-                o.Predicate = a => a.Id;
-                o.Value = sut3.Id;
-            }).SingleOrDefaultAsync();
-
-            sut2.Dispose();
-
-            Assert.True(sut1.Disposed, "sut1.Disposed");
-            Assert.True(sut2.Disposed, "sut2.Disposed");
-            Assert.NotEqual(name, sut3.FullName);
-            Assert.Equal(newName, sut4.FullName);
-        }
+        Assert.True(sut1.Disposed, "sut1.Disposed");
+        Assert.True(sut2.Disposed, "sut2.Disposed");
+        Assert.NotEqual(name, sut3.FullName);
+        Assert.Equal(newName, sut4.FullName);
     }
 }

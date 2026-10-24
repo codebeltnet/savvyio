@@ -1,4 +1,4 @@
-﻿using Codebelt.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Commands;
 using Savvyio.EventDriven;
@@ -12,129 +12,136 @@ using Savvyio.Extensions.Text.Json;
 using Savvyio.Messaging;
 using Xunit;
 
-namespace Savvyio.Extensions.DependencyInjection.NATS
+namespace Savvyio.Extensions.DependencyInjection.NATS;
+
+public class ServiceCollectionExtensionsTest : Test
 {
-    public class ServiceCollectionExtensionsTest : Test
+    public ServiceCollectionExtensionsTest(ITestOutputHelper output) : base(output)
     {
-        public ServiceCollectionExtensionsTest(ITestOutputHelper output) : base(output)
+    }
+
+    [Fact]
+    public void AddNatsCommandQueue_ShouldRegisterNatsCommandQueueAndConfigureOptions()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        bool natsSetupCalled = false;
+
+        // Act
+        services.AddMarshaller<JsonMarshaller>();
+        services.AddNatsCommandQueue(options =>
         {
-        }
+            natsSetupCalled = true;
+            options.StreamName = "stream";
+            options.ConsumerName = "consumer";
+            options.Subject = "subject";
+        });
 
-        [Fact]
-        public void AddNatsCommandQueue_ShouldRegisterNatsCommandQueueAndConfigureOptions()
+        // Assert
+        Assert.False(natsSetupCalled);
+        var provider = services.BuildServiceProvider();
+        Assert.False(natsSetupCalled);
+        ConfiguredOptionsAssertions.Verify<NatsCommandQueueOptions>(provider);
+        Assert.True(natsSetupCalled);
+        var queue = provider.GetService<NatsCommandQueue>();
+
+
+        Assert.IsType<NatsCommandQueue>(provider.GetRequiredService<IPointToPointChannel<ICommand>>());
+        Assert.IsType<NatsCommandQueue>(provider.GetRequiredService<ISender<ICommand>>());
+        Assert.IsType<NatsCommandQueue>(provider.GetRequiredService<IReceiver<ICommand>>());
+
+        Assert.NotNull(queue);
+    }
+
+    [Fact]
+    public void AddNatsCommandQueue_Generic_ShouldRegisterNatsCommandQueueAndConfigureOptions()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        bool natsSetupCalled = false;
+
+        // Act
+        services.AddMarshaller<JsonMarshaller>();
+        services.AddNatsCommandQueue<QueueMarker>(options =>
         {
-            // Arrange
-            var services = new ServiceCollection();
-            bool natsSetupCalled = false;
+            natsSetupCalled = true;
+            options.StreamName = "stream";
+            options.ConsumerName = "consumer";
+            options.Subject = "subject";
+        });
 
-            // Act
-            services.AddMarshaller<JsonMarshaller>();
-            services.AddNatsCommandQueue(options =>
-            {
-                natsSetupCalled = true;
-                options.StreamName = "stream";
-                options.ConsumerName = "consumer";
-                options.Subject = "subject";
-            });
+        // Assert
+        Assert.False(natsSetupCalled);
+        var provider = services.BuildServiceProvider();
+        Assert.False(natsSetupCalled);
+        ConfiguredOptionsAssertions.Verify<NatsCommandQueueOptions<QueueMarker>>(provider);
+        Assert.True(natsSetupCalled);
+        var queue = provider.GetService<NatsCommandQueue<QueueMarker>>();
 
-            // Assert
-            Assert.True(natsSetupCalled);
-            var provider = services.BuildServiceProvider();
-            ConfiguredOptionsAssertions.Verify<NatsCommandQueueOptions>(provider);
-            var queue = provider.GetService<NatsCommandQueue>();
-            
-            
-            Assert.IsType<NatsCommandQueue>(provider.GetRequiredService<IPointToPointChannel<ICommand>>());
-            Assert.IsType<NatsCommandQueue>(provider.GetRequiredService<ISender<ICommand>>());
-            Assert.IsType<NatsCommandQueue>(provider.GetRequiredService<IReceiver<ICommand>>());
-            
-            Assert.NotNull(queue);
-        }
+        Assert.IsType<NatsCommandQueue<QueueMarker>>(provider.GetRequiredService<IPointToPointChannel<ICommand, QueueMarker>>());
+        Assert.IsType<NatsCommandQueue<QueueMarker>>(provider.GetRequiredService<ISender<ICommand, QueueMarker>>());
+        Assert.IsType<NatsCommandQueue<QueueMarker>>(provider.GetRequiredService<IReceiver<ICommand, QueueMarker>>());
 
-        [Fact]
-        public void AddNatsCommandQueue_Generic_ShouldRegisterNatsCommandQueueAndConfigureOptions()
+        Assert.NotNull(queue);
+    }
+
+    [Fact]
+    public void AddNatsEventBus_ShouldRegisterNatsEventBusAndConfigureOptions()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        bool natsSetupCalled = false;
+
+        // Act
+        services.AddMarshaller<JsonMarshaller>();
+        services.AddNatsEventBus(options =>
         {
-            // Arrange
-            var services = new ServiceCollection();
-            bool natsSetupCalled = false;
+            natsSetupCalled = true;
+            options.Subject = "subject";
+        });
 
-            // Act
-            services.AddMarshaller<JsonMarshaller>();
-            services.AddNatsCommandQueue<QueueMarker>(options =>
-            {
-                natsSetupCalled = true;
-                options.StreamName = "stream";
-                options.ConsumerName = "consumer";
-                options.Subject = "subject";
-            });
+        // Assert
+        Assert.False(natsSetupCalled);
+        var provider = services.BuildServiceProvider();
+        Assert.False(natsSetupCalled);
+        ConfiguredOptionsAssertions.Verify<NatsEventBusOptions>(provider);
+        Assert.True(natsSetupCalled);
+        var bus = provider.GetService<NatsEventBus>();
 
-            // Assert
-            Assert.True(natsSetupCalled);
-            var provider = services.BuildServiceProvider();
-            ConfiguredOptionsAssertions.Verify<NatsCommandQueueOptions<QueueMarker>>(provider);
-            var queue = provider.GetService<NatsCommandQueue<QueueMarker>>();
+        Assert.IsType<NatsEventBus>(provider.GetRequiredService<IPublishSubscribeChannel<IIntegrationEvent>>());
+        Assert.IsType<NatsEventBus>(provider.GetRequiredService<IPublisher<IIntegrationEvent>>());
+        Assert.IsType<NatsEventBus>(provider.GetRequiredService<ISubscriber<IIntegrationEvent>>());
 
-            Assert.IsType<NatsCommandQueue<QueueMarker>>(provider.GetRequiredService<IPointToPointChannel<ICommand, QueueMarker>>());
-            Assert.IsType<NatsCommandQueue<QueueMarker>>(provider.GetRequiredService<ISender<ICommand, QueueMarker>>());
-            Assert.IsType<NatsCommandQueue<QueueMarker>>(provider.GetRequiredService<IReceiver<ICommand, QueueMarker>>());
+        Assert.NotNull(bus);
+    }
 
-            Assert.NotNull(queue);
-        }
+    [Fact]
+    public void AddNatsEventBus_Generic_ShouldRegisterNatsEventBusAndConfigureOptions()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        bool natsSetupCalled = false;
 
-        [Fact]
-        public void AddNatsEventBus_ShouldRegisterNatsEventBusAndConfigureOptions()
+        // Act
+        services.AddMarshaller<JsonMarshaller>();
+        services.AddNatsEventBus<BusMarker>(options =>
         {
-            // Arrange
-            var services = new ServiceCollection();
-            bool natsSetupCalled = false;
+            natsSetupCalled = true;
+            options.Subject = "subject";
+        });
 
-            // Act
-            services.AddMarshaller<JsonMarshaller>();
-            services.AddNatsEventBus(options =>
-            {
-                natsSetupCalled = true;
-                options.Subject = "subject";
-            });
+        // Assert
+        Assert.False(natsSetupCalled);
+        var provider = services.BuildServiceProvider();
+        Assert.False(natsSetupCalled);
+        ConfiguredOptionsAssertions.Verify<NatsEventBusOptions<BusMarker>>(provider);
+        Assert.True(natsSetupCalled);
+        var bus = provider.GetService<NatsEventBus<BusMarker>>();
 
-            // Assert
-            Assert.True(natsSetupCalled);
-            var provider = services.BuildServiceProvider();
-            ConfiguredOptionsAssertions.Verify<NatsEventBusOptions>(provider);
-            var bus = provider.GetService<NatsEventBus>();
+        Assert.IsType<NatsEventBus<BusMarker>>(provider.GetRequiredService<IPublishSubscribeChannel<IIntegrationEvent, BusMarker>>());
+        Assert.IsType<NatsEventBus<BusMarker>>(provider.GetRequiredService<IPublisher<IIntegrationEvent, BusMarker>>());
+        Assert.IsType<NatsEventBus<BusMarker>>(provider.GetRequiredService<ISubscriber<IIntegrationEvent, BusMarker>>());
 
-            Assert.IsType<NatsEventBus>(provider.GetRequiredService<IPublishSubscribeChannel<IIntegrationEvent>>());
-            Assert.IsType<NatsEventBus>(provider.GetRequiredService<IPublisher<IIntegrationEvent>>());
-            Assert.IsType<NatsEventBus>(provider.GetRequiredService<ISubscriber<IIntegrationEvent>>());
-
-            Assert.NotNull(bus);
-        }
-
-        [Fact]
-        public void AddNatsEventBus_Generic_ShouldRegisterNatsEventBusAndConfigureOptions()
-        {
-            // Arrange
-            var services = new ServiceCollection();
-            bool natsSetupCalled = false;
-
-            // Act
-            services.AddMarshaller<JsonMarshaller>();
-            services.AddNatsEventBus<BusMarker>(options =>
-            {
-                natsSetupCalled = true;
-                options.Subject = "subject";
-            });
-
-            // Assert
-            Assert.True(natsSetupCalled);
-            var provider = services.BuildServiceProvider();
-            ConfiguredOptionsAssertions.Verify<NatsEventBusOptions<BusMarker>>(provider);
-            var bus = provider.GetService<NatsEventBus<BusMarker>>();
-
-            Assert.IsType<NatsEventBus<BusMarker>>(provider.GetRequiredService<IPublishSubscribeChannel<IIntegrationEvent, BusMarker>>());
-            Assert.IsType<NatsEventBus<BusMarker>>(provider.GetRequiredService<IPublisher<IIntegrationEvent, BusMarker>>());
-            Assert.IsType<NatsEventBus<BusMarker>>(provider.GetRequiredService<ISubscriber<IIntegrationEvent, BusMarker>>());
-
-            Assert.NotNull(bus);
-        }
+        Assert.NotNull(bus);
     }
 }

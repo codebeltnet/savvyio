@@ -6,79 +6,78 @@ using System.Threading.Tasks;
 using NATS.Client.Core;
 using Savvyio.Messaging;
 
-namespace Savvyio.Extensions.NATS.EventDriven
+namespace Savvyio.Extensions.NATS.EventDriven;
+
+internal sealed class ObservableNatsEventBus : NatsEventBus
 {
-    internal sealed class ObservableNatsEventBus : NatsEventBus
+    private readonly object _subscribedSyncRoot = new();
+    private TaskCompletionSource _subscribed = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    private int _subscriptionCount;
+
+    public ObservableNatsEventBus(IMarshaller marshaller, NatsEventBusOptions options) : base(marshaller, options)
     {
-        private readonly object _subscribedSyncRoot = new();
-        private TaskCompletionSource _subscribed = new(TaskCreationOptions.RunContinuationsAsynchronously);
-        private int _subscriptionCount;
+    }
 
-        public ObservableNatsEventBus(IMarshaller marshaller, NatsEventBusOptions options) : base(marshaller, options)
+    internal Task WaitUntilSubscribedAsync(int expectedSubscriptionCount = 1)
+    {
+        if (expectedSubscriptionCount < 1) { throw new ArgumentOutOfRangeException(nameof(expectedSubscriptionCount)); }
+        return WaitUntilSubscribedCoreAsync(expectedSubscriptionCount).WaitAsync(TimeSpan.FromSeconds(10));
+    }
+
+    private async Task WaitUntilSubscribedCoreAsync(int expectedSubscriptionCount)
+    {
+        while (Volatile.Read(ref _subscriptionCount) < expectedSubscriptionCount)
         {
-        }
-
-        internal Task WaitUntilSubscribedAsync(int expectedSubscriptionCount = 1)
-        {
-            if (expectedSubscriptionCount < 1) { throw new ArgumentOutOfRangeException(nameof(expectedSubscriptionCount)); }
-            return WaitUntilSubscribedCoreAsync(expectedSubscriptionCount).WaitAsync(TimeSpan.FromSeconds(10));
-        }
-
-        private async Task WaitUntilSubscribedCoreAsync(int expectedSubscriptionCount)
-        {
-            while (Volatile.Read(ref _subscriptionCount) < expectedSubscriptionCount)
-            {
-                Task subscribedTask;
-                lock (_subscribedSyncRoot)
-                {
-                    if (_subscriptionCount >= expectedSubscriptionCount)
-                    {
-                        return;
-                    }
-
-                    subscribedTask = _subscribed.Task;
-                }
-
-                await subscribedTask.ConfigureAwait(false);
-            }
-        }
-
-        private void SignalSubscribed()
-        {
-            TaskCompletionSource subscribed;
+            Task subscribedTask;
             lock (_subscribedSyncRoot)
             {
-                _subscriptionCount++;
-                subscribed = _subscribed;
-                _subscribed = new(TaskCreationOptions.RunContinuationsAsynchronously);
+                if (_subscriptionCount >= expectedSubscriptionCount)
+                {
+                    return;
+                }
+
+                subscribedTask = _subscribed.Task;
             }
 
-            subscribed.TrySetResult();
+            await subscribedTask.ConfigureAwait(false);
+        }
+    }
+
+    private void SignalSubscribed()
+    {
+        TaskCompletionSource subscribed;
+        lock (_subscribedSyncRoot)
+        {
+            _subscriptionCount++;
+            subscribed = _subscribed;
+            _subscribed = new(TaskCreationOptions.RunContinuationsAsynchronously);
         }
 
-        protected override async IAsyncEnumerable<ReceivedNatsMessage> SubscribeMessagesAsync(string subject, NatsSubOpts options, [EnumeratorCancellation] CancellationToken cancellationToken)
+        subscribed.TrySetResult();
+    }
+
+    protected override async IAsyncEnumerable<ReceivedNatsMessage> SubscribeMessagesAsync(string subject, NatsSubOpts options, [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        var subscriptionRegistered = 0;
+        var observedOptions = new NatsSubOpts
         {
-            var subscriptionRegistered = 0;
-            var observedOptions = new NatsSubOpts
+            Events = new NatsSubEvents
             {
-                Events = new NatsSubEvents
+                OnSubscribed = _ =>
                 {
-                    OnSubscribed = _ =>
+                    if (Interlocked.Exchange(ref subscriptionRegistered, 1) == 0)
                     {
-                        if (Interlocked.Exchange(ref subscriptionRegistered, 1) == 0)
-                        {
-                            SignalSubscribed();
-                        }
-
-                        return default;
+                        SignalSubscribed();
                     }
-                }
-            };
 
-            await foreach (var message in base.SubscribeMessagesAsync(subject, observedOptions, cancellationToken))
-            {
-                yield return message;
+                    return default;
+                }
             }
+        };
+
+        await foreach (var message in base.SubscribeMessagesAsync(subject, observedOptions, cancellationToken))
+        {
+            yield return message;
         }
     }
 }

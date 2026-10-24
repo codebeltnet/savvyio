@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Extensions.DependencyInjection.EFCore.Domain.ServiceCollectionExtensions
 example:
 - *content

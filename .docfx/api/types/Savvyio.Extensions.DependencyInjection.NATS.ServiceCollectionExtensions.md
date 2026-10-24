@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Extensions.DependencyInjection.NATS.ServiceCollectionExtensions
 example:
 - *content

@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Extensions.EFCore.EfCoreRepository`2
 example:
 - *content

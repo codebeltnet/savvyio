@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Extensions.DependencyInjection.EFCore.EfCoreDataSourceOptions`1
 example:
 - *content

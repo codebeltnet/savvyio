@@ -1,11 +1,10 @@
-﻿using Savvyio.Domain;
+using Savvyio.Domain;
 
-namespace Savvyio.Assets.Domain.Events
+namespace Savvyio.Assets.Domain.Events;
+
+public record AccountInitiatedChained : DomainEvent
 {
-    public record AccountInitiatedChained : DomainEvent
+    public AccountInitiatedChained()
     {
-        public AccountInitiatedChained()
-        {
-        }
     }
 }

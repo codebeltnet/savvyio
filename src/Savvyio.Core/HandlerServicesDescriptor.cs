@@ -8,121 +8,120 @@ using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Runtime;
 
-namespace Savvyio
+namespace Savvyio;
+
+/// <summary>
+/// Provides information, in a developer friendly way, about implementations of the <see cref="IHandler{TRequest}"/> interface such as name, declared members and what type of request they handle.
+/// </summary>
+/// <remarks>
+/// An example of the output available when calling <see cref="ToString"/>:<br/>
+/// <br/>
+/// Discovered 1 ICommandHandler implementation covering a total of 5 ICommand methods<br/>
+/// <br/>
+/// <br/>
+/// Assembly: Savvyio.Assets.Tests<br/>
+/// Namespace: Savvyio.Assets<br/>
+/// <br/>
+/// &lt;AccountCommandHandler&gt;<br/>
+///    *UpdateAccount --> &amp;&lt;RegisterDelegates&gt;b__5_0<br/>
+///    *CreateAccount --> &amp;CreateAccountAsync<br/>
+/// </remarks>>
+public class HandlerServicesDescriptor : IHandlerServicesDescriptor
 {
+    private List<HandlerDiscoveryModel> _models;
+    private readonly Lock _locker = new();
+
     /// <summary>
-    /// Provides information, in a developer friendly way, about implementations of the <see cref="IHandler{TRequest}"/> interface such as name, declared members and what type of request they handle.
+    /// Initializes a new instance of the <see cref="HandlerServicesDescriptor"/> class.
     /// </summary>
-    /// <remarks>
-    /// An example of the output available when calling <see cref="ToString"/>:<br/>
-    /// <br/>
-    /// Discovered 1 ICommandHandler implementation covering a total of 5 ICommand methods<br/>
-    /// <br/>
-    /// <br/>
-    /// Assembly: Savvyio.Assets.Tests<br/>
-    /// Namespace: Savvyio.Assets<br/>
-    /// <br/>
-    /// &lt;AccountCommandHandler&gt;<br/>
-    ///    *UpdateAccount --> &amp;&lt;RegisterDelegates&gt;b__5_0<br/>
-    ///    *CreateAccount --> &amp;CreateAccountAsync<br/>
-    /// </remarks>>
-    public class HandlerServicesDescriptor : IHandlerServicesDescriptor
+    /// <param name="discoveredServices">The discovered implementations of the <see cref="IHandler{TRequest}"/> interface.</param>
+    /// <param name="serviceTypes">The registered <see cref="IHandler{TRequest}"/> service types.</param>
+    public HandlerServicesDescriptor(IEnumerable<IGrouping<Type, KeyValuePair<Type, List<IHierarchy<object>>>>> discoveredServices, IEnumerable<Type> serviceTypes)
     {
-        private List<HandlerDiscoveryModel> _models;
-        private readonly Lock _locker = new();
+        DiscoveredServices = new List<IGrouping<Type, KeyValuePair<Type, List<IHierarchy<object>>>>>(discoveredServices ?? Enumerable.Empty<IGrouping<Type, KeyValuePair<Type, List<IHierarchy<object>>>>>());
+        ServiceTypes = new List<Type>(serviceTypes ?? Enumerable.Empty<Type>()).OrderBy(type => type.Name).ToList();
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HandlerServicesDescriptor"/> class.
-        /// </summary>
-        /// <param name="discoveredServices">The discovered implementations of the <see cref="IHandler{TRequest}"/> interface.</param>
-        /// <param name="serviceTypes">The registered <see cref="IHandler{TRequest}"/> service types.</param>
-        public HandlerServicesDescriptor(IEnumerable<IGrouping<Type, KeyValuePair<Type, List<IHierarchy<object>>>>> discoveredServices, IEnumerable<Type> serviceTypes)
+    private IReadOnlyList<IGrouping<Type, KeyValuePair<Type, List<IHierarchy<object>>>>> DiscoveredServices { get; }
+
+    private IReadOnlyList<Type> ServiceTypes { get; }
+
+    /// <summary>
+    /// Returns a <see cref="string" /> that represents this instance.
+    /// </summary>
+    /// <returns>A <see cref="string" /> that represents this instance.</returns>
+    public override string ToString()
+    {
+        var builder = new StringBuilder();
+        foreach (var model in GenerateHandlerDiscoveries())
         {
-            DiscoveredServices = new List<IGrouping<Type, KeyValuePair<Type, List<IHierarchy<object>>>>>(discoveredServices ?? Enumerable.Empty<IGrouping<Type, KeyValuePair<Type, List<IHierarchy<object>>>>>());
-            ServiceTypes = new List<Type>(serviceTypes ?? Enumerable.Empty<Type>()).OrderBy(type => type.Name).ToList();
-        }
-
-        private IReadOnlyList<IGrouping<Type, KeyValuePair<Type, List<IHierarchy<object>>>>> DiscoveredServices { get; }
-
-        private IReadOnlyList<Type> ServiceTypes { get; }
-
-        /// <summary>
-        /// Returns a <see cref="string" /> that represents this instance.
-        /// </summary>
-        /// <returns>A <see cref="string" /> that represents this instance.</returns>
-        public override string ToString()
-        {
-            var builder = new StringBuilder();
-            foreach (var model in GenerateHandlerDiscoveries())
-            {
-                var discovery = FormatDiscoveryHeader(model);
-                builder.Append(discovery);
-                builder.AppendLine();
-                foreach (var assembly in model.Assemblies)
-                {
-                    AppendAssembly(builder, assembly);
-                }
-                builder.AppendLine(Generate.FixedString('-', discovery.Length.Max(discovery.Length.Max(discovery.Length))));
-                builder.AppendLine();
-            }
-            return builder.ToString().TrimEnd();
-        }
-
-        private static string FormatDiscoveryHeader(HandlerDiscoveryModel model)
-        {
-            return $"Discovered {model.ImplementationsCount} {model.AbstractionType} implementation{(model.ImplementationsCount > 1 ? "s" : "")} covering a total of {model.DelegatesCount} {model.DelegateType} method{(model.DelegatesCount > 1 ? "s" : "")}";
-        }
-
-        private static void AppendAssembly(StringBuilder builder, HandlerServiceAssemblyModel assembly)
-        {
+            var discovery = FormatDiscoveryHeader(model);
+            builder.Append(discovery);
             builder.AppendLine();
-            builder.AppendLine(CultureInfo.InvariantCulture, $"Assembly: {assembly.Name}");
-            builder.AppendLine(CultureInfo.InvariantCulture, $"Namespace: {assembly.Namespace}");
+            foreach (var assembly in model.Assemblies)
+            {
+                AppendAssembly(builder, assembly);
+            }
+            builder.AppendLine(Generate.FixedString('-', discovery.Length.Max(discovery.Length.Max(discovery.Length))));
             builder.AppendLine();
-
-            foreach (var implementation in assembly.Implementations)
-            {
-                builder.AppendLine(CultureInfo.InvariantCulture, $"<{implementation.Name}>");
-                foreach (var @delegate in implementation.Delegates)
-                {
-                    builder.AppendLine(CultureInfo.InvariantCulture, $"\t*{@delegate.Type} --> &{@delegate.Handler}");
-                }
-                builder.AppendLine();
-            }
         }
+        return builder.ToString().TrimEnd();
+    }
 
-        /// <summary>
-        /// Generates the handler discoveries.
-        /// </summary>
-        /// <returns>A collection of <see cref="HandlerDiscoveryModel" /> representing the handler discoveries.</returns>
-        public IEnumerable<HandlerDiscoveryModel> GenerateHandlerDiscoveries()
+    private static string FormatDiscoveryHeader(HandlerDiscoveryModel model)
+    {
+        return $"Discovered {model.ImplementationsCount} {model.AbstractionType} implementation{(model.ImplementationsCount > 1 ? "s" : "")} covering a total of {model.DelegatesCount} {model.DelegateType} method{(model.DelegatesCount > 1 ? "s" : "")}";
+    }
+
+    private static void AppendAssembly(StringBuilder builder, HandlerServiceAssemblyModel assembly)
+    {
+        builder.AppendLine();
+        builder.AppendLine(CultureInfo.InvariantCulture, $"Assembly: {assembly.Name}");
+        builder.AppendLine(CultureInfo.InvariantCulture, $"Namespace: {assembly.Namespace}");
+        builder.AppendLine();
+
+        foreach (var implementation in assembly.Implementations)
         {
-            if (_models != null) { return _models; }
-
-            lock (_locker)
+            builder.AppendLine(CultureInfo.InvariantCulture, $"<{implementation.Name}>");
+            foreach (var @delegate in implementation.Delegates)
             {
-                _models ??= BuildHandlerDiscoveries();
+                builder.AppendLine(CultureInfo.InvariantCulture, $"\t*{@delegate.Type} --> &{@delegate.Handler}");
             }
-            return _models;
+            builder.AppendLine();
         }
+    }
 
-        private List<HandlerDiscoveryModel> BuildHandlerDiscoveries()
+    /// <summary>
+    /// Generates the handler discoveries.
+    /// </summary>
+    /// <returns>A collection of <see cref="HandlerDiscoveryModel" /> representing the handler discoveries.</returns>
+    public IEnumerable<HandlerDiscoveryModel> GenerateHandlerDiscoveries()
+    {
+        if (_models != null) { return _models; }
+
+        lock (_locker)
         {
-            var models = new List<HandlerDiscoveryModel>();
-            foreach (var serviceType in ServiceTypes)
+            _models ??= BuildHandlerDiscoveries();
+        }
+        return _models;
+    }
+
+    private List<HandlerDiscoveryModel> BuildHandlerDiscoveries()
+    {
+        var models = new List<HandlerDiscoveryModel>();
+        foreach (var serviceType in ServiceTypes)
+        {
+            var serviceRequestType = serviceType.GetInterface("IHandler`1")?.GenericTypeArguments.Single();
+            if (serviceRequestType == null) { continue; }
+            foreach (var discoveredServicesGroup in DiscoveredServices)
             {
-                var serviceRequestType = serviceType.GetInterface("IHandler`1")?.GenericTypeArguments.Single();
-                if (serviceRequestType == null) { continue; }
-                foreach (var discoveredServicesGroup in DiscoveredServices)
+                var model = new HandlerDiscoveryModel(serviceType, serviceRequestType, discoveredServicesGroup);
+                if (model.ImplementationsCount > 0)
                 {
-                    var model = new HandlerDiscoveryModel(serviceType, serviceRequestType, discoveredServicesGroup);
-                    if (model.ImplementationsCount > 0)
-                    {
-                        models.Add(model);
-                    }
+                    models.Add(model);
                 }
             }
-            return models;
         }
+        return models;
     }
 }

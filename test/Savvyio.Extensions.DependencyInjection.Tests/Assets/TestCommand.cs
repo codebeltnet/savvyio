@@ -1,8 +1,7 @@
-﻿using Savvyio.Commands;
+using Savvyio.Commands;
 
-namespace Savvyio.Extensions.DependencyInjection.Assets
+namespace Savvyio.Extensions.DependencyInjection.Assets;
+
+public record TestCommand : Command
 {
-    public record TestCommand : Command
-    {
-    }
 }

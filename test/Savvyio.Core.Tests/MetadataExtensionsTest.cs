@@ -3,170 +3,169 @@ using Codebelt.Extensions.Xunit;
 using Cuemon.Extensions.Reflection;
 using Xunit;
 
-namespace Savvyio
+namespace Savvyio;
+
+public class MetadataExtensionsTest : Test
 {
-    public class MetadataExtensionsTest : Test
+    public MetadataExtensionsTest(ITestOutputHelper output) : base(output)
     {
-        public MetadataExtensionsTest(ITestOutputHelper output) : base(output)
-        {
-            
-        }
 
-        private class TestMetadata : IMetadata
-        {
-            public IMetadataDictionary Metadata { get; } = new MetadataDictionary();
-        }
+    }
 
-        [Fact]
-        public void GetCausationId_ShouldReturnCausationId()
-        {
-            var request = new TestMetadata();
-            request.Metadata[MetadataDictionary.CausationId] = "causation-id";
+    private class TestMetadata : IMetadata
+    {
+        public IMetadataDictionary Metadata { get; } = new MetadataDictionary();
+    }
 
-            var result = request.GetCausationId();
+    [Fact]
+    public void GetCausationId_ShouldReturnCausationId()
+    {
+        var request = new TestMetadata();
+        request.Metadata[MetadataDictionary.CausationId] = "causation-id";
 
-            Assert.Equal("causation-id", result);
-        }
+        var result = request.GetCausationId();
 
-        [Fact]
-        public void GetCorrelationId_ShouldReturnCorrelationId()
-        {
-            var request = new TestMetadata();
-            request.Metadata[MetadataDictionary.CorrelationId] = "correlation-id";
+        Assert.Equal("causation-id", result);
+    }
 
-            var result = request.GetCorrelationId();
+    [Fact]
+    public void GetCorrelationId_ShouldReturnCorrelationId()
+    {
+        var request = new TestMetadata();
+        request.Metadata[MetadataDictionary.CorrelationId] = "correlation-id";
 
-            Assert.Equal("correlation-id", result);
-        }
+        var result = request.GetCorrelationId();
 
-        [Fact]
-        public void GetRequestId_ShouldReturnRequestId()
-        {
-            var request = new TestMetadata();
-            request.SetRequestId("request-id");
+        Assert.Equal("correlation-id", result);
+    }
 
-            var result = request.GetRequestId();
+    [Fact]
+    public void GetRequestId_ShouldReturnRequestId()
+    {
+        var request = new TestMetadata();
+        request.SetRequestId("request-id");
 
-            Assert.Equal("request-id", result);
-        }
+        var result = request.GetRequestId();
 
-        [Fact]
-        public void GetMemberType_ShouldReturnMemberType()
-        {
-            var request = new TestMetadata();
-            request.Metadata[MetadataDictionary.MemberType] = "member-type";
+        Assert.Equal("request-id", result);
+    }
 
-            var result = request.GetMemberType();
+    [Fact]
+    public void GetMemberType_ShouldReturnMemberType()
+    {
+        var request = new TestMetadata();
+        request.Metadata[MetadataDictionary.MemberType] = "member-type";
 
-            Assert.Equal("member-type", result);
-        }
+        var result = request.GetMemberType();
 
-        [Fact]
-        public void SetCausationId_ShouldSetCausationId()
-        {
-            var request = new TestMetadata();
+        Assert.Equal("member-type", result);
+    }
 
-            request.SetCausationId("new-causation-id");
+    [Fact]
+    public void SetCausationId_ShouldSetCausationId()
+    {
+        var request = new TestMetadata();
 
-            Assert.Equal("new-causation-id", request.Metadata[MetadataDictionary.CausationId]);
-        }
+        request.SetCausationId("new-causation-id");
 
-        [Fact]
-        public void SetCorrelationId_ShouldSetCorrelationId()
-        {
-            var request = new TestMetadata();
+        Assert.Equal("new-causation-id", request.Metadata[MetadataDictionary.CausationId]);
+    }
 
-            request.SetCorrelationId("new-correlation-id");
+    [Fact]
+    public void SetCorrelationId_ShouldSetCorrelationId()
+    {
+        var request = new TestMetadata();
 
-            Assert.Equal("new-correlation-id", request.Metadata[MetadataDictionary.CorrelationId]);
-        }
+        request.SetCorrelationId("new-correlation-id");
 
-        [Fact]
-        public void SetRequestId_ShouldSetRequestId()
-        {
-            var request = new TestMetadata();
+        Assert.Equal("new-correlation-id", request.Metadata[MetadataDictionary.CorrelationId]);
+    }
 
-            request.SetRequestId("new-request-id");
+    [Fact]
+    public void SetRequestId_ShouldSetRequestId()
+    {
+        var request = new TestMetadata();
 
-            Assert.Equal("new-request-id", request.Metadata[MetadataDictionary.RequestId]);
-        }
+        request.SetRequestId("new-request-id");
 
-        [Fact]
-        public void SetEventId_ShouldSetEventId()
-        {
-            var request = new TestMetadata();
+        Assert.Equal("new-request-id", request.Metadata[MetadataDictionary.RequestId]);
+    }
 
-            request.SetEventId("new-event-id");
+    [Fact]
+    public void SetEventId_ShouldSetEventId()
+    {
+        var request = new TestMetadata();
 
-            Assert.Equal("new-event-id", request.Metadata[MetadataDictionary.EventId]);
-        }
+        request.SetEventId("new-event-id");
 
-        [Fact]
-        public void SetTimestamp_ShouldSetTimestamp()
-        {
-            var request = new TestMetadata();
-            var timestamp = DateTime.UtcNow;
+        Assert.Equal("new-event-id", request.Metadata[MetadataDictionary.EventId]);
+    }
 
-            request.SetTimestamp(timestamp);
+    [Fact]
+    public void SetTimestamp_ShouldSetTimestamp()
+    {
+        var request = new TestMetadata();
+        var timestamp = DateTime.UtcNow;
 
-            Assert.Equal(timestamp, request.Metadata[MetadataDictionary.Timestamp]);
-        }
+        request.SetTimestamp(timestamp);
 
-        [Fact]
-        public void SetTimestamp_ShouldSetCurrentUtcTimestamp_WhenNoTimestampProvided()
-        {
-            var request = new TestMetadata();
+        Assert.Equal(timestamp, request.Metadata[MetadataDictionary.Timestamp]);
+    }
 
-            request.SetTimestamp();
+    [Fact]
+    public void SetTimestamp_ShouldSetCurrentUtcTimestamp_WhenNoTimestampProvided()
+    {
+        var request = new TestMetadata();
 
-            Assert.True(request.Metadata.ContainsKey(MetadataDictionary.Timestamp));
-            Assert.IsType<DateTime>(request.Metadata[MetadataDictionary.Timestamp]);
-        }
+        request.SetTimestamp();
 
-        [Fact]
-        public void SetMemberType_ShouldSetMemberType()
-        {
-            var request = new TestMetadata();
-            var type = typeof(string);
+        Assert.True(request.Metadata.ContainsKey(MetadataDictionary.Timestamp));
+        Assert.IsType<DateTime>(request.Metadata[MetadataDictionary.Timestamp]);
+    }
 
-            request.SetMemberType(type);
+    [Fact]
+    public void SetMemberType_ShouldSetMemberType()
+    {
+        var request = new TestMetadata();
+        var type = typeof(string);
 
-            Assert.Equal(type.ToFullNameIncludingAssemblyName(), request.Metadata[MetadataDictionary.MemberType]);
-        }
+        request.SetMemberType(type);
 
-        [Fact]
-        public void SaveMetadata_ShouldAddOrUpdateMetadata()
-        {
-            var request = new TestMetadata();
+        Assert.Equal(type.ToFullNameIncludingAssemblyName(), request.Metadata[MetadataDictionary.MemberType]);
+    }
 
-            request.SaveMetadata("key", "value");
+    [Fact]
+    public void SaveMetadata_ShouldAddOrUpdateMetadata()
+    {
+        var request = new TestMetadata();
 
-            Assert.Equal("value", request.Metadata["key"]);
-        }
+        request.SaveMetadata("key", "value");
 
-        [Fact]
-        public void MergeMetadata_ShouldCopyMetadataFromSourceToDestination()
-        {
-            var source = new TestMetadata();
-            source.Metadata["key1"] = "value1";
-            var destination = new TestMetadata();
+        Assert.Equal("value", request.Metadata["key"]);
+    }
 
-            destination.MergeMetadata(source);
+    [Fact]
+    public void MergeMetadata_ShouldCopyMetadataFromSourceToDestination()
+    {
+        var source = new TestMetadata();
+        source.Metadata["key1"] = "value1";
+        var destination = new TestMetadata();
 
-            Assert.Equal("value1", destination.Metadata["key1"]);
-        }
+        destination.MergeMetadata(source);
 
-        [Fact]
-        public void MergeMetadata_ShouldNotOverwriteExistingMetadata()
-        {
-            var source = new TestMetadata();
-            source.Metadata["key1"] = "value1";
-            var destination = new TestMetadata();
-            destination.Metadata["key1"] = "existing-value";
+        Assert.Equal("value1", destination.Metadata["key1"]);
+    }
 
-            destination.MergeMetadata(source);
+    [Fact]
+    public void MergeMetadata_ShouldNotOverwriteExistingMetadata()
+    {
+        var source = new TestMetadata();
+        source.Metadata["key1"] = "value1";
+        var destination = new TestMetadata();
+        destination.Metadata["key1"] = "existing-value";
 
-            Assert.Equal("existing-value", destination.Metadata["key1"]);
-        }
+        destination.MergeMetadata(source);
+
+        Assert.Equal("existing-value", destination.Metadata["key1"]);
     }
 }

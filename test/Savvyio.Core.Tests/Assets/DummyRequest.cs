@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 
-namespace Savvyio.Assets
+namespace Savvyio.Assets;
+
+public record DummyRequest(Guid Uuid, int Number) : Request
 {
-    public record DummyRequest(Guid Uuid, int Number) : Request
-    {
-    }
 }

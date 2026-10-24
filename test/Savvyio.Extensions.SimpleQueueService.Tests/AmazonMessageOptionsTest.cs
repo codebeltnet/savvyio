@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
 using Amazon;
@@ -9,146 +9,145 @@ using Cuemon;
 using Codebelt.Extensions.Xunit;
 using Xunit;
 
-namespace Savvyio.Extensions.SimpleQueueService
+namespace Savvyio.Extensions.SimpleQueueService;
+
+public class AmazonMessageOptionsTest : Test
 {
-    public class AmazonMessageOptionsTest : Test
+    public AmazonMessageOptionsTest(ITestOutputHelper output) : base(output)
     {
-        public AmazonMessageOptionsTest(ITestOutputHelper output) : base(output)
+    }
+
+    [Fact]
+    public void Ctor_ShouldHaveDefaultValues()
+    {
+        var sut = new AmazonMessageOptions();
+
+        Assert.Null(sut.Endpoint);
+        Assert.Null(sut.SourceQueue);
+        Assert.Null(sut.Credentials);
+        Assert.Empty(sut.ClientConfigurations);
+    }
+
+    [Fact]
+    public void ValidateOptions_ThrowsInvalidOperationException_WhenEndpointIsNull()
+    {
+        var sut1 = new AmazonMessageOptions
         {
-        }
+            SourceQueue = new Uri("urn:null"),
+            Credentials = new AnonymousAWSCredentials()
+        };
+        var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
+        var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
 
-        [Fact]
-        public void Ctor_ShouldHaveDefaultValues()
+        Assert.Equal($"Operation is not valid due to the current state of the object. (Expression '{nameof(AmazonMessageOptions.Endpoint)} == null')", sut2.Message);
+        Assert.Equal($"{nameof(AmazonMessageOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
+        Assert.IsType<InvalidOperationException>(sut3.InnerException);
+    }
+
+    [Fact]
+    public void ValidateOptions_ThrowsInvalidOperationException_WhenSourceQueueIsNull()
+    {
+        var sut1 = new AmazonMessageOptions
         {
-            var sut = new AmazonMessageOptions();
+            Endpoint = RegionEndpoint.EUWest1,
+            Credentials = new AnonymousAWSCredentials()
+        };
+        var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
+        var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
 
-            Assert.Null(sut.Endpoint);
-            Assert.Null(sut.SourceQueue);
-            Assert.Null(sut.Credentials);
-            Assert.Empty(sut.ClientConfigurations);
-        }
+        Assert.Equal($"Operation is not valid due to the current state of the object. (Expression '{nameof(AmazonMessageOptions.SourceQueue)} == null')", sut2.Message);
+        Assert.Equal($"{nameof(AmazonMessageOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
+        Assert.IsType<InvalidOperationException>(sut3.InnerException);
+    }
 
-        [Fact]
-        public void ValidateOptions_ThrowsInvalidOperationException_WhenEndpointIsNull()
+    [Fact]
+    public void ValidateOptions_ThrowsInvalidOperationException_WhenCredentialsIsNull()
+    {
+        var sut1 = new AmazonMessageOptions
         {
-            var sut1 = new AmazonMessageOptions
-            {
-                SourceQueue = new Uri("urn:null"),
-                Credentials = new AnonymousAWSCredentials()
-            };
-            var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
-            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
+            Endpoint = RegionEndpoint.EUWest1,
+            SourceQueue = new Uri("urn:null"),
+        };
+        var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
+        var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
 
-            Assert.Equal($"Operation is not valid due to the current state of the object. (Expression '{nameof(AmazonMessageOptions.Endpoint)} == null')", sut2.Message);
-            Assert.Equal($"{nameof(AmazonMessageOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
-            Assert.IsType<InvalidOperationException>(sut3.InnerException);
-        }
+        Assert.Equal($"Operation is not valid due to the current state of the object. (Expression '{nameof(AmazonMessageOptions.Credentials)} == null')", sut2.Message);
+        Assert.Equal($"{nameof(AmazonMessageOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
+        Assert.IsType<InvalidOperationException>(sut3.InnerException);
+    }
 
-        [Fact]
-        public void ValidateOptions_ThrowsInvalidOperationException_WhenSourceQueueIsNull()
+    [Fact]
+    public void ValidateOptions_ShouldPass()
+    {
+        var sut1 = new AmazonMessageOptions
         {
-            var sut1 = new AmazonMessageOptions
-            {
-                Endpoint = RegionEndpoint.EUWest1,
-                Credentials = new AnonymousAWSCredentials()
-            };
-            var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
-            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
+            Credentials = new AnonymousAWSCredentials(),
+            Endpoint = RegionEndpoint.EUWest1,
+            SourceQueue = new Uri("urn:null")
+        };
 
-            Assert.Equal($"Operation is not valid due to the current state of the object. (Expression '{nameof(AmazonMessageOptions.SourceQueue)} == null')", sut2.Message);
-            Assert.Equal($"{nameof(AmazonMessageOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
-            Assert.IsType<InvalidOperationException>(sut3.InnerException);
-        }
+        sut1.ValidateOptions();
 
-        [Fact]
-        public void ValidateOptions_ThrowsInvalidOperationException_WhenCredentialsIsNull()
+        Assert.Equivalent(new AnonymousAWSCredentials(), sut1.Credentials, true);
+        Assert.Equal(RegionEndpoint.EUWest1, sut1.Endpoint);
+        Assert.Equal(new Uri("urn:null"), sut1.SourceQueue);
+        Assert.Equal(0, sut1.ClientConfigurations.Length);
+    }
+
+    [Fact]
+    public void ValidateOptions_ShouldPassWithConfiguredClient()
+    {
+        var sut1 = new AmazonMessageOptions
         {
-            var sut1 = new AmazonMessageOptions
-            {
-                Endpoint = RegionEndpoint.EUWest1,
-                SourceQueue = new Uri("urn:null"),
-            };
-            var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
-            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
-
-            Assert.Equal($"Operation is not valid due to the current state of the object. (Expression '{nameof(AmazonMessageOptions.Credentials)} == null')", sut2.Message);
-            Assert.Equal($"{nameof(AmazonMessageOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
-            Assert.IsType<InvalidOperationException>(sut3.InnerException);
-        }
-
-        [Fact]
-        public void ValidateOptions_ShouldPass()
+            Credentials = new AnonymousAWSCredentials(),
+            Endpoint = RegionEndpoint.EUWest1,
+            SourceQueue = new Uri("urn:null")
+        }.ConfigureClient(client =>
         {
-            var sut1 = new AmazonMessageOptions
-            {
-                Credentials = new AnonymousAWSCredentials(),
-                Endpoint = RegionEndpoint.EUWest1,
-                SourceQueue = new Uri("urn:null")
-            };
+            client.ServiceURL = "http://localhost:4566";
+            client.AuthenticationRegion = RegionEndpoint.EUWest1.SystemName;
+        });
 
-            sut1.ValidateOptions();
+        sut1.ValidateOptions();
 
-            Assert.Equivalent(new AnonymousAWSCredentials(), sut1.Credentials, true);
-            Assert.Equal(RegionEndpoint.EUWest1, sut1.Endpoint);
-            Assert.Equal(new Uri("urn:null"), sut1.SourceQueue);
-            Assert.Equal(0, sut1.ClientConfigurations.Length);
-        }
+        Assert.Equivalent(new AnonymousAWSCredentials(), sut1.Credentials, true);
+        Assert.Equal(RegionEndpoint.EUWest1, sut1.Endpoint);
+        Assert.Equal(new Uri("urn:null"), sut1.SourceQueue);
+        Assert.True(sut1.ClientConfigurations.All(config => config is AmazonSQSConfig || config is AmazonSimpleNotificationServiceConfig));
+        Assert.Equal(2, sut1.ClientConfigurations.Length);
+        Assert.Equal("http://localhost:4566/", sut1.ClientConfigurations.SimpleQueueService().ServiceURL);
+        Assert.Equal("eu-west-1", sut1.ClientConfigurations.SimpleQueueService().AuthenticationRegion);
+        Assert.Equal(sut1.ClientConfigurations.SimpleQueueService().ServiceURL, sut1.ClientConfigurations.SimpleNotificationService().ServiceURL);
+        Assert.Equal(sut1.ClientConfigurations.SimpleQueueService().AuthenticationRegion, sut1.ClientConfigurations.SimpleNotificationService().AuthenticationRegion);
+    }
 
-        [Fact]
-        public void ValidateOptions_ShouldPassWithConfiguredClient()
+    [Fact]
+    public void ConfigureClient_Should_Throw_When_Setup_Is_Null()
+    {
+        var sut = new AmazonMessageOptions();
+
+        Assert.Throws<ArgumentNullException>(() => sut.ConfigureClient(null));
+    }
+
+    [Fact]
+    public void ValidateOptions_ThrowsInvalidOperationException_WhenClientConfigurationsAreInvalid()
+    {
+        var sut1 = new AmazonMessageOptions
         {
-            var sut1 = new AmazonMessageOptions
-            {
-                Credentials = new AnonymousAWSCredentials(),
-                Endpoint = RegionEndpoint.EUWest1,
-                SourceQueue = new Uri("urn:null")
-            }.ConfigureClient(client =>
-            {
-                client.ServiceURL = "http://localhost:4566";
-                client.AuthenticationRegion = RegionEndpoint.EUWest1.SystemName;
-            });
+            Credentials = new AnonymousAWSCredentials(),
+            Endpoint = RegionEndpoint.EUWest1,
+            SourceQueue = new Uri("urn:null")
+        };
 
-            sut1.ValidateOptions();
+        typeof(AmazonMessageOptions)
+            .GetProperty(nameof(AmazonMessageOptions.ClientConfigurations), BindingFlags.Instance | BindingFlags.Public)!
+            .SetValue(sut1, new ClientConfig[] { new AmazonSQSConfig() });
 
-            Assert.Equivalent(new AnonymousAWSCredentials(), sut1.Credentials, true);
-            Assert.Equal(RegionEndpoint.EUWest1, sut1.Endpoint);
-            Assert.Equal(new Uri("urn:null"), sut1.SourceQueue);
-            Assert.True(sut1.ClientConfigurations.All(config => config is AmazonSQSConfig || config is AmazonSimpleNotificationServiceConfig));
-            Assert.Equal(2, sut1.ClientConfigurations.Length);
-            Assert.Equal("http://localhost:4566/", sut1.ClientConfigurations.SimpleQueueService().ServiceURL);
-            Assert.Equal("eu-west-1", sut1.ClientConfigurations.SimpleQueueService().AuthenticationRegion);
-            Assert.Equal(sut1.ClientConfigurations.SimpleQueueService().ServiceURL, sut1.ClientConfigurations.SimpleNotificationService().ServiceURL);
-            Assert.Equal(sut1.ClientConfigurations.SimpleQueueService().AuthenticationRegion, sut1.ClientConfigurations.SimpleNotificationService().AuthenticationRegion);
-        }
+        var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
+        var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
 
-        [Fact]
-        public void ConfigureClient_Should_Throw_When_Setup_Is_Null()
-        {
-            var sut = new AmazonMessageOptions();
-
-            Assert.Throws<ArgumentNullException>(() => sut.ConfigureClient(null));
-        }
-
-        [Fact]
-        public void ValidateOptions_ThrowsInvalidOperationException_WhenClientConfigurationsAreInvalid()
-        {
-            var sut1 = new AmazonMessageOptions
-            {
-                Credentials = new AnonymousAWSCredentials(),
-                Endpoint = RegionEndpoint.EUWest1,
-                SourceQueue = new Uri("urn:null")
-            };
-
-            typeof(AmazonMessageOptions)
-                .GetProperty(nameof(AmazonMessageOptions.ClientConfigurations), BindingFlags.Instance | BindingFlags.Public)!
-                .SetValue(sut1, new ClientConfig[] { new AmazonSQSConfig() });
-
-            var sut2 = Assert.Throws<InvalidOperationException>(() => sut1.ValidateOptions());
-            var sut3 = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(sut1));
-
-            Assert.Equal($"Operation is not valid due to the current state of the object. (Expression '{nameof(AmazonMessageOptions.ClientConfigurations)}.Length > 0 && ({nameof(AmazonMessageOptions.ClientConfigurations)}.Length != 2 || !({nameof(AmazonMessageOptions.ClientConfigurations)}[0] is AmazonSQSConfig && {nameof(AmazonMessageOptions.ClientConfigurations)}[1] is AmazonSimpleNotificationServiceConfig))')", sut2.Message);
-            Assert.Equal($"{nameof(AmazonMessageOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
-            Assert.IsType<InvalidOperationException>(sut3.InnerException);
-        }
+        Assert.Equal($"Operation is not valid due to the current state of the object. (Expression '{nameof(AmazonMessageOptions.ClientConfigurations)}.Length > 0 && ({nameof(AmazonMessageOptions.ClientConfigurations)}.Length != 2 || !({nameof(AmazonMessageOptions.ClientConfigurations)}[0] is AmazonSQSConfig && {nameof(AmazonMessageOptions.ClientConfigurations)}[1] is AmazonSimpleNotificationServiceConfig))')", sut2.Message);
+        Assert.Equal($"{nameof(AmazonMessageOptions)} are not in a valid state. (Parameter '{nameof(sut1)}')", sut3.Message);
+        Assert.IsType<InvalidOperationException>(sut3.InnerException);
     }
 }

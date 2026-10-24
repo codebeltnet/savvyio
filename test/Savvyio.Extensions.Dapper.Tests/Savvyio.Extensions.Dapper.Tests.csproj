@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    
+
     <ProjectReference Include="..\Savvyio.Assets.Dapper.Tests\Savvyio.Assets.Dapper.Tests.csproj" />
     <ProjectReference Include="..\Savvyio.Assets.Tests\Savvyio.Assets.Tests.csproj" />
   </ItemGroup>

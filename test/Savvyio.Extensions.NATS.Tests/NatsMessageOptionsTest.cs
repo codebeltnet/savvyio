@@ -1,60 +1,59 @@
-﻿    using System;
+using System;
 using Codebelt.Extensions.Xunit;
 using Cuemon;
 using Xunit;
 
-namespace Savvyio.Extensions.NATS
+namespace Savvyio.Extensions.NATS;
+
+public class NatsMessageOptionsTest : Test
 {
-    public class NatsMessageOptionsTest : Test
+    public NatsMessageOptionsTest(ITestOutputHelper output) : base(output) { }
+
+    [Fact]
+    public void Constructor_ShouldSetDefaults()
     {
-        public NatsMessageOptionsTest(ITestOutputHelper output) : base(output) { }
+        var options = new NatsMessageOptions();
+        Assert.NotNull(options.NatsUrl);
+        Assert.Equal("nats://127.0.0.1:4222", options.NatsUrl.OriginalString);
+        Assert.Null(options.Subject);
+    }
 
-        [Fact]
-        public void Constructor_ShouldSetDefaults()
-        {
-            var options = new NatsMessageOptions();
-            Assert.NotNull(options.NatsUrl);
-            Assert.Equal("nats://127.0.0.1:4222", options.NatsUrl.OriginalString);
-            Assert.Null(options.Subject);
-        }
+    [Fact]
+    public void ValidateOptions_ShouldThrow_WhenNatsUrlIsNull()
+    {
+        var options = new NatsMessageOptions { NatsUrl = null, Subject = "foo" };
+        Assert.Throws<InvalidOperationException>(() => options.ValidateOptions());
+    }
 
-        [Fact]
-        public void ValidateOptions_ShouldThrow_WhenNatsUrlIsNull()
-        {
-            var options = new NatsMessageOptions { NatsUrl = null, Subject = "foo" };
-            Assert.Throws<InvalidOperationException>(() => options.ValidateOptions());
-        }
+    [Fact]
+    public void ValidateOptions_ShouldThrow_WhenSubjectIsNullOrWhitespace()
+    {
+        var options = new NatsMessageOptions { Subject = null };
+        Assert.Throws<InvalidOperationException>(() => options.ValidateOptions());
 
-        [Fact]
-        public void ValidateOptions_ShouldThrow_WhenSubjectIsNullOrWhitespace()
-        {
-            var options = new NatsMessageOptions { Subject = null };
-            Assert.Throws<InvalidOperationException>(() => options.ValidateOptions());
+        options.Subject = "";
+        Assert.Throws<InvalidOperationException>(() => options.ValidateOptions());
 
-            options.Subject = "";
-            Assert.Throws<InvalidOperationException>(() => options.ValidateOptions());
+        options.Subject = "   ";
+        Assert.Throws<InvalidOperationException>(() => options.ValidateOptions());
+    }
 
-            options.Subject = "   ";
-            Assert.Throws<InvalidOperationException>(() => options.ValidateOptions());
-        }
+    [Fact]
+    public void ValidateOptions_ShouldNotThrow_WhenValid()
+    {
+        var options = new NatsMessageOptions { Subject = "foo" };
+        var ex = Record.Exception(() => options.ValidateOptions());
+        Assert.Null(ex);
+    }
 
-        [Fact]
-        public void ValidateOptions_ShouldNotThrow_WhenValid()
-        {
-            var options = new NatsMessageOptions { Subject = "foo" };
-            var ex = Record.Exception(() => options.ValidateOptions());
-            Assert.Null(ex);
-        }
+    [Fact]
+    public void Validator_Should_Wrap_Invalid_Options()
+    {
+        var options = new NatsMessageOptions();
 
-        [Fact]
-        public void Validator_Should_Wrap_Invalid_Options()
-        {
-            var options = new NatsMessageOptions();
+        var exception = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(options));
 
-            var exception = Assert.Throws<ArgumentException>(() => Validator.ThrowIfInvalidOptions(options));
-
-            Assert.Equal($"{nameof(NatsMessageOptions)} are not in a valid state. (Parameter '{nameof(options)}')", exception.Message);
-            Assert.IsType<InvalidOperationException>(exception.InnerException);
-        }
+        Assert.Equal($"{nameof(NatsMessageOptions)} are not in a valid state. (Parameter '{nameof(options)}')", exception.Message);
+        Assert.IsType<InvalidOperationException>(exception.InnerException);
     }
 }

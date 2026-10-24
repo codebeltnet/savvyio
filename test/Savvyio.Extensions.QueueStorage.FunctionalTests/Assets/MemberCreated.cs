@@ -1,17 +1,16 @@
-﻿using Savvyio.EventDriven;
+using Savvyio.EventDriven;
 
-namespace Savvyio.Extensions.QueueStorage.Assets
+namespace Savvyio.Extensions.QueueStorage.Assets;
+
+public record MemberCreated : IntegrationEvent
 {
-    public record MemberCreated : IntegrationEvent
+    public MemberCreated(string name, string emailAddress)
     {
-        public MemberCreated(string name, string emailAddress)
-        {
-            Name = name;
-            EmailAddress = emailAddress;
-        }
-
-        public string Name { get; }
-
-        public string EmailAddress { get; }
+        Name = name;
+        EmailAddress = emailAddress;
     }
+
+    public string Name { get; }
+
+    public string EmailAddress { get; }
 }

@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Extensions.Text.Json.Converters.MetadataDictionaryConverter
 example:
 - *content

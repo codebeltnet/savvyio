@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Extensions.DependencyInjection.Dapper.DapperDataSourceOptions`1
 example:
 - *content

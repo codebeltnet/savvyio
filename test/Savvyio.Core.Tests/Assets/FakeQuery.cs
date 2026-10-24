@@ -1,8 +1,7 @@
-﻿using Savvyio.Queries;
+using Savvyio.Queries;
 
-namespace Savvyio.Assets
+namespace Savvyio.Assets;
+
+internal record FakeQuery : Query<int>
 {
-    internal record FakeQuery : Query<int>
-    {
-    }
 }

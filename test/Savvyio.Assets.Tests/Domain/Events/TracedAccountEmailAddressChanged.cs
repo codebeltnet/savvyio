@@ -1,14 +1,13 @@
-﻿using Savvyio.Domain.EventSourcing;
+using Savvyio.Domain.EventSourcing;
 
-namespace Savvyio.Assets.Domain.Events
+namespace Savvyio.Assets.Domain.Events;
+
+public record TracedAccountEmailAddressChanged : TracedDomainEvent
 {
-    public record TracedAccountEmailAddressChanged : TracedDomainEvent
+    public TracedAccountEmailAddressChanged(string emailAddress)
     {
-        public TracedAccountEmailAddressChanged(string emailAddress)
-        {
-            EmailAddress = emailAddress;
-        }
-
-        public string EmailAddress { get; private set; }
+        EmailAddress = emailAddress;
     }
+
+    public string EmailAddress { get; private set; }
 }

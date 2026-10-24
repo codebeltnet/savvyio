@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
@@ -8,35 +8,35 @@ using Savvyio.EventDriven.Messaging;
 using Savvyio.EventDriven.Messaging.CloudEvents;
 using Xunit;
 
-namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging.CloudEvents
+namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging.CloudEvents;
+
+public class IntegrationEventExtensionsTest : Test
 {
-    public class IntegrationEventExtensionsTest : Test
+    public IntegrationEventExtensionsTest(ITestOutputHelper output) : base(output)
     {
-        public IntegrationEventExtensionsTest(ITestOutputHelper output) : base(output)
+    }
+
+    [Fact]
+    public void ToMessage_ToCloudEvent_ShouldSerializeAndDeserialize_MemberCreated_UsingInterface()
+    {
+        var utc = DateTime.Parse("2023-11-16T23:24:17.8414532Z", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
+        var sut1 = new MemberCreated("Jane Doe", "jd@office.com").SetEventId("69bccf3b1117425397c5ed9ed757bb0f").SetTimestamp(utc);
+        var sut2 = sut1.ToMessage("https://fancy.api/members".ToUri(), nameof(MemberCreated), o =>
         {
-        }
+            o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
+            o.Time = utc;
+        }).ToCloudEvent();
 
-        [Fact]
-        public void ToMessage_ToCloudEvent_ShouldSerializeAndDeserialize_MemberCreated_UsingInterface()
-        {
-            var utc = DateTime.Parse("2023-11-16T23:24:17.8414532Z", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
-            var sut1 = new MemberCreated("Jane Doe", "jd@office.com").SetEventId("69bccf3b1117425397c5ed9ed757bb0f").SetTimestamp(utc);
-            var sut2 = sut1.ToMessage("https://fancy.api/members".ToUri(), nameof(MemberCreated), o =>
-            {
-                o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
-                o.Time = utc;
-            }).ToCloudEvent();
+        var json = new JsonMarshaller().Serialize(sut2);
+        var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
-            var json = new JsonMarshaller().Serialize(sut2);
-            var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
+        TestOutput.WriteLine(jsonString);
 
-            TestOutput.WriteLine(jsonString);
+        var sut4 = new JsonMarshaller().Deserialize<ICloudEvent<MemberCreated>>(json);
 
-            var sut4 = new JsonMarshaller().Deserialize<ICloudEvent<MemberCreated>>(json);
+        Assert.Equivalent(sut2, sut4, true);
 
-            Assert.Equivalent(sut2, sut4, true);
-
-            Assert.Equal("""
+        Assert.Equal("""
                          {
                            "id": "2d4030d32a254ee8a27046e5bafe696a",
                            "source": "https://fancy.api/members",
@@ -54,29 +54,29 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging.CloudEvents
                            "specversion": "1.0"
                          }
                          """.ReplaceLineEndings(), jsonString);
-        }
+    }
 
-        [Fact]
-        public void ToMessage_ToCloudEvent_ShouldSerializeAndDeserialize_MemberCreated_UsingConcreteType()
+    [Fact]
+    public void ToMessage_ToCloudEvent_ShouldSerializeAndDeserialize_MemberCreated_UsingConcreteType()
+    {
+        var utcNow = DateTime.UtcNow;
+        var sut1 = new MemberCreated("Jane Doe", "jd@office.com").SetEventId("69bccf3b1117425397c5ed9ed757bb0f").SetTimestamp(utcNow);
+        var sut2 = sut1.ToMessage("https://fancy.api/members".ToUri(), nameof(MemberCreated), o =>
         {
-            var utcNow = DateTime.UtcNow;
-            var sut1 = new MemberCreated("Jane Doe", "jd@office.com").SetEventId("69bccf3b1117425397c5ed9ed757bb0f").SetTimestamp(utcNow);
-            var sut2 = sut1.ToMessage("https://fancy.api/members".ToUri(), nameof(MemberCreated), o =>
-            {
-                o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
-                o.Time = utcNow;
-            }).ToCloudEvent();
+            o.MessageId = "2d4030d32a254ee8a27046e5bafe696a";
+            o.Time = utcNow;
+        }).ToCloudEvent();
 
-            var json = new JsonMarshaller().Serialize(sut2);
-            var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
+        var json = new JsonMarshaller().Serialize(sut2);
+        var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
-            TestOutput.WriteLine(jsonString);
+        TestOutput.WriteLine(jsonString);
 
-            var sut4 = new JsonMarshaller().Deserialize<CloudEvent<MemberCreated>>(json);
+        var sut4 = new JsonMarshaller().Deserialize<CloudEvent<MemberCreated>>(json);
 
-            Assert.Equivalent(sut2, sut4, true);
+        Assert.Equivalent(sut2, sut4, true);
 
-            Assert.Equal($$"""
+        Assert.Equal($$"""
                            {
                              "id": "2d4030d32a254ee8a27046e5bafe696a",
                              "source": "https://fancy.api/members",
@@ -94,6 +94,5 @@ namespace Savvyio.Extensions.Text.Json.EventDriven.Messaging.CloudEvents
                              "specversion": "1.0"
                            }
                            """.ReplaceLineEndings(), jsonString);
-        }
     }
 }

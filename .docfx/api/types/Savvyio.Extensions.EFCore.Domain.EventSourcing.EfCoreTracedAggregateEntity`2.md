@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Extensions.EFCore.Domain.EventSourcing.EfCoreTracedAggregateEntity`2
 example:
 - *content

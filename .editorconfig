@@ -57,9 +57,8 @@ indent_size = 4
 
 # IDE0161: Namespace declaration preferences
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0161
-# Prefer file-scoped namespaces for new files; existing block-scoped files should not be converted unless explicitly asked
 [*.cs]
-csharp_style_namespace_declarations = file_scoped:suggestion
+csharp_style_namespace_declarations = file_scoped:error
 
 # Top-level statements: DO NOT USE
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0210-ide0211

@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Domain.DomainEventDispatcher
 example:
 - *content

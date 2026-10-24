@@ -4,6 +4,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [6.0.0] - 2026-11-10
+
+This major release adds .NET 11 support, removes .NET 9 support, and aligns configured options with Microsoft Options integration so direct options and `IOptions<TOptions>.Value` share one configuration and validation pipeline.
+
+### Added
+
+- .NET 11 support alongside .NET 10 across packages and tests, with matching .NET 11 Entity Framework Core, SQLite, logging abstractions, and cryptography dependencies for net11.0.
+
+### Changed
+
+- CI provisions preview SDKs and tests .NET 11, preserving the single-target CI policy; local tests cover both supported targets; the local test container uses the .NET 11 SDK with the .NET 10 runtime and Microsoft Testing Platform arguments,
+- Updated Codebelt.Coverlet.MTP from 10.1.0 to 10.1.1,
+- Updated framework availability in contributor guidance, package READMEs, and DocFX includes; retained .NET 10 for DocFX metadata generation,
+- Service-update automation preserves pending major/minor release versions and uses the modern framework availability fallback,
+- Set the MinVer minimum major/minor to 6.0 for the breaking framework baseline change; release versions remain Git-tag derived,
+- Configured options now use Cuemon's `AddConfiguredOptions`: direct `TOptions` and the default `IOptions<TOptions>.Value` share one instance and the Microsoft configuration, post-configuration, and validation pipeline, avoiding the previous separate eager instance and repeated setup execution for these two consumption forms,
+- Options configuration and validation are deferred until materialization; recoverable parameter-object validation failures surface as `OptionsValidationException` instead of `ArgumentException` during registration. The first `AddConfiguredOptions` registration per options type is retained; use `Configure<TOptions>` for additional composition. Injectable `Action<TOptions>` remains the original setup delegate and does not include the Microsoft pipeline.
+
+### Removed
+
+- .NET 9 support. Consumers must target .NET 10 or later,
+- The .NET 9-only System.Linq.Async reference; both supported frameworks provide async LINQ,
+- `Savvyio.Reflection.AssemblyContext`; dispatcher, handler, and message converter discovery now calls `AssemblyContext.GetCurrentDomainAssemblies` from `Cuemon.Reflection`,
+- `Savvyio.Extensions.DependencyInjection.ServiceCollectionExtensions.AddConfiguredOptions`; import `Cuemon.Extensions.DependencyInjection` or update fully qualified calls to use the Cuemon implementation.
+
 ## [5.0.13] - 2026-10-18
 
 This is a patch release focused on DocFX publishing pipeline hardening, expanded test coverage for configured options, discovery, and JSON converters, shared dependency and Entity Framework Core updates, documentation sitemap correction, and consolidated repository agent guidance.
@@ -1171,6 +1196,7 @@ Noticeable highlights:
 - QueryHandler class in the Savvyio.Queries namespace that defines a generic and consistent way of handling Query objects that implements the IQuery interface
 - SavvyioOptionsExtensions class in the Savvyio.Queries namespace that consist of extension methods for the SavvyioOptions class: AddQueryHandler, AddQueryDispatcher
 
+[6.0.0]: https://github.com/codebeltnet/savvyio/compare/v5.0.13...v6.0.0
 [5.0.13]: https://github.com/codebeltnet/savvyio/compare/v5.0.12...v5.0.13
 [5.0.12]: https://github.com/codebeltnet/savvyio/compare/v5.0.11...v5.0.12
 [5.0.11]: https://github.com/codebeltnet/savvyio/compare/v5.0.10...v5.0.11

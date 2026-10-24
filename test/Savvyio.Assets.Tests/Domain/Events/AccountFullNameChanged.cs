@@ -1,14 +1,13 @@
-﻿using Savvyio.Domain;
+using Savvyio.Domain;
 
-namespace Savvyio.Assets.Domain.Events
+namespace Savvyio.Assets.Domain.Events;
+
+public record AccountFullNameChanged : DomainEvent
 {
-    public record AccountFullNameChanged : DomainEvent
+    public AccountFullNameChanged(Account account)
     {
-        public AccountFullNameChanged(Account account)
-        {
-            FullName = account.FullName;
-        }
-
-        public string FullName { get; private set; }
+        FullName = account.FullName;
     }
+
+    public string FullName { get; private set; }
 }

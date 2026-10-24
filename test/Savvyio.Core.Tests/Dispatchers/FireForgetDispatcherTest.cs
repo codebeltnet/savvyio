@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Codebelt.Extensions.Xunit;
@@ -10,70 +10,69 @@ using Savvyio.Extensions.DependencyInjection;
 using Savvyio.Handlers;
 using Xunit;
 
-namespace Savvyio.Dispatchers
+namespace Savvyio.Dispatchers;
+
+public class FireForgetDispatcherTest : Test
 {
-    public class FireForgetDispatcherTest : Test
+    public FireForgetDispatcherTest(ITestOutputHelper output) : base(output)
     {
-        public FireForgetDispatcherTest(ITestOutputHelper output) : base(output)
-        {
-        }
+    }
 
-        [Fact]
-        public void Dispatch_ShouldFailWithOrphanedHandlerException()
-        {
-            var sc = new ServiceCollection().AddSavvyIO(o => o.AddAssemblyToScan(typeof(FireForgetDispatcherTest).Assembly));
-            var sp = sc.BuildServiceProvider();
-            var sut = new CommandDispatcher(sp.GetRequiredService<IServiceLocator>());
+    [Fact]
+    public void Dispatch_ShouldFailWithOrphanedHandlerException()
+    {
+        var sc = new ServiceCollection().AddSavvyIO(o => o.AddAssemblyToScan(typeof(FireForgetDispatcherTest).Assembly));
+        var sp = sc.BuildServiceProvider();
+        var sut = new CommandDispatcher(sp.GetRequiredService<IServiceLocator>());
 
-            Assert.Throws<OrphanedHandlerException>(() => sut.Commit(new FakeCommand()));
-        }
+        Assert.Throws<OrphanedHandlerException>(() => sut.Commit(new FakeCommand()));
+    }
 
-        [Fact]
-        public void Dispatch_ShouldDispatchCommandToDesignatedHandler()
-        {
-            var sc = new ServiceCollection()
-                .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(FireForgetDispatcherTest).Assembly, typeof(ICommand).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery())
-                .AddScoped<ITestStore<ICommand>, InMemoryTestStore<ICommand>>();
+    [Fact]
+    public void Dispatch_ShouldDispatchCommandToDesignatedHandler()
+    {
+        var sc = new ServiceCollection()
+            .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(FireForgetDispatcherTest).Assembly, typeof(ICommand).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery())
+            .AddScoped<ITestStore<ICommand>, InMemoryTestStore<ICommand>>();
 
-            var sp = sc.BuildServiceProvider();
-            var sut = new CommandDispatcher(sp.GetRequiredService<IServiceLocator>());
-            var ca = new CreateAccount(Guid.NewGuid(), "Michael Mortensen", "root@gimlichael.dev");
-            var cs = sp.GetRequiredService<ITestStore<ICommand>>();
+        var sp = sc.BuildServiceProvider();
+        var sut = new CommandDispatcher(sp.GetRequiredService<IServiceLocator>());
+        var ca = new CreateAccount(Guid.NewGuid(), "Michael Mortensen", "root@gimlichael.dev");
+        var cs = sp.GetRequiredService<ITestStore<ICommand>>();
 
-            sut.Commit(ca);
+        sut.Commit(ca);
 
-            Assert.Equal(ca.FullName, cs.QueryFor<CreateAccount>().Single().FullName);
-            Assert.Equal(ca.EmailAddress, cs.QueryFor<CreateAccount>().Single().EmailAddress);
-            Assert.Equal(ca.PlatformProviderId, cs.QueryFor<CreateAccount>().Single().PlatformProviderId);
-        }
+        Assert.Equal(ca.FullName, cs.QueryFor<CreateAccount>().Single().FullName);
+        Assert.Equal(ca.EmailAddress, cs.QueryFor<CreateAccount>().Single().EmailAddress);
+        Assert.Equal(ca.PlatformProviderId, cs.QueryFor<CreateAccount>().Single().PlatformProviderId);
+    }
 
-        [Fact]
-        public async Task DispatchAsync_ShouldFailWithOrphanedHandlerExceptionAsync()
-        {
-            var sc = new ServiceCollection().AddSavvyIO(o => o.AddAssemblyToScan(typeof(FireForgetDispatcherTest).Assembly));
-            var sp = sc.BuildServiceProvider();
-            var sut = new CommandDispatcher(sp.GetRequiredService<IServiceLocator>());
+    [Fact]
+    public async Task DispatchAsync_ShouldFailWithOrphanedHandlerExceptionAsync()
+    {
+        var sc = new ServiceCollection().AddSavvyIO(o => o.AddAssemblyToScan(typeof(FireForgetDispatcherTest).Assembly));
+        var sp = sc.BuildServiceProvider();
+        var sut = new CommandDispatcher(sp.GetRequiredService<IServiceLocator>());
 
-            await Assert.ThrowsAsync<OrphanedHandlerException>(async () => await sut.CommitAsync(new FakeCommand()));
-        }
+        await Assert.ThrowsAsync<OrphanedHandlerException>(async () => await sut.CommitAsync(new FakeCommand()));
+    }
 
-        [Fact]
-        public async Task DispatchAsync_ShouldDispatchCommandToDesignatedHandlerAsync()
-        {
-            var sc = new ServiceCollection()
-                .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(FireForgetDispatcherTest).Assembly, typeof(ICommand).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery())
-                .AddScoped<ITestStore<ICommand>, InMemoryTestStore<ICommand>>();
+    [Fact]
+    public async Task DispatchAsync_ShouldDispatchCommandToDesignatedHandlerAsync()
+    {
+        var sc = new ServiceCollection()
+            .AddSavvyIO(o => o.AddAssemblyRangeToScan(typeof(FireForgetDispatcherTest).Assembly, typeof(ICommand).Assembly).EnableDispatcherDiscovery().EnableHandlerDiscovery())
+            .AddScoped<ITestStore<ICommand>, InMemoryTestStore<ICommand>>();
 
-            var sp = sc.BuildServiceProvider();
-            var sut = new CommandDispatcher(sp.GetRequiredService<IServiceLocator>());
-            var ca = new CreateAccount(Guid.NewGuid(), "Michael Mortensen", "root@gimlichael.dev");
-            var cs = sp.GetRequiredService<ITestStore<ICommand>>();
+        var sp = sc.BuildServiceProvider();
+        var sut = new CommandDispatcher(sp.GetRequiredService<IServiceLocator>());
+        var ca = new CreateAccount(Guid.NewGuid(), "Michael Mortensen", "root@gimlichael.dev");
+        var cs = sp.GetRequiredService<ITestStore<ICommand>>();
 
-            await sut.CommitAsync(ca);
+        await sut.CommitAsync(ca);
 
-            Assert.Equal(ca.FullName, cs.QueryFor<CreateAccount>().Single().FullName);
-            Assert.Equal(ca.EmailAddress, cs.QueryFor<CreateAccount>().Single().EmailAddress);
-            Assert.Equal(ca.PlatformProviderId, cs.QueryFor<CreateAccount>().Single().PlatformProviderId);
-        }
+        Assert.Equal(ca.FullName, cs.QueryFor<CreateAccount>().Single().FullName);
+        Assert.Equal(ca.EmailAddress, cs.QueryFor<CreateAccount>().Single().EmailAddress);
+        Assert.Equal(ca.PlatformProviderId, cs.QueryFor<CreateAccount>().Single().PlatformProviderId);
     }
 }

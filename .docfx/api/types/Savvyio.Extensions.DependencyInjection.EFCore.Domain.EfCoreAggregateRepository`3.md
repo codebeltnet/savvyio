@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Extensions.DependencyInjection.EFCore.Domain.EfCoreAggregateRepository`3
 example:
 - *content

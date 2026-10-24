@@ -83,9 +83,11 @@ jobs:
               print(f"::error::Unsupported CHANGELOG.md version status: {current_status}")
               sys.exit(1)
 
-          if current_version == next_version and current_status.upper() == "TBD":
-              # Reuse an already pending next release, such as [5.0.13] - TBD.
-              new_version = next_version
+          pending_version = tuple(int(part) for part in current_version.split("."))
+          released_version = (major, minor, patch)
+          if pending_version > released_version and current_status.upper() == "TBD":
+              # Preserve an explicitly planned patch, minor, or major release.
+              new_version = current_version
           elif current_version == latest_version and current_status.upper() != "TBD":
               # The changelog is at the latest released tag; start the next patch release.
               new_version = next_version
@@ -93,7 +95,7 @@ jobs:
               print(
                   f"::error::CHANGELOG.md starts at {current_version} ({current_status}), "
                   f"but the latest stable Git tag is {latest_tag}. Expected either "
-                  f"[{latest_version}] with a release date or [{next_version}] - TBD."
+                  f"[{latest_version}] with a release date or a newer version marked TBD."
               )
               sys.exit(1)
 
@@ -125,7 +127,9 @@ jobs:
           NEW="${{ steps.newver.outputs.new }}"
           for f in .nuget/*/PackageReleaseNotes.txt; do
             [ -f "$f" ] || continue
-            TFM=$(grep -m1 "^Availability:" "$f" | sed 's/Availability: //' || echo ".NET 10, .NET 9 and .NET Standard 2.0")
+            # Preserve an existing pending release block instead of duplicating it.
+            if [ "$(head -n1 "$f" | tr -d '\r')" = "Version: ${NEW}" ]; then continue; fi
+            TFM=$(grep -m1 "^Availability:" "$f" | sed 's/Availability: //' || echo ".NET 11 and .NET 10")
             ENTRY="Version: ${NEW}\nAvailability: ${TFM}\n\n# ALM\n- CHANGED Dependencies have been upgraded to the latest compatible versions for all supported target frameworks (TFMs)\n\n"
             { printf "$ENTRY"; cat "$f"; } > "$f.tmp" && mv "$f.tmp" "$f"
           done

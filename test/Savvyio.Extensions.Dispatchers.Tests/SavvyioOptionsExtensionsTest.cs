@@ -6,73 +6,72 @@ using Savvyio.EventDriven;
 using Savvyio.Queries;
 using Xunit;
 
-namespace Savvyio.Extensions
+namespace Savvyio.Extensions;
+
+public class SavvyioOptionsExtensionsTest : Test
 {
-    public class SavvyioOptionsExtensionsTest : Test
+    public SavvyioOptionsExtensionsTest(ITestOutputHelper output) : base(output)
     {
-        public SavvyioOptionsExtensionsTest(ITestOutputHelper output) : base(output)
-        {
-        }
+    }
 
-        [Fact]
-        public void UseAutomaticDispatcherDiscovery_ShouldDiscoverAcrossCurrentDomain()
-        {
-            var options = new SavvyioOptions();
+    [Fact]
+    public void UseAutomaticDispatcherDiscovery_ShouldDiscoverAcrossCurrentDomain()
+    {
+        var options = new SavvyioOptions();
 
-            Assert.Same(options, options.UseAutomaticDispatcherDiscovery(true));
+        Assert.Same(options, options.UseAutomaticDispatcherDiscovery(true));
 
-            Assert.Contains(typeof(ICommandDispatcher), options.DispatcherServiceTypes);
-            Assert.Contains(typeof(IDomainEventDispatcher), options.DispatcherServiceTypes);
-            Assert.Contains(typeof(IIntegrationEventDispatcher), options.DispatcherServiceTypes);
-            Assert.Contains(typeof(IQueryDispatcher), options.DispatcherServiceTypes);
-            Assert.Contains(typeof(CommandDispatcher), options.DispatcherImplementationTypes);
-            Assert.Contains(typeof(DomainEventDispatcher), options.DispatcherImplementationTypes);
-            Assert.Contains(typeof(IntegrationEventDispatcher), options.DispatcherImplementationTypes);
-            Assert.Contains(typeof(QueryDispatcher), options.DispatcherImplementationTypes);
-        }
+        Assert.Contains(typeof(ICommandDispatcher), options.DispatcherServiceTypes);
+        Assert.Contains(typeof(IDomainEventDispatcher), options.DispatcherServiceTypes);
+        Assert.Contains(typeof(IIntegrationEventDispatcher), options.DispatcherServiceTypes);
+        Assert.Contains(typeof(IQueryDispatcher), options.DispatcherServiceTypes);
+        Assert.Contains(typeof(CommandDispatcher), options.DispatcherImplementationTypes);
+        Assert.Contains(typeof(DomainEventDispatcher), options.DispatcherImplementationTypes);
+        Assert.Contains(typeof(IntegrationEventDispatcher), options.DispatcherImplementationTypes);
+        Assert.Contains(typeof(QueryDispatcher), options.DispatcherImplementationTypes);
+    }
 
-        [Fact]
-        public void UseAutomaticHandlerDiscovery_ShouldDiscoverAcrossCurrentDomainWithoutDuplicates()
-        {
-            var options = new SavvyioOptions();
+    [Fact]
+    public void UseAutomaticHandlerDiscovery_ShouldDiscoverAcrossCurrentDomainWithoutDuplicates()
+    {
+        var options = new SavvyioOptions();
 
-            Assert.Same(options, options.UseAutomaticHandlerDiscovery(true));
-            options.UseAutomaticHandlerDiscovery(true);
+        Assert.Same(options, options.UseAutomaticHandlerDiscovery(true));
+        options.UseAutomaticHandlerDiscovery(true);
 
-            Assert.Contains(typeof(ICommandHandler), options.HandlerServiceTypes);
-            Assert.Contains(typeof(IDomainEventHandler), options.HandlerServiceTypes);
-            Assert.Contains(typeof(IIntegrationEventHandler), options.HandlerServiceTypes);
-            Assert.Contains(typeof(IQueryHandler), options.HandlerServiceTypes);
-            Assert.Contains(options.HandlerImplementationTypes, type => type.Name == "TestMediatorCommandHandler");
-            Assert.Contains(options.HandlerImplementationTypes, type => type.Name == "TestMediatorDomainEventHandler");
-            Assert.Contains(options.HandlerImplementationTypes, type => type.Name == "TestMediatorIntegrationEventHandler");
-            Assert.Contains(options.HandlerImplementationTypes, type => type.Name == "TestMediatorQueryHandler");
-            Assert.Equal(options.HandlerImplementationTypes.Count, options.HandlerImplementationTypes.Distinct().Count());
-        }
+        Assert.Contains(typeof(ICommandHandler), options.HandlerServiceTypes);
+        Assert.Contains(typeof(IDomainEventHandler), options.HandlerServiceTypes);
+        Assert.Contains(typeof(IIntegrationEventHandler), options.HandlerServiceTypes);
+        Assert.Contains(typeof(IQueryHandler), options.HandlerServiceTypes);
+        Assert.Contains(options.HandlerImplementationTypes, type => type.Name == "TestMediatorCommandHandler");
+        Assert.Contains(options.HandlerImplementationTypes, type => type.Name == "TestMediatorDomainEventHandler");
+        Assert.Contains(options.HandlerImplementationTypes, type => type.Name == "TestMediatorIntegrationEventHandler");
+        Assert.Contains(options.HandlerImplementationTypes, type => type.Name == "TestMediatorQueryHandler");
+        Assert.Equal(options.HandlerImplementationTypes.Count, options.HandlerImplementationTypes.Distinct().Count());
+    }
 
-        [Fact]
-        public void UseAutomaticDispatcherDiscovery_ShouldUseCallingAssembly_WhenBruteAssemblyScanningIsFalse()
-        {
-            var options = new SavvyioOptions().UseAutomaticDispatcherDiscovery();
+    [Fact]
+    public void UseAutomaticDispatcherDiscovery_ShouldUseCallingAssembly_WhenBruteAssemblyScanningIsFalse()
+    {
+        var options = new SavvyioOptions().UseAutomaticDispatcherDiscovery();
 
-            Assert.Empty(options.DispatcherServiceTypes);
-            Assert.Empty(options.DispatcherImplementationTypes);
-        }
+        Assert.Empty(options.DispatcherServiceTypes);
+        Assert.Empty(options.DispatcherImplementationTypes);
+    }
 
-        [Fact]
-        public void UseAutomaticHandlerDiscovery_ShouldUseCallingAssembly_WhenBruteAssemblyScanningIsFalse()
-        {
-            var options = new SavvyioOptions().UseAutomaticHandlerDiscovery();
+    [Fact]
+    public void UseAutomaticHandlerDiscovery_ShouldUseCallingAssembly_WhenBruteAssemblyScanningIsFalse()
+    {
+        var options = new SavvyioOptions().UseAutomaticHandlerDiscovery();
 
-            Assert.Collection(options.HandlerServiceTypes.OrderBy(type => type.Name),
-                type => Assert.Equal(typeof(ICommandHandler), type),
-                type => Assert.Equal(typeof(IDomainEventHandler), type),
-                type => Assert.Equal(typeof(IIntegrationEventHandler), type),
-                type => Assert.Equal(typeof(IQueryHandler), type));
-            Assert.Contains(options.HandlerImplementationTypes, type => type.Name == "TestMediatorCommandHandler");
-            Assert.Contains(options.HandlerImplementationTypes, type => type.Name == "TestMediatorDomainEventHandler");
-            Assert.Contains(options.HandlerImplementationTypes, type => type.Name == "TestMediatorIntegrationEventHandler");
-            Assert.Contains(options.HandlerImplementationTypes, type => type.Name == "TestMediatorQueryHandler");
-        }
+        Assert.Collection(options.HandlerServiceTypes.OrderBy(type => type.Name),
+            type => Assert.Equal(typeof(ICommandHandler), type),
+            type => Assert.Equal(typeof(IDomainEventHandler), type),
+            type => Assert.Equal(typeof(IIntegrationEventHandler), type),
+            type => Assert.Equal(typeof(IQueryHandler), type));
+        Assert.Contains(options.HandlerImplementationTypes, type => type.Name == "TestMediatorCommandHandler");
+        Assert.Contains(options.HandlerImplementationTypes, type => type.Name == "TestMediatorDomainEventHandler");
+        Assert.Contains(options.HandlerImplementationTypes, type => type.Name == "TestMediatorIntegrationEventHandler");
+        Assert.Contains(options.HandlerImplementationTypes, type => type.Name == "TestMediatorQueryHandler");
     }
 }
