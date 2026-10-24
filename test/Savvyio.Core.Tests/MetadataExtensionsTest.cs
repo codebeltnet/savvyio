@@ -9,7 +9,7 @@ public class MetadataExtensionsTest : Test
 {
     public MetadataExtensionsTest(ITestOutputHelper output) : base(output)
     {
-        
+
     }
 
     private class TestMetadata : IMetadata

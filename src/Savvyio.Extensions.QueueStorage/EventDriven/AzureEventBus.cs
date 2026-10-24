@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
@@ -141,7 +141,7 @@ public class AzureEventBus : AzureQueue<IIntegrationEvent>, IPublishSubscribeCha
             }
         }
     }
-    
+
     /// <summary>
     /// Gets the <see cref="Uri"/> representing the health check endpoint for the configured Azure Event Grid topic.
     /// </summary>

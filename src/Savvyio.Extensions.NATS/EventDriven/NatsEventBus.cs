@@ -1,4 +1,4 @@
-﻿using Cuemon;
+using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Reflection;
@@ -65,8 +65,8 @@ public class NatsEventBus : NatsMessage, IPublishSubscribeChannel<IIntegrationEv
     {
         Validator.ThrowIfInvalidConfigurator(setup, out var options);
         await foreach (var message in SubscribeMessagesAsync(_options.Subject, new NatsSubOpts()
-                       {
-                       }, cancellationToken: options.CancellationToken))
+        {
+        }, cancellationToken: options.CancellationToken))
         {
             var messageType = Type.GetType(message.Headers["type"]);
             var deserialized = Marshaller.Deserialize(await message.Data.FromBase64().ToStreamAsync().ConfigureAwait(false), messageType) as IMessage<IIntegrationEvent>;

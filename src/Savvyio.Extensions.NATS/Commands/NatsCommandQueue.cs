@@ -1,4 +1,4 @@
-﻿using Cuemon;
+using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Reflection;
@@ -71,10 +71,10 @@ public class NatsCommandQueue : NatsMessage, IPointToPointChannel<ICommand>
     public async IAsyncEnumerable<IMessage<ICommand>> ReceiveAsync(Action<AsyncOptions> setup = null)
     {
         Validator.ThrowIfInvalidConfigurator(setup, out var options);
-        
+
         var streamName = _options.StreamName;
         var consumerName = _options.ConsumerName;
-        
+
         var consumer = await CreateConsumerAsync(new StreamConfig(streamName, [_options.Subject])
         {
             Retention = StreamConfigRetention.Workqueue
@@ -83,10 +83,10 @@ public class NatsCommandQueue : NatsMessage, IPointToPointChannel<ICommand>
         }, options.CancellationToken).ConfigureAwait(false);
 
         await foreach (var message in FetchMessagesAsync(consumer, new NatsJSFetchOpts()
-                       {
-                           Expires = _options.Expires == TimeSpan.Zero ? null : _options.Expires,
-                           MaxMsgs = _options.MaxMessages,
-                           IdleHeartbeat = _options.Heartbeat == TimeSpan.Zero ? null : _options.Heartbeat
+        {
+            Expires = _options.Expires == TimeSpan.Zero ? null : _options.Expires,
+            MaxMsgs = _options.MaxMessages,
+            IdleHeartbeat = _options.Heartbeat == TimeSpan.Zero ? null : _options.Heartbeat
         }, cancellationToken: options.CancellationToken))
         {
             options.CancellationToken.ThrowIfCancellationRequested();

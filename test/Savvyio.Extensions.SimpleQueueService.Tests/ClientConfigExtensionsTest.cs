@@ -15,7 +15,7 @@ public class ClientConfigExtensionsTest : Test
     [Fact]
     public void IsValid_Should_Return_True_When_Both_Aws_Client_Configurations_Are_Present()
     {
-        ClientConfig[] configurations = [ new AmazonSQSConfig(), new AmazonSimpleNotificationServiceConfig() ];
+        ClientConfig[] configurations = [new AmazonSQSConfig(), new AmazonSimpleNotificationServiceConfig()];
 
         Assert.True(configurations.IsValid());
         Assert.IsType<AmazonSQSConfig>(configurations.SimpleQueueService());
@@ -25,7 +25,7 @@ public class ClientConfigExtensionsTest : Test
     [Fact]
     public void IsValid_Should_Return_False_When_Configurations_Are_Missing_Expected_Types()
     {
-        ClientConfig[] invalid = [ new AmazonSQSConfig() ];
+        ClientConfig[] invalid = [new AmazonSQSConfig()];
 
         Assert.False(invalid.IsValid());
         Assert.NotNull(invalid.SimpleQueueService());

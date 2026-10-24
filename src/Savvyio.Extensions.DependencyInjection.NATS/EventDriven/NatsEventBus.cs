@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Savvyio.EventDriven;
 using Savvyio.Extensions.DependencyInjection.Messaging;
 using Savvyio.Extensions.NATS;
@@ -13,7 +13,7 @@ namespace Savvyio.Extensions.DependencyInjection.NATS.EventDriven;
 /// <seealso cref="IPublishSubscribeChannel{TRequest,TMarker}"/>
 public class NatsEventBus<TMarker> : NatsEventBus, IPublishSubscribeChannel<IIntegrationEvent, TMarker>
 {
-    
+
     /// <summary>
     /// Initializes a new instance of the <see cref="NatsEventBus"/> class.
     /// </summary>

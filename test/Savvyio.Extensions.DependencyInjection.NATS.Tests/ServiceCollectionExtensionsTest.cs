@@ -1,4 +1,4 @@
-﻿using Codebelt.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Commands;
 using Savvyio.EventDriven;
@@ -42,12 +42,12 @@ public class ServiceCollectionExtensionsTest : Test
         var provider = services.BuildServiceProvider();
         ConfiguredOptionsAssertions.Verify<NatsCommandQueueOptions>(provider);
         var queue = provider.GetService<NatsCommandQueue>();
-        
-        
+
+
         Assert.IsType<NatsCommandQueue>(provider.GetRequiredService<IPointToPointChannel<ICommand>>());
         Assert.IsType<NatsCommandQueue>(provider.GetRequiredService<ISender<ICommand>>());
         Assert.IsType<NatsCommandQueue>(provider.GetRequiredService<IReceiver<ICommand>>());
-        
+
         Assert.NotNull(queue);
     }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Codebelt.Extensions.Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Commands;
@@ -27,7 +27,7 @@ public class ServiceCollectionExtensionsTest : Test
     public void AddRabbitMqCommandQueue_ShouldAddDefaultImplementation()
     {
         Action<RabbitMqCommandQueueOptions> rabbitMqSetup = o =>
-        { 
+        {
             o.QueueName = "urn:queue";
         };
 

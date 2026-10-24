@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cuemon;
 using Cuemon.Configuration;
 using Cuemon.Security.Cryptography;
@@ -9,7 +9,7 @@ namespace Savvyio.Messaging.Cryptography;
 /// Configuration options that is related to wrapping an <see cref="IRequest"/> implementation inside a cryptographically signed message.
 /// </summary>
 /// <seealso cref="IValidatableParameterObject" />
-	public class SignedMessageOptions : IValidatableParameterObject
+public class SignedMessageOptions : IValidatableParameterObject
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="SignedMessageOptions"/> class.

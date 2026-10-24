@@ -18,7 +18,7 @@ namespace Savvyio.Extensions.NATS.EventDriven;
 public class NatsEventBusTest : Test
 {
     private IMarshaller _marshaller = JsonMarshaller.Default;
-    private NatsEventBusOptions _options = new ();
+    private NatsEventBusOptions _options = new();
 
     public NatsEventBusTest(ITestOutputHelper output) : base(output) { }
 
@@ -51,7 +51,7 @@ public class NatsEventBusTest : Test
         Assert.Throws<ArgumentNullException>(() => new NatsEventBus(_marshaller, null));
     }
 
-    
+
     [Fact]
     public void Constructor_ShouldThrow_WhenOptionsAreInvalid()
     {

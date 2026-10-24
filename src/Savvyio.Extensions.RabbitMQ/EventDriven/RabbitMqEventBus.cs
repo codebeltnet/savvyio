@@ -1,4 +1,4 @@
-﻿using Cuemon;
+using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Reflection;
@@ -95,7 +95,7 @@ public class RabbitMqEventBus : RabbitMqMessage, IPublishSubscribeChannel<IInteg
             deserialized.Properties.Add(nameof(QueueDeclareOk.QueueName), queue.QueueName);
             await buffer.Writer.WriteAsync(deserialized, options.CancellationToken).ConfigureAwait(false);
         };
-        
+
         await RabbitMqChannel.BasicConsumeAsync(queue.QueueName, autoAck: true, consumer: consumer, options.CancellationToken).ConfigureAwait(false);
 
         while (await buffer.Reader.WaitToReadAsync(options.CancellationToken).ConfigureAwait(false))

@@ -1,4 +1,4 @@
-﻿using Savvyio.Extensions.RabbitMQ.EventDriven;
+using Savvyio.Extensions.RabbitMQ.EventDriven;
 using System;
 using Savvyio.EventDriven;
 using Savvyio.Extensions.DependencyInjection.Messaging;
@@ -13,7 +13,7 @@ namespace Savvyio.Extensions.DependencyInjection.RabbitMQ.EventDriven;
 /// <seealso cref="IPublishSubscribeChannel{TRequest,TMarker}"/>
 public class RabbitMqEventBus<TMarker> : RabbitMqEventBus, IPublishSubscribeChannel<IIntegrationEvent, TMarker>
 {
-    
+
     /// <summary>
     /// Initializes a new instance of the <see cref="RabbitMqEventBus"/> class.
     /// </summary>

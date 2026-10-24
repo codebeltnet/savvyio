@@ -20,7 +20,7 @@ namespace Savvyio.Extensions.NATS.Commands;
 public class NatsCommandQueueTest : Test
 {
     private IMarshaller _marshaller = JsonMarshaller.Default;
-    private NatsCommandQueueOptions _options = new ();
+    private NatsCommandQueueOptions _options = new();
 
     public NatsCommandQueueTest(ITestOutputHelper output) : base(output) { }
 
@@ -54,7 +54,7 @@ public class NatsCommandQueueTest : Test
         Assert.Throws<ArgumentNullException>(() => new NatsCommandQueue(_marshaller, null));
     }
 
-    
+
     [Fact]
     public void Constructor_ShouldThrow_WhenOptionsAreInvalid()
     {
