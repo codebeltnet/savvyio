@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Extensions.EFCore.EfCoreDataStore`1
 example:
 - *content

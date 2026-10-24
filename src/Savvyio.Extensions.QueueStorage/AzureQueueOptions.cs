@@ -9,19 +9,19 @@ using Cuemon.Configuration;
 
 namespace Savvyio.Extensions.QueueStorage;
 
-/// <summary>  
+/// <summary>
 /// Configuration options for <see cref="AzureQueue{TRequest}"/>.
-/// </summary>  
+/// </summary>
 public class AzureQueueOptions : IValidatableParameterObject
 {
-    /// <summary>  
+    /// <summary>
     /// The maximum number of messages that Azure Queue Storage supports when retrieving.
-    /// </summary>  
+    /// </summary>
     public const int MaxNumberOfMessages = 32;
 
-    /// <summary>  
+    /// <summary>
     /// The maximum visibility timeout for messages in Azure Queue Storage.
-    /// </summary>  
+    /// </summary>
     public static readonly TimeSpan MaxVisibilityTimeout = TimeSpan.FromDays(7);
 
     private Action<QueueClient> _clientCallback;
@@ -85,27 +85,27 @@ public class AzureQueueOptions : IValidatableParameterObject
         SendContext = new AzureQueueSendOptions();
     }
 
-    /// <summary>  
+    /// <summary>
     /// Gets the options for receiving messages from the queue.
-    /// </summary>  
+    /// </summary>
     public AzureQueueReceiveOptions ReceiveContext { get; }
 
-    /// <summary>  
+    /// <summary>
     /// Gets the options for sending messages to the queue.
-    /// </summary>  
+    /// </summary>
     public AzureQueueSendOptions SendContext { get; }
 
-    /// <summary>  
+    /// <summary>
     /// Gets or sets the name of the storage account.
-    /// </summary>  
+    /// </summary>
     public string StorageAccountName { get; set; }
 
-    /// <summary>  
+    /// <summary>
     /// Gets or sets the name of the queue.
-    /// </summary>  
+    /// </summary>
     public string QueueName { get; set; }
 
-    /// <summary>  
+    /// <summary>
     /// Gets or sets the credential used to authenticate with Azure.
     /// </summary>
     /// <remarks>Setting this property will nullify <see cref="SasCredential"/> and <see cref="StorageKeyCredential"/> as they are mutually exclusive.</remarks>
@@ -120,7 +120,7 @@ public class AzureQueueOptions : IValidatableParameterObject
         }
     }
 
-    /// <summary>  
+    /// <summary>
     /// Gets or sets the SAS credential used to authenticate with Azure.
     /// </summary>
     /// <remarks>Setting this property will nullify <see cref="Credential"/> and <see cref="StorageKeyCredential"/> as they are mutually exclusive.</remarks>
@@ -135,7 +135,7 @@ public class AzureQueueOptions : IValidatableParameterObject
         }
     }
 
-    /// <summary>  
+    /// <summary>
     /// Gets or sets the storage key credential used to authenticate with Azure.
     /// </summary>
     /// <remarks>Setting this property will nullify <see cref="Credential"/> and <see cref="SasCredential"/> as they are mutually exclusive.</remarks>
@@ -150,14 +150,14 @@ public class AzureQueueOptions : IValidatableParameterObject
         }
     }
 
-    /// <summary>  
+    /// <summary>
     /// Gets or sets the connection string used to connect to the Azure storage account.
-    /// </summary>  
+    /// </summary>
     public string ConnectionString { get; set; }
 
-    /// <summary>  
+    /// <summary>
     /// Gets the settings for the <see cref="QueueClient"/>>.
-    /// </summary>  
+    /// </summary>
     public QueueClientOptions Settings { get; }
 
     /// <summary>
@@ -177,8 +177,8 @@ public class AzureQueueOptions : IValidatableParameterObject
         _clientCallback?.Invoke(client);
     }
 
-    /// <summary>  
-    /// Validates the options to ensure they are in a valid state.  
+    /// <summary>
+    /// Validates the options to ensure they are in a valid state.
     /// </summary>
     /// <exception cref="InvalidOperationException">
     /// <see cref="QueueName"/> cannot be null, empty, or consists only of white-space characters when <see cref="ConnectionString"/> was specified -or-

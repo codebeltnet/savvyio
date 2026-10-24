@@ -8,9 +8,9 @@ using Cuemon.Configuration;
 
 namespace Savvyio.Extensions.QueueStorage.EventDriven;
 
-/// <summary>  
+/// <summary>
 /// Configuration options for <see cref="AzureEventBus"/>.
-/// </summary>  
+/// </summary>
 public class AzureEventBusOptions : IValidatableParameterObject
 {
     private TokenCredential _credential;

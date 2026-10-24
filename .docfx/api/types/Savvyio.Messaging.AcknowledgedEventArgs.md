@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Messaging.AcknowledgedEventArgs
 example:
 - *content

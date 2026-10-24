@@ -157,36 +157,36 @@ public class TracedAggregateRootTest : Test
         Assert.Equal(name, sut5.FullName);
         Assert.Equal("root@gimlichael.dev", sut5.EmailAddress);
 
-        Assert.True(Match(@"Model: 
+        Assert.True(Match(@"Model:
   EntityType: EfCoreTracedAggregateEntity<TracedAccount, Guid>
-    Properties: 
+    Properties:
       Id (_id, Guid) Required PK AfterSave:Throw
-        Annotations: 
+        Annotations:
           Relational:ColumnName: id
           Relational:ColumnType: uniqueidentifier
       Version (_version, long) Required PK AfterSave:Throw
-        Annotations: 
+        Annotations:
           Relational:ColumnName: version
           Relational:ColumnType: int
       Payload (_payload, byte[])
-        Annotations: 
+        Annotations:
           Relational:ColumnName: payload
           Relational:ColumnType: varchar(max)
       Timestamp (_timestamp, DateTime) Required
-        Annotations: 
+        Annotations:
           Relational:ColumnName: timestamp
           Relational:ColumnType: datetime
       Type (_type, string)
-        Annotations: 
+        Annotations:
           Relational:ColumnName: clrtype
           Relational:ColumnType: varchar(1024)
-    Keys: 
+    Keys:
       Id, Version PK
-    Annotations: 
-      Relational:Schema: 
+    Annotations:
+      Relational:Schema:
       Relational:TableName: TracedAccount_DomainEvents
       RelationshipDiscoveryConvention:NavigationCandidates: Microsoft.EntityFrameworkCore.Utilities.OrderedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]
-Annotations: 
+Annotations:
   BaseTypeDiscoveryConvention:DerivedTypes: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.List`1[Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType]]
   InversePropertyAttributeConvention:InverseNavigations: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.SortedSet`1[System.Type]]
   NonNullableConventionState: System.Reflection.NullabilityInfoContext

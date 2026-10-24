@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.HandlerFactory
 example:
 - *content

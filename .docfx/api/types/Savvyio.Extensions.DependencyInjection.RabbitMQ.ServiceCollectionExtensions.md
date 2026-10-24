@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Extensions.DependencyInjection.RabbitMQ.ServiceCollectionExtensions
 example:
 - *content

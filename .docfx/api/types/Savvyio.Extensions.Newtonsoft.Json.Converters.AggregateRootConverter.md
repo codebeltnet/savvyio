@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Extensions.Newtonsoft.Json.Converters.AggregateRootConverter`1
 example:
 - *content

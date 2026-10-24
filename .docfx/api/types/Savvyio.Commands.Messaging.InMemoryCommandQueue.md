@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Commands.Messaging.InMemoryCommandQueue
 example:
 - *content
