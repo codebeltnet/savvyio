@@ -8,53 +8,52 @@ using Savvyio.Extensions;
 using Savvyio.Extensions.DependencyInjection.Domain;
 using Savvyio.Handlers;
 
-namespace Savvyio.Assets
+namespace Savvyio.Assets;
+
+public class AccountCommandHandler : CommandHandler
 {
-    public class AccountCommandHandler : CommandHandler
+    private readonly IMediator _mediator;
+    private readonly IUnitOfWork<Account> _uow;
+    private readonly IPersistentRepository<Account, long, Account> _accountRepository;
+
+    public AccountCommandHandler(IMediator mediator = null, IUnitOfWork<Account> uow = null, IPersistentRepository<Account, long, Account> accountRepository = null)
     {
-        private readonly IMediator _mediator;
-        private readonly IUnitOfWork<Account> _uow;
-        private readonly IPersistentRepository<Account, long, Account> _accountRepository;
+        _mediator = mediator;
+        _uow = uow;
+        _accountRepository = accountRepository;
+    }
 
-        public AccountCommandHandler(IMediator mediator = null, IUnitOfWork<Account> uow = null, IPersistentRepository<Account, long, Account> accountRepository = null)
+    protected override void RegisterDelegates(IFireForgetRegistry<ICommand> handlers)
+    {
+        handlers.RegisterAsync<CreateAccount>(CreateAccountAsync);
+        handlers.RegisterAsync<UpdateAccount>(async c =>
         {
-            _mediator = mediator;
-            _uow = uow;
-            _accountRepository = accountRepository;
+            var account = new Account(c.Id);
+            account.ChangeFullName(c.FullName);
+            account.ChangeEmailAddress(c.EmailAddress);
+            _accountRepository?.Add(account); // store in db
+            await _uow.SaveChangesAsync();
+            await _mediator.PublishAsync(new AccountUpdated(account.Id, account.FullName, account.EmailAddress)); // raise integration event
+        });
+    }
+
+    public async Task CreateAccountAsync(CreateAccount c)
+    {
+        var account = new Account(c.PlatformProviderId, c.FullName, c.EmailAddress).MergeMetadata(c);
+
+        // check unique email
+        // through domain event - look at OnInProcAccountInitiated in Savvyio.Assets.Domain.Handlers.AccountDomainEventHandler
+        try
+        {
+            _accountRepository.Add(account);
+            await _uow.SaveChangesAsync(); // store in db
+        }
+        catch (Exception)
+        {
+            _accountRepository.Remove(account); // undo add
+            throw;
         }
 
-        protected override void RegisterDelegates(IFireForgetRegistry<ICommand> handlers)
-        {
-            handlers.RegisterAsync<CreateAccount>(CreateAccountAsync);
-            handlers.RegisterAsync<UpdateAccount>(async c =>
-            {
-                var account = new Account(c.Id);
-                account.ChangeFullName(c.FullName);
-                account.ChangeEmailAddress(c.EmailAddress);
-                _accountRepository?.Add(account); // store in db
-                await _uow.SaveChangesAsync();
-                await _mediator.PublishAsync(new AccountUpdated(account.Id, account.FullName, account.EmailAddress)); // raise integration event
-            });
-        }
-
-        public async Task CreateAccountAsync(CreateAccount c)
-        {
-            var account = new Account(c.PlatformProviderId, c.FullName, c.EmailAddress).MergeMetadata(c);
-
-            // check unique email
-            // through domain event - look at OnInProcAccountInitiated in Savvyio.Assets.Domain.Handlers.AccountDomainEventHandler
-            try
-            {
-                _accountRepository.Add(account);
-                await _uow.SaveChangesAsync(); // store in db
-            }
-            catch (Exception)
-            {
-                _accountRepository.Remove(account); // undo add
-                throw;
-            }
-
-            await _mediator.PublishAsync(new AccountCreated(account.Id, account.FullName, account.EmailAddress).MergeMetadata(account)); // raise integration event
-        }
+        await _mediator.PublishAsync(new AccountCreated(account.Id, account.FullName, account.EmailAddress).MergeMetadata(account)); // raise integration event
     }
 }

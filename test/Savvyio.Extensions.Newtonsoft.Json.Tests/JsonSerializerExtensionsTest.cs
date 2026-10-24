@@ -3,36 +3,35 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Xunit;
 
-namespace Savvyio.Extensions.Newtonsoft.Json
+namespace Savvyio.Extensions.Newtonsoft.Json;
+
+public class JsonSerializerExtensionsTest : Test
 {
-    public class JsonSerializerExtensionsTest : Test
+    public JsonSerializerExtensionsTest(ITestOutputHelper output) : base(output)
     {
-        public JsonSerializerExtensionsTest(ITestOutputHelper output) : base(output)
-        {
-        }
+    }
 
-        [Fact]
-        public void JsonSerializerExtensions_ShouldResolveKeysWithDefaultNamingStrategy()
-        {
-            var sut = JsonSerializer.CreateDefault();
+    [Fact]
+    public void JsonSerializerExtensions_ShouldResolveKeysWithDefaultNamingStrategy()
+    {
+        var sut = JsonSerializer.CreateDefault();
 
-            Assert.Equal("MemberType", sut.ResolvePropertyKeyByConvention("MemberType"));
-            Assert.Equal("MemberType", sut.ResolveDictionaryKeyByConvention("MemberType"));
-        }
+        Assert.Equal("MemberType", sut.ResolvePropertyKeyByConvention("MemberType"));
+        Assert.Equal("MemberType", sut.ResolveDictionaryKeyByConvention("MemberType"));
+    }
 
-        [Fact]
-        public void JsonSerializerExtensions_ShouldResolveKeysWithCamelCaseNamingStrategy()
+    [Fact]
+    public void JsonSerializerExtensions_ShouldResolveKeysWithCamelCaseNamingStrategy()
+    {
+        var sut = JsonSerializer.CreateDefault(new JsonSerializerSettings
         {
-            var sut = JsonSerializer.CreateDefault(new JsonSerializerSettings
+            ContractResolver = new DefaultContractResolver
             {
-                ContractResolver = new DefaultContractResolver
-                {
-                    NamingStrategy = new CamelCaseNamingStrategy()
-                }
-            });
+                NamingStrategy = new CamelCaseNamingStrategy()
+            }
+        });
 
-            Assert.Equal("memberType", sut.ResolvePropertyKeyByConvention("MemberType"));
-            Assert.Equal("MemberType", sut.ResolveDictionaryKeyByConvention("MemberType"));
-        }
+        Assert.Equal("memberType", sut.ResolvePropertyKeyByConvention("MemberType"));
+        Assert.Equal("MemberType", sut.ResolveDictionaryKeyByConvention("MemberType"));
     }
 }

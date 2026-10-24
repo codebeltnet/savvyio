@@ -2,18 +2,17 @@
 using Savvyio.Handlers;
 using Savvyio.Queries;
 
-namespace Savvyio.Extensions.DependencyInjection.Assets
-{
-    internal class TestQueryHandler : QueryHandler
-    {
-        protected override void RegisterDelegates(IRequestReplyRegistry<IQuery> handlers)
-        {
-            handlers.Register<TestQuery, Guid>(Handler);
-        }
+namespace Savvyio.Extensions.DependencyInjection.Assets;
 
-        private Guid Handler(TestQuery arg)
-        {
-            throw new NotImplementedException();
-        }
+internal class TestQueryHandler : QueryHandler
+{
+    protected override void RegisterDelegates(IRequestReplyRegistry<IQuery> handlers)
+    {
+        handlers.Register<TestQuery, Guid>(Handler);
+    }
+
+    private Guid Handler(TestQuery arg)
+    {
+        throw new NotImplementedException();
     }
 }

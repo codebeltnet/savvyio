@@ -6,36 +6,36 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
-namespace Savvyio.Extensions.DependencyInjection
+namespace Savvyio.Extensions.DependencyInjection;
+
+public class ServiceCollectionExtensionsTest : Test
 {
-    public class ServiceCollectionExtensionsTest : Test
+    public ServiceCollectionExtensionsTest(ITestOutputHelper output) : base(output)
     {
-        public ServiceCollectionExtensionsTest(ITestOutputHelper output) : base(output)
-        {
-        }
+    }
 
-        [Fact]
-        public void AddHandlerServicesDescriptor_ShouldAddHandlerServiceDescriptorAsIHandlerServicesDescriptor()
-        {
-            using var test = HostTestFactory.Create(
-                services =>
-                {
-                    services.AddXunitTestLogging(TestOutput);
-                    services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true));
-                    services.AddHandlerServicesDescriptor();
-                });
+    [Fact]
+    public void AddHandlerServicesDescriptor_ShouldAddHandlerServiceDescriptorAsIHandlerServicesDescriptor()
+    {
+        using var test = HostTestFactory.Create(
+            services =>
+            {
+                services.AddXunitTestLogging(TestOutput);
+                services.AddSavvyIO(o => o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true));
+                services.AddHandlerServicesDescriptor();
+            });
 
-            test.Host.Services.WriteHandlerDiscoveriesToLog<ServiceCollectionExtensionsTest>();
+        test.Host.Services.WriteHandlerDiscoveriesToLog<ServiceCollectionExtensionsTest>();
 
-            var loggerEntry = test.Host.Services.GetRequiredService<ILogger<ServiceCollectionExtensionsTest>>()
-                .GetTestStore()
-                .Query(entry => entry.Severity == LogLevel.Information && entry.Message.Contains("Discovered 2 ICommandHandler implementations"))
-                .SingleOrDefault();
+        var loggerEntry = test.Host.Services.GetRequiredService<ILogger<ServiceCollectionExtensionsTest>>()
+            .GetTestStore()
+            .Query(entry => entry.Severity == LogLevel.Information && entry.Message.Contains("Discovered 2 ICommandHandler implementations"))
+            .SingleOrDefault();
 
-            Assert.NotNull(loggerEntry);
-            Assert.NotNull(test.Host.Services.GetService<IHandlerServicesDescriptor>());
-            Assert.IsType<HandlerServicesDescriptor>(test.Host.Services.GetService<IHandlerServicesDescriptor>());
-            Assert.Equal("""
+        Assert.NotNull(loggerEntry);
+        Assert.NotNull(test.Host.Services.GetService<IHandlerServicesDescriptor>());
+        Assert.IsType<HandlerServicesDescriptor>(test.Host.Services.GetService<IHandlerServicesDescriptor>());
+        Assert.Equal("""
                          Information: Discovered 2 ICommandHandler implementations covering a total of 5 ICommand methods
                          
                          Assembly: Savvyio.Assets.Tests
@@ -102,21 +102,20 @@ namespace Savvyio.Extensions.DependencyInjection
                          
                          ------------------------------------------------------------------------------
                          """.ReplaceLineEndings(), loggerEntry.Message);
-        }
+    }
 
-        [Fact]
-        public void AddHandlerServicesDescriptor_ShouldThrowInvalidOperationException_SinceEnableHandlerServicesDescriptorWasNotSetupInAddSavvyIO()
-        {
-            using var test = HostTestFactory.Create(
-                services =>
-                {
-                    services.AddXunitTestLogging(TestOutput);
-                    services.AddSavvyIO(o => o.UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true));
-                    services.AddHandlerServicesDescriptor();
-                });
+    [Fact]
+    public void AddHandlerServicesDescriptor_ShouldThrowInvalidOperationException_SinceEnableHandlerServicesDescriptorWasNotSetupInAddSavvyIO()
+    {
+        using var test = HostTestFactory.Create(
+            services =>
+            {
+                services.AddXunitTestLogging(TestOutput);
+                services.AddSavvyIO(o => o.UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true));
+                services.AddHandlerServicesDescriptor();
+            });
 
-            Assert.Throws<InvalidOperationException>(() => test.Host.Services.WriteHandlerDiscoveriesToLog<ServiceCollectionExtensionsTest>());
-            Assert.Null(test.Host.Services.GetService<IHandlerServicesDescriptor>());
-        }
+        Assert.Throws<InvalidOperationException>(() => test.Host.Services.WriteHandlerDiscoveriesToLog<ServiceCollectionExtensionsTest>());
+        Assert.Null(test.Host.Services.GetService<IHandlerServicesDescriptor>());
     }
 }

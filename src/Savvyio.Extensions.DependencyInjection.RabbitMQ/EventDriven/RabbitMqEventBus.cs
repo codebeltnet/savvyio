@@ -4,30 +4,29 @@ using Savvyio.EventDriven;
 using Savvyio.Extensions.DependencyInjection.Messaging;
 using Savvyio.Extensions.RabbitMQ;
 
-namespace Savvyio.Extensions.DependencyInjection.RabbitMQ.EventDriven
+namespace Savvyio.Extensions.DependencyInjection.RabbitMQ.EventDriven;
+
+/// <summary>
+/// Provides a default implementation of the <see cref="RabbitMqMessage"/> class for messages holding an <see cref="IIntegrationEvent"/> implementation.
+/// </summary>
+/// <seealso cref="RabbitMqEventBus"/>
+/// <seealso cref="IPublishSubscribeChannel{TRequest,TMarker}"/>
+public class RabbitMqEventBus<TMarker> : RabbitMqEventBus, IPublishSubscribeChannel<IIntegrationEvent, TMarker>
 {
+    
     /// <summary>
-    /// Provides a default implementation of the <see cref="RabbitMqMessage"/> class for messages holding an <see cref="IIntegrationEvent"/> implementation.
+    /// Initializes a new instance of the <see cref="RabbitMqEventBus"/> class.
     /// </summary>
-    /// <seealso cref="RabbitMqEventBus"/>
-    /// <seealso cref="IPublishSubscribeChannel{TRequest,TMarker}"/>
-    public class RabbitMqEventBus<TMarker> : RabbitMqEventBus, IPublishSubscribeChannel<IIntegrationEvent, TMarker>
+    /// <param name="marshaller">The marshaller used for serializing and deserializing messages.</param>
+    /// <param name="options">The options used to configure the RabbitMQ event bus.</param>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="marshaller"/> cannot be null -or-
+    /// <paramref name="options"/> cannot be null.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    /// <paramref name="options"/> are not in a valid state.
+    /// </exception>
+    public RabbitMqEventBus(IMarshaller marshaller, RabbitMqEventBusOptions<TMarker> options) : base(marshaller, options)
     {
-        
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RabbitMqEventBus"/> class.
-        /// </summary>
-        /// <param name="marshaller">The marshaller used for serializing and deserializing messages.</param>
-        /// <param name="options">The options used to configure the RabbitMQ event bus.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="marshaller"/> cannot be null -or-
-        /// <paramref name="options"/> cannot be null.
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        /// <paramref name="options"/> are not in a valid state.
-        /// </exception>
-        public RabbitMqEventBus(IMarshaller marshaller, RabbitMqEventBusOptions<TMarker> options) : base(marshaller, options)
-        {
-        }
     }
 }

@@ -1,6 +1,5 @@
-﻿namespace Savvyio.Commands.Assets
+﻿namespace Savvyio.Commands.Assets;
+
+internal record DefaultCommand : Command
 {
-    internal record DefaultCommand : Command
-    {
-    }
 }

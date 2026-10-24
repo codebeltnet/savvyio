@@ -6,82 +6,81 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Cuemon.Extensions.Reflection;
 
-namespace Savvyio.Extensions.Text.Json.Converters
+namespace Savvyio.Extensions.Text.Json.Converters;
+
+/// <summary>
+/// Converts an <see cref="IRequest"/> to or from JSON.
+/// </summary>
+/// <seealso cref="JsonConverter" />
+public class RequestConverter : JsonConverter<IRequest>
 {
     /// <summary>
-    /// Converts an <see cref="IRequest"/> to or from JSON.
+    /// Determines whether the specified type can be converted.
     /// </summary>
-    /// <seealso cref="JsonConverter" />
-    public class RequestConverter : JsonConverter<IRequest>
+    /// <param name="typeToConvert">The type to compare against.</param>
+    /// <returns><see langword="true" /> if the type can be converted; otherwise, <see langword="false" />.</returns>
+    public override bool CanConvert(Type typeToConvert)
     {
-        /// <summary>
-        /// Determines whether the specified type can be converted.
-        /// </summary>
-        /// <param name="typeToConvert">The type to compare against.</param>
-        /// <returns><see langword="true" /> if the type can be converted; otherwise, <see langword="false" />.</returns>
-        public override bool CanConvert(Type typeToConvert)
-        {
-            return typeof(IRequest).IsAssignableFrom(typeToConvert);
-        }
+        return typeof(IRequest).IsAssignableFrom(typeToConvert);
+    }
 
-        /// <summary>
-        /// Reads and converts the JSON to <paramref name="typeToConvert"/>.
-        /// </summary>
-        /// <param name="reader">The reader.</param>
-        /// <param name="typeToConvert">The type to convert.</param>
-        /// <param name="options">An object that specifies serialization options to use.</param>
-        /// <returns>The converted value.</returns>
-        /// <exception cref="NotSupportedException">
-        /// This deserializer only supports rehydration of <see cref="IRequest"/> implementations that either use auto-properties or have a naming convention that makes it possible to tie non-writable properties with the backing field equivalent.
-        /// </exception>
-        public override IRequest Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    /// <summary>
+    /// Reads and converts the JSON to <paramref name="typeToConvert"/>.
+    /// </summary>
+    /// <param name="reader">The reader.</param>
+    /// <param name="typeToConvert">The type to convert.</param>
+    /// <param name="options">An object that specifies serialization options to use.</param>
+    /// <returns>The converted value.</returns>
+    /// <exception cref="NotSupportedException">
+    /// This deserializer only supports rehydration of <see cref="IRequest"/> implementations that either use auto-properties or have a naming convention that makes it possible to tie non-writable properties with the backing field equivalent.
+    /// </exception>
+    public override IRequest Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        using (var document = JsonDocument.ParseValue(ref reader))
         {
-            using (var document = JsonDocument.ParseValue(ref reader))
+            var instance = RuntimeHelpers.GetUninitializedObject(typeToConvert);
+            var properties = typeToConvert.GetAllProperties();
+            var jProperties = document.RootElement.EnumerateObject();
+            foreach (var property in properties.Where(pi => jProperties.Any(jp => jp.Name.Equals(options.PropertyNamingPolicy!.ConvertName(pi.Name), StringComparison.OrdinalIgnoreCase))))
             {
-                var instance = RuntimeHelpers.GetUninitializedObject(typeToConvert);
-                var properties = typeToConvert.GetAllProperties();
-                var jProperties = document.RootElement.EnumerateObject();
-                foreach (var property in properties.Where(pi => jProperties.Any(jp => jp.Name.Equals(options.PropertyNamingPolicy!.ConvertName(pi.Name), StringComparison.OrdinalIgnoreCase))))
+                var jProperty = jProperties.Single(jp => jp.Name.Equals(options.PropertyNamingPolicy!.ConvertName(property.Name), StringComparison.OrdinalIgnoreCase));
+                if (document.RootElement.TryGetProperty(jProperty.Name, out var element))
                 {
-                    var jProperty = jProperties.Single(jp => jp.Name.Equals(options.PropertyNamingPolicy!.ConvertName(property.Name), StringComparison.OrdinalIgnoreCase));
-                    if (document.RootElement.TryGetProperty(jProperty.Name, out var element))
-                    {
-                        var value = element.Deserialize(property.PropertyType, options);
-                        SetPropertyOrField(instance, typeToConvert, property, value);
-                    }
+                    var value = element.Deserialize(property.PropertyType, options);
+                    SetPropertyOrField(instance, typeToConvert, property, value);
                 }
-                return instance as IRequest;
             }
+            return instance as IRequest;
         }
+    }
 
-        private static void SetPropertyOrField(object instance, Type typeToConvert, PropertyInfo property, object value)
+    private static void SetPropertyOrField(object instance, Type typeToConvert, PropertyInfo property, object value)
+    {
+        if (property.CanWrite)
         {
-            if (property.CanWrite)
-            {
-                property.SetValue(instance, value);
-                return;
-            }
-
-            var field = property.IsAutoProperty()
-                ? typeToConvert.GetAllFields().SingleOrDefault(fi => fi.Name.StartsWith($"<{property.Name}>", StringComparison.Ordinal))
-                : typeToConvert.GetAllFields().SingleOrDefault(fi => fi.Name.Equals($"_{property.Name}>", StringComparison.OrdinalIgnoreCase));
-            if (field == null)
-            {
-                throw new NotSupportedException($"This deserializer only supports rehydration of {nameof(IRequest)} implementations that either use auto-properties or have a naming convention that makes it possible to tie non-writable properties with the backing field equivalent.");
-            }
-
-            field.SetValue(instance, value);
+            property.SetValue(instance, value);
+            return;
         }
 
-        /// <summary>
-        /// Writes a specified <paramref name="value"/> as JSON.
-        /// </summary>
-        /// <param name="writer">The writer to write to.</param>
-        /// <param name="value">The value to convert to JSON.</param>
-        /// <param name="options">An object that specifies serialization options to use.</param>
-        public override void Write(Utf8JsonWriter writer, IRequest value, JsonSerializerOptions options)
+        var field = property.IsAutoProperty()
+            ? typeToConvert.GetAllFields().SingleOrDefault(fi => fi.Name.StartsWith($"<{property.Name}>", StringComparison.Ordinal))
+            : typeToConvert.GetAllFields().SingleOrDefault(fi => fi.Name.Equals($"_{property.Name}>", StringComparison.OrdinalIgnoreCase));
+        if (field == null)
         {
-            JsonSerializer.Serialize(writer, (object)value, options.Clone(jso => jso.Converters.RemoveAllOf<IRequest>())); // prevent stackoverflow in case this method gets called
+            throw new NotSupportedException($"This deserializer only supports rehydration of {nameof(IRequest)} implementations that either use auto-properties or have a naming convention that makes it possible to tie non-writable properties with the backing field equivalent.");
         }
+
+        field.SetValue(instance, value);
+    }
+
+    /// <summary>
+    /// Writes a specified <paramref name="value"/> as JSON.
+    /// </summary>
+    /// <param name="writer">The writer to write to.</param>
+    /// <param name="value">The value to convert to JSON.</param>
+    /// <param name="options">An object that specifies serialization options to use.</param>
+    public override void Write(Utf8JsonWriter writer, IRequest value, JsonSerializerOptions options)
+    {
+        JsonSerializer.Serialize(writer, (object)value, options.Clone(jso => jso.Converters.RemoveAllOf<IRequest>())); // prevent stackoverflow in case this method gets called
     }
 }

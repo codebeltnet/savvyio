@@ -24,225 +24,224 @@ using Savvyio.Messaging.Cryptography;
 using Xunit;
 using Xunit.v3.Priority;
 
-namespace Savvyio.Extensions.SimpleQueueService.EventDriven
+namespace Savvyio.Extensions.SimpleQueueService.EventDriven;
+
+[TestMethodOrderer(typeof(PriorityMethodOrderer))]
+public class AmazonEventBusJsonSerializerContextTest : HostTest<ManagedHostFixture>
 {
-    [TestMethodOrderer(typeof(PriorityMethodOrderer))]
-    public class AmazonEventBusJsonSerializerContextTest : HostTest<ManagedHostFixture>
+    private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+    private readonly AmazonEventBus _bus;
+    private static readonly InMemoryTestStore<IMessage<IIntegrationEvent>> Comparer = new();
+    private readonly IMarshaller _marshaller;
+    private static readonly string UniqueType = $"{Guid.NewGuid():N}";
+
+    public AmazonEventBusJsonSerializerContextTest(ManagedHostFixture fixture, ITestOutputHelper output) : base(fixture, output)
     {
-        private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
-        private readonly AmazonEventBus _bus;
-        private static readonly InMemoryTestStore<IMessage<IIntegrationEvent>> Comparer = new();
-        private readonly IMarshaller _marshaller;
-        private static readonly string UniqueType = $"{Guid.NewGuid():N}";
+        _bus = fixture.Host.Services.GetRequiredService<AmazonEventBus>();
+        _marshaller = fixture.Host.Services.GetRequiredService<IMarshaller>();
+    }
 
-        public AmazonEventBusJsonSerializerContextTest(ManagedHostFixture fixture, ITestOutputHelper output) : base(fixture, output)
+    [Fact, Priority(0)]
+    public async Task PublishAsync_MemberCreated_OneTime()
+    {
+        var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
+        var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
+        var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{UniqueType}.updated-event");
+
+        TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
+        TestOutput.WriteLine(Generate.ObjectPortrayal(sut3, o => o.Delimiter = System.Environment.NewLine));
+        Comparer.Add(sut3);
+
+        await _bus.PublishAsync(sut3);
+    }
+
+    [Fact, Priority(1)]
+    public async Task SubscribeAsync_MemberCreated_OneTime()
+    {
+        var handlerInvocations = 0;
+        var sut1 = Comparer.Query(message => message.Type.Contains($"{UniqueType}.updated-event")).Single();
+
+        await _bus.SubscribeAsync((sut2, _) =>
         {
-            _bus = fixture.Host.Services.GetRequiredService<AmazonEventBus>();
-            _marshaller = fixture.Host.Services.GetRequiredService<IMarshaller>();
-        }
+            if (!sut2.Type.Contains($"{UniqueType}.updated-event")) { return Task.CompletedTask; }
+            handlerInvocations++;
+            Assert.Equivalent(sut1.Data, sut2.Data);
+            Assert.Equivalent(sut1.Time, sut2.Time);
+            Assert.Equivalent(sut1.Source, sut2.Source);
+            Assert.Equivalent(sut1.Id, sut2.Id);
+            Assert.Equivalent(sut1.Type, sut2.Type);
+            return Task.CompletedTask;
+        }).ConfigureAwait(false);
+        Assert.Equal(1, handlerInvocations);
+    }
 
-        [Fact, Priority(0)]
-        public async Task PublishAsync_MemberCreated_OneTime()
+    [Fact, Priority(2)]
+    public async Task PublishAsync_MemberCreated_OneTime_Signed()
+    {
+        var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
+        var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
+        var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{UniqueType}.updated-event.signed").Sign(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
+
+        TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
+
+        Comparer.Add(sut3);
+
+        await _bus.PublishAsync(sut3);
+    }
+
+    [Fact, Priority(3)]
+    public async Task SubscribeAsync_MemberCreated_OneTime_Signed()
+    {
+        var handlerInvocations = 0;
+        var sut1 = Comparer.Query(message => message.Type.Contains($"{UniqueType}.updated-event.signed")).Single();
+
+        await _bus.SubscribeAsync((sut2, _) =>
         {
-            var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
-            var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
-            var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{UniqueType}.updated-event");
+            if (!sut2.Type.Contains($"{UniqueType}.updated-event.signed")) { return Task.CompletedTask; }
+            ((ISignedMessage<IIntegrationEvent>)sut2).CheckSignature(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
+            handlerInvocations++;
+            Assert.Equivalent(sut1.Data, sut2.Data);
+            Assert.Equivalent(sut1.Time, sut2.Time);
+            Assert.Equivalent(sut1.Source, sut2.Source);
+            Assert.Equivalent(sut1.Id, sut2.Id);
+            Assert.Equivalent(sut1.Type, sut2.Type);
+            return Task.CompletedTask;
+        }).ConfigureAwait(false);
+        Assert.Equal(1, handlerInvocations);
+    }
 
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut3, o => o.Delimiter = System.Environment.NewLine));
-            Comparer.Add(sut3);
+    [Fact, Priority(4)]
+    public async Task PublishAsync_MemberCreated_OneTime_CloudEvent()
+    {
+        var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
+        var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
+        var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{UniqueType}.updated-event.cloud-event").ToCloudEvent();
 
-            await _bus.PublishAsync(sut3);
-        }
+        TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
 
-        [Fact, Priority(1)]
-        public async Task SubscribeAsync_MemberCreated_OneTime()
+        Comparer.Add(sut3);
+
+        await _bus.PublishAsync(sut3);
+    }
+
+    [Fact, Priority(5)]
+    public async Task SubscribeAsync_MemberCreated_OneTime_CloudEvent()
+    {
+        var handlerInvocations = 0;
+        var sut1 = Comparer.Query(message => message.Type.Contains($"{UniqueType}.updated-event.cloud-event")).Single() as ICloudEvent<IIntegrationEvent>;
+
+        await _bus.SubscribeAsync((sut2, _) =>
         {
-            var handlerInvocations = 0;
-            var sut1 = Comparer.Query(message => message.Type.Contains($"{UniqueType}.updated-event")).Single();
+            if (!sut2.Type.Contains($"{UniqueType}.updated-event.cloud-event")) { return Task.CompletedTask; }
+            handlerInvocations++;
+            Assert.Equivalent(sut1.Data, sut2.Data);
+            Assert.Equivalent(sut1.Time, sut2.Time);
+            Assert.Equivalent(sut1.Source, sut2.Source);
+            Assert.Equivalent(sut1.Id, sut2.Id);
+            Assert.Equivalent(sut1.Type, sut2.Type);
+            Assert.Equivalent(sut1.Specversion, ((ICloudEvent<IIntegrationEvent>)sut2).Specversion);
+            return Task.CompletedTask;
+        }).ConfigureAwait(false);
+        Assert.Equal(1, handlerInvocations);
+    }
 
-            await _bus.SubscribeAsync((sut2, _) =>
+    [Fact, Priority(6)]
+    public async Task PublishAsync_MemberCreated_OneTime_CloudEvent_Signed()
+    {
+        var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
+        var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
+        var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{UniqueType}.updated-event.signed-cloud-event").ToCloudEvent().SignCloudEvent(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
+
+        TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
+
+        Comparer.Add(sut3);
+
+        await _bus.PublishAsync(sut3);
+    }
+
+    [Fact, Priority(7)]
+    public async Task SubscribeAsync_MemberCreated_OneTime_CloudEvent_Signed()
+    {
+        var handlerInvocations = 0;
+        var sut1 = Comparer.Query(message => message.Type.Contains($"{UniqueType}.updated-event.signed-cloud-event")).Single();
+
+        await _bus.SubscribeAsync((sut2, _) =>
+        {
+            if (!sut2.Type.Contains($"{UniqueType}.updated-event.signed-cloud-event")) { return Task.CompletedTask; }
+            ((ISignedCloudEvent<IIntegrationEvent>)sut2).CheckCloudEventSignature(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
+            handlerInvocations++;
+            Assert.Equivalent(sut1.Data, sut2.Data);
+            Assert.Equivalent(sut1.Time, sut2.Time);
+            Assert.Equivalent(sut1.Source, sut2.Source);
+            Assert.Equivalent(sut1.Id, sut2.Id);
+            Assert.Equivalent(sut1.Type, sut2.Type);
+            return Task.CompletedTask;
+        }).ConfigureAwait(false);
+        Assert.Equal(1, handlerInvocations);
+    }
+
+    [Fact, Priority(8)]
+    public async Task PublishAsync_MemberCreated_HundredTimes() // reduced as SNS is not part of free tier (FIFO)
+    {
+        var messages = Generate.RangeOf(100, _ =>
+        {
+            var email = $"{Generate.RandomString(5)}@outlook.com";
+            return new MemberCreated(Generate.RandomString(10), email).ToMessage((IsLinux ? "member-events-many" : "member-events-many.fifo").ToSnsUri(), $"{nameof(MemberCreated)}.{UniqueType}");
+        });
+
+        await ParallelFactory.ForEachAsync(messages, (message, token) =>
+        {
+            Comparer.Add(message);
+            return _bus.PublishAsync(message, o => o.CancellationToken = token);
+        }).ConfigureAwait(false);
+    }
+
+    [Fact, Priority(9)]
+    public async Task SubscribeAsync_MemberCreated_All()
+    {
+        var sut1 = Comparer.Query(message => message.Source.Contains("member-events-many") && message.Type.Contains($"{UniqueType}")).ToList();
+        var sut2 = new List<IMessage<IIntegrationEvent>>();
+        var sut3 = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+
+        await _bus.SubscribeAsync((message, _) =>
+        {
+            if (!message.Type.Contains($"{UniqueType}")) { return Task.CompletedTask; }
+            sut2.Add(message);
+            return Task.CompletedTask;
+        }, o => o.CancellationToken = sut3.Token).ConfigureAwait(false);
+
+        TestOutput.WriteLine(sut2.Count.ToString());
+        TestOutput.WriteLines(sut2.Take(10));
+
+        Assert.Equivalent(sut1.Count, sut2.Count);
+        Assert.Equivalent(sut1, sut2);
+        Assert.Equivalent(sut1.Select(message => message.Data), sut2.Select(message => message.Data));
+        Assert.Equivalent(sut1.Select(message => message.Data.Metadata), sut2.Select(message => message.Data.Metadata));
+    }
+
+    public override void ConfigureServices(IServiceCollection services)
+    {
+        services.AddMarshaller<JsonMarshaller>();
+        services.AddAmazonEventBus(o =>
+        {
+            var queue = IsLinux ? "savvyio-events" : "savvyio-events.fifo";
+            o.Endpoint = RegionEndpoint.EUWest1;
+            if (Configuration["AWS:LocalStack"] != null)
             {
-                if (!sut2.Type.Contains($"{UniqueType}.updated-event")) { return Task.CompletedTask; }
-                handlerInvocations++;
-                Assert.Equivalent(sut1.Data, sut2.Data);
-                Assert.Equivalent(sut1.Time, sut2.Time);
-                Assert.Equivalent(sut1.Source, sut2.Source);
-                Assert.Equivalent(sut1.Id, sut2.Id);
-                Assert.Equivalent(sut1.Type, sut2.Type);
-                return Task.CompletedTask;
-            }).ConfigureAwait(false);
-            Assert.Equal(1, handlerInvocations);
-        }
-
-        [Fact, Priority(2)]
-        public async Task PublishAsync_MemberCreated_OneTime_Signed()
-        {
-            var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
-            var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
-            var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{UniqueType}.updated-event.signed").Sign(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
-
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
-
-            Comparer.Add(sut3);
-
-            await _bus.PublishAsync(sut3);
-        }
-
-        [Fact, Priority(3)]
-        public async Task SubscribeAsync_MemberCreated_OneTime_Signed()
-        {
-            var handlerInvocations = 0;
-            var sut1 = Comparer.Query(message => message.Type.Contains($"{UniqueType}.updated-event.signed")).Single();
-
-            await _bus.SubscribeAsync((sut2, _) =>
-            {
-                if (!sut2.Type.Contains($"{UniqueType}.updated-event.signed")) { return Task.CompletedTask; }
-                ((ISignedMessage<IIntegrationEvent>)sut2).CheckSignature(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
-                handlerInvocations++;
-                Assert.Equivalent(sut1.Data, sut2.Data);
-                Assert.Equivalent(sut1.Time, sut2.Time);
-                Assert.Equivalent(sut1.Source, sut2.Source);
-                Assert.Equivalent(sut1.Id, sut2.Id);
-                Assert.Equivalent(sut1.Type, sut2.Type);
-                return Task.CompletedTask;
-            }).ConfigureAwait(false);
-            Assert.Equal(1, handlerInvocations);
-        }
-
-        [Fact, Priority(4)]
-        public async Task PublishAsync_MemberCreated_OneTime_CloudEvent()
-        {
-            var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
-            var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
-            var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{UniqueType}.updated-event.cloud-event").ToCloudEvent();
-
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
-
-            Comparer.Add(sut3);
-
-            await _bus.PublishAsync(sut3);
-        }
-
-        [Fact, Priority(5)]
-        public async Task SubscribeAsync_MemberCreated_OneTime_CloudEvent()
-        {
-            var handlerInvocations = 0;
-            var sut1 = Comparer.Query(message => message.Type.Contains($"{UniqueType}.updated-event.cloud-event")).Single() as ICloudEvent<IIntegrationEvent>;
-
-            await _bus.SubscribeAsync((sut2, _) =>
-            {
-                if (!sut2.Type.Contains($"{UniqueType}.updated-event.cloud-event")) { return Task.CompletedTask; }
-                handlerInvocations++;
-                Assert.Equivalent(sut1.Data, sut2.Data);
-                Assert.Equivalent(sut1.Time, sut2.Time);
-                Assert.Equivalent(sut1.Source, sut2.Source);
-                Assert.Equivalent(sut1.Id, sut2.Id);
-                Assert.Equivalent(sut1.Type, sut2.Type);
-                Assert.Equivalent(sut1.Specversion, ((ICloudEvent<IIntegrationEvent>)sut2).Specversion);
-                return Task.CompletedTask;
-            }).ConfigureAwait(false);
-            Assert.Equal(1, handlerInvocations);
-        }
-
-        [Fact, Priority(6)]
-        public async Task PublishAsync_MemberCreated_OneTime_CloudEvent_Signed()
-        {
-            var sut1 = new MemberCreated("John Doe", "jd@outlook.com");
-            var sut2 = (IsLinux ? "member-events-one" : "member-events-one.fifo").ToSnsUri();
-            var sut3 = sut1.ToMessage(sut2, $"{nameof(MemberCreated)}.{UniqueType}.updated-event.signed-cloud-event").ToCloudEvent().SignCloudEvent(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
-
-            TestOutput.WriteLine(Generate.ObjectPortrayal(sut2, o => o.Delimiter = System.Environment.NewLine));
-
-            Comparer.Add(sut3);
-
-            await _bus.PublishAsync(sut3);
-        }
-
-        [Fact, Priority(7)]
-        public async Task SubscribeAsync_MemberCreated_OneTime_CloudEvent_Signed()
-        {
-            var handlerInvocations = 0;
-            var sut1 = Comparer.Query(message => message.Type.Contains($"{UniqueType}.updated-event.signed-cloud-event")).Single();
-
-            await _bus.SubscribeAsync((sut2, _) =>
-            {
-                if (!sut2.Type.Contains($"{UniqueType}.updated-event.signed-cloud-event")) { return Task.CompletedTask; }
-                ((ISignedCloudEvent<IIntegrationEvent>)sut2).CheckCloudEventSignature(_marshaller, o => o.SignatureSecret = new byte[] { 1, 2, 3 });
-                handlerInvocations++;
-                Assert.Equivalent(sut1.Data, sut2.Data);
-                Assert.Equivalent(sut1.Time, sut2.Time);
-                Assert.Equivalent(sut1.Source, sut2.Source);
-                Assert.Equivalent(sut1.Id, sut2.Id);
-                Assert.Equivalent(sut1.Type, sut2.Type);
-                return Task.CompletedTask;
-            }).ConfigureAwait(false);
-            Assert.Equal(1, handlerInvocations);
-        }
-
-        [Fact, Priority(8)]
-        public async Task PublishAsync_MemberCreated_HundredTimes() // reduced as SNS is not part of free tier (FIFO)
-        {
-            var messages = Generate.RangeOf(100, _ =>
-            {
-                var email = $"{Generate.RandomString(5)}@outlook.com";
-                return new MemberCreated(Generate.RandomString(10), email).ToMessage((IsLinux ? "member-events-many" : "member-events-many.fifo").ToSnsUri(), $"{nameof(MemberCreated)}.{UniqueType}");
-            });
-
-            await ParallelFactory.ForEachAsync(messages, (message, token) =>
-            {
-                Comparer.Add(message);
-                return _bus.PublishAsync(message, o => o.CancellationToken = token);
-            }).ConfigureAwait(false);
-        }
-
-        [Fact, Priority(9)]
-        public async Task SubscribeAsync_MemberCreated_All()
-        {
-            var sut1 = Comparer.Query(message => message.Source.Contains("member-events-many") && message.Type.Contains($"{UniqueType}")).ToList();
-            var sut2 = new List<IMessage<IIntegrationEvent>>();
-            var sut3 = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-
-            await _bus.SubscribeAsync((message, _) =>
-            {
-                if (!message.Type.Contains($"{UniqueType}")) { return Task.CompletedTask; }
-                sut2.Add(message);
-                return Task.CompletedTask;
-            }, o => o.CancellationToken = sut3.Token).ConfigureAwait(false);
-
-            TestOutput.WriteLine(sut2.Count.ToString());
-            TestOutput.WriteLines(sut2.Take(10));
-
-            Assert.Equivalent(sut1.Count, sut2.Count);
-            Assert.Equivalent(sut1, sut2);
-            Assert.Equivalent(sut1.Select(message => message.Data), sut2.Select(message => message.Data));
-            Assert.Equivalent(sut1.Select(message => message.Data.Metadata), sut2.Select(message => message.Data.Metadata));
-        }
-
-        public override void ConfigureServices(IServiceCollection services)
-        {
-            services.AddMarshaller<JsonMarshaller>();
-            services.AddAmazonEventBus(o =>
-            {
-                var queue = IsLinux ? "savvyio-events" : "savvyio-events.fifo";
-                o.Endpoint = RegionEndpoint.EUWest1;
-                if (Configuration["AWS:LocalStack"] != null)
+                o.Credentials = new BasicAWSCredentials("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
+                o.SourceQueue = new Uri($"http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/{queue}");
+                o.ConfigureClient(client =>
                 {
-                    o.Credentials = new BasicAWSCredentials("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
-                    o.SourceQueue = new Uri($"http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/{queue}");
-                    o.ConfigureClient(client =>
-                    {
-                        client.ServiceURL = Configuration["AWS:LocalStack"];
-                        client.AuthenticationRegion = RegionEndpoint.EUWest1.SystemName;
-                    });
-                }
-                else
-                {
-                    AmazonResourceNameOptions.DefaultAccountId = Configuration["AWS:CallerIdentity"];
-                    o.Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]);
-                    o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}");
-                }
-            });
-        }
+                    client.ServiceURL = Configuration["AWS:LocalStack"];
+                    client.AuthenticationRegion = RegionEndpoint.EUWest1.SystemName;
+                });
+            }
+            else
+            {
+                AmazonResourceNameOptions.DefaultAccountId = Configuration["AWS:CallerIdentity"];
+                o.Credentials = new BasicAWSCredentials(Configuration["AWS:IAM:AccessKey"], Configuration["AWS:IAM:SecretKey"]);
+                o.SourceQueue = new Uri($"https://sqs.eu-west-1.amazonaws.com/{Configuration["AWS:CallerIdentity"]}/{queue}");
+            }
+        });
     }
 }

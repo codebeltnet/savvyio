@@ -1,25 +1,24 @@
 ﻿using System;
 using Savvyio.Commands;
 
-namespace Savvyio.Assets
+namespace Savvyio.Assets;
+
+internal record FakeCommand : Command
 {
-    internal record FakeCommand : Command
+    public FakeCommand()
     {
-        public FakeCommand()
-        {
-            Type = null;
-        }
-
-        public object Value { get; set; }
-
-        public Type Type { get; protected set; }
+        Type = null;
     }
 
-    internal record FakeCommand<T> : FakeCommand
+    public object Value { get; set; }
+
+    public Type Type { get; protected set; }
+}
+
+internal record FakeCommand<T> : FakeCommand
+{
+    public FakeCommand()
     {
-        public FakeCommand()
-        {
-            Type = typeof(T);
-        }
+        Type = typeof(T);
     }
 }

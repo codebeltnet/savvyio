@@ -6,99 +6,98 @@ using Cuemon.Extensions.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Savvyio.Extensions.Newtonsoft.Json.Converters
+namespace Savvyio.Extensions.Newtonsoft.Json.Converters;
+
+/// <summary>
+/// Converts an <see cref="IRequest"/> to or from JSON.
+/// </summary>
+/// <seealso cref="JsonConverter" />
+public class RequestConverter : JsonConverter
 {
     /// <summary>
-    /// Converts an <see cref="IRequest"/> to or from JSON.
+    /// Initializes a new instance of the <see cref="RequestConverter"/> class.
     /// </summary>
-    /// <seealso cref="JsonConverter" />
-    public class RequestConverter : JsonConverter
+    public RequestConverter()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RequestConverter"/> class.
-        /// </summary>
-        public RequestConverter()
+    }
+
+    /// <summary>
+    /// Writes the JSON representation of the object.
+    /// </summary>
+    /// <param name="writer">The <see cref="JsonWriter" /> to write to.</param>
+    /// <param name="value">The value.</param>
+    /// <param name="serializer">The calling serializer.</param>
+    /// <exception cref="NotImplementedException">
+    /// This method is not implemented and should not be used.
+    /// </exception>
+    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Gets a value indicating whether this <see cref="JsonConverter" /> can write JSON.
+    /// </summary>
+    /// <value><c>true</c> if this <see cref="JsonConverter" /> can write JSON; otherwise, <c>false</c>.</value>
+    public override bool CanWrite { get; } = false;
+
+
+    /// <summary>
+    /// Reads the JSON representation of the object.
+    /// </summary>
+    /// <param name="reader">The <see cref="JsonReader" /> to read from.</param>
+    /// <param name="objectType">Type of the object.</param>
+    /// <param name="existingValue">The existing value of object being read.</param>
+    /// <param name="serializer">The calling serializer.</param>
+    /// <returns>The object value.</returns>
+    /// <exception cref="NotSupportedException">
+    /// This deserializer only supports rehydration of <see cref="IRequest"/> implementations that either use auto-properties or have a naming convention that makes it possible to tie non-writable properties with the backing field equivalent.
+    /// </exception>
+    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    {
+        var document = JObject.Load(reader);
+        var instance = RuntimeHelpers.GetUninitializedObject(objectType);
+        var properties = objectType.GetAllProperties();
+        var jProperties = document.Properties().ToList();
+        foreach (var property in properties.Where(pi => jProperties.Exists(jp => jp.Name.Equals(serializer.ResolvePropertyKeyByConvention(pi.Name), StringComparison.OrdinalIgnoreCase))))
         {
-        }
-
-        /// <summary>
-        /// Writes the JSON representation of the object.
-        /// </summary>
-        /// <param name="writer">The <see cref="JsonWriter" /> to write to.</param>
-        /// <param name="value">The value.</param>
-        /// <param name="serializer">The calling serializer.</param>
-        /// <exception cref="NotImplementedException">
-        /// This method is not implemented and should not be used.
-        /// </exception>
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="JsonConverter" /> can write JSON.
-        /// </summary>
-        /// <value><c>true</c> if this <see cref="JsonConverter" /> can write JSON; otherwise, <c>false</c>.</value>
-        public override bool CanWrite { get; } = false;
-
-
-        /// <summary>
-        /// Reads the JSON representation of the object.
-        /// </summary>
-        /// <param name="reader">The <see cref="JsonReader" /> to read from.</param>
-        /// <param name="objectType">Type of the object.</param>
-        /// <param name="existingValue">The existing value of object being read.</param>
-        /// <param name="serializer">The calling serializer.</param>
-        /// <returns>The object value.</returns>
-        /// <exception cref="NotSupportedException">
-        /// This deserializer only supports rehydration of <see cref="IRequest"/> implementations that either use auto-properties or have a naming convention that makes it possible to tie non-writable properties with the backing field equivalent.
-        /// </exception>
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            var document = JObject.Load(reader);
-            var instance = RuntimeHelpers.GetUninitializedObject(objectType);
-            var properties = objectType.GetAllProperties();
-            var jProperties = document.Properties().ToList();
-            foreach (var property in properties.Where(pi => jProperties.Exists(jp => jp.Name.Equals(serializer.ResolvePropertyKeyByConvention(pi.Name), StringComparison.OrdinalIgnoreCase))))
+            var jProperty = jProperties.Single(jp => jp.Name.Equals(serializer.ResolvePropertyKeyByConvention(property.Name), StringComparison.OrdinalIgnoreCase));
+            if (document.Root[jProperty.Name] != null)
             {
-                var jProperty = jProperties.Single(jp => jp.Name.Equals(serializer.ResolvePropertyKeyByConvention(property.Name), StringComparison.OrdinalIgnoreCase));
-                if (document.Root[jProperty.Name] != null)
-                {
-                    var value = serializer.Deserialize(document.Root[jProperty.Name].CreateReader(), property.PropertyType);
-                    SetPropertyOrField(instance, objectType, property, value);
-                }
+                var value = serializer.Deserialize(document.Root[jProperty.Name].CreateReader(), property.PropertyType);
+                SetPropertyOrField(instance, objectType, property, value);
             }
-            return instance as IRequest;
-
         }
+        return instance as IRequest;
 
-        private static void SetPropertyOrField(object instance, Type objectType, PropertyInfo property, object value)
+    }
+
+    private static void SetPropertyOrField(object instance, Type objectType, PropertyInfo property, object value)
+    {
+        if (property.CanWrite)
         {
-            if (property.CanWrite)
-            {
-                property.SetValue(instance, value);
-                return;
-            }
-
-            var field = property.IsAutoProperty()
-                ? objectType.GetAllFields().SingleOrDefault(fi => fi.Name.StartsWith($"<{property.Name}>", StringComparison.Ordinal))
-                : objectType.GetAllFields().SingleOrDefault(fi => fi.Name.Equals($"_{property.Name}>", StringComparison.OrdinalIgnoreCase));
-            if (field == null)
-            {
-                throw new NotSupportedException($"This deserializer only supports rehydration of {nameof(IRequest)} implementations that either use auto-properties or have a naming convention that makes it possible to tie non-writable properties with the backing field equivalent.");
-            }
-
-            field.SetValue(instance, value);
+            property.SetValue(instance, value);
+            return;
         }
 
-        /// <summary>
-        /// Determines whether this instance can convert the specified object type.
-        /// </summary>
-        /// <param name="objectType">Type of the object.</param>
-        /// <returns><c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.</returns>
-        public override bool CanConvert(Type objectType)
+        var field = property.IsAutoProperty()
+            ? objectType.GetAllFields().SingleOrDefault(fi => fi.Name.StartsWith($"<{property.Name}>", StringComparison.Ordinal))
+            : objectType.GetAllFields().SingleOrDefault(fi => fi.Name.Equals($"_{property.Name}>", StringComparison.OrdinalIgnoreCase));
+        if (field == null)
         {
-            return typeof(IRequest).IsAssignableFrom(objectType);
+            throw new NotSupportedException($"This deserializer only supports rehydration of {nameof(IRequest)} implementations that either use auto-properties or have a naming convention that makes it possible to tie non-writable properties with the backing field equivalent.");
         }
+
+        field.SetValue(instance, value);
+    }
+
+    /// <summary>
+    /// Determines whether this instance can convert the specified object type.
+    /// </summary>
+    /// <param name="objectType">Type of the object.</param>
+    /// <returns><c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.</returns>
+    public override bool CanConvert(Type objectType)
+    {
+        return typeof(IRequest).IsAssignableFrom(objectType);
     }
 }

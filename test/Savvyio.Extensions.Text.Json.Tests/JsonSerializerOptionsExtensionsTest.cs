@@ -4,39 +4,38 @@ using Codebelt.Extensions.Xunit;
 using Savvyio.Extensions.Text.Json.Converters;
 using Xunit;
 
-namespace Savvyio.Extensions.Text.Json
+namespace Savvyio.Extensions.Text.Json;
+
+public class JsonSerializerOptionsExtensionsTest : Test
 {
-    public class JsonSerializerOptionsExtensionsTest : Test
+    public JsonSerializerOptionsExtensionsTest(ITestOutputHelper output) : base(output)
     {
-        public JsonSerializerOptionsExtensionsTest(ITestOutputHelper output) : base(output)
-        {
-        }
+    }
 
-        [Fact]
-        public void Clone_ShouldThrowArgumentNullException_WhenOptionsIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => ((JsonSerializerOptions)null).Clone());
-        }
+    [Fact]
+    public void Clone_ShouldThrowArgumentNullException_WhenOptionsIsNull()
+    {
+        Assert.Throws<ArgumentNullException>(() => ((JsonSerializerOptions)null).Clone());
+    }
 
-        [Fact]
-        public void Clone_ShouldReturnNewInstance_WithoutSetup()
-        {
-            var original = new JsonSerializerOptions { WriteIndented = true };
-            var cloned = original.Clone();
+    [Fact]
+    public void Clone_ShouldReturnNewInstance_WithoutSetup()
+    {
+        var original = new JsonSerializerOptions { WriteIndented = true };
+        var cloned = original.Clone();
 
-            Assert.NotSame(original, cloned);
-            Assert.True(cloned.WriteIndented);
-        }
+        Assert.NotSame(original, cloned);
+        Assert.True(cloned.WriteIndented);
+    }
 
-        [Fact]
-        public void Clone_ShouldApplySetup_WhenProvided()
-        {
-            var original = new JsonSerializerOptions { WriteIndented = true };
-            var cloned = original.Clone(o => o.WriteIndented = false);
+    [Fact]
+    public void Clone_ShouldApplySetup_WhenProvided()
+    {
+        var original = new JsonSerializerOptions { WriteIndented = true };
+        var cloned = original.Clone(o => o.WriteIndented = false);
 
-            Assert.NotSame(original, cloned);
-            Assert.True(original.WriteIndented);
-            Assert.False(cloned.WriteIndented);
-        }
+        Assert.NotSame(original, cloned);
+        Assert.True(original.WriteIndented);
+        Assert.False(cloned.WriteIndented);
     }
 }

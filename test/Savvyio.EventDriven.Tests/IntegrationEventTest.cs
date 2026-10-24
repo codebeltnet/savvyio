@@ -4,59 +4,58 @@ using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.EventDriven;
 using Xunit;
 
-namespace Savvyio.EventDriven
+namespace Savvyio.EventDriven;
+
+public class IntegrationEventTest : Test
 {
-    public class IntegrationEventTest : Test
+    public IntegrationEventTest(ITestOutputHelper output) : base(output)
     {
-        public IntegrationEventTest(ITestOutputHelper output) : base(output)
-        {
-        }
+    }
 
-        [Fact]
-        public void IntegrationEvent_AccountCreated_ShouldHaveMetadata_WithSpecifiedEventId()
-        {
-            var eventId = Guid.NewGuid().ToString("N");
-            var id = 100;
-            var fullname = "Michael Mortensen";
-            var email = "root@gimlichael.dev";
+    [Fact]
+    public void IntegrationEvent_AccountCreated_ShouldHaveMetadata_WithSpecifiedEventId()
+    {
+        var eventId = Guid.NewGuid().ToString("N");
+        var id = 100;
+        var fullname = "Michael Mortensen";
+        var email = "root@gimlichael.dev";
 
-            var sut = new AccountCreated(100, fullname, email).SetEventId(eventId);
+        var sut = new AccountCreated(100, fullname, email).SetEventId(eventId);
 
-            Assert.Equal(email, sut.EmailAddress);
-            Assert.Equal(fullname, sut.FullName);
-            Assert.Equal(id, sut.Id);
+        Assert.Equal(email, sut.EmailAddress);
+        Assert.Equal(fullname, sut.FullName);
+        Assert.Equal(id, sut.Id);
 
-            Assert.Collection(sut.Metadata,
-                kvp =>
-                {
-                    Assert.Equal(kvp.Key, MetadataDictionary.MemberType);
-                    Assert.Equal(kvp.Value, sut.GetType().ToFullNameIncludingAssemblyName());
-                },
-                kvp =>
-                {
-                    Assert.Equal(kvp.Key, MetadataDictionary.EventId);
-                    Assert.Equal(kvp.Value, eventId);
-                },
-                kvp =>
-                {
-                    Assert.Equal(kvp.Key, MetadataDictionary.Timestamp);
-                    Assert.Equal(kvp.Value, sut.GetTimestamp());
-                });
-            Assert.True(sut.Metadata.Count == 3, "sut.Metadata.Count == 3");
-        }
+        Assert.Collection(sut.Metadata,
+            kvp =>
+            {
+                Assert.Equal(kvp.Key, MetadataDictionary.MemberType);
+                Assert.Equal(kvp.Value, sut.GetType().ToFullNameIncludingAssemblyName());
+            },
+            kvp =>
+            {
+                Assert.Equal(kvp.Key, MetadataDictionary.EventId);
+                Assert.Equal(kvp.Value, eventId);
+            },
+            kvp =>
+            {
+                Assert.Equal(kvp.Key, MetadataDictionary.Timestamp);
+                Assert.Equal(kvp.Value, sut.GetTimestamp());
+            });
+        Assert.True(sut.Metadata.Count == 3, "sut.Metadata.Count == 3");
+    }
 
-        [Fact]
-        public void IntegrationEvent_AccountCreated_ShouldExposeMetadataThroughExtensions()
-        {
-            var eventId = Guid.NewGuid().ToString("N");
-            var timestamp = DateTime.UtcNow;
-            var sut = new AccountCreated(100, "Michael Mortensen", "root@gimlichael.dev")
-                .SetEventId(eventId)
-                .SetTimestamp(timestamp);
+    [Fact]
+    public void IntegrationEvent_AccountCreated_ShouldExposeMetadataThroughExtensions()
+    {
+        var eventId = Guid.NewGuid().ToString("N");
+        var timestamp = DateTime.UtcNow;
+        var sut = new AccountCreated(100, "Michael Mortensen", "root@gimlichael.dev")
+            .SetEventId(eventId)
+            .SetTimestamp(timestamp);
 
-            Assert.Equal(eventId, sut.GetEventId());
-            Assert.Equal(timestamp, sut.GetTimestamp());
-            Assert.Equal(sut.GetType().ToFullNameIncludingAssemblyName(), sut.GetMemberType());
-        }
+        Assert.Equal(eventId, sut.GetEventId());
+        Assert.Equal(timestamp, sut.GetTimestamp());
+        Assert.Equal(sut.GetType().ToFullNameIncludingAssemblyName(), sut.GetMemberType());
     }
 }

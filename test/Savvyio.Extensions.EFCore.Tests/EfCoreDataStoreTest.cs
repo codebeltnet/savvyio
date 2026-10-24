@@ -7,131 +7,130 @@ using Savvyio.Assets;
 using Savvyio.Assets.Domain;
 using Xunit;
 
-namespace Savvyio.Extensions.EFCore
+namespace Savvyio.Extensions.EFCore;
+
+public class EfCoreDataStoreTest : Test
 {
-    public class EfCoreDataStoreTest : Test
+    public EfCoreDataStoreTest(ITestOutputHelper output) : base(output)
     {
-        public EfCoreDataStoreTest(ITestOutputHelper output) : base(output)
+    }
+
+    [Fact]
+    public async Task EfCoreDataStore_ShouldCreateObject()
+    {
+        var id = Guid.NewGuid();
+        var name = "Test";
+        var email = "test@unit.test";
+
+        var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
         {
-        }
+            ContextConfigurator = b => b.UseInMemoryDatabase("Dummy"),
+            ModelConstructor = mb => mb.AddAccount()
+        });
 
-        [Fact]
-        public async Task EfCoreDataStore_ShouldCreateObject()
+        var sut2 = new EfCoreDataStore<Account>(sut1);
+        await sut2.CreateAsync(new Account(id, name, email));
+
+        var sut3 = await sut2.FindAllAsync(o => o.Predicate = a => a.PlatformProviderId == id).SingleOrDefaultAsync();
+
+        Assert.Equal(id, sut3.PlatformProviderId);
+        Assert.Equal(name, sut3.FullName);
+        Assert.Equal(email, sut3.EmailAddress);
+    }
+
+    [Fact]
+    public async Task EfCoreDataStore_ShouldRemoveObject()
+    {
+        var id = Guid.NewGuid();
+        var name = "Test";
+        var email = "test@unit.test";
+        var dto = new Account(id, name, email);
+
+        var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
         {
-            var id = Guid.NewGuid();
-            var name = "Test";
-            var email = "test@unit.test";
+            ContextConfigurator = b => b.UseInMemoryDatabase("Dummy"),
+            ModelConstructor = mb => mb.AddAccount()
+        });
 
-            var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
-            {
-                ContextConfigurator = b => b.UseInMemoryDatabase("Dummy"),
-                ModelConstructor = mb => mb.AddAccount()
-            });
+        var sut2 = new EfCoreDataStore<Account>(sut1);
+        await sut2.CreateAsync(dto);
 
-            var sut2 = new EfCoreDataStore<Account>(sut1);
-            await sut2.CreateAsync(new Account(id, name, email));
+        var sut3 = await sut2.FindAllAsync(o => o.Predicate = a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
-            var sut3 = await sut2.FindAllAsync(o => o.Predicate = a => a.PlatformProviderId == id).SingleOrDefaultAsync();
+        await sut2.DeleteAsync(dto);
 
-            Assert.Equal(id, sut3.PlatformProviderId);
-            Assert.Equal(name, sut3.FullName);
-            Assert.Equal(email, sut3.EmailAddress);
-        }
+        var sut4 = await sut2.FindAllAsync(o => o.Predicate = a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
-        [Fact]
-        public async Task EfCoreDataStore_ShouldRemoveObject()
+        Assert.NotNull(sut3);
+        Assert.Null(sut4);
+    }
+
+    [Fact]
+    public async Task EfCoreDataStore_ShouldUpdateObject()
+    {
+        var id = Guid.NewGuid();
+        var name = "Test";
+        var newName = "Unit Test";
+        var email = "test@unit.test";
+        var dto = new Account(id, name, email);
+
+        var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
         {
-            var id = Guid.NewGuid();
-            var name = "Test";
-            var email = "test@unit.test";
-            var dto = new Account(id, name, email);
+            ContextConfigurator = b => b.UseInMemoryDatabase("Dummy"),
+            ModelConstructor = mb => mb.AddAccount()
+        });
 
-            var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
-            {
-                ContextConfigurator = b => b.UseInMemoryDatabase("Dummy"),
-                ModelConstructor = mb => mb.AddAccount()
-            });
+        var sut2 = new EfCoreDataStore<Account>(sut1);
+        await sut2.CreateAsync(dto);
 
-            var sut2 = new EfCoreDataStore<Account>(sut1);
-            await sut2.CreateAsync(dto);
+        var sut3 = await sut2.FindAllAsync(o => o.Predicate = a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
-            var sut3 = await sut2.FindAllAsync(o => o.Predicate = a => a.PlatformProviderId == id).SingleOrDefaultAsync();
+        sut3.ChangeFullName(newName);
 
-            await sut2.DeleteAsync(dto);
+        await sut2.UpdateAsync(sut3);
 
-            var sut4 = await sut2.FindAllAsync(o => o.Predicate = a => a.PlatformProviderId == id).SingleOrDefaultAsync();
+        var sut4 = await sut2.FindAllAsync(o => o.Predicate = a => a.PlatformProviderId == id).SingleOrDefaultAsync();
 
-            Assert.NotNull(sut3);
-            Assert.Null(sut4);
-        }
+        Assert.NotEqual(name, sut3.FullName);
+        Assert.Equal(newName, sut4.FullName);
+    }
 
-        [Fact]
-        public async Task EfCoreDataStore_ShouldUpdateObject()
+    [Fact]
+    public async Task EfCoreDataStore_ShouldGetObjectById()
+    {
+        var id = Guid.NewGuid();
+        var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
         {
-            var id = Guid.NewGuid();
-            var name = "Test";
-            var newName = "Unit Test";
-            var email = "test@unit.test";
-            var dto = new Account(id, name, email);
+            ContextConfigurator = b => b.UseInMemoryDatabase("Dummy_" + Guid.NewGuid()),
+            ModelConstructor = mb => mb.AddAccount()
+        });
+        var sut2 = new EfCoreDataStore<Account>(sut1);
+        var dto = new Account(id, "Test", "test@unit.test");
 
-            var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
-            {
-                ContextConfigurator = b => b.UseInMemoryDatabase("Dummy"),
-                ModelConstructor = mb => mb.AddAccount()
-            });
+        await sut2.CreateAsync(dto);
 
-            var sut2 = new EfCoreDataStore<Account>(sut1);
-            await sut2.CreateAsync(dto);
+        var sut3 = await sut2.GetByIdAsync(dto.Id);
+        var sut4 = await sut2.GetByIdAsync(long.MaxValue);
 
-            var sut3 = await sut2.FindAllAsync(o => o.Predicate = a => a.PlatformProviderId == id).SingleOrDefaultAsync();
+        Assert.Equal(dto.Id, sut3.Id);
+        Assert.Null(sut4);
+    }
 
-            sut3.ChangeFullName(newName);
-
-            await sut2.UpdateAsync(sut3);
-
-            var sut4 = await sut2.FindAllAsync(o => o.Predicate = a => a.PlatformProviderId == id).SingleOrDefaultAsync();
-
-            Assert.NotEqual(name, sut3.FullName);
-            Assert.Equal(newName, sut4.FullName);
-        }
-
-        [Fact]
-        public async Task EfCoreDataStore_ShouldGetObjectById()
+    [Fact]
+    public async Task EfCoreDataStore_ShouldReturnAllObjectsWhenPredicateIsMissing()
+    {
+        var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
         {
-            var id = Guid.NewGuid();
-            var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
-            {
-                ContextConfigurator = b => b.UseInMemoryDatabase("Dummy_" + Guid.NewGuid()),
-                ModelConstructor = mb => mb.AddAccount()
-            });
-            var sut2 = new EfCoreDataStore<Account>(sut1);
-            var dto = new Account(id, "Test", "test@unit.test");
+            ContextConfigurator = b => b.UseInMemoryDatabase("Dummy_" + Guid.NewGuid()),
+            ModelConstructor = mb => mb.AddAccount()
+        });
+        var sut2 = new EfCoreDataStore<Account>(sut1);
 
-            await sut2.CreateAsync(dto);
+        await sut2.CreateAsync(new Account(Guid.NewGuid(), "Test1", "test1@unit.test"));
+        await sut2.CreateAsync(new Account(Guid.NewGuid(), "Test2", "test2@unit.test"));
 
-            var sut3 = await sut2.GetByIdAsync(dto.Id);
-            var sut4 = await sut2.GetByIdAsync(long.MaxValue);
+        var sut3 = await sut2.FindAllAsync();
 
-            Assert.Equal(dto.Id, sut3.Id);
-            Assert.Null(sut4);
-        }
-
-        [Fact]
-        public async Task EfCoreDataStore_ShouldReturnAllObjectsWhenPredicateIsMissing()
-        {
-            var sut1 = new EfCoreDataSource(new EfCoreDataSourceOptions()
-            {
-                ContextConfigurator = b => b.UseInMemoryDatabase("Dummy_" + Guid.NewGuid()),
-                ModelConstructor = mb => mb.AddAccount()
-            });
-            var sut2 = new EfCoreDataStore<Account>(sut1);
-
-            await sut2.CreateAsync(new Account(Guid.NewGuid(), "Test1", "test1@unit.test"));
-            await sut2.CreateAsync(new Account(Guid.NewGuid(), "Test2", "test2@unit.test"));
-
-            var sut3 = await sut2.FindAllAsync();
-
-            Assert.Equal(2, sut3.Count());
-        }
+        Assert.Equal(2, sut3.Count());
     }
 }

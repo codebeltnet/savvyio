@@ -3,47 +3,46 @@ using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.Domain;
 using Xunit;
 
-namespace Savvyio.Domain
+namespace Savvyio.Domain;
+
+public class SingleValueObjectTest : Test
 {
-    public class SingleValueObjectTest : Test
+    public SingleValueObjectTest(ITestOutputHelper output) : base(output)
     {
-        public SingleValueObjectTest(ITestOutputHelper output) : base(output)
-        {
-        }
+    }
 
-        [Fact]
-        public void SingleValueObject_PlatformProviderId_ShouldBeEqual()
-        {
-            var id = Guid.NewGuid();
-            var sut1 = new PlatformProviderId(id);
-            var sut2 = new PlatformProviderId(id);
+    [Fact]
+    public void SingleValueObject_PlatformProviderId_ShouldBeEqual()
+    {
+        var id = Guid.NewGuid();
+        var sut1 = new PlatformProviderId(id);
+        var sut2 = new PlatformProviderId(id);
 
-            TestOutput.WriteLines(sut1.ToString(), sut2.ToString());
+        TestOutput.WriteLines(sut1.ToString(), sut2.ToString());
 
-            Assert.Equal(sut1, sut2);
-        }
+        Assert.Equal(sut1, sut2);
+    }
 
-        [Fact]
-        public void SingleValueObject_PlatformProviderId_ShouldNotBeEqual()
-        {
-            var id1 = Guid.NewGuid();
-            var id2 = Guid.NewGuid();
-            var sut1 = new PlatformProviderId(id1);
-            var sut2 = new PlatformProviderId(id2);
+    [Fact]
+    public void SingleValueObject_PlatformProviderId_ShouldNotBeEqual()
+    {
+        var id1 = Guid.NewGuid();
+        var id2 = Guid.NewGuid();
+        var sut1 = new PlatformProviderId(id1);
+        var sut2 = new PlatformProviderId(id2);
 
-            TestOutput.WriteLines(sut1.ToString(), sut2.ToString());
+        TestOutput.WriteLines(sut1.ToString(), sut2.ToString());
 
-            Assert.NotEqual(sut1, sut2);
-        }
+        Assert.NotEqual(sut1, sut2);
+    }
 
-        [Fact]
-        public void SingleValueObject_EmailAddress_ShouldConvertBiderictional()
-        {
-            var email = "root@gimlichael.dev";
-            var sut = new EmailAddress(email);
+    [Fact]
+    public void SingleValueObject_EmailAddress_ShouldConvertBiderictional()
+    {
+        var email = "root@gimlichael.dev";
+        var sut = new EmailAddress(email);
 
-            Assert.Equal(email, sut);
-            Assert.Equal((EmailAddress)email, sut);
-        }
+        Assert.Equal(email, sut);
+        Assert.Equal((EmailAddress)email, sut);
     }
 }

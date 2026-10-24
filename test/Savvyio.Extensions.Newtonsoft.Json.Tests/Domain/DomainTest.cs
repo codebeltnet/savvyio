@@ -4,61 +4,60 @@ using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.Domain;
 using Xunit;
 
-namespace Savvyio.Extensions.Newtonsoft.Json.Domain
+namespace Savvyio.Extensions.Newtonsoft.Json.Domain;
+
+public class DomainTest : Test
 {
-    public class DomainTest : Test
+    public DomainTest(ITestOutputHelper output) : base(output)
     {
-        public DomainTest(ITestOutputHelper output) : base(output)
+    }
+
+    [Fact]
+    public void Coordinates_ShouldBeAbleToBothSerializeAndDeserialize()
+    {
+        var sut = new Coordinates(10.1, 10.2);
+
+        var json = new NewtonsoftJsonMarshaller().Serialize(sut);
+        var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
+
+        TestOutput.WriteLine(jsonString);
+
+        var rehydrated = new NewtonsoftJsonMarshaller().Deserialize<Coordinates>(json);
+
+        Assert.Equivalent(sut, rehydrated, true);
+    }
+
+    [Fact]
+    public void Timestamp_ShouldBeAbleToBothSerializeAndDeserialize()
+    {
+        var sut = new Timestamp(DateTimeOffset.UtcNow)
         {
-        }
+            IsDaylightSavingTime = false,
+            TimeZone = "Europe/Berlin"
+        };
 
-        [Fact]
-        public void Coordinates_ShouldBeAbleToBothSerializeAndDeserialize()
-        {
-            var sut = new Coordinates(10.1, 10.2);
+        var json = new NewtonsoftJsonMarshaller().Serialize(sut);
+        var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
-            var json = new NewtonsoftJsonMarshaller().Serialize(sut);
-            var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
+        TestOutput.WriteLine(jsonString);
 
-            TestOutput.WriteLine(jsonString);
+        var rehydrated = new NewtonsoftJsonMarshaller().Deserialize<Timestamp>(json);
 
-            var rehydrated = new NewtonsoftJsonMarshaller().Deserialize<Coordinates>(json);
+        Assert.Equivalent(sut, rehydrated, true);
+    }
 
-            Assert.Equivalent(sut, rehydrated, true);
-        }
+    [Fact]
+    public void PlatformProviderId_ShouldBeAbleToBothSerializeAndDeserialize()
+    {
+        var sut = new PlatformProviderId(Guid.NewGuid());
 
-        [Fact]
-        public void Timestamp_ShouldBeAbleToBothSerializeAndDeserialize()
-        {
-            var sut = new Timestamp(DateTimeOffset.UtcNow)
-            {
-                IsDaylightSavingTime = false,
-                TimeZone = "Europe/Berlin"
-            };
+        var json = new NewtonsoftJsonMarshaller().Serialize(sut);
+        var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
 
-            var json = new NewtonsoftJsonMarshaller().Serialize(sut);
-            var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
+        TestOutput.WriteLine(jsonString);
 
-            TestOutput.WriteLine(jsonString);
+        var rehydrated = new NewtonsoftJsonMarshaller().Deserialize<PlatformProviderId>(json);
 
-            var rehydrated = new NewtonsoftJsonMarshaller().Deserialize<Timestamp>(json);
-
-            Assert.Equivalent(sut, rehydrated, true);
-        }
-
-        [Fact]
-        public void PlatformProviderId_ShouldBeAbleToBothSerializeAndDeserialize()
-        {
-            var sut = new PlatformProviderId(Guid.NewGuid());
-
-            var json = new NewtonsoftJsonMarshaller().Serialize(sut);
-            var jsonString = json.ToEncodedString(o => o.LeaveOpen = true);
-
-            TestOutput.WriteLine(jsonString);
-
-            var rehydrated = new NewtonsoftJsonMarshaller().Deserialize<PlatformProviderId>(json);
-
-            Assert.Equivalent(sut, rehydrated, true);
-        }
+        Assert.Equivalent(sut, rehydrated, true);
     }
 }
