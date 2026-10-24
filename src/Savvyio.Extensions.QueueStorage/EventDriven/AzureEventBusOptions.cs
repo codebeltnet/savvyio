@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Azure;
 using Azure.Core;
 using Azure.Identity;

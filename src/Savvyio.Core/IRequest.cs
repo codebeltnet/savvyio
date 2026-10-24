@@ -1,4 +1,4 @@
-﻿namespace Savvyio;
+namespace Savvyio;
 
 /// <summary>
 /// A marker interface that specifies a request/model/event.

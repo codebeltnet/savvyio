@@ -1,4 +1,4 @@
-﻿using Savvyio.Messaging.Cryptography;
+using Savvyio.Messaging.Cryptography;
 
 namespace Savvyio.EventDriven.Messaging.CloudEvents.Cryptography;
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Savvyio.Assets.Commands;
 using Savvyio.Assets.Domain;

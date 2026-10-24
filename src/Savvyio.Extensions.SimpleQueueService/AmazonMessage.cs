@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Cuemon.Configuration;
 using Cuemon;
 using Savvyio.Messaging;

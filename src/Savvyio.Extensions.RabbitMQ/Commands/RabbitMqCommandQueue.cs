@@ -1,4 +1,4 @@
-﻿using Cuemon;
+using Cuemon;
 using Cuemon.Extensions;
 using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Reflection;

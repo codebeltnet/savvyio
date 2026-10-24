@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Extensions.NATS.EventDriven;
+namespace Savvyio.Extensions.NATS.EventDriven;
 
 /// <summary>
 /// Configuration options for <see cref="NatsEventBus"/>.

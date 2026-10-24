@@ -1,4 +1,4 @@
-﻿using Cuemon.Extensions.IO;
+using Cuemon.Extensions.IO;
 using Cuemon.Extensions.Text.Json.Formatters;
 using Codebelt.Extensions.Xunit;
 using Savvyio.Assets;

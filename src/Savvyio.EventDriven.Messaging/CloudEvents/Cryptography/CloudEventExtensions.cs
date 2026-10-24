@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cuemon;
 using Cuemon.Security.Cryptography;
 using Savvyio.Messaging.Cryptography;

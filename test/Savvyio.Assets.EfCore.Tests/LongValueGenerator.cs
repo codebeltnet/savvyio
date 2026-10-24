@@ -1,4 +1,4 @@
-﻿using Cuemon;
+using Cuemon;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
 

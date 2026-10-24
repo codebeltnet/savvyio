@@ -1,4 +1,4 @@
-﻿using Savvyio.Domain;
+using Savvyio.Domain;
 
 namespace Savvyio.Assets.Domain.Events;
 

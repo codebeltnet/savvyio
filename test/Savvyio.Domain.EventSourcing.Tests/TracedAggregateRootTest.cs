@@ -1,4 +1,4 @@
-﻿using Codebelt.Extensions.Xunit;
+using Codebelt.Extensions.Xunit;
 using Cuemon;
 using Cuemon.Collections.Generic;
 using Microsoft.EntityFrameworkCore;

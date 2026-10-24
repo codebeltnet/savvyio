@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Assets.Queries;
+namespace Savvyio.Assets.Queries;
 
 public class AccountProjection
 {

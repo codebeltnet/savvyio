@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Amazon.Runtime;
 using Amazon.SimpleNotificationService;
 using Amazon.SQS;

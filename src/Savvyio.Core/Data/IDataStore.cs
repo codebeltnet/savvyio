@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Data;
+namespace Savvyio.Data;
 
 /// <summary>
 /// A marker interface that specifies an abstraction of data persistence based on the Data Access Object pattern aka DAO.

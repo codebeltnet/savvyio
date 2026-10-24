@@ -1,4 +1,4 @@
-﻿using Azure.Storage.Queues;
+using Azure.Storage.Queues;
 using Cuemon.Threading;
 using Savvyio.Commands;
 using Savvyio.Diagnostics;

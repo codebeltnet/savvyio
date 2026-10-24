@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Domain;
+namespace Savvyio.Domain;
 
 /// <summary>
 /// Defines a generic way of abstracting persistent repositories (CRUD).

@@ -1,4 +1,4 @@
-﻿using Amazon;
+using Amazon;
 using Amazon.Runtime;
 using Codebelt.Extensions.Newtonsoft.Json.Formatters;
 using Codebelt.Extensions.Xunit;

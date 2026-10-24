@@ -1,4 +1,4 @@
-﻿using Savvyio.EventDriven;
+using Savvyio.EventDriven;
 
 namespace Savvyio.Extensions.QueueStorage.Assets;
 

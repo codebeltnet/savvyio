@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cuemon;
 
 namespace Savvyio.EventDriven.Messaging.CloudEvents.Cryptography;

@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Domain;
+namespace Savvyio.Domain;
 
 /// <summary>
 /// Extension methods for the <see cref="SavvyioOptions"/> class.

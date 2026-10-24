@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.Domain;
 using Xunit;

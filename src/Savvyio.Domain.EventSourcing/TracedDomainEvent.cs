@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Domain.EventSourcing;
+namespace Savvyio.Domain.EventSourcing;
 
 /// <summary>
 /// Provides a default implementation of something that happened in the domain that you want other parts of the same domain (in-process/inner-application) to be aware of.

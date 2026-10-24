@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Cuemon;
 using Codebelt.Extensions.Newtonsoft.Json;

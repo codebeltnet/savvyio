@@ -1,4 +1,4 @@
-﻿using Cuemon.Threading;
+using Cuemon.Threading;
 using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;

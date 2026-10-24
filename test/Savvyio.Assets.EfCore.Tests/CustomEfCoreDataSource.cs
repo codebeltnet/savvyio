@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore;
 using Savvyio.Assets.Domain;
 using Savvyio.Domain;

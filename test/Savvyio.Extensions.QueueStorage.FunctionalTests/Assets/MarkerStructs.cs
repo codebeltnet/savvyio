@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Extensions.QueueStorage.Assets;
+namespace Savvyio.Extensions.QueueStorage.Assets;
 
 public struct WindowsDebug
 {

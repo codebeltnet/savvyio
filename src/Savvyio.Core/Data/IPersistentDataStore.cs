@@ -1,4 +1,4 @@
-﻿using Cuemon.Threading;
+using Cuemon.Threading;
 
 namespace Savvyio.Data;
 

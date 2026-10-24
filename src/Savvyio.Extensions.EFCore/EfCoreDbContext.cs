@@ -1,4 +1,4 @@
-﻿using Cuemon.Configuration;
+using Cuemon.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace Savvyio.Extensions.EFCore;

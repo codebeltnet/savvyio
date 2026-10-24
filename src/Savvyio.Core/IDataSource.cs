@@ -1,4 +1,4 @@
-﻿using Savvyio.Data;
+using Savvyio.Data;
 using Savvyio.Domain;
 
 namespace Savvyio;

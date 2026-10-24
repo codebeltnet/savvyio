@@ -1,4 +1,4 @@
-﻿using Cuemon.Extensions.DependencyInjection;
+using Cuemon.Extensions.DependencyInjection;
 using Cuemon.Extensions.Text.Json.Formatters;
 using Microsoft.Extensions.DependencyInjection;
 using System;

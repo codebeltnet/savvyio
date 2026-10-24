@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Cuemon;
 using Savvyio.Assets.EventDriven;
 using Savvyio.Assets.Queries;

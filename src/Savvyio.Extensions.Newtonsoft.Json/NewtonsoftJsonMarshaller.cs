@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Codebelt.Extensions.Newtonsoft.Json.Formatters;
 using Newtonsoft.Json;

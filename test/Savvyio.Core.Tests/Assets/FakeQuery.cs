@@ -1,4 +1,4 @@
-﻿using Savvyio.Queries;
+using Savvyio.Queries;
 
 namespace Savvyio.Assets;
 

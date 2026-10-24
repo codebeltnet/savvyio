@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Savvyio.Commands;
 using Savvyio.Extensions.DependencyInjection.Messaging;
 using Savvyio.Extensions.NATS;

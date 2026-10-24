@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Diagnostics;
+namespace Savvyio.Diagnostics;
 
 /// <summary>
 /// Defines a contract for providing an underlying target that can be probed to assess health status.

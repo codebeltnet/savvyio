@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Savvyio.EventDriven;
 using Savvyio.Extensions.DependencyInjection.Messaging;
 using Savvyio.Extensions.SimpleQueueService;

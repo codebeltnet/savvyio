@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Extensions.DependencyInjection.NATS.Assets;
+namespace Savvyio.Extensions.DependencyInjection.NATS.Assets;
 
 public struct QueueMarker
 {

@@ -1,4 +1,4 @@
-﻿using Savvyio.Commands;
+using Savvyio.Commands;
 
 namespace Savvyio.Extensions.QueueStorage.Assets;
 

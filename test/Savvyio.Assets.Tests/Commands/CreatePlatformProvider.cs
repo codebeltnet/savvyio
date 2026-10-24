@@ -1,4 +1,4 @@
-﻿using Savvyio.Assets.Domain;
+using Savvyio.Assets.Domain;
 using Savvyio.Commands;
 
 namespace Savvyio.Assets.Commands;

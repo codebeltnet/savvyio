@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Dispatchers;

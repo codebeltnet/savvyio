@@ -1,4 +1,4 @@
-﻿using Cuemon.Extensions.DependencyInjection;
+using Cuemon.Extensions.DependencyInjection;
 using Savvyio.Extensions.NATS.Commands;
 
 namespace Savvyio.Extensions.DependencyInjection.NATS.Commands;

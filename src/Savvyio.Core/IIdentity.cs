@@ -1,4 +1,4 @@
-﻿namespace Savvyio;
+namespace Savvyio;
 
 /// <summary>
 /// Defines a generic identity typically associated with a storage such as a database.

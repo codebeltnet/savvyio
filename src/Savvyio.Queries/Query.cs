@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Queries;
+namespace Savvyio.Queries;
 
 /// <summary>
 /// Provides a default implementation of of the <see cref="IQuery{TResult}" /> interface.

@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Codebelt.Extensions.Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Commands.Assets;

@@ -1,4 +1,4 @@
-﻿namespace Savvyio;
+namespace Savvyio;
 
 /// <summary>
 /// Defines a generic way to associate metadata with any type of object.

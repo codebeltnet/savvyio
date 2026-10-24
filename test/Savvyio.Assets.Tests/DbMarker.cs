@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Assets;
+namespace Savvyio.Assets;
 
 public struct DbMarker
 {

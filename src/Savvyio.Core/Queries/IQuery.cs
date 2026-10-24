@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Queries;
+namespace Savvyio.Queries;
 
 /// <summary>
 /// A marker interface that specifies something that returns data.

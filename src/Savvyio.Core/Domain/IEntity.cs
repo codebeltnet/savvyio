@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Domain;
+namespace Savvyio.Domain;
 
 /// <summary>
 /// Defines an Entity as specified in Domain Driven Design.

@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Domain;
+namespace Savvyio.Domain;
 
 /// <summary>
 /// Provides a way to cover the pattern of an Aggregate Root as specified in Domain Driven Design. This is an abstract class.

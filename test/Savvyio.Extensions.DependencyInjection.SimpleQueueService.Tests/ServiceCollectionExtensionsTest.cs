@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Amazon;
 using Amazon.Runtime;
 using Codebelt.Extensions.Xunit;

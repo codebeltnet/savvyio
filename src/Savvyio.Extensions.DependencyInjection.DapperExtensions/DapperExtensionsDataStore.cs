@@ -1,4 +1,4 @@
-﻿using Savvyio.Data;
+using Savvyio.Data;
 using Savvyio.Extensions.DapperExtensions;
 using Savvyio.Extensions.DependencyInjection.Dapper;
 using Savvyio.Extensions.DependencyInjection.Data;

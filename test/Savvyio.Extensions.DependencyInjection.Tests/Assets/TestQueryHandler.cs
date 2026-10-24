@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Savvyio.Handlers;
 using Savvyio.Queries;
 

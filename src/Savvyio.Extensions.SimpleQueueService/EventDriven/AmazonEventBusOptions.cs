@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Extensions.SimpleQueueService.EventDriven;
+namespace Savvyio.Extensions.SimpleQueueService.EventDriven;
 
 /// <summary>
 /// Configuration options for <see cref="AmazonEventBus"/>.

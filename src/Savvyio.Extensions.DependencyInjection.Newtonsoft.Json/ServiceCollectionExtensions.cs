@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Codebelt.Extensions.Newtonsoft.Json.Formatters;
 using Cuemon;
 using Cuemon.Extensions.DependencyInjection;

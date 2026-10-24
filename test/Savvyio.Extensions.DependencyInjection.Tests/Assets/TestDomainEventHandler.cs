@@ -1,4 +1,4 @@
-﻿using Savvyio.Domain;
+using Savvyio.Domain;
 using Savvyio.Handlers;
 
 namespace Savvyio.Extensions.DependencyInjection.Assets;

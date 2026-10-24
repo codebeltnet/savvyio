@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Savvyio.Messaging;
 
 namespace Savvyio.EventDriven.Messaging.CloudEvents;

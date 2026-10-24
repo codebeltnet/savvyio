@@ -1,4 +1,4 @@
-﻿using Cuemon.Extensions.DependencyInjection;
+using Cuemon.Extensions.DependencyInjection;
 using Savvyio.Data;
 
 namespace Savvyio.Extensions.DependencyInjection.Data;

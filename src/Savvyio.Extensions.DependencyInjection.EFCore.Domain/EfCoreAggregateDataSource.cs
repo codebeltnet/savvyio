@@ -1,4 +1,4 @@
-﻿using Savvyio.Domain;
+using Savvyio.Domain;
 using Savvyio.Extensions.EFCore;
 using Savvyio.Extensions.EFCore.Domain;
 

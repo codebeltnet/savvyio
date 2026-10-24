@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Domain.EventSourcing;
+namespace Savvyio.Domain.EventSourcing;
 
 /// <summary>
 /// Defines a generic way of abstracting traced read- and writable repositories (CRud) that is optimized for Domain Driven Design.

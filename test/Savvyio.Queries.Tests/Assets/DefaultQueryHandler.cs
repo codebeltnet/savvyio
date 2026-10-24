@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Savvyio.Handlers;
 
 namespace Savvyio.Queries.Assets;

@@ -1,4 +1,4 @@
-﻿using Cuemon.Extensions;
+using Cuemon.Extensions;
 
 namespace Savvyio.Domain.EventSourcing;
 

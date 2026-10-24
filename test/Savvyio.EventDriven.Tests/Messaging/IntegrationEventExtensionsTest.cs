@@ -1,4 +1,4 @@
-﻿using Cuemon.Extensions;
+using Cuemon.Extensions;
 using Cuemon.Extensions.Reflection;
 using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.EventDriven;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Savvyio.Domain.EventSourcing;
 
 namespace Savvyio.Assets.Domain.Events;

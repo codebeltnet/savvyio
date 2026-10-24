@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cuemon;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Extensions.DapperExtensions;

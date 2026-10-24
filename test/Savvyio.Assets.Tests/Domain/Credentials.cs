@@ -1,4 +1,4 @@
-﻿using Cuemon;
+using Cuemon;
 using Cuemon.Collections.Generic;
 using Cuemon.Extensions;
 using Cuemon.Security.Cryptography;

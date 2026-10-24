@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Extensions.DependencyInjection.Assets;
+namespace Savvyio.Extensions.DependencyInjection.Assets;
 
 public class FakeDataSource : IDataSource
 {

@@ -1,4 +1,4 @@
-﻿using Cuemon.Extensions.DependencyInjection;
+using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Savvyio.Extensions.DependencyInjection.Messaging;
 using Savvyio.Extensions.DependencyInjection.RabbitMQ.Commands;

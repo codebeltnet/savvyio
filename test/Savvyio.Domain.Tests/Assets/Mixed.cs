@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Savvyio.Assets.Domain;
 
 namespace Savvyio.Domain.Assets;

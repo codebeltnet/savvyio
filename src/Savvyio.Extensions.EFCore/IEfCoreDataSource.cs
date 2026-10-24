@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Savvyio.Domain;
 
 namespace Savvyio.Extensions.EFCore;

@@ -1,4 +1,4 @@
-﻿namespace Savvyio;
+namespace Savvyio;
 
 /// <summary>
 /// Represents the base class from which all implementations of <see cref="IRequest"/> should derive.

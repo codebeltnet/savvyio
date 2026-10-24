@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Extensions.SimpleQueueService.Commands;
+namespace Savvyio.Extensions.SimpleQueueService.Commands;
 
 /// <summary>
 /// Configuration options for <see cref="AmazonCommandQueue"/>.

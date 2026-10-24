@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Commands;
+namespace Savvyio.Commands;
 
 /// <summary>
 /// A marker interface that specifies an intention to do something (e.g. change the state).

@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Commands;
+namespace Savvyio.Commands;
 
 /// <summary>
 /// Extension methods for the <see cref="SavvyioOptions"/> class.

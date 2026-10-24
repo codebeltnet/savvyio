@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Domain;
+namespace Savvyio.Domain;
 
 /// <summary>
 /// A marker interface that specifies an abstraction of data persistence based on the Repository pattern.

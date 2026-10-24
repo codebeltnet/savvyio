@@ -1,4 +1,4 @@
-﻿using Savvyio.Messaging;
+using Savvyio.Messaging;
 
 namespace Savvyio.Extensions.DependencyInjection.Messaging;
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cuemon;
 using Cuemon.Extensions;
 using RabbitMQ.Client;

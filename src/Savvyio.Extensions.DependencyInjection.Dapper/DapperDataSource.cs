@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Savvyio.Extensions.Dapper;
 
 namespace Savvyio.Extensions.DependencyInjection.Dapper;

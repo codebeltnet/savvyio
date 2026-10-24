@@ -1,4 +1,4 @@
-﻿using Cuemon;
+using Cuemon;
 using Savvyio.Domain;
 
 namespace Savvyio.Assets.Domain;

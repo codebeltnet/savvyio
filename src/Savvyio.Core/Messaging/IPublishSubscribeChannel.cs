@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Messaging;
+namespace Savvyio.Messaging;
 
 /// <summary>
 /// Specifies an interface for a bus that is used for interacting with other subsystems (out-process/inter-application) to be notified (e.g., made aware of something that has happened).

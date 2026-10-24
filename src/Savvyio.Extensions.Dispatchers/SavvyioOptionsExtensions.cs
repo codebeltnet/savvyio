@@ -1,4 +1,4 @@
-﻿using Savvyio.Commands;
+using Savvyio.Commands;
 using Savvyio.Dispatchers;
 using Savvyio.Domain;
 using Savvyio.EventDriven;

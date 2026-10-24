@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.Queries;
 using Savvyio.Queries.Assets;

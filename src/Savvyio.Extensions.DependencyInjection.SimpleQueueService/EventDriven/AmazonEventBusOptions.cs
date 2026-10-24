@@ -1,4 +1,4 @@
-﻿using Cuemon.Extensions.DependencyInjection;
+using Cuemon.Extensions.DependencyInjection;
 using Savvyio.Extensions.SimpleQueueService.EventDriven;
 
 namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService.EventDriven;

@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Queries;
+namespace Savvyio.Queries;
 
 /// <summary>
 /// Extension methods for the <see cref="SavvyioOptions"/> class.

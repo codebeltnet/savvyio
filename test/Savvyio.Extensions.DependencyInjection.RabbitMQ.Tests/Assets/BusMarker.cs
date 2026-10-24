@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Extensions.DependencyInjection.RabbitMQ.Assets;
+namespace Savvyio.Extensions.DependencyInjection.RabbitMQ.Assets;
 
 public struct BusMarker
 {

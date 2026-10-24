@@ -1,4 +1,4 @@
-﻿namespace Savvyio.EventDriven;
+namespace Savvyio.EventDriven;
 
 /// <summary>
 /// Extension methods for the <see cref="SavvyioOptions"/> class.

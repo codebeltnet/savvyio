@@ -1,4 +1,4 @@
-﻿namespace Savvyio.Domain.EventSourcing;
+namespace Savvyio.Domain.EventSourcing;
 
 /// <summary>
 /// Defines an Event Sourcing capable contract of an Aggregate as specified in Domain Driven Design.
