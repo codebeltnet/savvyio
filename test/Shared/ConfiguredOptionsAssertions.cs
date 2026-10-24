@@ -17,10 +17,8 @@ internal static class ConfiguredOptionsAssertions
         var manual = new TOptions();
         callback(manual);
 
-        Assert.Equivalent(direct, microsoft, strict: true);
+        Assert.Same(direct, microsoft);
         Assert.Equivalent(direct, manual, strict: true);
-        // Characterize the current separate eager instance before the Cuemon migration.
-        Assert.NotSame(direct, microsoft);
         using var scope = provider.CreateScope();
         Assert.Same(direct, scope.ServiceProvider.GetRequiredService<TOptions>());
         Assert.Same(callback, scope.ServiceProvider.GetRequiredService<Action<TOptions>>());

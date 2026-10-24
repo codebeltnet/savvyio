@@ -38,9 +38,11 @@ public class ServiceCollectionExtensionsTest : Test
         });
 
         // Assert
-        Assert.True(natsSetupCalled);
+        Assert.False(natsSetupCalled);
         var provider = services.BuildServiceProvider();
+        Assert.False(natsSetupCalled);
         ConfiguredOptionsAssertions.Verify<NatsCommandQueueOptions>(provider);
+        Assert.True(natsSetupCalled);
         var queue = provider.GetService<NatsCommandQueue>();
 
 
@@ -69,9 +71,11 @@ public class ServiceCollectionExtensionsTest : Test
         });
 
         // Assert
-        Assert.True(natsSetupCalled);
+        Assert.False(natsSetupCalled);
         var provider = services.BuildServiceProvider();
+        Assert.False(natsSetupCalled);
         ConfiguredOptionsAssertions.Verify<NatsCommandQueueOptions<QueueMarker>>(provider);
+        Assert.True(natsSetupCalled);
         var queue = provider.GetService<NatsCommandQueue<QueueMarker>>();
 
         Assert.IsType<NatsCommandQueue<QueueMarker>>(provider.GetRequiredService<IPointToPointChannel<ICommand, QueueMarker>>());
@@ -97,9 +101,11 @@ public class ServiceCollectionExtensionsTest : Test
         });
 
         // Assert
-        Assert.True(natsSetupCalled);
+        Assert.False(natsSetupCalled);
         var provider = services.BuildServiceProvider();
+        Assert.False(natsSetupCalled);
         ConfiguredOptionsAssertions.Verify<NatsEventBusOptions>(provider);
+        Assert.True(natsSetupCalled);
         var bus = provider.GetService<NatsEventBus>();
 
         Assert.IsType<NatsEventBus>(provider.GetRequiredService<IPublishSubscribeChannel<IIntegrationEvent>>());
@@ -125,9 +131,11 @@ public class ServiceCollectionExtensionsTest : Test
         });
 
         // Assert
-        Assert.True(natsSetupCalled);
+        Assert.False(natsSetupCalled);
         var provider = services.BuildServiceProvider();
+        Assert.False(natsSetupCalled);
         ConfiguredOptionsAssertions.Verify<NatsEventBusOptions<BusMarker>>(provider);
+        Assert.True(natsSetupCalled);
         var bus = provider.GetService<NatsEventBus<BusMarker>>();
 
         Assert.IsType<NatsEventBus<BusMarker>>(provider.GetRequiredService<IPublishSubscribeChannel<IIntegrationEvent, BusMarker>>());

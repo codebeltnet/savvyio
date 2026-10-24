@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Codebelt.Extensions.Xunit;
 using Cuemon.Configuration;
+using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Savvyio.Dispatchers;
