@@ -157,6 +157,8 @@ public class TracedAggregateRootTest : Test
         Assert.Equal(name, sut5.FullName);
         Assert.Equal("root@gimlichael.dev", sut5.EmailAddress);
 
+        var normalizedSchema = string.Join(Environment.NewLine, schema.ReplaceLineEndings().Split(Environment.NewLine).Select(line => line.TrimEnd()));
+
         Assert.True(Match(@"Model:
   EntityType: EfCoreTracedAggregateEntity<TracedAccount, Guid>
     Properties:
@@ -190,7 +192,7 @@ Annotations:
   BaseTypeDiscoveryConvention:DerivedTypes: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.List`1[Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType]]
   InversePropertyAttributeConvention:InverseNavigations: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.SortedSet`1[System.Type]]
   NonNullableConventionState: System.Reflection.NullabilityInfoContext
-  ProductVersion: *".ReplaceLineEndings(), schema.ReplaceLineEndings(), o => o.ThrowOnNoMatch = true));
+  ProductVersion: *".ReplaceLineEndings(), normalizedSchema, o => o.ThrowOnNoMatch = true));
     }
 
     [Fact]
