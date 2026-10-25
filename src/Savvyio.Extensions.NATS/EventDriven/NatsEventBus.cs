@@ -49,6 +49,7 @@ public class NatsEventBus : NatsMessage, IPublishSubscribeChannel<IIntegrationEv
     public async Task PublishAsync(IMessage<IIntegrationEvent> message, Action<AsyncOptions> setup = null)
     {
         Validator.ThrowIfInvalidConfigurator(setup, out var options);
+        options.CancellationToken.ThrowIfCancellationRequested();
         await PublishMessageAsync(_options.Subject, (await Marshaller.Serialize(message).ToByteArrayAsync().ConfigureAwait(false)).ToBase64String(), new NatsHeaders()
             {
                 { "type", message.GetType().ToFullNameIncludingAssemblyName() }

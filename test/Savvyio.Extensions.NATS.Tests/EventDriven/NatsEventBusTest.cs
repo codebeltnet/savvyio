@@ -76,7 +76,7 @@ public class NatsEventBusTest : Test
         using var cts = new CancellationTokenSource();
         cts.Cancel();
 
-        var bus = new NatsEventBus(_marshaller, new NatsEventBusOptions { Subject = "subject" });
+        await using var bus = new TestableNatsEventBus(_marshaller, new NatsEventBusOptions { Subject = "subject" });
         var message = new Message<TestIntegrationEvent>(
             Guid.NewGuid().ToString("N"),
             new Uri("urn:test"),
@@ -87,7 +87,10 @@ public class NatsEventBusTest : Test
             () => bus.PublishAsync(message, o => o.CancellationToken = cts.Token));
 
         Assert.NotNull(ex);
-        Assert.IsAssignableFrom<OperationCanceledException>(ex);
+        Assert.Equal(cts.Token, Assert.IsAssignableFrom<OperationCanceledException>(ex).CancellationToken);
+        Assert.Null(bus.PublishedSubject);
+        Assert.Null(bus.PublishedMessage);
+        Assert.Null(bus.PublishedHeaders);
     }
 
     [Fact]
