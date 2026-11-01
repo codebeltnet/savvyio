@@ -15,7 +15,7 @@ This repository is part of the Codebelt .NET library estate. The instructions be
 - `test/` contains xUnit v3 test projects.
 - `Savvyio.slnx` is the solution used for local development.
 - `.github/workflows/ci-pipeline.yml` is the CI workflow and the authority for the test matrix.
-- `testenvironments.json` declares the supported `WSL-Ubuntu` and `Docker-Ubuntu` test environments.
+- `testenvironments.json` declares the supported `WSL-Ubuntu`, `Docker-Ubuntu (net10.0)`, and `Docker-Ubuntu (net11.0)` test environments.
 
 ## Build
 
@@ -44,8 +44,9 @@ The CI test plan currently runs **28** project(s) and excludes **8** project(s).
 
 ## Integration and infrastructure
 
-- `WSL-Ubuntu` — WSL distribution `Ubuntu-24.04`.
-- `Docker-Ubuntu` — Docker image `codebeltnet/ubuntu-testrunner:8-9-10-11`.
+- `WSL-Ubuntu` — WSL distribution `Ubuntu-26.04`.
+- `Docker-Ubuntu (net10.0)` — Docker image `codebeltnet/ubuntu-testrunner:10`.
+- `Docker-Ubuntu (net11.0)` — Docker image `codebeltnet/ubuntu-testrunner:11`.
 
 This repository has `docker-compose.yml` with these services: `awscli, localstack, nats, rabbitmq`.
 
@@ -85,7 +86,7 @@ Package-specific release notes live under `.nuget/<ProjectName>/PackageReleaseNo
 
 ## Issues
 
-Include the affected project, target framework, operating system, SDK version, exact command, expected result, actual result, and a minimal reproduction. Identify whether the behavior differs between local Windows/WSL, Docker-Ubuntu and GitHub Actions.
+Include the affected project, target framework, operating system, SDK version, exact command, expected result, actual result, and a minimal reproduction. Identify whether the behavior differs between local Windows/WSL, the Docker test environments, and GitHub Actions.
 
 ## Coding guidelines
 
