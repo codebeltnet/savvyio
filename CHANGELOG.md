@@ -14,11 +14,10 @@ This major release adds .NET 11 support, removes .NET 9 support, and aligns conf
 
 ### Changed
 
-- CI provisions preview SDKs and tests .NET 11, preserving the single-target CI policy; local tests cover both supported targets; the local test container uses the .NET 11 SDK with the .NET 10 runtime and Microsoft Testing Platform arguments,
+- CI provisions preview SDKs and tests .NET 11, preserving the single-target CI policy; local tests cover both supported targets,
 - Updated Codebelt.Coverlet.MTP from 10.1.0 to 10.1.1,
 - Updated framework availability in contributor guidance, package READMEs, and DocFX includes; retained .NET 10 for DocFX metadata generation,
 - Service-update automation preserves pending major/minor release versions and uses the modern framework availability fallback,
-- Set the MinVer minimum major/minor to 6.0 for the breaking framework baseline change; release versions remain Git-tag derived,
 - Configured options now use Cuemon's `AddConfiguredOptions`: direct `TOptions` and the default `IOptions<TOptions>.Value` share one instance and the Microsoft configuration, post-configuration, and validation pipeline, avoiding the previous separate eager instance and repeated setup execution for these two consumption forms,
 - Options configuration and validation are deferred until materialization; recoverable parameter-object validation failures surface as `OptionsValidationException` instead of `ArgumentException` during registration. The first `AddConfiguredOptions` registration per options type is retained; use `Configure<TOptions>` for additional composition. Injectable `Action<TOptions>` remains the original setup delegate and does not include the Microsoft pipeline.
 
