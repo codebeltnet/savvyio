@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Extensions.EFCore.EfCoreQueryOptions`1
 example:
 - *content

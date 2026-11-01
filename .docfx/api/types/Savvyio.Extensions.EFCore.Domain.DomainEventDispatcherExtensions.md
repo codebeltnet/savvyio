@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Extensions.EFCore.Domain.DomainEventDispatcherExtensions
 example:
 - *content

@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Extensions.DependencyInjection.SimpleQueueService.ServiceCollectionExtensions
 example:
 - *content

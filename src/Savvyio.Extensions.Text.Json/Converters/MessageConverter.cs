@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -7,186 +7,185 @@ using System.Text.Json.Serialization;
 using Cuemon.Extensions;
 using Cuemon.Extensions.Reflection;
 using Cuemon.Extensions.Text.Json;
+using Cuemon.Reflection;
 using Savvyio.EventDriven;
 using Savvyio.EventDriven.Messaging.CloudEvents;
 using Savvyio.EventDriven.Messaging.CloudEvents.Cryptography;
 using Savvyio.Messaging;
 using Savvyio.Messaging.Cryptography;
-using Savvyio.Reflection;
 
-namespace Savvyio.Extensions.Text.Json.Converters
+namespace Savvyio.Extensions.Text.Json.Converters;
+
+/// <summary>
+/// Converts an <see cref="IMessage{T}"/> (or derived) to or from JSON.
+/// </summary>
+/// <seealso cref="JsonConverter" />
+public class MessageConverter : JsonConverterFactory
 {
+    internal static readonly Lazy<IList<TypeInfo>> CloudEventTypes = new(() => AssemblyContext.GetCurrentDomainAssemblies(o => o.ExcludedAssemblies.Add(typeof(IMessage<>).Assembly)).SelectMany(a => a.DefinedTypes.Where(ti => ti.HasInterfaces(typeof(ICloudEvent<>)) &&
+                                                                                                                                                                  ti is { IsAbstract: false, IsInterface: false })).ToList());
+
     /// <summary>
-    /// Converts an <see cref="IMessage{T}"/> (or derived) to or from JSON.
+    /// Initializes a new instance of the <see cref="MessageConverter"/> class.
     /// </summary>
-    /// <seealso cref="JsonConverter" />
-    public class MessageConverter : JsonConverterFactory
+    public MessageConverter()
     {
-        internal static readonly Lazy<IList<TypeInfo>> CloudEventTypes = new(() => AssemblyContext.CurrentDomainAssemblies.SelectMany(a => a.DefinedTypes.Where(ti => ti.HasInterfaces(typeof(ICloudEvent<>)) &&
-                                                                                                                                                                      ti is { IsAbstract: false, IsInterface: false })).ToList());
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MessageConverter"/> class.
-        /// </summary>
-        public MessageConverter()
-        {
-        }
-
-        /// <summary>
-        /// When overridden in a derived class, determines whether the converter instance can convert the specified object type.
-        /// </summary>
-        /// <param name="typeToConvert">The type of the object to check whether it can be converted by this converter instance.</param>
-        /// <returns><see langword="true" /> if the instance can convert the specified object type; otherwise, <see langword="false" />.</returns>
+    /// <summary>
+    /// When overridden in a derived class, determines whether the converter instance can convert the specified object type.
+    /// </summary>
+    /// <param name="typeToConvert">The type of the object to check whether it can be converted by this converter instance.</param>
+    /// <returns><see langword="true" /> if the instance can convert the specified object type; otherwise, <see langword="false" />.</returns>
 		public override bool CanConvert(Type typeToConvert)
-        {
-            return (typeToConvert.IsGenericType &&
-                    typeToConvert.GetGenericTypeDefinition().HasInterfaces(typeof(IMessage<>)));
-        }
+    {
+        return (typeToConvert.IsGenericType &&
+                typeToConvert.GetGenericTypeDefinition().HasInterfaces(typeof(IMessage<>)));
+    }
 
-        /// <summary>
-        /// Creates a converter for a specified type.
-        /// </summary>
-        /// <param name="typeToConvert">The type handled by the converter.</param>
-        /// <param name="options">The serialization options to use.</param>
-        /// <returns>A converter that is compatible with <paramref name="typeToConvert" />.</returns>
-        public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+    /// <summary>
+    /// Creates a converter for a specified type.
+    /// </summary>
+    /// <param name="typeToConvert">The type handled by the converter.</param>
+    /// <param name="options">The serialization options to use.</param>
+    /// <returns>A converter that is compatible with <paramref name="typeToConvert" />.</returns>
+    public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+    {
+        var requestType = typeToConvert.GetGenericArguments()[0];
+        return (JsonConverter)Activator.CreateInstance(
+            typeof(MessageConverter<>).MakeGenericType(requestType),
+            BindingFlags.Instance | BindingFlags.Public,
+            binder: null,
+            args: null,
+            culture: null)!;
+    }
+}
+
+internal sealed class MessageConverter<T> : JsonConverter<IMessage<T>> where T : IRequest
+{
+    public MessageConverter()
+    {
+    }
+
+    public override IMessage<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        using (var document = JsonDocument.ParseValue(ref reader))
         {
-            var requestType = typeToConvert.GetGenericArguments()[0];
-            return (JsonConverter)Activator.CreateInstance(
-                typeof(MessageConverter<>).MakeGenericType(requestType),
-                BindingFlags.Instance | BindingFlags.Public,
-                binder: null,
-                args: null,
-                culture: null)!;
+            var idKey = options.PropertyNamingPolicy!.ConvertName(nameof(IMessage<T>.Id));
+            var sourceKey = options.PropertyNamingPolicy.ConvertName(nameof(IMessage<T>.Source));
+            var timeKey = options.PropertyNamingPolicy.ConvertName(nameof(IMessage<T>.Time));
+            var typeKey = options.PropertyNamingPolicy.ConvertName(nameof(IMessage<T>.Type));
+            var dataKey = options.PropertyNamingPolicy.ConvertName(nameof(IMessage<T>.Data));
+            var metadataKey = options.PropertyNamingPolicy.ConvertName(nameof(IMetadata.Metadata));
+            var signatureKey = options.PropertyNamingPolicy.ConvertName(nameof(ISignedMessage<T>.Signature));
+
+            var id = document.RootElement.GetProperty(idKey).GetString();
+            var source = document.RootElement.GetProperty(sourceKey).GetString().ToUri();
+            var type = document.RootElement.GetProperty(typeKey).GetString();
+            var memberType = typeToConvert.GenericTypeArguments[0];
+            var time = document.RootElement.GetProperty(timeKey).GetDateTimeOffset().UtcDateTime;
+            var data = (T)document.RootElement.GetProperty(dataKey).Deserialize(memberType!, options);
+
+            ApplyMetadata(data, memberType, document.RootElement.GetProperty(dataKey), metadataKey, options);
+
+            var message = new Message<T>(id, source, type, data, time);
+
+            if (typeToConvert.HasInterfaces(typeof(ICloudEvent<>)))
+            {
+                var reservedKeys = new[] { idKey, sourceKey, timeKey, typeKey, dataKey, metadataKey, signatureKey };
+                return CreateCloudEvent(typeToConvert, message, document.RootElement, signatureKey, reservedKeys, options);
+            }
+
+            if (typeToConvert.HasInterfaces(typeof(ISignedMessage<>)))
+            {
+                var signature = document.RootElement.GetProperty(signatureKey).GetString();
+                return new SignedMessage<T>(message, signature);
+            }
+
+            return message;
         }
     }
 
-    internal sealed class MessageConverter<T> : JsonConverter<IMessage<T>> where T : IRequest
+    // for unknown reasons, Microsoft does not use the custom converter for IMetadataDictionary here; have to fiddle extra around as seen below .. for the record; this just works with Newtonsoft!
+    private static void ApplyMetadata(T data, Type memberType, JsonElement dataElement, string metadataKey, JsonSerializerOptions options)
     {
-        public MessageConverter()
+        if (data is not IMetadata) { return; }
+
+        var md = dataElement.GetProperty(metadataKey).Deserialize<IMetadataDictionary>(options);
+        var property = memberType.GetAllProperties().SingleOrDefault(pi => pi.Name == nameof(IMetadata.Metadata));
+        if (property == null) { return; }
+
+        if (property.CanWrite)
         {
+            property.SetValue(data, md);
+        }
+        else
+        {
+            memberType.GetAllFields().SingleOrDefault(fi => fi.Name.Contains(nameof(IMetadata.Metadata)))?.SetValue(data, md);
+        }
+    }
+
+    private static IMessage<T> CreateCloudEvent(Type typeToConvert, Message<T> message, JsonElement root, string signatureKey, string[] reservedKeys, JsonSerializerOptions options)
+    {
+        var specVersionKey = options.PropertyNamingPolicy!.ConvertName(nameof(ICloudEvent<IIntegrationEvent>.Specversion));
+        var requestType = typeToConvert.GetGenericArguments()[0];
+        var cloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.CloudEvent", StringComparison.Ordinal));
+        var specVersion = root.GetProperty(specVersionKey).GetString();
+        var cloudEvent = Activator.CreateInstance(cloudEventType.MakeGenericType(requestType), [message, specVersion]) as IMessage<T>;
+
+        if (typeToConvert.HasInterfaces(typeof(ISignedCloudEvent<>)))
+        {
+            var signedCloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.Cryptography.SignedCloudEvent", StringComparison.Ordinal));
+            var signature = root.GetProperty(signatureKey).GetString();
+
+            return Activator.CreateInstance(signedCloudEventType.MakeGenericType(requestType), [cloudEvent, signature]) as IMessage<T>;
         }
 
-        public override IMessage<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        AddExtensionAttributes(cloudEvent, root, [.. reservedKeys, specVersionKey], options);
+        return cloudEvent;
+    }
+
+    private static void AddExtensionAttributes(IMessage<T> cloudEvent, JsonElement root, string[] reservedKeys, JsonSerializerOptions options)
+    {
+        if (cloudEvent is not IDictionary<string, object> dictionary) { return; }
+
+        foreach (var property in root.EnumerateObject().Where(jp => !reservedKeys.Contains(jp.Name)))
         {
-            using (var document = JsonDocument.ParseValue(ref reader))
-            {
-                var idKey = options.PropertyNamingPolicy!.ConvertName(nameof(IMessage<T>.Id));
-                var sourceKey = options.PropertyNamingPolicy.ConvertName(nameof(IMessage<T>.Source));
-                var timeKey = options.PropertyNamingPolicy.ConvertName(nameof(IMessage<T>.Time));
-                var typeKey = options.PropertyNamingPolicy.ConvertName(nameof(IMessage<T>.Type));
-                var dataKey = options.PropertyNamingPolicy.ConvertName(nameof(IMessage<T>.Data));
-                var metadataKey = options.PropertyNamingPolicy.ConvertName(nameof(IMetadata.Metadata));
-                var signatureKey = options.PropertyNamingPolicy.ConvertName(nameof(ISignedMessage<T>.Signature));
+            dictionary.Add(property.Name, property.Value.Deserialize(property.Value.GetType(), options));
+        }
+    }
 
-                var id = document.RootElement.GetProperty(idKey).GetString();
-                var source = document.RootElement.GetProperty(sourceKey).GetString().ToUri();
-                var type = document.RootElement.GetProperty(typeKey).GetString();
-                var memberType = typeToConvert.GenericTypeArguments[0];
-                var time = document.RootElement.GetProperty(timeKey).GetDateTimeOffset().UtcDateTime;
-                var data = (T)document.RootElement.GetProperty(dataKey).Deserialize(memberType!, options);
+    public override void Write(Utf8JsonWriter writer, IMessage<T> value, JsonSerializerOptions options)
+    {
+        writer.WriteStartObject();
+        writer.WriteString(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(value.Id)), value.Id);
+        writer.WriteString(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(value.Source)), value.Source);
+        writer.WriteString(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(value.Type)), value.Type);
+        writer.WritePropertyName(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(value.Time)));
+        writer.WriteObject(value.Time, options);
+        writer.WritePropertyName(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(value.Data)));
+        writer.WriteObject(value.Data, options);
 
-                ApplyMetadata(data, memberType, document.RootElement.GetProperty(dataKey), metadataKey, options);
-
-                var message = new Message<T>(id, source, type, data, time);
-
-                if (typeToConvert.HasInterfaces(typeof(ICloudEvent<>)))
-                {
-                    var reservedKeys = new[] { idKey, sourceKey, timeKey, typeKey, dataKey, metadataKey, signatureKey };
-                    return CreateCloudEvent(typeToConvert, message, document.RootElement, signatureKey, reservedKeys, options);
-                }
-
-                if (typeToConvert.HasInterfaces(typeof(ISignedMessage<>)))
-                {
-                    var signature = document.RootElement.GetProperty(signatureKey).GetString();
-                    return new SignedMessage<T>(message, signature);
-                }
-
-                return message;
-            }
+        if (value.GetType().HasInterfaces(typeof(ICloudEvent<>)))
+        {
+            dynamic ce = value;
+            writer.WriteString(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(ICloudEvent<IIntegrationEvent>.Specversion)), ce.Specversion);
         }
 
-        // for unknown reasons, Microsoft does not use the custom converter for IMetadataDictionary here; have to fiddle extra around as seen below .. for the record; this just works with Newtonsoft!
-        private static void ApplyMetadata(T data, Type memberType, JsonElement dataElement, string metadataKey, JsonSerializerOptions options)
+        if (value is ISignedMessage<T> sm)
         {
-            if (data is not IMetadata) { return; }
-
-            var md = dataElement.GetProperty(metadataKey).Deserialize<IMetadataDictionary>(options);
-            var property = memberType.GetAllProperties().SingleOrDefault(pi => pi.Name == nameof(IMetadata.Metadata));
-            if (property == null) { return; }
-
-            if (property.CanWrite)
-            {
-                property.SetValue(data, md);
-            }
-            else
-            {
-                memberType.GetAllFields().SingleOrDefault(fi => fi.Name.Contains(nameof(IMetadata.Metadata)))?.SetValue(data, md);
-            }
+            writer.WriteString(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(sm.Signature)), sm.Signature);
         }
 
-        private static IMessage<T> CreateCloudEvent(Type typeToConvert, Message<T> message, JsonElement root, string signatureKey, string[] reservedKeys, JsonSerializerOptions options)
+        if (value is IDictionary<string, object> dictionary)
         {
-            var specVersionKey = options.PropertyNamingPolicy!.ConvertName(nameof(ICloudEvent<IIntegrationEvent>.Specversion));
-            var requestType = typeToConvert.GetGenericArguments()[0];
-            var cloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.CloudEvent", StringComparison.Ordinal));
-            var specVersion = root.GetProperty(specVersionKey).GetString();
-            var cloudEvent = Activator.CreateInstance(cloudEventType.MakeGenericType(requestType), [message, specVersion]) as IMessage<T>;
-
-            if (typeToConvert.HasInterfaces(typeof(ISignedCloudEvent<>)))
+            foreach (var kvp in dictionary)
             {
-                var signedCloudEventType = MessageConverter.CloudEventTypes.Value.Single(ti => ti.FullName!.StartsWith("Savvyio.EventDriven.Messaging.CloudEvents.Cryptography.SignedCloudEvent", StringComparison.Ordinal));
-                var signature = root.GetProperty(signatureKey).GetString();
-
-                return Activator.CreateInstance(signedCloudEventType.MakeGenericType(requestType), [cloudEvent, signature]) as IMessage<T>;
-            }
-
-            AddExtensionAttributes(cloudEvent, root, [.. reservedKeys, specVersionKey], options);
-            return cloudEvent;
-        }
-
-        private static void AddExtensionAttributes(IMessage<T> cloudEvent, JsonElement root, string[] reservedKeys, JsonSerializerOptions options)
-        {
-            if (cloudEvent is not IDictionary<string, object> dictionary) { return; }
-
-            foreach (var property in root.EnumerateObject().Where(jp => !reservedKeys.Contains(jp.Name)))
-            {
-                dictionary.Add(property.Name, property.Value.Deserialize(property.Value.GetType(), options));
+                writer.WritePropertyName(options.PropertyNamingPolicy.DefaultOrConvertName(kvp.Key));
+                writer.WriteObject(kvp.Value, options);
             }
         }
 
-        public override void Write(Utf8JsonWriter writer, IMessage<T> value, JsonSerializerOptions options)
-        {
-            writer.WriteStartObject();
-            writer.WriteString(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(value.Id)), value.Id);
-            writer.WriteString(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(value.Source)), value.Source);
-            writer.WriteString(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(value.Type)), value.Type);
-            writer.WritePropertyName(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(value.Time)));
-            writer.WriteObject(value.Time, options);
-            writer.WritePropertyName(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(value.Data)));
-            writer.WriteObject(value.Data, options);
-
-            if (value.GetType().HasInterfaces(typeof(ICloudEvent<>)))
-            {
-                dynamic ce = value;
-                writer.WriteString(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(ICloudEvent<IIntegrationEvent>.Specversion)), ce.Specversion);
-            }
-
-            if (value is ISignedMessage<T> sm)
-            {
-                writer.WriteString(options.PropertyNamingPolicy.DefaultOrConvertName(nameof(sm.Signature)), sm.Signature);
-            }
-
-            if (value is IDictionary<string, object> dictionary)
-            {
-                foreach (var kvp in dictionary)
-                {
-                    writer.WritePropertyName(options.PropertyNamingPolicy.DefaultOrConvertName(kvp.Key));
-                    writer.WriteObject(kvp.Value, options);
-                }
-            }
-
-            writer.WriteEndObject();
-        }
+        writer.WriteEndObject();
     }
 }

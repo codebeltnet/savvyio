@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Messaging.MessageExtensions
 example:
 - *content

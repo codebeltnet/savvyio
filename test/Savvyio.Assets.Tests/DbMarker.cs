@@ -1,10 +1,9 @@
-﻿namespace Savvyio.Assets
-{
-    public struct DbMarker
-    {
-    }
+namespace Savvyio.Assets;
 
-    public struct AnotherDbMarker
-    {
-    }
+public struct DbMarker
+{
+}
+
+public struct AnotherDbMarker
+{
 }

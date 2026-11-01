@@ -28,54 +28,54 @@ using Xunit;
 using Xunit.v3.Priority;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace Savvyio
+namespace Savvyio;
+
+[TestMethodOrderer(typeof(PriorityMethodOrderer))]
+public class MediatorTest : HostTest<ManagedHostFixture>
 {
-    [TestMethodOrderer(typeof(PriorityMethodOrderer))]
-    public class MediatorTest : HostTest<ManagedHostFixture>
+    private IServiceProvider _provider;
+
+
+    public MediatorTest(ManagedHostFixture hostFixture, ITestOutputHelper output) : base(hostFixture, output)
     {
-        private IServiceProvider _provider;
+        _provider = hostFixture.Host.Services.CreateScope().ServiceProvider;
+    }
 
+    [Fact, Priority(0)]
+    public async Task RegisterNewUser()
+    {
+        var correlationId = Guid.NewGuid().ToString("N");
+        var caPpId = Guid.NewGuid();
+        var caFullName = "Michael Mortensen";
+        var caEmailAddress = "root@gimlichael.dev";
 
-        public MediatorTest(ManagedHostFixture hostFixture, ITestOutputHelper output) : base(hostFixture, output)
-        {
-            _provider = hostFixture.Host.Services.CreateScope().ServiceProvider;
-        }
+        var mediator = _provider.GetRequiredService<IMediator>();
 
-        [Fact, Priority(0)]
-        public async Task RegisterNewUser()
-        {
-            var correlationId = Guid.NewGuid().ToString("N");
-            var caPpId = Guid.NewGuid();
-            var caFullName = "Michael Mortensen";
-            var caEmailAddress = "root@gimlichael.dev";
+        var hsd = _provider.GetRequiredService<IHandlerServicesDescriptor>();
+        var plaintext = hsd.ToString();
 
-            var mediator = _provider.GetRequiredService<IMediator>();
+        var mappings = hsd.GenerateHandlerDiscoveries();
+        var json = JsonMarshaller.Create().Serialize(mappings).ToEncodedString(o => o.LeaveOpen = true);
+        var newtonsoftJson = NewtonsoftJsonMarshaller.Create().Serialize(mappings).ToEncodedString(o => o.LeaveOpen = true);
+        var yaml = YamlFormatter.SerializeObject(mappings, o => o.Settings.NamingConvention = CamelCaseNamingConvention.Instance).ToEncodedString(o => o.LeaveOpen = true);
 
-            var hsd = _provider.GetRequiredService<IHandlerServicesDescriptor>();
-            var plaintext = hsd.ToString();
+        TestOutput.WriteLine(json);
 
-            var mappings = hsd.GenerateHandlerDiscoveries();
-            var json = JsonMarshaller.Create().Serialize(mappings).ToEncodedString(o => o.LeaveOpen = true);
-            var newtonsoftJson = NewtonsoftJsonMarshaller.Create().Serialize(mappings).ToEncodedString(o => o.LeaveOpen = true);
-            var yaml = YamlFormatter.SerializeObject(mappings, o => o.Settings.NamingConvention = CamelCaseNamingConvention.Instance).ToEncodedString(o => o.LeaveOpen = true);
+        TestOutput.WriteLine(System.Environment.NewLine);
+        TestOutput.WriteLine("---");
+        TestOutput.WriteLine(System.Environment.NewLine);
 
-            TestOutput.WriteLine(json);
+        TestOutput.WriteLine(yaml);
 
-            TestOutput.WriteLine(System.Environment.NewLine);
-            TestOutput.WriteLine("---");
-            TestOutput.WriteLine(System.Environment.NewLine);
+        var accountRepo = _provider.GetRequiredService<ISearchableRepository<Account, long, Account>>();
 
-            TestOutput.WriteLine(yaml);
+        await mediator.CommitAsync(new CreateAccount(caPpId, caFullName, caEmailAddress).SetCorrelationId(correlationId));
 
-            var accountRepo = _provider.GetRequiredService<ISearchableRepository<Account, long, Account>>();
+        var entity = await accountRepo.FindAllAsync(a => a.Metadata.Contains(new KeyValuePair<string, object>(MetadataDictionary.CorrelationId, correlationId))).SingleOrDefaultAsync();
 
-            await mediator.CommitAsync(new CreateAccount(caPpId, caFullName, caEmailAddress).SetCorrelationId(correlationId));
+        var dao = await mediator.QueryAsync(new GetAccount(entity.Id)).ConfigureAwait(false);
 
-            var entity = await accountRepo.FindAllAsync(a => a.Metadata.Contains(new KeyValuePair<string, object>(MetadataDictionary.CorrelationId, correlationId))).SingleOrDefaultAsync();
-
-            var dao = await mediator.QueryAsync(new GetAccount(entity.Id)).ConfigureAwait(false);
-
-            Assert.True(Match("""
+        Assert.True(Match("""
                               Discovered 2 ICommandHandler implementations covering a total of 5 ICommand methods
                               
                               Assembly: Savvyio.Assets.Tests
@@ -142,8 +142,8 @@ namespace Savvyio
                               
                               ------------------------------------------------------------------------------
                               """.ReplaceLineEndings(), plaintext, o => o.ThrowOnNoMatch = true));
-            Assert.Equal(json, newtonsoftJson);
-            Assert.True(Match("""
+        Assert.Equal(json, newtonsoftJson);
+        Assert.True(Match("""
                               [
                                 {
                                   "abstractionType": "ICommandHandler",
@@ -335,7 +335,7 @@ namespace Savvyio
                               ]
                               """.ReplaceLineEndings(), json, o => o.ThrowOnNoMatch = true));
 
-            Assert.True(Match("""
+        Assert.True(Match("""
                               - abstractionType: ICommandHandler
                                 implementationsCount: 2
                                 delegateType: ICommand
@@ -433,79 +433,78 @@ namespace Savvyio
                               
                               """.ReplaceLineEndings(), yaml, o => o.ThrowOnNoMatch = true));
 
-            Assert.Equal(entity.Id, dao.Id);
-            Assert.Equal(entity.EmailAddress, dao.EmailAddress);
-            Assert.Equal(entity.FullName, dao.FullName);
+        Assert.Equal(entity.Id, dao.Id);
+        Assert.Equal(entity.EmailAddress, dao.EmailAddress);
+        Assert.Equal(entity.FullName, dao.FullName);
 
-        }
+    }
 
-        [Fact, Priority(1)]
-        public async Task RegisterNewUser_ShouldFailWithValidationException_BecauseOfUniqueEmailAddress()
+    [Fact, Priority(1)]
+    public async Task RegisterNewUser_ShouldFailWithValidationException_BecauseOfUniqueEmailAddress()
+    {
+        var correlationId = Guid.NewGuid().ToString("N");
+        var caPpId = Guid.NewGuid();
+        var caFullName = "El Presidente";
+        var caEmailAddress = "root@gimlichael.dev";
+
+        var mediator = _provider.GetRequiredService<IMediator>();
+
+        await Assert.ThrowsAsync<ValidationException>(() => mediator.CommitAsync(new CreateAccount(caPpId, caFullName, caEmailAddress).SetCorrelationId(correlationId)));
+    }
+
+    [Fact, Priority(2)]
+    public async Task RegisterAnotherUser()
+    {
+        var caPpId = Guid.NewGuid();
+        var caFullName = "El Presidento";
+        var caEmailAddress = "makemyday@us.gov";
+
+        var mediator = _provider.GetRequiredService<IMediator>();
+
+        await mediator.CommitAsync(new CreateAccount(caPpId, caFullName, caEmailAddress));
+    }
+
+    [Fact, Priority(3)]
+    public async Task VerifyUsers()
+    {
+        var accountRepo = _provider.GetRequiredService<ISearchableRepository<Account, long, Account>>();
+        var accountDao = _provider.GetRequiredService<ISearchableDataStore<AccountProjection, DapperQueryOptions>>();
+        var daos = new List<AccountProjection>(await accountDao.FindAllAsync().ConfigureAwait(false));
+        var entities = new List<Account>(await accountRepo.FindAllAsync().ConfigureAwait(false));
+        foreach (var entity in entities)
         {
-            var correlationId = Guid.NewGuid().ToString("N");
-            var caPpId = Guid.NewGuid();
-            var caFullName = "El Presidente";
-            var caEmailAddress = "root@gimlichael.dev";
-
-            var mediator = _provider.GetRequiredService<IMediator>();
-
-            await Assert.ThrowsAsync<ValidationException>(() => mediator.CommitAsync(new CreateAccount(caPpId, caFullName, caEmailAddress).SetCorrelationId(correlationId)));
+            TestOutput.WriteLine(entity.EmailAddress);
+            Assert.Equal(entity.Id, daos.Single(ac => ac.Id == entity.Id).Id);
+            Assert.Equal(entity.EmailAddress, daos.Single(ac => ac.Id == entity.Id).EmailAddress);
+            Assert.Equal(entity.FullName, daos.Single(ac => ac.Id == entity.Id).FullName);
         }
 
-        [Fact, Priority(2)]
-        public async Task RegisterAnotherUser()
+        Assert.Equal(2, entities.Count);
+        Assert.Equal(2, daos.Count);
+    }
+
+    public override void ConfigureServices(IServiceCollection services)
+    {
+        services.AddEfCoreAggregateDataSource<Account>(o =>
         {
-            var caPpId = Guid.NewGuid();
-            var caFullName = "El Presidento";
-            var caEmailAddress = "makemyday@us.gov";
+            o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(Account)).EnableDetailedErrors().LogTo(Console.WriteLine);
+            o.ModelConstructor = mb => mb.AddAccount();
+        }).AddEfCoreRepository<Account, long, Account>();
 
-            var mediator = _provider.GetRequiredService<IMediator>();
-
-            await mediator.CommitAsync(new CreateAccount(caPpId, caFullName, caEmailAddress));
-        }
-
-        [Fact, Priority(3)]
-        public async Task VerifyUsers()
+        services.AddEfCoreAggregateDataSource<PlatformProvider>(o =>
         {
-            var accountRepo = _provider.GetRequiredService<ISearchableRepository<Account, long, Account>>();
-            var accountDao = _provider.GetRequiredService<ISearchableDataStore<AccountProjection, DapperQueryOptions>>();
-            var daos = new List<AccountProjection>(await accountDao.FindAllAsync().ConfigureAwait(false));
-            var entities = new List<Account>(await accountRepo.FindAllAsync().ConfigureAwait(false));
-            foreach (var entity in entities)
-            {
-                TestOutput.WriteLine(entity.EmailAddress);
-                Assert.Equal(entity.Id, daos.Single(ac => ac.Id == entity.Id).Id);
-                Assert.Equal(entity.EmailAddress, daos.Single(ac => ac.Id == entity.Id).EmailAddress);
-                Assert.Equal(entity.FullName, daos.Single(ac => ac.Id == entity.Id).FullName);
-            }
+            o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(PlatformProvider)).EnableDetailedErrors().LogTo(Console.WriteLine);
+            o.ModelConstructor = mb => mb.AddPlatformProvider();
+        }).AddEfCoreRepository<PlatformProvider, Guid, PlatformProvider>();
 
-            Assert.Equal(2, entities.Count);
-            Assert.Equal(2, daos.Count);
-        }
+        services.AddDapperDataSource(o => o.ConnectionFactory = () => new SqliteConnection().SetDefaults().AddAccountTable().AddPlatformProviderTable())
+            .AddDapperDataStore<AccountData, AccountProjection>()
+            .AddDapperExtensionsDataStore<PlatformProviderProjection>();
 
-        public override void ConfigureServices(IServiceCollection services)
+        services.AddSavvyIO(o =>
         {
-            services.AddEfCoreAggregateDataSource<Account>(o =>
-            {
-                o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(Account)).EnableDetailedErrors().LogTo(Console.WriteLine);
-                o.ModelConstructor = mb => mb.AddAccount();
-            }).AddEfCoreRepository<Account, long, Account>();
-
-            services.AddEfCoreAggregateDataSource<PlatformProvider>(o =>
-            {
-                o.ContextConfigurator = b => b.UseInMemoryDatabase(nameof(PlatformProvider)).EnableDetailedErrors().LogTo(Console.WriteLine);
-                o.ModelConstructor = mb => mb.AddPlatformProvider();
-            }).AddEfCoreRepository<PlatformProvider, Guid, PlatformProvider>();
-
-            services.AddDapperDataSource(o => o.ConnectionFactory = () => new SqliteConnection().SetDefaults().AddAccountTable().AddPlatformProviderTable())
-                .AddDapperDataStore<AccountData, AccountProjection>()
-                .AddDapperExtensionsDataStore<PlatformProviderProjection>();
-
-            services.AddSavvyIO(o =>
-            {
-                o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true).AddMediator<Mediator>();
-            })
-            .AddHandlerServicesDescriptor();
-        }
+            o.EnableHandlerServicesDescriptor().UseAutomaticDispatcherDiscovery(true).UseAutomaticHandlerDiscovery(true).AddMediator<Mediator>();
+        })
+        .AddHandlerServicesDescriptor();
     }
 }

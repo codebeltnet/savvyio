@@ -1,7 +1,6 @@
-﻿namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService.Assets
-{
-    public struct QueueMarker
-    {
+namespace Savvyio.Extensions.DependencyInjection.SimpleQueueService.Assets;
 
-    }
+public struct QueueMarker
+{
+
 }

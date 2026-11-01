@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.HandlerDiscoveryModel
 example:
 - *content

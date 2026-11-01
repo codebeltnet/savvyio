@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Dispatchers.ServiceLocator
 example:
 - *content

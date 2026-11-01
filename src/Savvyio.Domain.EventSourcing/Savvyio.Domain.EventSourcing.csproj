@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>Provides the default implementation of an Aggregate Root that is Event Sourced enabled. Complements the concepts of DDD (Domain Driven Design).</Description>

@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Extensions.DependencyInjection.NATS.Commands.NatsCommandQueueOptions`1
 example:
 - *content

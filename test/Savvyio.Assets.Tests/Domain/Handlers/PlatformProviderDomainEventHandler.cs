@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Codebelt.Extensions.Xunit;
 using Savvyio.Assets.Domain.Events;
@@ -6,51 +6,50 @@ using Savvyio.Domain;
 using Savvyio.Handlers;
 using Xunit;
 
-namespace Savvyio.Assets.Domain.Handlers
+namespace Savvyio.Assets.Domain.Handlers;
+
+public class PlatformProviderDomainEventHandler : DomainEventHandler
 {
-    public class PlatformProviderDomainEventHandler : DomainEventHandler
+    private readonly ITestOutputHelper _output;
+    private readonly ITestStore<IDomainEvent> _testStore;
+
+    public PlatformProviderDomainEventHandler(ITestOutputHelper output = null, ITestStore<IDomainEvent> testStore = null)
     {
-        private readonly ITestOutputHelper _output;
-        private readonly ITestStore<IDomainEvent> _testStore;
+        _output = output;
+        _testStore = testStore;
+    }
 
-        public PlatformProviderDomainEventHandler(ITestOutputHelper output = null, ITestStore<IDomainEvent> testStore = null)
+    protected override void RegisterDelegates(IFireForgetRegistry<IDomainEvent> handlers)
+    {
+        handlers.RegisterAsync<PlatformProviderAccountPolicyChanged>(e =>
         {
-            _output = output;
-            _testStore = testStore;
-        }
-
-        protected override void RegisterDelegates(IFireForgetRegistry<IDomainEvent> handlers)
+            _testStore.Add(e);
+            _output.WriteLines($"DE {nameof(PlatformProviderAccountPolicyChanged)}", JsonSerializer.Serialize(e));
+            return Task.CompletedTask;
+        });
+        handlers.RegisterAsync<PlatformProviderInitiated>(e =>
         {
-            handlers.RegisterAsync<PlatformProviderAccountPolicyChanged>(e =>
-            {
-                _testStore.Add(e);
-                _output.WriteLines($"DE {nameof(PlatformProviderAccountPolicyChanged)}", JsonSerializer.Serialize(e));
-                return Task.CompletedTask;
-            });
-            handlers.RegisterAsync<PlatformProviderInitiated>(e =>
-            {
-                _testStore.Add(e);
-                _output.WriteLines($"DE {nameof(PlatformProviderInitiated)}", JsonSerializer.Serialize(e));
-                return Task.CompletedTask;
-            });
-            handlers.RegisterAsync<PlatformProviderDescriptionChanged>(e =>
-            {
-                _testStore.Add(e);
-                _output.WriteLines($"DE {nameof(PlatformProviderDescriptionChanged)}", JsonSerializer.Serialize(e));
-                return Task.CompletedTask;
-            });
-            handlers.RegisterAsync<PlatformProviderNameChanged>(e =>
-            {
-                _testStore.Add(e);
-                _output.WriteLines($"DE {nameof(PlatformProviderNameChanged)}", JsonSerializer.Serialize(e));
-                return Task.CompletedTask;
-            });
-            handlers.RegisterAsync<PlatformProviderThirdLevelDomainNameChanged>(e =>
-            {
-                _testStore.Add(e);
-                _output.WriteLines($"DE {nameof(PlatformProviderThirdLevelDomainNameChanged)}", JsonSerializer.Serialize(e));
-                return Task.CompletedTask;
-            });
-        }
+            _testStore.Add(e);
+            _output.WriteLines($"DE {nameof(PlatformProviderInitiated)}", JsonSerializer.Serialize(e));
+            return Task.CompletedTask;
+        });
+        handlers.RegisterAsync<PlatformProviderDescriptionChanged>(e =>
+        {
+            _testStore.Add(e);
+            _output.WriteLines($"DE {nameof(PlatformProviderDescriptionChanged)}", JsonSerializer.Serialize(e));
+            return Task.CompletedTask;
+        });
+        handlers.RegisterAsync<PlatformProviderNameChanged>(e =>
+        {
+            _testStore.Add(e);
+            _output.WriteLines($"DE {nameof(PlatformProviderNameChanged)}", JsonSerializer.Serialize(e));
+            return Task.CompletedTask;
+        });
+        handlers.RegisterAsync<PlatformProviderThirdLevelDomainNameChanged>(e =>
+        {
+            _testStore.Add(e);
+            _output.WriteLines($"DE {nameof(PlatformProviderThirdLevelDomainNameChanged)}", JsonSerializer.Serialize(e));
+            return Task.CompletedTask;
+        });
     }
 }

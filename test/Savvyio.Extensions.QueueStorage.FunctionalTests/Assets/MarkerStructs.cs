@@ -1,18 +1,17 @@
-﻿namespace Savvyio.Extensions.QueueStorage.Assets
+namespace Savvyio.Extensions.QueueStorage.Assets;
+
+public struct WindowsDebug
 {
-    public struct WindowsDebug
-    {
-    }
+}
 
-    public struct WindowsRelease
-    {
-    }
+public struct WindowsRelease
+{
+}
 
-    public struct LinuxDebug
-    {
-    }
+public struct LinuxDebug
+{
+}
 
-    public struct LinuxRelease
-    {
-    }
+public struct LinuxRelease
+{
 }

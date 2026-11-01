@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.MetadataFactory
 example:
 - *content

@@ -6,7 +6,7 @@ Provides the fundamental classes and interfaces to work with the Query part of t
 
 An open-source project (MIT license) that provides a SOLID and clean .NET class library for writing DDD, CQRS and Event Sourcing applications.
 
-Your versatile DDD, CQRS and Event Sourcing companion for modern development with `.NET 9` and `.NET 10`.
+Your versatile DDD, CQRS and Event Sourcing companion for modern development with `.NET 10` and `.NET 11`.
 
 It is, by heart, free, flexible and built to extend and boost your agile codebelt.
 

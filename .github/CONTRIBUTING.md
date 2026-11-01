@@ -5,7 +5,7 @@ This repository is part of the Codebelt .NET library estate. The instructions be
 ## Before you start
 
 - Read the repository `README.md` and open an issue before starting a non-trivial feature or behavioral change.
-- Use an installed .NET SDK that can build the target frameworks listed below. This repository currently targets: **net10.0, net9.0**.
+- Use an installed .NET SDK that can build the target frameworks listed below. This repository currently targets: **net10.0, net11.0**.
 - The solution is `Savvyio.slnx`. Central package versions are maintained in `Directory.Packages.props`.
 - The shared build behavior is in `Directory.Build.props` and `Directory.Build.targets`; repository-specific TFMs, package references and metadata remain local to this library.
 
@@ -15,7 +15,7 @@ This repository is part of the Codebelt .NET library estate. The instructions be
 - `test/` contains xUnit v3 test projects.
 - `Savvyio.slnx` is the solution used for local development.
 - `.github/workflows/ci-pipeline.yml` is the CI workflow and the authority for the test matrix.
-- `testenvironments.json` declares the supported `WSL-Ubuntu` and `Docker-Ubuntu` test environments.
+- `testenvironments.json` declares the supported `WSL-Ubuntu`, `Docker-Ubuntu (net10.0)`, and `Docker-Ubuntu (net11.0)` test environments.
 
 ## Build
 
@@ -40,12 +40,13 @@ foreach ($project in $testProjects) {
 }
 ```
 
-The CI test plan currently runs **28** project(s) and excludes **8** project(s). The workflow also has an optional macOS test job.
+The CI test plan currently runs **28** project(s) and excludes **8** project(s). The workflow also has an optional macOS test job. Run cloud integration projects one framework at a time with `--framework` because their queues are shared across targets.
 
 ## Integration and infrastructure
 
-- `WSL-Ubuntu` — WSL distribution `Ubuntu-24.04`.
-- `Docker-Ubuntu` — Docker image `codebeltnet/ubuntu-testrunner:8-9-10-11`.
+- `WSL-Ubuntu` — WSL distribution `Ubuntu-26.04`.
+- `Docker-Ubuntu (net10.0)` — Docker image `codebeltnet/ubuntu-testrunner:10`.
+- `Docker-Ubuntu (net11.0)` — Docker image `codebeltnet/ubuntu-testrunner:11`.
 
 This repository has `docker-compose.yml` with these services: `awscli, localstack, nats, rabbitmq`.
 
