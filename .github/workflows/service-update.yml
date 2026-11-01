@@ -50,6 +50,7 @@ jobs:
           import re
           import subprocess
           import sys
+          from datetime import date
 
           tag_pattern = re.compile(r"^v(\d+)\.(\d+)\.(\d+)$")
           tags = subprocess.check_output(["git", "tag", "--list"], text=True).splitlines()
@@ -72,30 +73,37 @@ jobs:
           with open("CHANGELOG.md", encoding="utf-8") as changelog_file:
               changelog = changelog_file.read()
 
-          heading = re.search(r"(?m)^## \[(\d+\.\d+\.\d+)\] - ([^\r\n]+)[ \t]*$", changelog)
+          heading = re.search(r"(?m)^## \[(\d+\.\d+\.\d+)\]([^\r\n]*)$", changelog)
           if not heading:
               print("::error::CHANGELOG.md has no versioned heading to compare with Git tags.")
               sys.exit(1)
 
-          current_version, current_status = heading.groups()
-          current_status = current_status.strip()
-          if current_status.upper() != "TBD" and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", current_status):
-              print(f"::error::Unsupported CHANGELOG.md version status: {current_status}")
+          current_version = heading.group(1)
+          status_match = re.fullmatch(r" - (TBD|\d{4}-\d{2}-\d{2})[ \t]*", heading.group(2), re.IGNORECASE)
+          if not status_match:
+              print(f"::error::Unsupported or missing CHANGELOG.md version status: {heading.group(2).strip()}")
               sys.exit(1)
+          current_status = status_match.group(1)
+          if current_status.upper() != "TBD":
+              try:
+                  date.fromisoformat(current_status)
+              except ValueError:
+                  print(f"::error::Invalid CHANGELOG.md release date: {current_status}")
+                  sys.exit(1)
 
           pending_version = tuple(int(part) for part in current_version.split("."))
           released_version = (major, minor, patch)
-          if pending_version > released_version and current_status.upper() == "TBD":
+          if pending_version > released_version:
               # Preserve an explicitly planned patch, minor, or major release.
               new_version = current_version
-          elif current_version == latest_version and current_status.upper() != "TBD":
+          elif pending_version == released_version and current_status.upper() != "TBD":
               # The changelog is at the latest released tag; start the next patch release.
               new_version = next_version
           else:
               print(
                   f"::error::CHANGELOG.md starts at {current_version} ({current_status}), "
                   f"but the latest stable Git tag is {latest_tag}. Expected either "
-                  f"[{latest_version}] with a release date or a newer version marked TBD."
+                  f"[{latest_version}] with a release date or a newer version with a date or TBD."
               )
               sys.exit(1)
 
@@ -107,6 +115,7 @@ jobs:
               output.write(f"current={current_version}\n")
               output.write(f"new={new_version}\n")
               output.write(f"branch={branch}\n")
+          PY
 
       - name: Generate codebelt-aicia token
         id: app-token
@@ -144,9 +153,9 @@ jobs:
           service_note = "This release also includes a service update focused on package dependencies."
           with open("CHANGELOG.md", encoding="utf-8") as f:
               content = f.read()
-          heading = re.search(r"(?m)^## \[(\d+\.\d+\.\d+)\] - (TBD|\d{4}-\d{2}-\d{2})[ \t]*$", content)
+          heading = re.search(r"(?m)^## \[(\d+\.\d+\.\d+)\] - (TBD|\d{4}-\d{2}-\d{2})[ \t]*$", content, re.IGNORECASE)
           if heading and heading.group(1) == new_ver:
-              if heading.group(2) == "TBD":
+              if heading.group(2).upper() == "TBD":
                   content = content[:heading.start(2)] + today + content[heading.end(2):]
                   heading = re.search(r"(?m)^## \[(\d+\.\d+\.\d+)\] - \d{4}-\d{2}-\d{2}[ \t]*$", content)
               section_end = re.search(r"(?m)^## \[", content[heading.end():])
