@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [5.0.14] - 2026-11-11
+
+This is a service update that focuses on package dependencies.
+
 ## [5.0.13] - 2026-10-18
 
 This is a patch release focused on DocFX publishing pipeline hardening, expanded test coverage for configured options, discovery, and JSON converters, shared dependency and Entity Framework Core updates, documentation sitemap correction, and consolidated repository agent guidance.
