@@ -6,27 +6,39 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 
 ## [6.0.0] - 2026-11-10
 
-This major release adds .NET 11 support, removes .NET 9 support, and aligns configured options with Microsoft Options integration so direct options and `IOptions<TOptions>.Value` share one configuration and validation pipeline.
+This major release adds .NET 11 support, removes .NET 9 support, and changes configured options to use the Microsoft Options pipeline. It also updates dependencies and test infrastructure and corrects NATS event cancellation and documentation asset caching.
 
 ### Added
 
-- .NET 11 support alongside .NET 10 across packages and tests, with matching .NET 11 Entity Framework Core, SQLite, logging abstractions, and cryptography dependencies for net11.0.
+- .NET 11 support alongside .NET 10 across packages and tests, with matching .NET 11 Entity Framework Core, SQLite, logging abstractions, and cryptography dependencies,
+- The SonarAnalyzer.CSharp 10.35.0.4138 analyzer for non-test projects.
 
 ### Changed
 
-- CI provisions preview SDKs and tests .NET 11, preserving the single-target CI policy; local tests cover both supported targets,
-- Updated Codebelt.Coverlet.MTP from 10.1.0 to 10.1.1,
-- Updated framework availability in contributor guidance, package READMEs, and DocFX includes; retained .NET 10 for DocFX metadata generation,
-- Service-update automation preserves pending major/minor release versions and uses the modern framework availability fallback,
-- Configured options now use Cuemon's `AddConfiguredOptions`: direct `TOptions` and the default `IOptions<TOptions>.Value` share one instance and the Microsoft configuration, post-configuration, and validation pipeline, avoiding the previous separate eager instance and repeated setup execution for these two consumption forms,
-- Options configuration and validation are deferred until materialization; recoverable parameter-object validation failures surface as `OptionsValidationException` instead of `ArgumentException` during registration. The first `AddConfiguredOptions` registration per options type is retained; use `Configure<TOptions>` for additional composition. Injectable `Action<TOptions>` remains the original setup delegate and does not include the Microsoft pipeline.
+- Configured options now use Cuemon's `AddConfiguredOptions`: direct `TOptions` and the default `IOptions<TOptions>.Value` share an instance and the Microsoft configuration, post-configuration, and validation pipeline,
+- Options configuration and validation are deferred until materialization; recoverable parameter-object validation failures surface as `OptionsValidationException` instead of `ArgumentException` during registration. The first `AddConfiguredOptions` registration per options type is retained; use `Configure<TOptions>` for additional composition. Injectable `Action<TOptions>` remains the original setup delegate and does not include the Microsoft pipeline,
+- CI provisions preview SDKs, runs tests on .NET 11, checks tracked line endings, and uses Ubuntu 26.04; local test environments provide separate .NET 10 and .NET 11 containers,
+- Contributor guidance, package READMEs, and DocFX availability reflect the supported frameworks; DocFX namespace listings use description lists,
+- Service-update automation validates release dates, preserves pending release versions and existing package blocks, and uses the modern framework availability fallback,
+- Fingerprinted documentation assets use immutable caching for successful and 304 responses, no-store for errors, and full responses instead of ranges,
+- Updated `AWSSDK.SQS` from 4.0.100.18 to 4.0.100.22 and `AWSSDK.SimpleNotificationService` from 4.0.100.19 to 4.0.100.22,
+- Updated `Cuemon.Extensions.Collections.Generic`, `Cuemon.Extensions.Core`, `Cuemon.Extensions.DependencyInjection`, `Cuemon.Extensions.IO`, `Cuemon.Extensions.Reflection`, `Cuemon.Extensions.Text.Json`, and `Cuemon.Security.Cryptography` from 10.8.1 to 10.8.2,
+- Updated `DapperExtensions.StrongNameReference` from 1.11.0 to 1.12.0,
+- Updated `Codebelt.Coverlet.MTP` from 10.1.0 to 10.1.1 and `Microsoft.Testing.Extensions.HangDump` from 2.5.1 to 2.5.2,
+- Updated `NATS.Client.Core`, `NATS.Client.JetStream`, and `NATS.Client.Simplified` from 3.3.1 to 3.3.2,
+- Updated the .NET 10 declarations for `Microsoft.Data.Sqlite`, `Microsoft.Extensions.Logging.Abstractions`, `Microsoft.EntityFrameworkCore`, `Microsoft.EntityFrameworkCore.InMemory`, `Microsoft.EntityFrameworkCore.Relational`, and `System.Security.Cryptography.Pkcs` from 10.0.13 to 10.0.14; .NET 11 uses 11.0.0-rc.3.26522.148 for those packages.
 
 ### Removed
 
-- .NET 9 support. Consumers must target .NET 10 or later,
-- The .NET 9-only System.Linq.Async reference; both supported frameworks provide async LINQ,
-- `Savvyio.Reflection.AssemblyContext`; dispatcher, handler, and message converter discovery now calls `AssemblyContext.GetCurrentDomainAssemblies` from `Cuemon.Reflection`,
-- `Savvyio.Extensions.DependencyInjection.ServiceCollectionExtensions.AddConfiguredOptions`; import `Cuemon.Extensions.DependencyInjection` or update fully qualified calls to use the Cuemon implementation.
+- .NET 9 support; consumers must target .NET 10 or later,
+- The .NET 9-only direct `System.Linq.Async` 7.0.1 reference,
+- `Savvyio.Reflection.AssemblyContext`; dispatcher, handler, and message converter discovery now uses `Cuemon.Reflection.AssemblyContext.GetCurrentDomainAssemblies`,
+- `Savvyio.Extensions.DependencyInjection.ServiceCollectionExtensions.AddConfiguredOptions`; import `Cuemon.Extensions.DependencyInjection` or update fully qualified calls to use the Cuemon implementation,
+- The repository's test Dockerfile and benchmark prompt.
+
+### Fixed
+
+- NATS event publishing checks cancellation before serializing or publishing the message.
 
 ## [5.0.13] - 2026-10-18
 
