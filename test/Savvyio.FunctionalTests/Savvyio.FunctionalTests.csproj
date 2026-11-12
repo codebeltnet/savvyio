@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="Codebelt.Extensions.YamlDotNet" />
-    <PackageReference Include="Xunit.v3.Priority" />
   </ItemGroup>
 
   <ItemGroup>

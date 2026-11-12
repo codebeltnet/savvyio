@@ -25,11 +25,10 @@ using Savvyio.Extensions.QueueStorage.Assets;
 using Savvyio.Messaging;
 using Savvyio.Messaging.Cryptography;
 using Xunit;
-using Xunit.v3.Priority;
 
 namespace Savvyio.Extensions.QueueStorage.Commands;
 
-[TestMethodOrderer(typeof(PriorityMethodOrderer))]
+[TestMethodOrderer(typeof(PriorityTestMethodOrderer))]
 public class AzureCommandQueueNewtonsoftJsonSerializerContextTest : HostTest<ManagedHostFixture>
 {
     private static readonly string Platform = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux" : "windows";

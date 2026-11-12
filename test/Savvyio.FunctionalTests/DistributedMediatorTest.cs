@@ -36,11 +36,10 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.v3.Priority;
 
 namespace Savvyio;
 
-[TestMethodOrderer(typeof(PriorityMethodOrderer))]
+[TestMethodOrderer(typeof(PriorityTestMethodOrderer))]
 public class DistributedMediatorTest : Test
 {
     private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);

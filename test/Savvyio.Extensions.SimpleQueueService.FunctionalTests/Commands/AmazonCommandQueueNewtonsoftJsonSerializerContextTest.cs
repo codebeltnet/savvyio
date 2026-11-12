@@ -23,11 +23,10 @@ using Savvyio.Extensions.DependencyInjection;
 using Savvyio.Extensions.DependencyInjection.SimpleQueueService;
 using Savvyio.Extensions.Newtonsoft.Json;
 using Savvyio.Messaging.Cryptography;
-using Xunit.v3.Priority;
 
 namespace Savvyio.Extensions.SimpleQueueService.Commands;
 
-[TestMethodOrderer(typeof(PriorityMethodOrderer))]
+[TestMethodOrderer(typeof(PriorityTestMethodOrderer))]
 public class AmazonCommandQueueNewtonsoftJsonSerializerContextTest : HostTest<ManagedHostFixture>
 {
     private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);

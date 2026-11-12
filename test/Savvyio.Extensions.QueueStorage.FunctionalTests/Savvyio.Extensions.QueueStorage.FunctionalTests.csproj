@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xunit.v3.Priority" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Savvyio.Commands.Messaging\Savvyio.Commands.Messaging.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.EventDriven.Messaging\Savvyio.EventDriven.Messaging.csproj" />
     <ProjectReference Include="..\..\src\Savvyio.Extensions.DependencyInjection.QueueStorage\Savvyio.Extensions.DependencyInjection.QueueStorage.csproj" />

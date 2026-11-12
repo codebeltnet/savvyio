@@ -1,3 +1,4 @@
+using Codebelt.Extensions.Xunit;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -25,12 +26,11 @@ using Savvyio.Extensions.DependencyInjection.EFCore.Domain;
 using Savvyio.Extensions.Newtonsoft.Json;
 using Savvyio.Extensions.Text.Json;
 using Xunit;
-using Xunit.v3.Priority;
 using YamlDotNet.Serialization.NamingConventions;
 
 namespace Savvyio;
 
-[TestMethodOrderer(typeof(PriorityMethodOrderer))]
+[TestMethodOrderer(typeof(PriorityTestMethodOrderer))]
 public class MediatorTest : HostTest<ManagedHostFixture>
 {
     private IServiceProvider _provider;
