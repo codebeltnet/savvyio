@@ -21,8 +21,9 @@ This is a major release that adds .NET 11 support, removes .NET 9 support, and m
 - The scorecard workflow updates its checkout, analysis, artifact upload, and CodeQL upload actions and pins them to commit hashes,
 - Contributor guidance, package READMEs, and DocFX availability reflect the supported frameworks; DocFX namespace listings use description lists,
 - Service-update automation validates release dates, preserves pending release versions and existing package blocks, and uses the modern framework availability fallback,
-- Updated `AWSSDK.SQS` from 4.0.100.18 to 4.0.100.26 and `AWSSDK.SimpleNotificationService` from 4.0.100.19 to 4.0.100.26,
-- Updated `Codebelt.Extensions.Newtonsoft.Json` and `Codebelt.Extensions.YamlDotNet` from 10.1.9 to 11.0.0,
+- Updated `AWSSDK.SQS` from 4.0.100.18 to 4.1.0 and `AWSSDK.SimpleNotificationService` from 4.0.100.19 to 4.1.0,
+- Updated `Codebelt.Extensions.Newtonsoft.Json` and `Codebelt.Extensions.YamlDotNet` from 10.1.9 to 11.0.0, and `Codebelt.Extensions.Xunit.App` from 12.0.2 to 13.0.0,
+- Tests use Codebelt’s `PriorityTestMethodOrderer` in place of the local priority orderer,
 - Updated `Cuemon.Extensions.Collections.Generic`, `Cuemon.Extensions.Core`, `Cuemon.Extensions.DependencyInjection`, `Cuemon.Extensions.IO`, `Cuemon.Extensions.Reflection`, `Cuemon.Extensions.Text.Json`, and `Cuemon.Security.Cryptography` from 10.8.1 to 11.0.0,
 - Updated `DapperExtensions.StrongNameReference` from 1.11.0 to 1.12.0,
 - Updated `Codebelt.Coverlet.MTP` from 10.1.0 to 11.0.0, `Microsoft.NET.Test.Sdk` from 18.11.0 to 18.12.0, and `Microsoft.Testing.Extensions.HangDump` from 2.5.1 to 2.5.3,
@@ -36,6 +37,7 @@ This is a major release that adds .NET 11 support, removes .NET 9 support, and m
 - The .NET 9-only direct `System.Linq.Async` 7.0.1 reference from `Savvyio.Messaging`,
 - `Savvyio.Reflection.AssemblyContext`; dispatcher, handler, and message converter discovery now uses `Cuemon.Reflection.AssemblyContext.GetCurrentDomainAssemblies`,
 - `Savvyio.Extensions.DependencyInjection.ServiceCollectionExtensions.AddConfiguredOptions`; import `Cuemon.Extensions.DependencyInjection` or update fully qualified calls to use the Cuemon implementation,
+- The `Xunit.v3.Priority` direct dependency from test projects and the local `PriorityMethodOrderer` shim,
 - The repository's test Dockerfile and benchmark prompt.
 
 ### Fixed
