@@ -1,19 +1,18 @@
-﻿using System;
+using System;
 using Savvyio.EventDriven;
 using Savvyio.Handlers;
 
-namespace Savvyio.Extensions.DependencyInjection.Assets
-{
-    internal class TestIntegrationEventHandler : IntegrationEventHandler
-    {
-        protected override void RegisterDelegates(IFireForgetRegistry<IIntegrationEvent> handlers)
-        {
-            handlers.Register<TestIntegrationEvent>(Handler);
-        }
+namespace Savvyio.Extensions.DependencyInjection.Assets;
 
-        private void Handler(TestIntegrationEvent obj)
-        {
-            throw new NotImplementedException();
-        }
+internal class TestIntegrationEventHandler : IntegrationEventHandler
+{
+    protected override void RegisterDelegates(IFireForgetRegistry<IIntegrationEvent> handlers)
+    {
+        handlers.Register<TestIntegrationEvent>(Handler);
+    }
+
+    private void Handler(TestIntegrationEvent obj)
+    {
+        throw new NotImplementedException();
     }
 }

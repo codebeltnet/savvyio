@@ -1,4 +1,4 @@
-﻿# Contributor Covenant Code of Conduct
+# Contributor Covenant Code of Conduct
 
 This document is adapted from the Contributor Covenant which is used by many open source projects,
 including those under the [.NET Foundation](https://dotnetfoundation.org/code-of-conduct).

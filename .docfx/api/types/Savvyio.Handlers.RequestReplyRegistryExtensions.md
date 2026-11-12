@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Handlers.RequestReplyRegistryExtensions
 example:
 - *content

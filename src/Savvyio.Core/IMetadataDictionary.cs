@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
-namespace Savvyio
+namespace Savvyio;
+
+/// <summary>
+/// Defines a generic way to support metadata capabilities.
+/// </summary>
+/// <seealso cref="IDictionary{TKey,TValue}" />
+public interface IMetadataDictionary : IDictionary<string, object>
 {
-    /// <summary>
-    /// Defines a generic way to support metadata capabilities.
-    /// </summary>
-    /// <seealso cref="IDictionary{TKey,TValue}" />
-    public interface IMetadataDictionary : IDictionary<string, object>
-    {
-    }
 }

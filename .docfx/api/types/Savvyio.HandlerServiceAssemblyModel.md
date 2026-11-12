@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.HandlerServiceAssemblyModel
 example:
 - *content

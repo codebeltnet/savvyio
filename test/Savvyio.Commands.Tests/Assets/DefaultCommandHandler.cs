@@ -1,26 +1,25 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Codebelt.Extensions.Xunit;
 using Savvyio.Handlers;
 
-namespace Savvyio.Commands.Assets
+namespace Savvyio.Commands.Assets;
+
+internal class DefaultCommandHandler : CommandHandler
 {
-    internal class DefaultCommandHandler : CommandHandler
+    private readonly ITestStore<string> _ts;
+
+    public DefaultCommandHandler(ITestStore<string> ts)
     {
-        private readonly ITestStore<string> _ts;
+        _ts = ts;
+    }
 
-        public DefaultCommandHandler(ITestStore<string> ts)
+    protected override void RegisterDelegates(IFireForgetRegistry<ICommand> handlers)
+    {
+        handlers.Register<DefaultCommand>(_ => _ts.Add(nameof(DefaultCommand)));
+        handlers.RegisterAsync<DefaultCommand>(_ =>
         {
-            _ts = ts;
-        }
-
-        protected override void RegisterDelegates(IFireForgetRegistry<ICommand> handlers)
-        {
-            handlers.Register<DefaultCommand>(_ => _ts.Add(nameof(DefaultCommand)));
-            handlers.RegisterAsync<DefaultCommand>(_ =>
-            {
-                _ts.Add(nameof(DefaultCommand) + "Async");
-                return Task.CompletedTask;
-            });
-        }
+            _ts.Add(nameof(DefaultCommand) + "Async");
+            return Task.CompletedTask;
+        });
     }
 }

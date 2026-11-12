@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.HandlerServiceTypeImplementationModel
 example:
 - *content

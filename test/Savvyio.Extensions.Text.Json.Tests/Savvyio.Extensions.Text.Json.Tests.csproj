@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <RootNamespace>Savvyio.Extensions.Text.Json</RootNamespace>
@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="Cuemon.Extensions.IO" />
-    <PackageReference Include="Xunit.v3.Priority" />
   </ItemGroup>
 
   <ItemGroup>

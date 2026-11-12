@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>Extend the Savvy I/O core assemblies with support for NATS Work-Queue Stream and NATS Core Publish-Subscribe.</Description>

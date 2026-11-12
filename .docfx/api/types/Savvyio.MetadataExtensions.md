@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.MetadataExtensions
 example:
 - *content

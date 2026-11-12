@@ -1,13 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <RootNamespace>Savvyio.Extensions.QueueStorage</RootNamespace>
     <UserSecretsId>1e7ac69f-8ed2-4d15-9069-fb975f33083f</UserSecretsId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Xunit.v3.Priority" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Savvyio.Commands.Messaging\Savvyio.Commands.Messaging.csproj" />

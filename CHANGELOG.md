@@ -4,6 +4,47 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [6.0.0] - 2026-11-12
+
+This is a major release that adds .NET 11 support, removes .NET 9 support, and moves configured options to the Microsoft Options pipeline. It also updates dependencies and development infrastructure and fixes NATS cancellation and documentation asset caching.
+
+### Added
+
+- .NET 11 support alongside .NET 10 across packages and tests, with corresponding Entity Framework Core, SQLite, logging, and cryptography package declarations,
+- `SonarAnalyzer.CSharp` 10.36.0.15337 for non-test projects.
+
+### Changed
+
+- Configured options use Cuemon's `AddConfiguredOptions`: direct `TOptions` and the default `IOptions<TOptions>.Value` share an instance and the Microsoft configuration, post-configuration, and validation pipeline,
+- Options configuration and validation are deferred until materialization; recoverable parameter-object validation failures surface as `OptionsValidationException` instead of `ArgumentException` during registration. The first `AddConfiguredOptions` registration per options type is retained; use `Configure<TOptions>` for additional composition. Injectable `Action<TOptions>` remains the original setup delegate and does not include the Microsoft pipeline,
+- CI runs tests on .NET 11, checks tracked line endings, and uses Ubuntu 26.04; local test environments provide separate .NET 10 and .NET 11 containers,
+- The scorecard workflow updates its checkout, analysis, artifact upload, and CodeQL upload actions and pins them to commit hashes,
+- Contributor guidance, package READMEs, and DocFX availability reflect the supported frameworks; DocFX namespace listings use description lists,
+- Service-update automation validates release dates, preserves pending release versions and existing package blocks, and uses the modern framework availability fallback,
+- Updated `AWSSDK.SQS` from 4.0.100.18 to 4.1.0 and `AWSSDK.SimpleNotificationService` from 4.0.100.19 to 4.1.0,
+- Updated `Codebelt.Extensions.Newtonsoft.Json` and `Codebelt.Extensions.YamlDotNet` from 10.1.9 to 11.0.0, and `Codebelt.Extensions.Xunit.App` from 12.0.2 to 13.0.0,
+- Tests use Codebelt’s `PriorityTestMethodOrderer` in place of the local priority orderer,
+- Updated `Cuemon.Extensions.Collections.Generic`, `Cuemon.Extensions.Core`, `Cuemon.Extensions.DependencyInjection`, `Cuemon.Extensions.IO`, `Cuemon.Extensions.Reflection`, `Cuemon.Extensions.Text.Json`, and `Cuemon.Security.Cryptography` from 10.8.1 to 11.0.0,
+- Updated `DapperExtensions.StrongNameReference` from 1.11.0 to 1.12.0,
+- Updated `Codebelt.Coverlet.MTP` from 10.1.0 to 11.0.0, `Microsoft.NET.Test.Sdk` from 18.11.0 to 18.12.0, and `Microsoft.Testing.Extensions.HangDump` from 2.5.1 to 2.5.3,
+- Updated `NATS.Client.Core`, `NATS.Client.JetStream`, and `NATS.Client.Simplified` from 3.3.1 to 3.3.2,
+- Updated `xunit.v3` and `xunit.v3.runner.console` from 4.0.2 to 4.0.3,
+- Updated the .NET 10 declarations for `Microsoft.Data.Sqlite`, `Microsoft.Extensions.Logging.Abstractions`, and `System.Security.Cryptography.Pkcs` from 10.0.13 to 11.0.0, and `Microsoft.EntityFrameworkCore`, `Microsoft.EntityFrameworkCore.InMemory`, and `Microsoft.EntityFrameworkCore.Relational` from 10.0.13 to 10.0.15; the .NET 11 declarations for these packages use 11.0.0.
+
+### Removed
+
+- .NET 9 support; consumers must target .NET 10 or later,
+- The .NET 9-only direct `System.Linq.Async` 7.0.1 reference from `Savvyio.Messaging`,
+- `Savvyio.Reflection.AssemblyContext`; dispatcher, handler, and message converter discovery now uses `Cuemon.Reflection.AssemblyContext.GetCurrentDomainAssemblies`,
+- `Savvyio.Extensions.DependencyInjection.ServiceCollectionExtensions.AddConfiguredOptions`; import `Cuemon.Extensions.DependencyInjection` or update fully qualified calls to use the Cuemon implementation,
+- The `Xunit.v3.Priority` direct dependency from test projects and the local `PriorityMethodOrderer` shim,
+- The repository's test Dockerfile and benchmark prompt.
+
+### Fixed
+
+- NATS event publishing checks cancellation before serializing or publishing the message,
+- Fingerprinted documentation assets use immutable caching for successful and 304 responses, no-store for errors, and full responses instead of ranges.
+
 ## [5.0.13] - 2026-10-18
 
 This is a patch release focused on DocFX publishing pipeline hardening, expanded test coverage for configured options, discovery, and JSON converters, shared dependency and Entity Framework Core updates, documentation sitemap correction, and consolidated repository agent guidance.
@@ -1171,6 +1212,7 @@ Noticeable highlights:
 - QueryHandler class in the Savvyio.Queries namespace that defines a generic and consistent way of handling Query objects that implements the IQuery interface
 - SavvyioOptionsExtensions class in the Savvyio.Queries namespace that consist of extension methods for the SavvyioOptions class: AddQueryHandler, AddQueryDispatcher
 
+[6.0.0]: https://github.com/codebeltnet/savvyio/compare/v5.0.13...v6.0.0
 [5.0.13]: https://github.com/codebeltnet/savvyio/compare/v5.0.12...v5.0.13
 [5.0.12]: https://github.com/codebeltnet/savvyio/compare/v5.0.11...v5.0.12
 [5.0.11]: https://github.com/codebeltnet/savvyio/compare/v5.0.10...v5.0.11

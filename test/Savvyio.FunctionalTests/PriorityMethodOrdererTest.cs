@@ -1,14 +1,13 @@
 #nullable enable
 using Codebelt.Extensions.Xunit;
 using Xunit;
-using Xunit.v3.Priority;
 
 namespace Savvyio;
 
 /// <summary>
 /// Verifies that the runner honors priority across methods, including ties and missing priorities.
 /// </summary>
-[TestMethodOrderer(typeof(PriorityMethodOrderer))]
+[TestMethodOrderer(typeof(PriorityTestMethodOrderer))]
 public class PriorityMethodOrdererTest : Test
 {
     private static int _completedSteps;
@@ -51,30 +50,29 @@ public class PriorityMethodOrdererTest : Test
 }
 
 /// <summary>
-/// Verifies that class-level default priorities still participate in method ordering.
+/// Verifies that explicit method priorities determine execution order.
 /// </summary>
-[DefaultPriority(0)]
-[TestMethodOrderer(typeof(PriorityMethodOrderer))]
-public class PriorityMethodOrdererDefaultPriorityTest : Test
+[TestMethodOrderer(typeof(PriorityTestMethodOrderer))]
+public class PriorityMethodOrdererExplicitPriorityTest : Test
 {
     private static int _completedSteps;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PriorityMethodOrdererDefaultPriorityTest"/> class.
+    /// Initializes a new instance of the <see cref="PriorityMethodOrdererExplicitPriorityTest"/> class.
     /// </summary>
     /// <param name="output">The <see cref="ITestOutputHelper"/> for the test.</param>
-    public PriorityMethodOrdererDefaultPriorityTest(ITestOutputHelper output) : base(output)
+    public PriorityMethodOrdererExplicitPriorityTest(ITestOutputHelper output) : base(output)
     {
     }
 
-    /// <summary>Uses the class default priority and runs before explicitly later priorities.</summary>
-    [Fact]
-    public void B_DefaultPriority()
+    /// <summary>Runs before methods with higher numeric priorities.</summary>
+    [Fact, Priority(0)]
+    public void B_LowerPriority()
     {
         Assert.Equal(0, _completedSteps++);
     }
 
-    /// <summary>Runs after methods that inherit the default priority.</summary>
+    /// <summary>Runs after methods with lower numeric priorities.</summary>
     [Fact, Priority(1)]
     public void C_ExplicitPriority()
     {

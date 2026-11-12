@@ -1,9 +1,9 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Codebelt.Extensions.Xunit;
 using Cuemon.Configuration;
+using Cuemon.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Xunit;
@@ -21,7 +21,7 @@ public class ConfiguredOptionsTest : Test
     {
         var called = false;
 
-        var error = Assert.Throws<ArgumentNullException>(() => ServiceCollectionExtensions.AddConfiguredOptions<Options>(null!, _ => called = true));
+        var error = Assert.Throws<ArgumentNullException>(() => Cuemon.Extensions.DependencyInjection.ServiceCollectionExtensions.AddConfiguredOptions<Options>(null!, _ => called = true));
 
         Assert.Equal("services", error.ParamName);
         Assert.False(called);
@@ -59,55 +59,77 @@ public class ConfiguredOptionsTest : Test
         Assert.Same(direct, scope.ServiceProvider.GetRequiredService<Options>());
         Assert.Same(callback, scope.ServiceProvider.GetRequiredService<Action<Options>>());
         Assert.Same(microsoft, scope.ServiceProvider.GetRequiredService<IOptions<Options>>());
-        Assert.NotSame(direct, microsoft.Value);
+        Assert.Same(direct, microsoft.Value);
         Assert.Equal(ServiceLifetime.Singleton, Assert.Single(services, descriptor => descriptor.ServiceType == typeof(Options)).Lifetime);
         Assert.Equal(ServiceLifetime.Singleton, Assert.Single(services, descriptor => descriptor.ServiceType == typeof(Action<Options>)).Lifetime);
     }
 
-    [Fact]
-    public void AddConfiguredOptions_ShouldConfigureEagerlyAndAgainWhenMicrosoftOptionsAreMaterialized()
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void AddConfiguredOptions_ShouldConfigureOnceWhenDefaultOptionsAreMaterialized(bool resolveDirectFirst)
     {
         var services = new ServiceCollection();
         var invocations = 0;
         services.AddConfiguredOptions<Options>(options => options.Value = (++invocations).ToString());
 
-        Assert.Equal(1, invocations);
-        using var provider = services.BuildServiceProvider();
-        Assert.Equal("1", provider.GetRequiredService<Options>().Value);
-        Assert.Equal(1, invocations);
+        Assert.Equal(0, invocations);
+        using var provider = services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true, ValidateOnBuild = true });
         var options = provider.GetRequiredService<IOptions<Options>>();
+        Assert.Equal(0, invocations);
+        var first = resolveDirectFirst ? provider.GetRequiredService<Options>() : options.Value;
+        var second = resolveDirectFirst ? options.Value : provider.GetRequiredService<Options>();
+
+        Assert.Equal("1", first.Value);
+        Assert.Same(first, second);
+        Assert.Same(first, provider.GetRequiredService<Options>());
+        Assert.Same(first, options.Value);
         Assert.Equal(1, invocations);
-        Assert.Equal("2", options.Value.Value);
-        Assert.Same(options.Value, options.Value);
-        Assert.Equal(2, invocations);
     }
 
-    [Fact]
-    public void AddConfiguredOptions_ShouldValidateEagerlyAndWrapInvalidStateWithoutRegisteringServices()
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void AddConfiguredOptions_ShouldReportInvalidStateWhenOptionsAreMaterialized(bool resolveDirect)
     {
         var services = new ServiceCollection();
 
-        var error = Assert.Throws<ArgumentException>(() => services.AddConfiguredOptions<ValidatedOptions>(options => options.Value = "invalid"));
+        services.AddConfiguredOptions<ValidatedOptions>(options => options.Value = "invalid");
+        using var provider = services.BuildServiceProvider();
 
-        Assert.Equal("setup", error.ParamName);
-        Assert.IsType<InvalidOperationException>(error.InnerException);
-        Assert.Empty(services);
+        var error = Assert.Throws<OptionsValidationException>(() =>
+        {
+            if (resolveDirect) { provider.GetRequiredService<ValidatedOptions>(); }
+            else { _ = provider.GetRequiredService<IOptions<ValidatedOptions>>().Value; }
+        });
+
+        Assert.Equal(Microsoft.Extensions.Options.Options.DefaultName, error.OptionsName);
+        Assert.Equal(typeof(ValidatedOptions), error.OptionsType);
+        Assert.Equal("Value must be valid.", Assert.Single(error.Failures));
     }
 
-    [Fact]
-    public void AddConfiguredOptions_ShouldPropagateSetupFailureWithoutRegisteringServices()
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void AddConfiguredOptions_ShouldPropagateSetupFailureWhenOptionsAreMaterialized(bool resolveDirect)
     {
         var services = new ServiceCollection();
         var expected = new InvalidOperationException("Configuration failed.");
 
-        var actual = Record.Exception(() => services.AddConfiguredOptions<Options>(_ => throw expected));
+        services.AddConfiguredOptions<Options>(_ => throw expected);
+        using var provider = services.BuildServiceProvider();
+
+        var actual = Record.Exception(() =>
+        {
+            if (resolveDirect) { provider.GetRequiredService<Options>(); }
+            else { _ = provider.GetRequiredService<IOptions<Options>>().Value; }
+        });
 
         Assert.Same(expected, actual);
-        Assert.Empty(services);
     }
 
     [Fact]
-    public void AddConfiguredOptions_ShouldPostConfigureThenValidateOnlyTheEagerInstance()
+    public void AddConfiguredOptions_ShouldPostConfigureThenValidateSharedOptionsAndExposeRawSetup()
     {
         var services = new ServiceCollection();
         services.AddConfiguredOptions<ValidatedOptions>(options =>
@@ -123,29 +145,32 @@ public class ConfiguredOptionsTest : Test
         provider.GetRequiredService<Action<ValidatedOptions>>()(manual);
 
         Assert.Equal(new[] { "configure", "postconfigure", "validate" }, direct.Stages);
-        Assert.Equal(new[] { "configure" }, microsoft.Stages);
+        Assert.Same(direct, microsoft);
         Assert.Equal(new[] { "configure" }, manual.Stages);
     }
 
     [Fact]
-    public void AddConfiguredOptions_ShouldAppendRepeatedRegistrationsAndComposeMicrosoftConfigurations()
+    public void AddConfiguredOptions_ShouldKeepFirstSetupAndRegisterEachConsumptionFormOnce()
     {
         var services = new ServiceCollection();
         Action<Options> first = options => options.Value += "first";
         Action<Options> second = options => options.Value += "second";
         services.AddConfiguredOptions(first);
         services.AddConfiguredOptions(second);
+        services.AddConfiguredOptions(first);
         using var provider = services.BuildServiceProvider();
 
-        Assert.Equal(new[] { "first", "second" }, provider.GetServices<Options>().Select(options => options.Value));
-        Assert.Equal("second", provider.GetRequiredService<Options>().Value);
-        Assert.Same(second, provider.GetRequiredService<Action<Options>>());
-        Assert.Equal(new[] { first, second }, provider.GetServices<Action<Options>>());
-        Assert.Equal("firstsecond", provider.GetRequiredService<IOptions<Options>>().Value.Value);
+        var direct = Assert.Single(provider.GetServices<Options>());
+        Assert.Equal("first", direct.Value);
+        Assert.Same(first, Assert.Single(provider.GetServices<Action<Options>>()));
+        Assert.Same(direct, provider.GetRequiredService<IOptions<Options>>().Value);
+        var manual = new Options();
+        provider.GetRequiredService<Action<Options>>()(manual);
+        Assert.Equal("first", manual.Value);
     }
 
     [Fact]
-    public void AddConfiguredOptions_ShouldComposeMicrosoftConfigureAndPostConfigureWithoutChangingDirectOptions()
+    public void AddConfiguredOptions_ShouldComposeMicrosoftConfigureAndPostConfigureForSharedOptions()
     {
         var services = new ServiceCollection();
         services.Configure<Options>(options => options.Value += "before;");
@@ -154,8 +179,9 @@ public class ConfiguredOptionsTest : Test
         services.PostConfigure<Options>(options => options.Value += "post;");
         using var provider = services.BuildServiceProvider();
 
-        Assert.Equal("primary;", provider.GetRequiredService<Options>().Value);
-        Assert.Equal("before;primary;after;post;", provider.GetRequiredService<IOptions<Options>>().Value.Value);
+        var direct = provider.GetRequiredService<Options>();
+        Assert.Equal("before;primary;after;post;", direct.Value);
+        Assert.Same(direct, provider.GetRequiredService<IOptions<Options>>().Value);
         var manual = new Options();
         provider.GetRequiredService<Action<Options>>()(manual);
         Assert.Equal("primary;", manual.Value);

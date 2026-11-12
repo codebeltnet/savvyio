@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Extensions.DependencyInjection.Messaging.ServiceCollectionExtensions
 example:
 - *content

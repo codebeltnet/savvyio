@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.AsyncEventHandler`1
 example:
 - *content

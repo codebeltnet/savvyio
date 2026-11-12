@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Savvyio.Extensions.EFCore.Domain.EventSourcing.EfCoreTracedAggregateRepository`2
 example:
 - *content

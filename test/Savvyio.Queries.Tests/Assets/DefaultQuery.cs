@@ -1,6 +1,5 @@
-﻿namespace Savvyio.Queries.Assets
+namespace Savvyio.Queries.Assets;
+
+internal record DefaultQuery<T> : Query<T>
 {
-    internal record DefaultQuery<T> : Query<T>
-    {
-    }
 }

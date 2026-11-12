@@ -1,4 +1,4 @@
-﻿---
+---
 uid: dotnet-md
 title: Savvy I/O API
 ---
